@@ -11,12 +11,13 @@ import {
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
-
-import { initialNodes, nodeTypes } from "./nodes";
-import { initialEdges, edgeTypes } from "./edges";
+import { edgeTypes } from "./edges/types";
+import { nodeTypes } from "./nodes/types";
+import { initialNodes } from "./nodes/initialNodes";
+import { initialEdges } from "./edges/initialEdges";
 
 export default function App() {
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const onConnect: OnConnect = useCallback(
     (connection) => setEdges((edges) => addEdge(connection, edges)),
