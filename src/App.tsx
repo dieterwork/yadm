@@ -28,6 +28,8 @@ export default function App() {
     <ReactFlow
       nodes={nodes}
       nodeTypes={nodeTypes}
+      snapToGrid
+      snapGrid={[10, 10]}
       onNodesChange={onNodesChange}
       edges={edges}
       edgeTypes={edgeTypes}
