@@ -1,45 +1,12 @@
-import { useCallback } from "react";
-import {
-  ReactFlow,
-  Background,
-  Controls,
-  MiniMap,
-  addEdge,
-  useNodesState,
-  useEdgesState,
-  type OnConnect,
-} from "@xyflow/react";
+import "./index.css";
 
-import "@xyflow/react/dist/style.css";
-import { edgeTypes } from "./edges/types";
-import { nodeTypes } from "./nodes/types";
-import { initialNodes } from "./nodes/initialNodes";
-import { initialEdges } from "./edges/initialEdges";
+import DEMOModeller from "./DEMOModeller";
+import { ReactFlowProvider } from "@xyflow/react";
 
 export default function App() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const onConnect: OnConnect = useCallback(
-    (connection) => setEdges((edges) => addEdge(connection, edges)),
-    [setEdges]
-  );
-
   return (
-    <ReactFlow
-      nodes={nodes}
-      nodeTypes={nodeTypes}
-      snapToGrid
-      snapGrid={[10, 10]}
-      onNodesChange={onNodesChange}
-      edges={edges}
-      edgeTypes={edgeTypes}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      fitView
-    >
-      <Background />
-      <MiniMap />
-      <Controls />
-    </ReactFlow>
+    <ReactFlowProvider>
+      <DEMOModeller />
+    </ReactFlowProvider>
   );
 }
