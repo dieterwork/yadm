@@ -1,12 +1,6 @@
 import "./index.css";
-
-import DEMOModeller from "./DEMOModeller";
-import { ReactFlowProvider } from "@xyflow/react";
+import YADMApp from "./YADMApp";
 
 export default function App() {
-  return (
-    <ReactFlowProvider>
-      <DEMOModeller />
-    </ReactFlowProvider>
-  );
+  return <YADMApp />;
 }
