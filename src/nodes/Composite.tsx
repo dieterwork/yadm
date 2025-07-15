@@ -14,7 +14,7 @@ const handlePositions = [
 
 const padding = 4;
 
-const DEMOObjectNode = ({
+const SelfActivationNode = ({
   id,
   selected,
   data,
@@ -46,7 +46,7 @@ const DEMOObjectNode = ({
           suppressContentEditableWarning={true}
           className="block content-center w-full h-full break-all overflow-hidden text-center focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
         >
-          Actor
+          Transactor
         </div>
       </div>
 
@@ -62,4 +62,4 @@ const DEMOObjectNode = ({
   );
 };
 
-export default DEMOObjectNode;
+export default SelfActivationNode;
