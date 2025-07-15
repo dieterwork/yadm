@@ -1,8 +1,10 @@
-import Actor from "./Actor";
+import Actor from "./actor/Actor";
+import Transaction from "./transaction/Transaction";
 import { type DEMOObjectComponentProps } from "./types";
 
 export const DEMOObjectComponents = {
   actor: Actor,
+  transaction: Transaction,
 };
 
 const DEMOObject = ({
