@@ -16,11 +16,10 @@ import { edgeTypes } from "../../edges/types";
 import { nodeTypes, type AppNode } from "../../nodes/types";
 import { initialNodes } from "../../nodes/initialNodes";
 import { initialEdges } from "../../edges/initialEdges";
-import { useToolbar } from "../toolbar/ToolbarStore";
 
 import uuid from "../../shared/utils/uuid";
 import { YADM_DATA_TYPE } from "../drag-and-drop/utils";
-import { useRef, type DragEvent, type DragEventHandler } from "react";
+import { useRef, type DragEvent } from "react";
 import { DropZone } from "react-aria-components";
 import type { DropEvent, TextDropItem } from "react-aria";
 
