@@ -6,6 +6,8 @@ import {
   Popover,
   SubmenuTrigger,
 } from "react-aria-components";
+import EditMenu from "./menus/EditMenu";
+import FileMenu from "./menus/FileMenu";
 
 const Topbar = () => {
   return (
@@ -17,40 +19,10 @@ const Topbar = () => {
         <nav className="nav">
           <ul className="flex">
             <li>
-              <MenuTrigger>
-                <Button>File</Button>
-                <Popover>
-                  <Menu>
-                    <MenuItem>New</MenuItem>
-                    <MenuItem>Save</MenuItem>
-                    <MenuItem>Import JSON</MenuItem>
-                    <SubmenuTrigger>
-                      <MenuItem>Export as</MenuItem>
-                      <Popover>
-                        <Menu>
-                          <MenuItem>JSON</MenuItem>
-                          <MenuItem>PNG</MenuItem>
-                          <MenuItem>PDF</MenuItem>
-                        </Menu>
-                      </Popover>
-                    </SubmenuTrigger>
-                    <MenuItem>Delete diagram</MenuItem>
-                    <MenuItem>Exit</MenuItem>
-                  </Menu>
-                </Popover>
-              </MenuTrigger>
+              <FileMenu />
             </li>
             <li>
-              <MenuTrigger>
-                <Button>Edit</Button>
-                <Popover>
-                  <Menu>
-                    <MenuItem>Undo</MenuItem>
-                    <MenuItem>Redo</MenuItem>
-                    <MenuItem>Clear</MenuItem>
-                  </Menu>
-                </Popover>
-              </MenuTrigger>
+              <EditMenu />
             </li>
           </ul>
         </nav>
