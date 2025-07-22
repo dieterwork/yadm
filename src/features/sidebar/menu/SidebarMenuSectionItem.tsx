@@ -1,14 +1,15 @@
 import { MenuItem, type MenuItemProps } from "@headlessui/react";
-import { useRef, type DragEvent, type RefObject } from "react";
-import { YADM_DATA_TYPE } from "../../drag-and-drop/utils";
-import DEMOObject from "../../DEMO_objects/DEMOObject";
-import { DragPreview, useDrag, type DragPreviewRenderer } from "react-aria";
+import { type Ref } from "react";
+import Shape from "../../shapes/Shape";
+import { shapeMap } from "../../shapes/shapeMap";
+import { usePreviewNode } from "../usePreviewNode";
+import { DEFAULT_CONTENT_MAP } from "../../nodes/utils";
 
 interface SidebarMenuSectionItemProps extends MenuItemProps {
   title: string;
   icon?: string;
   type: string;
-  ref?: RefObject<HTMLElement>;
+  ref?: Ref<HTMLDivElement>;
 }
 
 const SidebarMenuSectionItem = ({
@@ -18,51 +19,32 @@ const SidebarMenuSectionItem = ({
   ref,
   ...restProps
 }: SidebarMenuSectionItemProps) => {
-  ref = ref ? ref : useRef<HTMLElement>(null!);
-  const dragPreviewRef = useRef<DragPreviewRenderer | null>(null);
-
-  const { dragProps } = useDrag({
-    preview: dragPreviewRef,
-    getItems() {
-      return [
-        {
-          [YADM_DATA_TYPE]: type,
-        },
-      ];
-    },
-  });
-
+  const DEMOShape = shapeMap[type];
+  const { updatePreviewNode, updatePosition } = usePreviewNode();
+  if (!DEMOShape) return null;
   return (
     <>
-      <div {...restProps} ref={ref}>
-        <div
+      <MenuItem {...restProps} ref={ref}>
+        <button
           className="grid place-items-center shadow-sm gap-2 px-4 py-4 aspect-square"
-          {...dragProps}
-          onClick={(e) => e.preventDefault()}
+          onClick={(e) => {
+            e.preventDefault();
+            updatePreviewNode({ type, content: DEFAULT_CONTENT_MAP[type] });
+            updatePosition({ x: e.clientX, y: e.clientY });
+          }}
         >
-          <DEMOObject
+          <Shape
             type={type}
             width={40}
             height={40}
-            fill="white"
             stroke="black"
             strokeWidth={2}
-          />
-          <div className="font-medium text-center text-sm">{title}</div>{" "}
-          <DragPreview ref={dragPreviewRef}>
-            {(items) => (
-              <DEMOObject
-                type={items[0][YADM_DATA_TYPE]}
-                width={40}
-                height={40}
-                fill="white"
-                stroke="black"
-                strokeWidth={2}
-              />
-            )}
-          </DragPreview>
-        </div>
-      </div>
+          >
+            <DEMOShape />
+          </Shape>
+          <div className="font-medium text-center text-sm">{title}</div>
+        </button>
+      </MenuItem>
     </>
   );
 };

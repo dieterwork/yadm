@@ -1,9 +1,8 @@
-import type { SidebarMenuItem } from "./menu/types";
-import SidebarMenuSectionItem from "./menu_test/SidebarMenuSectionItem";
-import SidebarMenuButton from "./menu_test/SidebarMenuButton";
+import SidebarMenuSectionItem from "./menu/SidebarMenuSectionItem";
+import SidebarMenuButton from "./menu/SidebarMenuButton";
 import { Menu, MenuHeading, MenuItems, MenuSection } from "@headlessui/react";
-import { DropZone } from "react-aria-components";
-import { useEffect, useState } from "react";
+import { usePreviewNode } from "./usePreviewNode";
+import PreviewNode from "./PreviewNode";
 
 const sidebarMenuItems: SidebarMenuItem[] = [
   {
@@ -73,38 +72,37 @@ const sidebarMenuItems: SidebarMenuItem[] = [
 ];
 
 const Sidebar = () => {
-  const [isOpen, setOpen] = useState(true);
-
+  const { previewNode } = usePreviewNode();
   return (
     <div className="sidebar | [grid-area:sidebar] px-4 border-r border-gray-200 overflow-y-auto">
       <div className="sidebar-inner">
         {sidebarMenuItems.map((menuItem) => (
           <Menu key={menuItem.id}>
-            <SidebarMenuButton
-              label={menuItem.title}
-              onClick={() => setOpen((open) => !open)}
-            />
-            {isOpen && (
-              <MenuItems portal={false} className="w-(--button-width)" static>
-                {menuItem.sections.map((section) => (
-                  <MenuSection key={section.id}>
-                    <MenuHeading className="mb-4">{section.title}</MenuHeading>
-                    <div className="grid grid-cols-2 gap-4">
-                      {section.items.map((item) => (
-                        <SidebarMenuSectionItem
-                          key={item.id}
-                          title={item.title}
-                          type={item.type}
-                        />
-                      ))}
-                    </div>
-                  </MenuSection>
-                ))}
-              </MenuItems>
-            )}
+            <SidebarMenuButton label={menuItem.title} />
+            <MenuItems
+              portal={false}
+              modal={false}
+              className="w-(--button-width)"
+            >
+              {menuItem.sections.map((section) => (
+                <MenuSection key={section.id}>
+                  <MenuHeading className="mb-4">{section.title}</MenuHeading>
+                  <div className="grid grid-cols-2 gap-4">
+                    {section.items.map((item) => (
+                      <SidebarMenuSectionItem
+                        key={item.id}
+                        title={item.title}
+                        type={item.type}
+                      />
+                    ))}
+                  </div>
+                </MenuSection>
+              ))}
+            </MenuItems>
           </Menu>
         ))}
       </div>
+      {previewNode && <PreviewNode type={previewNode.type} />}
     </div>
   );
 };
