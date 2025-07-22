@@ -1,5 +1,4 @@
 import { Handle, NodeResizer, Position, type NodeProps } from "@xyflow/react";
-import { DEMONodeContext } from "./DEMONodeContext";
 import { shapeMap } from "../shapes/shapeMap";
 import Shape from "../shapes/Shape";
 import { useRef, type ReactNode } from "react";
