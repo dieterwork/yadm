@@ -1,17 +1,16 @@
 import { useContext } from "react";
 import { getStateFill } from "../utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
-import DiamondInCircle from "../../../shapes/DiamondInCircle";
 import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils";
-import type { TransactorState } from "./transactor.types";
+import type { CompositeCTARState } from "./compositeCTAR.types";
 import Rectangle from "../../../shapes/Rectangle";
 
-interface TransactionShapeProps {
-  state: TransactorState;
+interface CompositeCTARShapeProps {
+  state: CompositeCTARState;
   color?: string;
 }
 
-const TransactorShape = ({ state, color }: TransactionShapeProps) => {
+const CompositeCTARShape = ({ state, color }: CompositeCTARShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) return null;
   const { width, height, ...restSvgAttributes } = svgAttributes;
@@ -20,20 +19,12 @@ const TransactorShape = ({ state, color }: TransactionShapeProps) => {
 
   return (
     <g {...restSvgAttributes}>
-      <g transform={`translate(0, ${+width / 4})`}>
-        <Rectangle width={width} height={+height - +width / 4} fill="white" />
+      <g>
+        <Rectangle width={width} height={height} fill="white" />
         <Rectangle
           fill={fill}
           width={width}
-          height={+height - +width / 4}
-          fillOpacity={DEFAULT_FILL_OPACITY}
-        />
-      </g>
-      <g transform={`translate(${+width / 4}, 0)`}>
-        <DiamondInCircle
-          fill={fill}
-          width={+width / 2}
-          height={+width / 2}
+          height={height}
           fillOpacity={DEFAULT_FILL_OPACITY}
         />
       </g>
@@ -41,4 +32,4 @@ const TransactorShape = ({ state, color }: TransactionShapeProps) => {
   );
 };
 
-export default TransactorShape;
+export default CompositeCTARShape;

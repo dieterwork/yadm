@@ -17,7 +17,7 @@ import { usePreviewNode } from "../sidebar/usePreviewNode";
 import { useDEMOModeler } from "./useDEMOModeler";
 
 const createNode = <T extends string>(
-  nodeType: "actor" | "transactor" | "transaction",
+  nodeType: "actor" | "transactor" | "transaction" | "self-activation",
   position: XYPosition
 ): DEMONode<T> => {
   switch (nodeType) {
@@ -26,7 +26,7 @@ const createNode = <T extends string>(
         id: uuid(),
         type: nodeType,
         position,
-        data: { state: "default", content: ["A", "Actor1"] },
+        data: { state: "default", content: ["A", "Actor1"], scope: "in" },
         style: { width: 100, height: 100, fill: "white", stroke: "black" },
         selected: true,
       };
@@ -37,6 +37,69 @@ const createNode = <T extends string>(
         position,
         data: { state: "default", content: ["T", "Transaction1"] },
         style: { width: 100, height: 100, fill: "white", stroke: "black" },
+        selected: true,
+      };
+    case "transactor":
+      return {
+        id: uuid(),
+        type: nodeType,
+        position,
+        data: { state: "default", content: ["T2", "Transaction1"] },
+        style: { width: 200, height: 300, fill: "white", stroke: "black" },
+        selected: true,
+      };
+    case "self-activation":
+      return {
+        id: uuid(),
+        type: nodeType,
+        position,
+        data: { state: "default", content: ["T2"] },
+        style: { width: 200, height: 200, fill: "white", stroke: "black" },
+        selected: true,
+      };
+    case "composite-ctar":
+      return {
+        id: uuid(),
+        type: nodeType,
+        position,
+        data: { state: "default", content: ["CT", "client"] },
+        style: {
+          width: 100,
+          height: 100,
+          fill: "white",
+          stroke: "var(--color-slate-500)",
+          strokeWidth: 4,
+        },
+        selected: true,
+      };
+    case "elementary-actor":
+      return {
+        id: uuid(),
+        type: nodeType,
+        position,
+        data: { state: "default", content: ["T2"] },
+        style: {
+          width: 200,
+          height: 225,
+          fill: "white",
+          stroke: "var(--color-slate-500)",
+          strokeWidth: 4,
+        },
+        selected: true,
+      };
+    case "several-actors":
+      return {
+        id: uuid(),
+        type: nodeType,
+        position,
+        data: { state: "default", content: ["T2"] },
+        style: {
+          width: 200,
+          height: 225,
+          fill: "white",
+          stroke: "var(--color-slate-500)",
+          strokeWidth: 4,
+        },
         selected: true,
       };
     default:

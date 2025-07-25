@@ -3,15 +3,15 @@ import { getStateFill } from "../utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
 import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils";
-import type { TransactorState } from "./transactor.types";
+import type { ElementaryActorCTARState } from "./elementaryActorCTAR.types";
 import Rectangle from "../../../shapes/Rectangle";
 
 interface TransactionShapeProps {
-  state: TransactorState;
+  state: ElementaryActorCTARState;
   color?: string;
 }
 
-const TransactorShape = ({ state, color }: TransactionShapeProps) => {
+const ElementaryActorCTARShape = ({ state, color }: TransactionShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) return null;
   const { width, height, ...restSvgAttributes } = svgAttributes;
@@ -19,8 +19,12 @@ const TransactorShape = ({ state, color }: TransactionShapeProps) => {
   const fill = getStateFill(state, color);
 
   return (
-    <g {...restSvgAttributes}>
-      <g transform={`translate(0, ${+width / 4})`}>
+    <g {...restSvgAttributes} stroke={undefined} strokeWidth={undefined}>
+      <g
+        stroke={restSvgAttributes.stroke}
+        strokeWidth={restSvgAttributes.strokeWidth}
+        transform={`translate(0, ${+width / 4})`}
+      >
         <Rectangle width={width} height={+height - +width / 4} fill="white" />
         <Rectangle
           fill={fill}
@@ -29,7 +33,11 @@ const TransactorShape = ({ state, color }: TransactionShapeProps) => {
           fillOpacity={DEFAULT_FILL_OPACITY}
         />
       </g>
-      <g transform={`translate(${+width / 4}, 0)`}>
+      <g
+        transform={`translate(${+width / 4}, 0)`}
+        stroke="black"
+        strokeWidth={2}
+      >
         <DiamondInCircle
           fill={fill}
           width={+width / 2}
@@ -41,4 +49,4 @@ const TransactorShape = ({ state, color }: TransactionShapeProps) => {
   );
 };
 
-export default TransactorShape;
+export default ElementaryActorCTARShape;

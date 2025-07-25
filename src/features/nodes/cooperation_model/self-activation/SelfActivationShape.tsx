@@ -3,7 +3,7 @@ import { getStateFill } from "../utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
 import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils";
-import type { TransactorState } from "./transactor.types";
+import type { TransactorState } from "./selfActivation.types";
 import Rectangle from "../../../shapes/Rectangle";
 
 interface TransactionShapeProps {
@@ -11,7 +11,7 @@ interface TransactionShapeProps {
   color?: string;
 }
 
-const TransactorShape = ({ state, color }: TransactionShapeProps) => {
+const SelfActivationShape = ({ state, color }: TransactionShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) return null;
   const { width, height, ...restSvgAttributes } = svgAttributes;
@@ -20,16 +20,16 @@ const TransactorShape = ({ state, color }: TransactionShapeProps) => {
 
   return (
     <g {...restSvgAttributes}>
-      <g transform={`translate(0, ${+width / 4})`}>
-        <Rectangle width={width} height={+height - +width / 4} fill="white" />
+      <g>
+        <Rectangle width={width} height={height} fill="white" />
         <Rectangle
           fill={fill}
           width={width}
-          height={+height - +width / 4}
+          height={height}
           fillOpacity={DEFAULT_FILL_OPACITY}
         />
       </g>
-      <g transform={`translate(${+width / 4}, 0)`}>
+      <g transform={`translate(${+width / 4}, ${+height / 4})`}>
         <DiamondInCircle
           fill={fill}
           width={+width / 2}
@@ -41,4 +41,4 @@ const TransactorShape = ({ state, color }: TransactionShapeProps) => {
   );
 };
 
-export default TransactorShape;
+export default SelfActivationShape;

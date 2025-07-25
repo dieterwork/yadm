@@ -17,11 +17,9 @@ const PreviewNode = ({ type }: PreviewNodeProps) => {
   const reactFlow = useReactFlow();
   const zoom = reactFlow.getZoom();
 
-  console.log(zoom);
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       updatePosition({ x: e.clientX, y: e.clientY });
-      console.log("hi");
     };
     document.addEventListener("mousemove", handleMouseMove);
     return () => {

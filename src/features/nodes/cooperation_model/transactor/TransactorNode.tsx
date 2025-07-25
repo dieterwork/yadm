@@ -1,63 +1,48 @@
-import { NodeResizer, type NodeProps, Handle, Position } from "@xyflow/react";
+import { type NodeProps } from "@xyflow/react";
 
-import { useRef } from "react";
+import DEMONodePrimitive from "../../DEMONodePrimitive";
 import type { TransactorNode } from "./transactor.types";
-import Shape from "../../../shapes/Shape";
-import TransactorShape from "./TransactorShape";
-
-const handlePositions = [
-  Position.Top,
-  Position.Right,
-  Position.Bottom,
-  Position.Left,
-];
+import uuid from "../../../../shared/utils/uuid";
 
 const padding = 4;
 
 const TransactorNode = ({
-  selected,
+  id,
   data,
+  selected,
   width,
   height,
 }: NodeProps<TransactorNode>) => {
-  const shapeRef = useRef<SVGSVGElement>(null!);
-  const editableRef = useRef<HTMLDivElement>(null!);
-  const { state } = data;
+  const { content } = data;
+
+  const contentWithUUID = content.map((content) => ({ content, id: uuid() }));
 
   return (
     <>
-      <NodeResizer keepAspectRatio={true} isVisible={selected} />
-      <Shape
-        ref={shapeRef}
+      <DEMONodePrimitive
+        id={id}
+        data={data}
+        selected={selected}
         width={width}
         height={height}
-        strokeWidth={2}
-        fillOpacity={0.8}
-      >
-        <TransactorShape state={state} />
-      </Shape>
-      <div
-        className={`actor-wrapper | absolute top-[50%] left-[50%] translate-[-50%] w-full h-full p-${padding} overflow-hidden text-center`}
+        type="transactor"
       >
         <div
-          ref={editableRef}
-          aria-label="DEMO Title"
-          contentEditable="false"
-          suppressContentEditableWarning={true}
-          className="block content-center w-full h-full break-all overflow-hidden text-center focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
+          className={`transactor-wrapper | absolute bottom-0 left-[50%] translate-x-[-50%] w-full p-${padding} overflow-hidden text-center`}
+          style={{ height: height && width ? height - width / 4 : 0 }}
         >
-          Transactor
+          <div
+            aria-label="DEMO Title"
+            contentEditable="true"
+            suppressContentEditableWarning={true}
+            className="block content-center w-full h-full break-all overflow-hidden text-center focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
+          >
+            {contentWithUUID.map(({ content, id }) => (
+              <div key={id}>{content}</div>
+            ))}
+          </div>
         </div>
-      </div>
-
-      {handlePositions.map((position) => (
-        <Handle
-          id={position}
-          type="source"
-          position={position}
-          key={position}
-        />
-      ))}
+      </DEMONodePrimitive>
     </>
   );
 };

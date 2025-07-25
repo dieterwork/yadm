@@ -1,10 +1,5 @@
 import { TrashIcon } from "@phosphor-icons/react";
-import {
-  NodeToolbar as _NodeToolbar,
-  Position,
-  useNodes,
-  useReactFlow,
-} from "@xyflow/react";
+import { NodeToolbar as _NodeToolbar, Position } from "@xyflow/react";
 import {
   Button,
   Menu,
@@ -33,55 +28,80 @@ const NodeToolbar = ({ id, data, type }: NodeToolbarProps) => {
           >
             <TrashIcon size={24} />
           </Button>
-          <MenuTrigger>
-            <Button className="nodrag nopan">State</Button>
-            <Popover placement="right top">
-              <Menu>
-                <MenuItem
-                  onAction={() => {
-                    updateNodeState(id, "default", type);
-                  }}
-                >
-                  Default
-                </MenuItem>
-                <MenuItem
-                  onAction={() => {
-                    updateNodeState(id, "unclear", type);
-                  }}
-                >
-                  Unclear
-                </MenuItem>
-                <MenuItem
-                  onAction={() => {
-                    updateNodeState(id, "missing", type);
-                  }}
-                >
-                  Missing
-                </MenuItem>
-              </Menu>
-            </Popover>
-          </MenuTrigger>
-          <MenuTrigger>
-            <Button className="nodrag nopan">Scope</Button>
-            <Popover placement="right top">
-              <Menu className="bg-white">
-                <MenuItem
-                  onAction={() => {
-                    updateNodeScope(id, "in", type);
-                  }}
-                >
-                  In
-                </MenuItem>
-                <MenuItem
-                  onAction={() => {
-                    updateNodeScope(id, "out", type);
-                  }}
-                >
-                  Out
-                </MenuItem>
-              </Menu>
-            </Popover>
-          </MenuTrigger>
+          {data?.state && (
+            <MenuTrigger>
+              <Button className="nodrag nopan">State</Button>
+              <Popover placement="right top">
+                <Menu>
+                  {type === "actor" || type === "transaction" ? (
+                    <>
+                      <MenuItem
+                        onAction={() => {
+                          updateNodeState(id, "default", type);
+                        }}
+                      >
+                        Default
+                      </MenuItem>
+                      <MenuItem
+                        onAction={() => {
+                          updateNodeState(id, "unclear", type);
+                        }}
+                      >
+                        Unclear
+                      </MenuItem>
+                      <MenuItem
+                        onAction={() => {
+                          updateNodeState(id, "missing", type);
+                        }}
+                      >
+                        Missing
+                      </MenuItem>
+                    </>
+                  ) : (
+                    <>
+                      <MenuItem
+                        onAction={() => {
+                          updateNodeState(id, "internal", type);
+                        }}
+                      >
+                        Internal
+                      </MenuItem>
+                      <MenuItem
+                        onAction={() => {
+                          updateNodeState(id, "external", type);
+                        }}
+                      >
+                        External
+                      </MenuItem>
+                    </>
+                  )}
+                </Menu>
+              </Popover>
+            </MenuTrigger>
+          )}
+          {data?.scope && (
+            <MenuTrigger>
+              <Button className="nodrag nopan">Scope</Button>
+              <Popover placement="right top">
+                <Menu className="bg-white">
+                  <MenuItem
+                    onAction={() => {
+                      updateNodeScope(id, "in", type);
+                    }}
+                  >
+                    In
+                  </MenuItem>
+                  <MenuItem
+                    onAction={() => {
+                      updateNodeScope(id, "out", type);
+                    }}
+                  >
+                    Out
+                  </MenuItem>
+                </Menu>
+              </Popover>
+            </MenuTrigger>
+          )}
           <MenuTrigger>
             <Button className="nodrag nopan">Color</Button>
             <Popover placement="right top">

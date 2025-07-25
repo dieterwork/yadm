@@ -3,7 +3,7 @@ import { type Ref } from "react";
 import Shape from "../../shapes/Shape";
 import { shapeMap } from "../../shapes/shapeMap";
 import { usePreviewNode } from "../usePreviewNode";
-import { DEFAULT_CONTENT_MAP } from "../../nodes/utils";
+import { DEFAULT_CONTENT_MAP, DEFAULT_SIZE_MAP } from "../../nodes/utils";
 
 interface SidebarMenuSectionItemProps extends MenuItemProps {
   title: string;
@@ -26,7 +26,7 @@ const SidebarMenuSectionItem = ({
     <>
       <MenuItem {...restProps} ref={ref}>
         <button
-          className="grid place-items-center shadow-sm gap-2 px-4 py-4 aspect-square"
+          className="grid place-items-center shadow-sm gap-2 px-4 py-4 aspect-square cursor-pointer"
           onClick={(e) => {
             e.preventDefault();
             updatePreviewNode({ type, content: DEFAULT_CONTENT_MAP[type] });
@@ -35,10 +35,10 @@ const SidebarMenuSectionItem = ({
         >
           <Shape
             type={type}
-            width={40}
-            height={40}
+            width={DEFAULT_SIZE_MAP[type]["width"] / 5}
+            height={DEFAULT_SIZE_MAP[type]["height"] / 5}
             stroke="black"
-            strokeWidth={2}
+            strokeWidth={1.5}
           >
             <DEMOShape />
           </Shape>

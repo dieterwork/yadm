@@ -49,6 +49,20 @@ const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
         </g>
       );
 
+    case "double":
+      return (
+        <g>
+          <QuestionMark width={width} height={height} />
+          <g fill={fill} {...restSvgAttributes}>
+            <DiamondInCircle
+              width={width}
+              height={height}
+              fillOpacity={DEFAULT_FILL_OPACITY}
+            />
+          </g>
+        </g>
+      );
+
     default: {
       return (
         <g fill={fill} {...restSvgAttributes}>

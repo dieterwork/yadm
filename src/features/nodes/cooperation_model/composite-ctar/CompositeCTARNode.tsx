@@ -1,28 +1,18 @@
-import { NodeResizer, type NodeProps, Handle, Position } from "@xyflow/react";
+import { type NodeProps } from "@xyflow/react";
 
-import { useRef } from "react";
-import Shape from "../../../shapes/Shape";
-import TransactionShape from "./TransactionShape";
-import type { TransactionNode } from "./transaction.types";
 import DEMONodePrimitive from "../../DEMONodePrimitive";
+import type { CompositeCTARNode as CompositeCTARNodeType } from "./compositeCTAR.types";
 import uuid from "../../../../shared/utils/uuid";
-
-const handlePositions = [
-  Position.Top,
-  Position.Right,
-  Position.Bottom,
-  Position.Left,
-];
 
 const padding = 4;
 
-const TransactionNode = ({
+const CompositeCTARNode = ({
   id,
   data,
   selected,
   width,
   height,
-}: NodeProps<TransactionNode>) => {
+}: NodeProps<CompositeCTARNodeType>) => {
   const { content } = data;
 
   const contentWithUUID = content.map((content) => ({ content, id: uuid() }));
@@ -35,10 +25,10 @@ const TransactionNode = ({
         selected={selected}
         width={width}
         height={height}
-        type="transaction"
+        type="composite-ctar"
       >
         <div
-          className={`transaction-wrapper | absolute top-[50%] left-[50%] translate-[-50%] w-full h-full p-${padding} overflow-hidden text-center`}
+          className={`composite-ctar-wrapper | absolute top-[50%] left-[50%] translate-[-50%] w-full h-full p-${padding} overflow-hidden text-center`}
         >
           <div
             aria-label="DEMO Title"
@@ -56,4 +46,4 @@ const TransactionNode = ({
   );
 };
 
-export default TransactionNode;
+export default CompositeCTARNode;

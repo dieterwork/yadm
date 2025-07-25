@@ -17,7 +17,7 @@ const ActorNode = ({
   width,
   height,
 }: NodeProps<ActorNode>) => {
-  const { state, scope, content, color } = data;
+  const { content } = data;
 
   const contentWithUUID = content.map((content) => ({ content, id: uuid() }));
 

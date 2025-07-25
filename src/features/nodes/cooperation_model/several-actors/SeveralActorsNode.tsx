@@ -1,28 +1,18 @@
-import { NodeResizer, type NodeProps, Handle, Position } from "@xyflow/react";
+import { type NodeProps } from "@xyflow/react";
 
-import { useRef } from "react";
-import Shape from "../../../shapes/Shape";
-import TransactionShape from "./TransactionShape";
-import type { TransactionNode } from "./transaction.types";
 import DEMONodePrimitive from "../../DEMONodePrimitive";
+import type { SeveralActorsNode as SeveralActorsNodeType } from "./severalActors.types";
 import uuid from "../../../../shared/utils/uuid";
-
-const handlePositions = [
-  Position.Top,
-  Position.Right,
-  Position.Bottom,
-  Position.Left,
-];
 
 const padding = 4;
 
-const TransactionNode = ({
+const SeveralActorsNode = ({
   id,
   data,
   selected,
   width,
   height,
-}: NodeProps<TransactionNode>) => {
+}: NodeProps<SeveralActorsNodeType>) => {
   const { content } = data;
 
   const contentWithUUID = content.map((content) => ({ content, id: uuid() }));
@@ -35,10 +25,11 @@ const TransactionNode = ({
         selected={selected}
         width={width}
         height={height}
-        type="transaction"
+        type="several-actors"
       >
         <div
-          className={`transaction-wrapper | absolute top-[50%] left-[50%] translate-[-50%] w-full h-full p-${padding} overflow-hidden text-center`}
+          className={`several-actors-wrapper | absolute top-0 left-[50%] translate-x-[-50%] w-full p-${padding} overflow-hidden text-center`}
+          style={{ width: width / 2, height: width / 2 }}
         >
           <div
             aria-label="DEMO Title"
@@ -56,4 +47,4 @@ const TransactionNode = ({
   );
 };
 
-export default TransactionNode;
+export default SeveralActorsNode;

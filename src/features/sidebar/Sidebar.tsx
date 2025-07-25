@@ -52,6 +52,13 @@ const sidebarMenuItems: SidebarMenuItem[] = [
         title: "Composite Transactor Role (CTAR)",
         items: [
           {
+            id: "composite-ctar",
+            name: "composite-ctar",
+            title: "Composite CTAR",
+            icon: "Hii",
+            type: "composite-ctar",
+          },
+          {
             id: "elementary-actor",
             name: "elementary-actor",
             title: "Elementary Actor CTAR",

@@ -9,3 +9,13 @@ export const getScopeFill = (scope: Scope, color?: string) => {
 
   return color;
 };
+
+export const getStateFill = (state: string, color?: string) => {
+  if (state === "external") return "var(--color-slate-500)";
+
+  if (color === "default" || !color) {
+    return "none";
+  }
+
+  return color;
+};
