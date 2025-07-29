@@ -1,6 +1,5 @@
-import type { SVGAttributes } from "react";
-import { generatePath } from "./utils";
 import type { ShapeProps } from "./shapes.types";
+import { generatePath } from "./utils/generatePath";
 
 const Diamond = ({ width, height, ...svgAttributes }: ShapeProps) => {
   const diamondPath = generatePath([

@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { getStateFill } from "../utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
-import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils";
 import type { CompositeCTARState } from "./compositeCTAR.types";
 import Rectangle from "../../../shapes/Rectangle";
+import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
 
 interface CompositeCTARShapeProps {
   state: CompositeCTARState;

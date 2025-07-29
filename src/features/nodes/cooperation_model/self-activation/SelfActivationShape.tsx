@@ -2,16 +2,16 @@ import { useContext } from "react";
 import { getStateFill } from "../utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
-import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils";
-import type { TransactorState } from "./selfActivation.types";
 import Rectangle from "../../../shapes/Rectangle";
+import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
+import type { SelfActivationState } from "./selfActivation.types";
 
-interface TransactionShapeProps {
-  state: TransactorState;
+interface SelfActivationShapeProps {
+  state: SelfActivationState;
   color?: string;
 }
 
-const SelfActivationShape = ({ state, color }: TransactionShapeProps) => {
+const SelfActivationShape = ({ state, color }: SelfActivationShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) return null;
   const { width, height, ...restSvgAttributes } = svgAttributes;

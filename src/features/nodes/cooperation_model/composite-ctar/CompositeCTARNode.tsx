@@ -36,8 +36,10 @@ const CompositeCTARNode = ({
             suppressContentEditableWarning={true}
             className="block content-center w-full h-full break-all overflow-hidden text-center focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
           >
-            {contentWithUUID.map(({ content, id }) => (
-              <div key={id}>{content}</div>
+            {contentWithUUID.map(({ content }) => (
+              <>
+                <div>{content}</div>
+              </>
             ))}
           </div>
         </div>

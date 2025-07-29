@@ -7,15 +7,27 @@ import {
   MenuTrigger,
   Popover,
 } from "react-aria-components";
-import { useDEMOModeler } from "../modeler/useDEMOModeler";
+import {
+  useDEMOModeler,
+  type DEMOModelerState,
+} from "../modeler/useDEMOModeler";
+import { useShallow } from "zustand/react/shallow";
 
 interface NodeToolbarProps {
   id: string;
   type: string;
 }
+
 const NodeToolbar = ({ id, data, type }: NodeToolbarProps) => {
   const { deleteNode, updateNodeState, updateNodeScope, updateNodeColor } =
-    useDEMOModeler();
+    useDEMOModeler(
+      useShallow((state: DEMOModelerState) => ({
+        deleteNode: state.deleteNode,
+        updateNodeState: state.updateNodeState,
+        updateNodeScope: state.updateNodeScope,
+        updateNodeColor: state.updateNodeColor,
+      }))
+    );
   return (
     <>
       <_NodeToolbar position={Position.Right}>

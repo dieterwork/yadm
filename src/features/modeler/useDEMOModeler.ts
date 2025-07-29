@@ -15,7 +15,7 @@ import { initialEdges } from "../edges/initialEdges";
 import type { DEMONode } from "../nodes/nodes.types";
 
 export interface DEMOModelerState {
-  nodes: DEMONode[];
+  nodes: DEMONode<string>[];
   edges: Edge[];
   onNodesChange: OnNodesChange<DEMONode>;
   onEdgesChange: OnEdgesChange;

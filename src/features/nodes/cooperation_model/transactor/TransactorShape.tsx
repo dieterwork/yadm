@@ -2,9 +2,9 @@ import { useContext } from "react";
 import { getStateFill } from "../utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
-import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils";
 import type { TransactorState } from "./transactor.types";
 import Rectangle from "../../../shapes/Rectangle";
+import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
 
 interface TransactionShapeProps {
   state: TransactorState;

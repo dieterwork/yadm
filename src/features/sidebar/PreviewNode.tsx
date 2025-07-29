@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { shapeMap } from "../shapes/shapeMap";
 import { createPortal } from "react-dom";
 import Shape from "../shapes/Shape";
-import { DEFAULT_SIZE_MAP } from "../nodes/utils";
-import { useReactFlow, useStore } from "@xyflow/react";
+import { DEFAULT_SIZE_MAP } from "../nodes/utils/consts";
+import { useReactFlow, useStore, useViewport } from "@xyflow/react";
 import { usePreviewNode } from "./usePreviewNode";
 
 interface PreviewNodeProps {
@@ -15,7 +15,7 @@ const PreviewNode = ({ type }: PreviewNodeProps) => {
   const shapeRef = useRef<SVGSVGElement>(null!);
   const { position, updatePosition } = usePreviewNode();
   const reactFlow = useReactFlow();
-  const zoom = reactFlow.getZoom();
+  const { zoom } = useViewport();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {

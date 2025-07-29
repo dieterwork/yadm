@@ -1,20 +1,7 @@
-import {
-  useMenuSection,
-  useSeparator,
-  type AriaMenuSectionProps,
-} from "react-aria";
-import SidebarMenuItem from "./SidebarMenuItem";
-import type { Node, TreeState } from "react-stately";
+import { useMenuSection, useSeparator } from "react-aria";
+import SidebarMenuSectionItem from "./SidebarMenuSectionItem";
 
-interface SidebarMenuSectionProps<T> extends AriaMenuSectionProps {
-  section: Node<T>;
-  state: TreeState<T>;
-}
-
-const SidebarMenuSection = <T extends object>({
-  section,
-  state,
-}: SidebarMenuSectionProps<T>) => {
+const SidebarMenuSection = ({ section, state }) => {
   const { itemProps, headingProps, groupProps } = useMenuSection({
     heading: section.rendered,
     "aria-label": section["aria-label"],
@@ -32,18 +19,34 @@ const SidebarMenuSection = <T extends object>({
       {section.key !== state.collection.getFirstKey() && (
         <li
           {...separatorProps}
-          className="border border-width-1 border-color-gray-500"
+          style={{
+            borderTop: "1px solid gray",
+            margin: "2px 5px",
+          }}
         />
       )}
       <li {...itemProps}>
         {section.rendered && (
-          <span {...headingProps} className="mb-4">
+          <span
+            {...headingProps}
+            style={{
+              fontWeight: "bold",
+              fontSize: "1.1em",
+              padding: "2px 5px",
+            }}
+          >
             {section.rendered}
           </span>
         )}
-        <ul {...groupProps} className="grid grid-cols-2 gap-4">
+        <ul
+          {...groupProps}
+          style={{
+            padding: 0,
+            listStyle: "none",
+          }}
+        >
           {[...section.childNodes].map((node) => (
-            <SidebarMenuItem key={node.key} item={node} state={state} />
+            <SidebarMenuSectionItem key={node.key} item={node} state={state} />
           ))}
         </ul>
       </li>

@@ -1,8 +1,14 @@
 import SidebarMenuSectionItem from "./menu/SidebarMenuSectionItem";
 import SidebarMenuButton from "./menu/SidebarMenuButton";
-import { Menu, MenuHeading, MenuItems, MenuSection } from "@headlessui/react";
 import { usePreviewNode } from "./usePreviewNode";
 import PreviewNode from "./PreviewNode";
+import {
+  Collection,
+  Header,
+  Menu,
+  MenuSection,
+  MenuTrigger,
+} from "react-aria-components";
 
 const sidebarMenuItems: SidebarMenuItem[] = [
   {
@@ -83,31 +89,30 @@ const Sidebar = () => {
   return (
     <div className="sidebar | [grid-area:sidebar] px-4 border-r border-gray-200 overflow-y-auto">
       <div className="sidebar-inner">
-        {sidebarMenuItems.map((menuItem) => (
-          <Menu key={menuItem.id}>
-            <SidebarMenuButton label={menuItem.title} />
-            <MenuItems
-              portal={false}
-              modal={false}
-              className="w-(--button-width)"
-            >
-              {menuItem.sections.map((section) => (
-                <MenuSection key={section.id}>
-                  <MenuHeading className="mb-4">{section.title}</MenuHeading>
-                  <div className="grid grid-cols-2 gap-4">
-                    {section.items.map((item) => (
-                      <SidebarMenuSectionItem
-                        key={item.id}
-                        title={item.title}
-                        type={item.type}
-                      />
-                    ))}
-                  </div>
-                </MenuSection>
-              ))}
-            </MenuItems>
-          </Menu>
-        ))}
+        <Collection items={sidebarMenuItems}>
+          {(menuItem) => (
+            <SidebarMenuButton key={menuItem.id} label={menuItem.title}>
+              <Menu items={menuItem.sections}>
+                {(section) => (
+                  <MenuSection key={section.id} className="grid grid-cols-2">
+                    <Header className="mb-4 col-span-full">
+                      {section.title}
+                    </Header>
+                    <Collection items={section.items}>
+                      {(item) => (
+                        <SidebarMenuSectionItem
+                          key={item.id}
+                          title={item.title}
+                          type={item.type}
+                        />
+                      )}
+                    </Collection>
+                  </MenuSection>
+                )}
+              </Menu>
+            </SidebarMenuButton>
+          )}
+        </Collection>
       </div>
       {previewNode && <PreviewNode type={previewNode.type} />}
     </div>

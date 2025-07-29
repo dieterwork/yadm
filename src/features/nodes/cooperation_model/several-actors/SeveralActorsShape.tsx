@@ -1,14 +1,12 @@
 import { useContext } from "react";
 import { getStateFill } from "../utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
-import DiamondInCircle from "../../../shapes/DiamondInCircle";
-import {
-  calculateDoubleDiamondInCircleDimensions,
-  DEFAULT_FILL_OPACITY,
-} from "../../../shapes/utils";
+
 import type { SeveralActorsState } from "./severalActors.types";
 import Rectangle from "../../../shapes/Rectangle";
 import DoubleDiamondInCircle from "../../../shapes/DoubleDiamondInCircle";
+import { calculateDoubleDiamondInCircleDimensions } from "../../../shapes/utils/calculateDoubleDiamondInCircleDimensions";
+import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
 
 interface TransactionShapeProps {
   state: SeveralActorsState;
@@ -25,8 +23,6 @@ const SeveralActorsShape = ({ state, color }: TransactionShapeProps) => {
     100,
     1 / 8
   );
-
-  console.log(doubleDiamondWidth);
 
   return (
     <g {...restSvgAttributes} stroke={undefined} strokeWidth={undefined}>

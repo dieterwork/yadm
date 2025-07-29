@@ -4,112 +4,30 @@ import {
   Controls,
   MiniMap,
   useReactFlow,
-  type XYPosition,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
 import { edgeTypes } from "../edges/types";
 import { nodeTypes, type DEMONode } from "../nodes/nodes.types";
 
-import uuid from "../../shared/utils/uuid";
 import { useRef, type MouseEvent } from "react";
 import { usePreviewNode } from "../sidebar/usePreviewNode";
-import { useDEMOModeler } from "./useDEMOModeler";
-
-const createNode = <T extends string>(
-  nodeType: "actor" | "transactor" | "transaction" | "self-activation",
-  position: XYPosition
-): DEMONode<T> => {
-  switch (nodeType) {
-    case "actor":
-      return {
-        id: uuid(),
-        type: nodeType,
-        position,
-        data: { state: "default", content: ["A", "Actor1"], scope: "in" },
-        style: { width: 100, height: 100, fill: "white", stroke: "black" },
-        selected: true,
-      };
-    case "transaction":
-      return {
-        id: uuid(),
-        type: nodeType,
-        position,
-        data: { state: "default", content: ["T", "Transaction1"] },
-        style: { width: 100, height: 100, fill: "white", stroke: "black" },
-        selected: true,
-      };
-    case "transactor":
-      return {
-        id: uuid(),
-        type: nodeType,
-        position,
-        data: { state: "default", content: ["T2", "Transaction1"] },
-        style: { width: 200, height: 300, fill: "white", stroke: "black" },
-        selected: true,
-      };
-    case "self-activation":
-      return {
-        id: uuid(),
-        type: nodeType,
-        position,
-        data: { state: "default", content: ["T2"] },
-        style: { width: 200, height: 200, fill: "white", stroke: "black" },
-        selected: true,
-      };
-    case "composite-ctar":
-      return {
-        id: uuid(),
-        type: nodeType,
-        position,
-        data: { state: "default", content: ["CT", "client"] },
-        style: {
-          width: 100,
-          height: 100,
-          fill: "white",
-          stroke: "var(--color-slate-500)",
-          strokeWidth: 4,
-        },
-        selected: true,
-      };
-    case "elementary-actor":
-      return {
-        id: uuid(),
-        type: nodeType,
-        position,
-        data: { state: "default", content: ["T2"] },
-        style: {
-          width: 200,
-          height: 225,
-          fill: "white",
-          stroke: "var(--color-slate-500)",
-          strokeWidth: 4,
-        },
-        selected: true,
-      };
-    case "several-actors":
-      return {
-        id: uuid(),
-        type: nodeType,
-        position,
-        data: { state: "default", content: ["T2"] },
-        style: {
-          width: 200,
-          height: 225,
-          fill: "white",
-          stroke: "var(--color-slate-500)",
-          strokeWidth: 4,
-        },
-        selected: true,
-      };
-    default:
-      throw new Error(`Could not find node type ${nodeType}`);
-  }
-};
+import { useDEMOModeler, type DEMOModelerState } from "./useDEMOModeler";
+import { createNode } from "../nodes/utils/createNode";
+import { useShallow } from "zustand/react/shallow";
 
 const DEMOModeler = () => {
   const { addNode, nodes, edges, onConnect, onEdgesChange, onNodesChange } =
-    useDEMOModeler();
+    useDEMOModeler(
+      useShallow((state: DEMOModelerState) => ({
+        nodes: state.nodes,
+        edges: state.edges,
+        onNodesChange: state.onNodesChange,
+        onEdgesChange: state.onEdgesChange,
+        onConnect: state.onConnect,
+        addNode: state.addNode,
+      }))
+    );
   const { screenToFlowPosition } = useReactFlow();
   const dropZoneRef = useRef<HTMLDivElement>(null!);
   const { previewNode, resetPreviewNode } = usePreviewNode();

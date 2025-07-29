@@ -32,7 +32,7 @@ const DEMONodePrimitive = ({
   const { state, scope, color } = data;
 
   return (
-    <>
+    <div>
       {/* Controls */}
       <NodeToolbar id={id} data={data} type={type} />
       <NodeResizer keepAspectRatio={false} isVisible={selected} />
@@ -50,7 +50,7 @@ const DEMONodePrimitive = ({
       </Shape>
       {/* Children Content */}
       {children}
-    </>
+    </div>
   );
 };
 
