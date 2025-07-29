@@ -24,6 +24,8 @@ const SeveralActorsShape = ({ state, color }: TransactionShapeProps) => {
     1 / 8
   );
 
+  console.log(doubleDiamondWidth);
+
   return (
     <g {...restSvgAttributes} stroke={undefined} strokeWidth={undefined}>
       <g
@@ -40,7 +42,7 @@ const SeveralActorsShape = ({ state, color }: TransactionShapeProps) => {
         />
       </g>
       <g
-        transform={`translate(${+width / 2 - doubleDiamondWidth / 2}, 0)`}
+        transform={`translate(${width / 4 - 100 / 8}, 0)`}
         stroke="black"
         strokeWidth={2}
       >

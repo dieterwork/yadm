@@ -3,6 +3,7 @@ import { type NodeProps } from "@xyflow/react";
 import DEMONodePrimitive from "../../DEMONodePrimitive";
 import type { SeveralActorsNode as SeveralActorsNodeType } from "./severalActors.types";
 import uuid from "../../../../shared/utils/uuid";
+import { calculateDoubleDiamondInCircleDimensions } from "../../../shapes/utils/calculateDoubleDiamondInCircleDimensions";
 
 const padding = 4;
 
@@ -17,6 +18,11 @@ const SeveralActorsNode = ({
 
   const contentWithUUID = content.map((content) => ({ content, id: uuid() }));
 
+  const doubleDiamondInCircleWidth = calculateDoubleDiamondInCircleDimensions(
+    100,
+    1 / 8
+  );
+
   return (
     <>
       <DEMONodePrimitive
@@ -28,8 +34,8 @@ const SeveralActorsNode = ({
         type="several-actors"
       >
         <div
-          className={`several-actors-wrapper | absolute top-0 left-[50%] translate-x-[-50%] w-full p-${padding} overflow-hidden text-center`}
-          style={{ width: width / 2, height: width / 2 }}
+          className={`several-actors-wrapper | absolute top-0 translate-x-[-50%] w-[100px] h-[100px] p-${padding} overflow-hidden text-center`}
+          style={{ left: `calc(50% - ${100 / 8}px)` }}
         >
           <div
             aria-label="DEMO Title"
