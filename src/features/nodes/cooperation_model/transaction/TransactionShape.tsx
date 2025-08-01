@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import QuestionMark from "../../../shapes/QuestionMark";
 import type { Scope } from "../cooperation_model.types";
-import { getScopeFill } from "../utils";
+import { getScopeFill } from "../../../../shared/utils/utils";
 import type { TransactionState } from "./transaction.types";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
@@ -27,6 +27,7 @@ const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
             width={width}
             height={height}
             fillOpacity={DEFAULT_FILL_OPACITY}
+            diamondAttributes={{ stroke: "var(--color-red-500)" }}
           />
         </g>
       );
@@ -40,6 +41,7 @@ const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
               width={width}
               height={height}
               fillOpacity={DEFAULT_FILL_OPACITY}
+              diamondAttributes={{ stroke: "var(--color-red-500)" }}
             />
           </g>
         </g>
@@ -54,6 +56,7 @@ const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
               width={width}
               height={height}
               fillOpacity={DEFAULT_FILL_OPACITY}
+              diamondAttributes={{ stroke: "var(--color-red-500)" }}
             />
           </g>
         </g>
@@ -66,6 +69,7 @@ const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
             width={width}
             height={height}
             fillOpacity={DEFAULT_FILL_OPACITY}
+            diamondAttributes={{ stroke: "var(--color-red-500)" }}
           />
         </g>
       );

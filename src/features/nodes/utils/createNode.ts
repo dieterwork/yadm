@@ -4,13 +4,14 @@ import uuid from "../../../shared/utils/uuid";
 import { DEFAULT_CONTENT_MAP, DEFAULT_SIZE_MAP } from "./consts";
 
 export const createNode = <T extends string>(
-  nodeType: "actor" | "transactor" | "transaction" | "self-activation",
+  nodeType: "actor" | "transactor" | "transaction" | "self_activation",
   position: XYPosition
-): DEMONode<T> => {
+): DEMONode<T> | DEMONode<T>[] => {
+  const id = uuid();
   switch (nodeType) {
-    case "actor":
+    case "actor": {
       return {
-        id: uuid(),
+        id: id,
         type: nodeType,
         position,
         data: {
@@ -26,9 +27,11 @@ export const createNode = <T extends string>(
         },
         selected: true,
       };
-    case "transaction":
+    }
+
+    case "transaction": {
       return {
-        id: uuid(),
+        id: id,
         type: nodeType,
         position,
         data: { state: "default", content: DEFAULT_CONTENT_MAP[nodeType] },
@@ -40,9 +43,11 @@ export const createNode = <T extends string>(
         },
         selected: true,
       };
-    case "transactor":
+    }
+
+    case "transactor": {
       return {
-        id: uuid(),
+        id: id,
         type: nodeType,
         position,
         data: { state: "default", content: DEFAULT_CONTENT_MAP[nodeType] },
@@ -54,9 +59,11 @@ export const createNode = <T extends string>(
         },
         selected: true,
       };
-    case "self-activation":
+    }
+
+    case "self_activation": {
       return {
-        id: uuid(),
+        id: id,
         type: nodeType,
         position,
         data: { state: "default", content: DEFAULT_CONTENT_MAP[nodeType] },
@@ -68,9 +75,11 @@ export const createNode = <T extends string>(
         },
         selected: true,
       };
-    case "composite-ctar":
+    }
+
+    case "composite": {
       return {
-        id: uuid(),
+        id: id,
         type: nodeType,
         position,
         data: { state: "default", content: DEFAULT_CONTENT_MAP[nodeType] },
@@ -79,13 +88,15 @@ export const createNode = <T extends string>(
           height: DEFAULT_SIZE_MAP[nodeType].height,
           fill: "white",
           stroke: "var(--color-slate-500)",
-          strokeWidth: 4,
+          strokeWidth: 8,
         },
         selected: true,
       };
-    case "elementary-actor":
+    }
+
+    case "elementary_actor": {
       return {
-        id: uuid(),
+        id: id,
         type: nodeType,
         position,
         data: { state: "default", content: DEFAULT_CONTENT_MAP[nodeType] },
@@ -94,13 +105,15 @@ export const createNode = <T extends string>(
           height: DEFAULT_SIZE_MAP[nodeType].height,
           fill: "white",
           stroke: "var(--color-slate-500)",
-          strokeWidth: 4,
+          strokeWidth: 8,
         },
         selected: true,
       };
-    case "several-actors":
+    }
+
+    case "several_actors": {
       return {
-        id: uuid(),
+        id: id,
         type: nodeType,
         position,
         data: { state: "default", content: DEFAULT_CONTENT_MAP[nodeType] },
@@ -109,10 +122,203 @@ export const createNode = <T extends string>(
           height: DEFAULT_SIZE_MAP[nodeType].height,
           fill: "white",
           stroke: "var(--color-slate-500)",
-          strokeWidth: 4,
+          strokeWidth: 8,
         },
         selected: true,
       };
+    }
+
+    case "production_event": {
+      return {
+        id: id,
+        type: nodeType,
+        position,
+        data: { content: DEFAULT_CONTENT_MAP[nodeType] },
+        style: {
+          width: DEFAULT_SIZE_MAP[nodeType].width,
+          height: DEFAULT_SIZE_MAP[nodeType].height,
+          fill: "var(--color-red-500)",
+          fillOpacity: 1,
+          strokeWidth: 2,
+          stroke: "black",
+        },
+        selected: true,
+      };
+    }
+
+    case "entity_class": {
+      return {
+        id: id,
+        type: nodeType,
+        position,
+        data: { content: DEFAULT_CONTENT_MAP[nodeType] },
+        style: {
+          width: DEFAULT_SIZE_MAP[nodeType].width,
+          height: DEFAULT_SIZE_MAP[nodeType].height,
+          fill: "white",
+          strokeWidth: 2,
+          stroke: "black",
+        },
+        selected: true,
+      };
+    }
+
+    case "derived_entity": {
+      return {
+        id,
+        type: nodeType,
+        position,
+        data: { scope: "in", content: DEFAULT_CONTENT_MAP[nodeType] },
+        style: {
+          width: DEFAULT_SIZE_MAP[nodeType].width,
+          height: DEFAULT_SIZE_MAP[nodeType].height,
+          fill: "white",
+          strokeWidth: 2,
+          stroke: "black",
+        },
+        selected: true,
+      };
+    }
+
+    // transaction pattern diagram
+    case "transaction_time": {
+      const innerId = uuid();
+      return [
+        {
+          id: id,
+          position,
+          type: "transaction_time",
+          data: {},
+          style: {
+            width: DEFAULT_SIZE_MAP["transaction_time"].width,
+            height: DEFAULT_SIZE_MAP["transaction_time"].height,
+            fill: "white",
+            strokeWidth: 2,
+            stroke: "black",
+          },
+          selected: true,
+        },
+        {
+          id: innerId,
+          type: "transaction_time_inner",
+          parentId: id,
+          position: {
+            x:
+              DEFAULT_SIZE_MAP["transaction_time"].width / 2 -
+              DEFAULT_SIZE_MAP["transaction_time_inner"].width / 2,
+            y:
+              DEFAULT_SIZE_MAP["transaction_time"].height / 2 -
+              DEFAULT_SIZE_MAP["transaction_time_inner"].height / 2,
+          },
+          data: {},
+          style: {
+            width: DEFAULT_SIZE_MAP["transaction_time_inner"].width,
+            height: DEFAULT_SIZE_MAP["transaction_time_inner"].height,
+            fill: "white",
+            strokeWidth: 2,
+            stroke: "black",
+          },
+          extent: "parent",
+          selected: false,
+        },
+        {
+          id: uuid(),
+          parentId: innerId,
+          type: "transaction_kind",
+          position: {
+            x:
+              DEFAULT_SIZE_MAP["transaction_time_inner"].width / 2 -
+              DEFAULT_SIZE_MAP["transaction_kind"].width / 2,
+            y:
+              DEFAULT_SIZE_MAP["transaction_time_inner"].height / 2 -
+              DEFAULT_SIZE_MAP["transaction_kind"].height / 2,
+          },
+          data: { content: DEFAULT_CONTENT_MAP[nodeType] },
+          style: {
+            width: DEFAULT_SIZE_MAP["transaction_kind"].width,
+            height: DEFAULT_SIZE_MAP["transaction_kind"].height,
+            fill: "white",
+            strokeWidth: 2,
+            stroke: "black",
+          },
+          extent: [
+            [12.5, 12.5],
+            [
+              DEFAULT_SIZE_MAP["transaction_time_inner"].width - 12.5,
+              DEFAULT_SIZE_MAP["transaction_time_inner"].height - 12.5,
+            ],
+          ],
+          selected: false,
+        },
+      ];
+    }
+    case "initiation_fact": {
+      return {
+        id,
+        type: nodeType,
+        position,
+        data: {},
+        style: {
+          width: DEFAULT_SIZE_MAP[nodeType].width,
+          height: DEFAULT_SIZE_MAP[nodeType].height,
+          fill: "white",
+          strokeWidth: 2,
+          stroke: "black",
+        },
+        selected: true,
+      };
+    }
+
+    case "c_fact": {
+      return {
+        id,
+        type: nodeType,
+        position,
+        data: {},
+        style: {
+          width: DEFAULT_SIZE_MAP[nodeType].width,
+          height: DEFAULT_SIZE_MAP[nodeType].height,
+          fill: "white",
+          strokeWidth: 2,
+          stroke: "black",
+        },
+        selected: true,
+      };
+    }
+
+    case "c_act": {
+      return {
+        id,
+        type: nodeType,
+        position,
+        data: {},
+        style: {
+          width: DEFAULT_SIZE_MAP[nodeType].width,
+          height: DEFAULT_SIZE_MAP[nodeType].height,
+          fill: "white",
+          strokeWidth: 2,
+          stroke: "black",
+        },
+        selected: true,
+      };
+    }
+    case "tk_execution": {
+      return {
+        id,
+        type: nodeType,
+        position,
+        data: {},
+        style: {
+          width: DEFAULT_SIZE_MAP[nodeType].width,
+          height: DEFAULT_SIZE_MAP[nodeType].height,
+          fill: "var(--color-slate-500)",
+          strokeWidth: 2,
+          stroke: "black",
+        },
+        selected: true,
+      };
+    }
+
     default:
       throw new Error(`Could not find node type ${nodeType}`);
   }

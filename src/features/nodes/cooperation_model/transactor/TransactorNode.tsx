@@ -1,10 +1,8 @@
 import { type NodeProps } from "@xyflow/react";
 
 import DEMONodePrimitive from "../../DEMONodePrimitive";
-import type { TransactorNode } from "./transactor.types";
-import uuid from "../../../../shared/utils/uuid";
-
-const padding = 4;
+import type { TransactorNode as TransactorNodeType } from "./transactor.types";
+import EditableContent from "../../../editable_content/EditableContent";
 
 const TransactorNode = ({
   id,
@@ -12,10 +10,8 @@ const TransactorNode = ({
   selected,
   width,
   height,
-}: NodeProps<TransactorNode>) => {
+}: NodeProps<TransactorNodeType>) => {
   const { content } = data;
-
-  const contentWithUUID = content.map((content) => ({ content, id: uuid() }));
 
   return (
     <>
@@ -27,23 +23,10 @@ const TransactorNode = ({
         height={height}
         type="transactor"
       >
-        <div
-          className={`transactor-wrapper | absolute bottom-0 left-[50%] translate-x-[-50%] w-full p-${padding} overflow-hidden text-center`}
+        <EditableContent
           style={{ height: height && width ? height - width / 4 : 0 }}
-        >
-          <div
-            aria-label="DEMO Title"
-            contentEditable="true"
-            suppressContentEditableWarning={true}
-            className="block content-center w-full h-full break-all overflow-hidden text-center focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
-          >
-            {contentWithUUID.map(({ content }) => (
-              <>
-                <div>{content}</div>
-              </>
-            ))}
-          </div>
-        </div>
+          content={content}
+        />
       </DEMONodePrimitive>
     </>
   );

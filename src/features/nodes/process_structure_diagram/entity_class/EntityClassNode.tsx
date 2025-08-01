@@ -1,16 +1,16 @@
 import { type NodeProps } from "@xyflow/react";
 
-import type { ActorNode } from "./actor.types";
 import DEMONodePrimitive from "../../DEMONodePrimitive";
 import EditableContent from "../../../editable_content/EditableContent";
+import type { EntityClassNode as EntityClassNodeType } from "./entityClass.types";
 
-const ActorNode = ({
+const EntityClassNode = ({
   id,
   data,
   selected,
   width,
   height,
-}: NodeProps<ActorNode>) => {
+}: NodeProps<EntityClassNodeType>) => {
   const { content } = data;
 
   return (
@@ -21,12 +21,12 @@ const ActorNode = ({
         selected={selected}
         width={width}
         height={height}
-        type="actor"
+        type="entity_class"
       >
         <EditableContent
           content={content}
-          width={width}
-          height={height}
+          width={width * 0.75}
+          height={height * 0.75}
           editable={true}
         />
       </DEMONodePrimitive>
@@ -34,4 +34,4 @@ const ActorNode = ({
   );
 };
 
-export default ActorNode;
+export default EntityClassNode;

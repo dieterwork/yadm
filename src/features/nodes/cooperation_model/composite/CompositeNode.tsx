@@ -1,16 +1,19 @@
 import { type NodeProps } from "@xyflow/react";
 
-import type { ActorNode } from "./actor.types";
 import DEMONodePrimitive from "../../DEMONodePrimitive";
+import type { CompositeNode as CompositeNodeType } from "./compositetypes";
+import uuid from "../../../../shared/utils/uuid";
 import EditableContent from "../../../editable_content/EditableContent";
 
-const ActorNode = ({
+const padding = 4;
+
+const CompositeNode = ({
   id,
   data,
   selected,
   width,
   height,
-}: NodeProps<ActorNode>) => {
+}: NodeProps<CompositeNodeType>) => {
   const { content } = data;
 
   return (
@@ -21,7 +24,7 @@ const ActorNode = ({
         selected={selected}
         width={width}
         height={height}
-        type="actor"
+        type="composite"
       >
         <EditableContent
           content={content}
@@ -34,4 +37,4 @@ const ActorNode = ({
   );
 };
 
-export default ActorNode;
+export default CompositeNode;

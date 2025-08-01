@@ -1,16 +1,16 @@
 import { type NodeProps } from "@xyflow/react";
 
-import type { ActorNode } from "./actor.types";
 import DEMONodePrimitive from "../../DEMONodePrimitive";
+import type { TransactionKindNode as TransactionKindNodeType } from "./transactionKind.types";
 import EditableContent from "../../../editable_content/EditableContent";
 
-const ActorNode = ({
+const TransactionKindNode = ({
   id,
   data,
   selected,
   width,
   height,
-}: NodeProps<ActorNode>) => {
+}: NodeProps<TransactionKindNodeType>) => {
   const { content } = data;
 
   return (
@@ -21,7 +21,8 @@ const ActorNode = ({
         selected={selected}
         width={width}
         height={height}
-        type="actor"
+        type="transaction_kind"
+        resizable={false}
       >
         <EditableContent
           content={content}
@@ -34,4 +35,4 @@ const ActorNode = ({
   );
 };
 
-export default ActorNode;
+export default TransactionKindNode;

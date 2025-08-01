@@ -1,16 +1,16 @@
 import { type NodeProps } from "@xyflow/react";
 
-import type { ActorNode } from "./actor.types";
 import DEMONodePrimitive from "../../DEMONodePrimitive";
 import EditableContent from "../../../editable_content/EditableContent";
+import type { ProductionEventNode as ProductionEventNodeType } from "./productionEvent.types";
 
-const ActorNode = ({
+const ProductionEventNode = ({
   id,
   data,
   selected,
   width,
   height,
-}: NodeProps<ActorNode>) => {
+}: NodeProps<ProductionEventNodeType>) => {
   const { content } = data;
 
   return (
@@ -21,7 +21,7 @@ const ActorNode = ({
         selected={selected}
         width={width}
         height={height}
-        type="actor"
+        type="production_event"
       >
         <EditableContent
           content={content}
@@ -34,4 +34,4 @@ const ActorNode = ({
   );
 };
 
-export default ActorNode;
+export default ProductionEventNode;

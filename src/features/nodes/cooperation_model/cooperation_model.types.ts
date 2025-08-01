@@ -2,8 +2,8 @@ import { type SVGAttributes } from "react";
 import type { ActorNode } from "./actor/actor.types";
 import type { TransactionNode } from "./transaction/transaction.types";
 import type { TransactorNode } from "./transactor/transactor.types";
-import type { SelfActivationNode } from "./self-activation/selfActivation.types";
-import type { CompositeCTARNode } from "./composite-ctar/compositeCTAR.types";
+import type { SelfActivationNode } from "./self_activation/selfActivation.types";
+import type { CompositeNode } from "./composite/compositetypes";
 
 // Scope
 export type Scope = "in" | "out";
@@ -12,10 +12,10 @@ export type CooperationModelShapeType =
   | "actor"
   | "transactor"
   | "transaction"
-  | "self-activation"
-  | "composite-ctar"
-  | "elementary-actor"
-  | "several-actors-ctar";
+  | "self_activation"
+  | "composite"
+  | "elementary_actor"
+  | "several_actors-";
 
 export type CooperationModelShapeProps = {
   width: number;
@@ -33,4 +33,4 @@ export type CooperationModelNode<T> =
   | TransactionNode
   | TransactorNode
   | SelfActivationNode
-  | CompositeCTARNode;
+  | CompositeNode;
