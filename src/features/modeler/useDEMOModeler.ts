@@ -8,6 +8,7 @@ import {
   type OnNodesChange,
   type OnEdgesChange,
   type OnConnect,
+  type CoordinateExtent,
 } from "@xyflow/react";
 
 import { initialNodes } from "../nodes/initialNodes";
@@ -27,6 +28,9 @@ export interface DEMOModelerState {
   updateNodeScope: (nodeId: string, scope: string, type: string) => void;
   deleteNode: (nodeId: string) => void;
   addNode: (node: DEMONode<unknown>) => void;
+  getNode: (nodeId: string) => DEMONode<unknown>;
+  getChildrenNodes: (nodeId: string) => DEMONode<unknown>[];
+  updateNodeExtent: (nodeId: string, extent: CoordinateExtent) => void;
 }
 
 export const useDEMOModeler = create<DEMOModelerState>()(
@@ -76,7 +80,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         }),
       });
     },
-    updateNodeScope: (nodeId: string, scope: string, type: string) => {
+    updateNodeScope: (nodeId: string, scope: string) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
@@ -87,6 +91,20 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         }),
       });
     },
+    updateNodeExtent: (nodeId: string, extent: CoordinateExtent) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            return { ...node, extent };
+          }
+
+          return node;
+        }),
+      });
+    },
+    getNode: (nodeId: string) => get().nodes.find((node) => node.id === nodeId),
+    getChildrenNodes: (nodeId: string) =>
+      get().nodes.filter((node) => node.parentId === nodeId),
     addNode: (node: DEMONode<unknown>) => {
       set({
         nodes: get()
@@ -94,7 +112,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
             ...node,
             selected: false,
           }))
-          .concat([node]),
+          .concat(Array.isArray(node) ? node : [node]),
       });
     },
     deleteNode: (nodeId: string) => {

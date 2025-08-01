@@ -29,8 +29,12 @@ const DEMOModeler = () => {
       }))
     );
   const { screenToFlowPosition } = useReactFlow();
-  const dropZoneRef = useRef<HTMLDivElement>(null!);
-  const { previewNode, resetPreviewNode } = usePreviewNode();
+  const { previewNode, resetPreviewNode } = usePreviewNode(
+    useShallow((state) => ({
+      previewNode: state.previewNode,
+      resetPreviewNode: state.resetPreviewNode,
+    }))
+  );
 
   const onNodeDragStart = (e: React.MouseEvent, node: DEMONode<unknown>) => {
     const contentEditableElements = "";
@@ -38,8 +42,7 @@ const DEMOModeler = () => {
 
   const onNodeDragStop = (e: React.MouseEvent, node: DEMONode<unknown>) => {};
 
-  const onClick = (e: MouseEvent) => {
-    e.stopPropagation();
+  const addNodeFromSidebar = (e: MouseEvent) => {
     if (!previewNode) return; // If no preview node, ignore the click event
 
     const position = screenToFlowPosition({
@@ -54,14 +57,17 @@ const DEMOModeler = () => {
     resetPreviewNode();
   };
 
+  const handleClick = (e: MouseEvent) => {
+    e.stopPropagation();
+    addNodeFromSidebar(e);
+  };
+
   return (
     <div className="DEMO-modeler | [grid-area:modeler] h-full">
       <div className="react-flow-wrapper | h-full">
         <ReactFlow
           nodes={nodes}
           nodeTypes={nodeTypes}
-          snapToGrid
-          snapGrid={[10, 10]}
           onNodesChange={onNodesChange}
           edges={edges}
           edgeTypes={edgeTypes}
@@ -72,7 +78,7 @@ const DEMOModeler = () => {
           edgesFocusable={true}
           disableKeyboardA11y={false}
           fitView
-          onClick={onClick}
+          onClick={handleClick}
         >
           <Background />
           <MiniMap />
