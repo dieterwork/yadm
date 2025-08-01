@@ -16,6 +16,6 @@ export const usePreviewNode = create<PreviewNodeState>()((set) => ({
   previewNode: null,
   position: { x: 0, y: 0 },
   updatePosition: (position) => set(() => ({ position })),
-  updatePreviewNode: (data) => set(() => ({ previewNode: data })),
+  updatePreviewNode: (previewNode) => set(() => ({ previewNode })),
   resetPreviewNode: () => set(() => ({ previewNode: null })),
 }));

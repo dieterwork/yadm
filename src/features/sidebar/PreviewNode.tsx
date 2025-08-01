@@ -5,16 +5,21 @@ import Shape from "../shapes/Shape";
 import { DEFAULT_SIZE_MAP } from "../nodes/utils/consts";
 import { useReactFlow, useStore, useViewport } from "@xyflow/react";
 import { usePreviewNode } from "./usePreviewNode";
+import { useShallow } from "zustand/react/shallow";
 
 interface PreviewNodeProps {
-  type: string;
+  type?: string;
 }
 const PreviewNode = ({ type }: PreviewNodeProps) => {
   const DEMOShape = shapeMap[type];
   const size = DEFAULT_SIZE_MAP[type];
   const shapeRef = useRef<SVGSVGElement>(null!);
-  const { position, updatePosition } = usePreviewNode();
-  const reactFlow = useReactFlow();
+  const { position, updatePosition } = usePreviewNode(
+    useShallow((state) => ({
+      position: state.position,
+      updatePosition: state.updatePosition,
+    }))
+  );
   const { zoom } = useViewport();
 
   useEffect(() => {
