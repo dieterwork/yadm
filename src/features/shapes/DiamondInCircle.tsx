@@ -1,56 +1,37 @@
 import { type SVGAttributes } from "react";
 import Diamond from "./Diamond";
 import Circle from "./Circle";
+import type { ShapeProps } from "./shapes.types";
 
-type DiamondInCircleProps = {
-  x?: number;
-  y?: number;
+type DiamondInCircleProps = ShapeProps & {
   diamondAttributes?: SVGAttributes<SVGElement>;
   circleAttributes?: SVGAttributes<SVGElement>;
-} & SVGAttributes<SVGElement>;
+};
 
 const DiamondInCircle = ({
-  x,
-  y,
+  width,
+  height,
   diamondAttributes,
   circleAttributes,
   ...restSvgAttributes
 }: DiamondInCircleProps) => {
-  const { width, height } = restSvgAttributes;
-  if (!width || !height) return;
+  if (!width || !height)
+    throw new Error("No width/height provided for diamond in circle");
   const strokeWidth = restSvgAttributes.strokeWidth
     ? +restSvgAttributes.strokeWidth
     : 0;
 
-  const diamondWidth = +width - strokeWidth * 2;
-  const diamondHeight = +height - strokeWidth * 2;
+  const diamondWidth = width - strokeWidth * 2;
+  const diamondHeight = height - strokeWidth * 2;
 
   return (
-    <g x={x} y={x} {...restSvgAttributes}>
-      <g>
-        <Circle
-          {...circleAttributes}
-          width={width}
-          height={height}
-          fill="white"
-          fillOpacity={1}
-        />
-        <Circle width={width} height={height} {...circleAttributes} />
-      </g>
-      <g>
-        <Diamond
-          {...diamondAttributes}
-          width={diamondWidth}
-          height={diamondHeight}
-          fill="white"
-          fillOpacity={1}
-        />
-        <Diamond
-          {...diamondAttributes}
-          width={diamondWidth}
-          height={diamondHeight}
-        />
-      </g>
+    <g {...restSvgAttributes}>
+      <Circle {...circleAttributes} width={width} height={height} />
+      <Diamond
+        {...diamondAttributes}
+        width={diamondWidth}
+        height={diamondHeight}
+      />
     </g>
   );
 };

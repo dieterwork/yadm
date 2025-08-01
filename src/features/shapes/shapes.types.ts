@@ -1,3 +1,6 @@
-import { type JSX, type SVGAttributes } from "react";
+import { type SVGAttributes } from "react";
 
-export type ShapeProps = SVGAttributes<SVGElement>;
+export type ShapeProps = SVGAttributes<SVGElement> & {
+  width: number;
+  height: number;
+};
