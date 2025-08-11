@@ -4,35 +4,54 @@ import {
   Controls,
   MiniMap,
   useReactFlow,
+  type NodeMouseHandler,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
 import { edgeTypes } from "../edges/types";
 import { nodeTypes, type DEMONode } from "../nodes/nodes.types";
 
-import { useRef, type MouseEvent } from "react";
+import { useEffect, type MouseEvent } from "react";
 import { usePreviewNode } from "../sidebar/usePreviewNode";
 import { useDEMOModeler, type DEMOModelerState } from "./useDEMOModeler";
 import { createNode } from "../nodes/utils/createNode";
 import { useShallow } from "zustand/react/shallow";
+import { convertAbsoluteToParentRelativePosition } from "../nodes/utils/getNodePositionInsideParent";
+import { SMALL_NODE_SIZE, X_SMALL_NODE_SIZE } from "../nodes/utils/consts";
+import uuid from "../../shared/utils/uuid";
+
+const transactionTimeNodes = [
+  "c_act",
+  "c_fact",
+  "initiation_fact",
+  "tk_execution",
+];
 
 const DEMOModeler = () => {
-  const { addNode, nodes, edges, onConnect, onEdgesChange, onNodesChange } =
-    useDEMOModeler(
-      useShallow((state: DEMOModelerState) => ({
-        nodes: state.nodes,
-        edges: state.edges,
-        onNodesChange: state.onNodesChange,
-        onEdgesChange: state.onEdgesChange,
-        onConnect: state.onConnect,
-        addNode: state.addNode,
-      }))
-    );
+  const {
+    addNode,
+    nodes,
+    edges,
+    onConnect,
+    onEdgesChange,
+    onNodesChange,
+    getNodeAbsolutePosition,
+  } = useDEMOModeler(
+    useShallow((state: DEMOModelerState) => ({
+      nodes: state.nodes,
+      edges: state.edges,
+      onNodesChange: state.onNodesChange,
+      onEdgesChange: state.onEdgesChange,
+      onConnect: state.onConnect,
+      addNode: state.addNode,
+      getNodeAbsolutePosition: state.getNodeAbsolutePosition,
+    }))
+  );
   const { screenToFlowPosition } = useReactFlow();
   const { previewNode, resetPreviewNode } = usePreviewNode(
     useShallow((state) => ({
       previewNode: state.previewNode,
-      resetPreviewNode: state.resetPreviewNode,
+      resetPreviewNode: state.reset,
     }))
   );
 
@@ -45,14 +64,20 @@ const DEMOModeler = () => {
   const addNodeFromSidebar = (e: MouseEvent) => {
     if (!previewNode) return; // If no preview node, ignore the click event
 
+    // cancel node add for c-act, c-fact, initiation-fact, tk-excution
+    // only add these if transaction time node was clicked
+    if (transactionTimeNodes.includes(previewNode.type)) return;
+
     const position = screenToFlowPosition({
       x: e.clientX,
       y: e.clientY,
     });
 
-    const newNode = createNode(previewNode.type, position);
+    const newNode = createNode({ type: previewNode.type, position });
 
     addNode(newNode);
+
+    console.log("Added new node");
 
     resetPreviewNode();
   };
@@ -60,6 +85,67 @@ const DEMOModeler = () => {
   const handleClick = (e: MouseEvent) => {
     e.stopPropagation();
     addNodeFromSidebar(e);
+  };
+
+  const handleObjectFactDiagramNodeAdd = (
+    e: MouseEvent,
+    clickedNode: DEMONode<string>
+  ) => {
+    if (!previewNode) return;
+    if (
+      clickedNode.type !== "transaction_time_inner" &&
+      clickedNode.type !== "transaction_kind"
+    )
+      return;
+
+    const absolutePosition = screenToFlowPosition({
+      x: e.clientX,
+      y: e.clientY,
+    });
+
+    // get parent absolute position
+    const parentAbsolutePosition = getNodeAbsolutePosition(clickedNode.id);
+
+    // get relative position of ofd node
+    const relativePosition = convertAbsoluteToParentRelativePosition({
+      absolutePosition,
+      nodeDimensions: { width: X_SMALL_NODE_SIZE, height: X_SMALL_NODE_SIZE },
+      parentNode: clickedNode,
+      parentAbsolutePosition,
+    });
+
+    const id = uuid();
+
+    // create ofd node
+    const ofdNode = createNode({
+      type: previewNode.type,
+      position: relativePosition,
+      id,
+      parentId:
+        clickedNode.type === "transaction_kind"
+          ? clickedNode.parentId
+          : clickedNode.id,
+    });
+
+    // create text node
+    const textNode = createNode({
+      type: "ofd_text_node",
+      position: {
+        x: relativePosition.x,
+        y: relativePosition.y,
+      },
+      parentId: id,
+    });
+
+    addNode(ofdNode);
+    addNode(textNode);
+
+    // reset the preview node after clicking
+    resetPreviewNode();
+  };
+
+  const handleNodeClick: NodeMouseHandler<DEMONode<T>> = (e, node) => {
+    handleObjectFactDiagramNodeAdd(e, node);
   };
 
   return (
@@ -79,6 +165,7 @@ const DEMOModeler = () => {
           disableKeyboardA11y={false}
           fitView
           onClick={handleClick}
+          onNodeClick={handleNodeClick}
         >
           <Background />
           <MiniMap />

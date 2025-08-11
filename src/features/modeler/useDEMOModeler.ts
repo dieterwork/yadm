@@ -31,6 +31,8 @@ export interface DEMOModelerState {
   getNode: (nodeId: string) => DEMONode<unknown>;
   getChildrenNodes: (nodeId: string) => DEMONode<unknown>[];
   updateNodeExtent: (nodeId: string, extent: CoordinateExtent) => void;
+  getNodeAbsolutePosition: (nodeId: string) => { x: number; y: number };
+  updateNodeContent: (nodeId: string, content: string | string[]) => void;
 }
 
 export const useDEMOModeler = create<DEMOModelerState>()(
@@ -102,6 +104,17 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         }),
       });
     },
+    updateNodeContent: (nodeId: string, content: string[] | string) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            return { ...node, content };
+          }
+
+          return node;
+        }),
+      });
+    },
     getNode: (nodeId: string) => get().nodes.find((node) => node.id === nodeId),
     getChildrenNodes: (nodeId: string) =>
       get().nodes.filter((node) => node.parentId === nodeId),
@@ -119,6 +132,22 @@ export const useDEMOModeler = create<DEMOModelerState>()(
       set({
         nodes: get().nodes.filter((node) => node.id !== nodeId),
       });
+    },
+    getNodeAbsolutePosition: (nodeId: string) => {
+      const node = get().getNode(nodeId);
+      let x = 0;
+      let y = 0;
+      let host: DEMONode<string> | undefined = node;
+
+      while (host) {
+        x += host.position.x;
+        y += host.position.y;
+
+        host = host.parentId
+          ? get().nodes.find((node) => node.id === host?.parentId)
+          : undefined;
+      }
+      return { x, y };
     },
   }))
 );
