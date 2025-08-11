@@ -26,8 +26,6 @@ const TransactionNode = ({
 }: NodeProps<TransactionNodeType>) => {
   const { content } = data;
 
-  const contentWithUUID = content.map((content) => ({ content, id: uuid() }));
-
   return (
     <>
       <DEMONodePrimitive

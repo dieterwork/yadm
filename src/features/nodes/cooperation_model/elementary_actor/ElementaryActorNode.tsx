@@ -17,8 +17,6 @@ const ElementaryActorNode = ({
 }: NodeProps<ElementaryActorNodeType>) => {
   const { content } = data;
 
-  const contentWithUUID = content.map((content) => ({ content, id: uuid() }));
-
   return (
     <>
       <DEMONodePrimitive

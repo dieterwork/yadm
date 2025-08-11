@@ -17,8 +17,6 @@ const SelfActivationNode = ({
 }: NodeProps<SelfActivationNodeType>) => {
   const { content } = data;
 
-  const contentWithUUID = content.map((content) => ({ content, id: uuid() }));
-
   return (
     <>
       <DEMONodePrimitive
