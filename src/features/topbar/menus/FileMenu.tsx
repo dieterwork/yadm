@@ -14,15 +14,12 @@ import type {
   ReactFlowInstance,
   ReactFlowJsonObject,
 } from "@xyflow/react";
-import { useId, useRef, type RefObject } from "react";
+import { useRef, type RefObject } from "react";
 
-const save = (
-  instance: ReactFlowInstance<DEMONode<string>, Edge> | null,
-  id: string
-) => {
+const save = (instance: ReactFlowInstance<DEMONode<string>, Edge> | null) => {
   if (!instance) return;
   const jsonModel = JSON.stringify(instance.toObject());
-  localStorage.setItem(id, jsonModel);
+  localStorage.setItem("demo-model", jsonModel);
 };
 
 const exportAsJSON = (
@@ -52,13 +49,14 @@ const importJSON = (ref: RefObject<HTMLInputElement>) => {
 
 const FileMenu = () => {
   const inputRef = useRef<HTMLInputElement>(null!);
-  const { DEMOInstance, id, setNodes, setEdges, setViewport } = useDEMOModeler(
+  const { DEMOInstance, id, setModelFromJSONObject } = useDEMOModeler(
     useShallow((state) => ({
       DEMOInstance: state.DEMOInstance,
       id: state.id,
       setNodes: state.setNodes,
       setEdges: state.setEdges,
       setViewport: state.setViewport,
+      setModelFromJSONObject: state.setModelFromJSONObject,
     }))
   );
 
@@ -68,12 +66,10 @@ const FileMenu = () => {
     if (file.type !== "application/json") throw new Error("Invalid file type");
     const reader = new FileReader();
     reader.onload = () => {
-      const DEMOModel: ReactFlowJsonObject<DEMONode<string>, Edge> = JSON.parse(
+      const demoModel: ReactFlowJsonObject<DEMONode<string>, Edge> = JSON.parse(
         reader.result
       );
-      setNodes(DEMOModel.nodes || []);
-      setEdges(DEMOModel.edges || []);
-      setViewport({ x: 0, y: 0, zoom: 1 });
+      setModelFromJSONObject(demoModel);
     };
     reader.onerror = () => {
       throw new Error("Error reading file");
@@ -95,7 +91,7 @@ const FileMenu = () => {
             <MenuItem>New</MenuItem>
             <MenuItem
               onAction={() => {
-                save(DEMOInstance, id);
+                save(DEMOInstance);
               }}
             >
               Save

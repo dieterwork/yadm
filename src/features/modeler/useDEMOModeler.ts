@@ -11,6 +11,7 @@ import {
   type CoordinateExtent,
   type ReactFlowInstance,
   type Viewport,
+  type ReactFlowJsonObject,
 } from "@xyflow/react";
 
 import { initialNodes } from "../nodes/initialNodes";
@@ -43,6 +44,9 @@ export interface DEMOModelerState {
   updateNodeExtent: (nodeId: string, extent: CoordinateExtent) => void;
   getNodeAbsolutePosition: (nodeId: string) => { x: number; y: number };
   updateNodeContent: (nodeId: string, content: string) => void;
+  setModelFromJSONObject: (
+    object: ReactFlowJsonObject<DEMONode<string>, Edge>
+  ) => void;
 }
 
 export const useDEMOModeler = create<DEMOModelerState>()(
@@ -171,6 +175,15 @@ export const useDEMOModeler = create<DEMOModelerState>()(
           : undefined;
       }
       return { x, y };
+    },
+    setModelFromJSONObject: (
+      object: ReactFlowJsonObject<DEMONode<string>, Edge>
+    ) => {
+      set({
+        nodes: object.nodes,
+        edges: object.edges,
+        viewport: { x: 0, y: 0, zoom: 1 },
+      });
     },
   }))
 );

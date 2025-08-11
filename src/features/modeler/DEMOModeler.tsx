@@ -5,6 +5,9 @@ import {
   MiniMap,
   useReactFlow,
   type NodeMouseHandler,
+  type ReactFlowInstance,
+  type Edge,
+  type ReactFlowJsonObject,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
@@ -39,6 +42,7 @@ const DEMOModeler = () => {
     setDEMOInstance,
     viewport,
     setViewport,
+    setModelFromJSONObject,
   } = useDEMOModeler(
     useShallow((state: DEMOModelerState) => ({
       nodes: state.nodes,
@@ -51,6 +55,7 @@ const DEMOModeler = () => {
       setDEMOInstance: state.setDEMOInstance,
       viewport: state.viewport,
       setViewport: state.setViewport,
+      setModelFromJSONObject: state.setModelFromJSONObject,
     }))
   );
   const { screenToFlowPosition } = useReactFlow();
@@ -150,9 +155,19 @@ const DEMOModeler = () => {
     resetPreviewNode();
   };
 
-  const handleNodeClick: NodeMouseHandler<DEMONode<T>> = (e, node) => {
+  const handleNodeClick: NodeMouseHandler<DEMONode<string>> = (e, node) => {
     handleObjectFactDiagramNodeAdd(e, node);
   };
+
+  useEffect(() => {
+    const localDEMOModelJSON = localStorage.getItem("demo-model");
+    if (!localDEMOModelJSON) return;
+    const localDEMOModel: ReactFlowJsonObject<
+      DEMONode<string>,
+      Edge
+    > = JSON.parse(localDEMOModelJSON);
+    setModelFromJSONObject(localDEMOModel);
+  }, []);
 
   return (
     <div className="DEMO-modeler | [grid-area:modeler] h-full">
