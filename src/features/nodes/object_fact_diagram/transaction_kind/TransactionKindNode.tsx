@@ -30,8 +30,6 @@ const TransactionKindNode = ({
           width={width}
           height={height}
           editable={true}
-          size="large"
-          as="input"
         />
       </DEMONodePrimitive>
     </>

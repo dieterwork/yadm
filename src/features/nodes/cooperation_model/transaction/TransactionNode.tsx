@@ -40,27 +40,11 @@ const TransactionNode = ({
         resizable={false}
       >
         <EditableContent
-          as="input"
           content={content}
           width={width}
           height={height}
+          editable={true}
         />
-        <div
-          className={`transaction-wrapper | absolute top-[50%] left-[50%] translate-[-50%] w-full h-full p-${padding} overflow-hidden text-center`}
-        >
-          <div
-            aria-label="DEMO Title"
-            contentEditable="true"
-            suppressContentEditableWarning={true}
-            className="block content-center w-full h-full break-all overflow-hidden text-center focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
-          >
-            {contentWithUUID.map(({ content }) => (
-              <>
-                <div>{content}</div>
-              </>
-            ))}
-          </div>
-        </div>
       </DEMONodePrimitive>
     </>
   );

@@ -36,6 +36,9 @@ const DEMOModeler = () => {
     onEdgesChange,
     onNodesChange,
     getNodeAbsolutePosition,
+    setDEMOInstance,
+    viewport,
+    setViewport,
   } = useDEMOModeler(
     useShallow((state: DEMOModelerState) => ({
       nodes: state.nodes,
@@ -45,6 +48,9 @@ const DEMOModeler = () => {
       onConnect: state.onConnect,
       addNode: state.addNode,
       getNodeAbsolutePosition: state.getNodeAbsolutePosition,
+      setDEMOInstance: state.setDEMOInstance,
+      viewport: state.viewport,
+      setViewport: state.setViewport,
     }))
   );
   const { screenToFlowPosition } = useReactFlow();
@@ -166,6 +172,9 @@ const DEMOModeler = () => {
           fitView
           onClick={handleClick}
           onNodeClick={handleNodeClick}
+          onInit={(instance) => setDEMOInstance(instance)}
+          viewport={viewport}
+          onViewportChange={(viewport) => setViewport(viewport)}
         >
           <Background />
           <MiniMap />

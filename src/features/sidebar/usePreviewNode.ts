@@ -7,7 +7,7 @@ interface PreviewNodeState {
     height: number;
     isDisabled: boolean;
     position: { x: number; y: number };
-    content?: string[];
+    content?: string;
   } | null;
   createNode: ({
     type,
@@ -22,11 +22,11 @@ interface PreviewNodeState {
     height: number;
     isDisabled?: boolean;
     position: { x: number; y: number };
-    content?: string[];
+    content?: string;
   }) => void;
   updateDimensions: (dimensions: { width?: number; height?: number }) => void;
   updateType: (type: string) => void;
-  updateContent: (content: string[]) => void;
+  updateContent: (content: string) => void;
   updateDisabled: (isDisabled: boolean) => void;
   updatePosition: (pos: { x: number; y: number }) => void;
   reset: () => void;

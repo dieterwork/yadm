@@ -165,22 +165,22 @@ export const MIN_SIZE_MAP = {
 
 export const DEFAULT_CONTENT_MAP = {
   // cooperation model
-  actor: ["A", "1"],
-  transaction: ["T", "1"],
-  transactor: ["T", "1"],
-  self_activation: ["T", "1"],
-  composite: ["T", "1"],
-  elementary_actor: ["T", "1"],
-  several_actors: ["T", "1"],
+  actor: "<div>A</div><div>1</div>",
+  transaction: "<div>A</div><div>1</div>",
+  transactor: "<div>A</div><div>1</div>",
+  self_activation: "<div>A</div><div>1</div>",
+  composite: "<div>A</div><div>1</div>",
+  elementary_actor: "<div>A</div><div>1</div>",
+  several_actors: "<div>A</div><div>1</div>",
   // transaction pattern diagram
-  transaction_time: [],
-  transaction_kind: ["T"],
-  initiation_fact: [],
-  c_fact: [],
-  c_act: [],
-  tk_execution: [],
+  transaction_time: "<div>A</div><div>1</div>",
+  transaction_kind: "<div>A</div><div>1</div>",
+  initiation_fact: "<div>A</div><div>1</div>",
+  c_fact: "<div>A</div><div>1</div>",
+  c_act: "<div>A</div><div>1</div>",
+  tk_execution: "<div>A</div><div>1</div>",
   // object fact diagram
   production_event: "01",
-  entity_class: ["T", "1"],
-  derived_entity: ["T", "1"],
+  entity_class: "<div>A</div><div>1</div>",
+  derived_entity: "<div>A</div><div>1</div>",
 };

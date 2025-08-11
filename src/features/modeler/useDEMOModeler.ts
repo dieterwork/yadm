@@ -9,20 +9,30 @@ import {
   type OnEdgesChange,
   type OnConnect,
   type CoordinateExtent,
+  type ReactFlowInstance,
+  type Viewport,
 } from "@xyflow/react";
 
 import { initialNodes } from "../nodes/initialNodes";
 import { initialEdges } from "../edges/initialEdges";
 import type { DEMONode } from "../nodes/nodes.types";
+import uuid from "../../shared/utils/uuid";
 
 export interface DEMOModelerState {
+  id: string;
   nodes: DEMONode<string>[];
   edges: Edge[];
+  viewport: Viewport;
+  setViewport: (viewport: Viewport) => void;
   onNodesChange: OnNodesChange<DEMONode>;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   setNodes: (nodes: DEMONode[]) => void;
   setEdges: (edges: Edge[]) => void;
+  DEMOInstance: null | ReactFlowInstance<DEMONode<string>, Edge>;
+  setDEMOInstance: (
+    instance: ReactFlowInstance<DEMONode<string>, Edge>
+  ) => void;
   updateNodeColor: (nodeId: string, color: string) => void;
   updateNodeState: (nodeId: string, state: string, type: string) => void;
   updateNodeScope: (nodeId: string, scope: string, type: string) => void;
@@ -32,13 +42,23 @@ export interface DEMOModelerState {
   getChildrenNodes: (nodeId: string) => DEMONode<unknown>[];
   updateNodeExtent: (nodeId: string, extent: CoordinateExtent) => void;
   getNodeAbsolutePosition: (nodeId: string) => { x: number; y: number };
-  updateNodeContent: (nodeId: string, content: string | string[]) => void;
+  updateNodeContent: (nodeId: string, content: string) => void;
 }
 
 export const useDEMOModeler = create<DEMOModelerState>()(
   temporal((set, get) => ({
+    id: uuid(),
     nodes: initialNodes,
     edges: initialEdges,
+    DEMOInstance: null,
+    viewport: {
+      x: 0,
+      y: 0,
+      zoom: 1,
+    },
+    setViewport: (viewport) => {
+      set({ viewport });
+    },
     onNodesChange: (changes) => {
       set({
         nodes: applyNodeChanges(changes, get().nodes),
@@ -53,6 +73,9 @@ export const useDEMOModeler = create<DEMOModelerState>()(
       set({
         edges: addEdge(connection, get().edges),
       });
+    },
+    setDEMOInstance: (instance) => {
+      set({ DEMOInstance: instance });
     },
     setNodes: (nodes) => {
       set({ nodes });
@@ -104,7 +127,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         }),
       });
     },
-    updateNodeContent: (nodeId: string, content: string[] | string) => {
+    updateNodeContent: (nodeId: string, content: string) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
