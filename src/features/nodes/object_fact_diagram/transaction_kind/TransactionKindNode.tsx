@@ -30,6 +30,8 @@ const TransactionKindNode = ({
           width={width}
           height={height}
           editable={true}
+          maxLines={1}
+          fontSize={14}
         />
       </DEMONodePrimitive>
     </>

@@ -31,6 +31,7 @@ const DiamondInCircle = ({
         {...diamondAttributes}
         width={diamondWidth}
         height={diamondHeight}
+        offset={2}
       />
     </g>
   );

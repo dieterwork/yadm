@@ -165,13 +165,13 @@ export const MIN_SIZE_MAP = {
 
 export const DEFAULT_CONTENT_MAP = {
   // cooperation model
-  actor: "<div>A</div><div>1</div>",
-  transaction: "<div>A</div><div>1</div>",
-  transactor: "<div>A</div><div>1</div>",
-  self_activation: "<div>A</div><div>1</div>",
-  composite: "<div>A</div><div>1</div>",
-  elementary_actor: "<div>A</div><div>1</div>",
-  several_actors: "<div>A</div><div>1</div>",
+  actor: "<div>Actor</div><div>A!</div>",
+  transaction: "<div>01</div>",
+  transactor: "<div>01</div>",
+  self_activation: "<div>01</div>",
+  composite: "<div>CT</div><div>Client</div>",
+  elementary_actor: "<div>01</div>",
+  several_actors: "<div>01</div>",
   // transaction pattern diagram
   transaction_time: "<div>A</div><div>1</div>",
   transaction_kind: "<div>A</div><div>1</div>",
