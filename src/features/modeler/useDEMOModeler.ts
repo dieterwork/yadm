@@ -28,7 +28,7 @@ export interface DEMOModelerState {
   onNodesChange: OnNodesChange<DEMONode>;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
-  setNodes: (nodes: DEMONode[]) => void;
+  setNodes: (nodes: DEMONode[] | ((nodes: DEMONode[]) => DEMONode[])) => void;
   setEdges: (edges: Edge[]) => void;
   DEMOInstance: null | ReactFlowInstance<DEMONode<string>, Edge>;
   setDEMOInstance: (
@@ -47,6 +47,13 @@ export interface DEMOModelerState {
   updateNodeFontSize: (nodeId: string, fontSize: number) => void;
   setModelFromJSONObject: (
     object: ReactFlowJsonObject<DEMONode<string>, Edge>
+  ) => void;
+  updateNode: (
+    id: string,
+    nodeUpdate: Partial<Node> | ((node: Node) => Partial<Node>),
+    options?: {
+      replace: boolean;
+    }
   ) => void;
 }
 
@@ -195,6 +202,17 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         nodes: object.nodes,
         edges: object.edges,
         viewport: { x: 0, y: 0, zoom: 1 },
+      });
+    },
+    updateNode(id, nodeUpdate, options) {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === id) {
+            return options?.replace ? nodeUpdate : { ...node, ...nodeUpdate };
+          }
+
+          return node;
+        }),
       });
     },
   }))

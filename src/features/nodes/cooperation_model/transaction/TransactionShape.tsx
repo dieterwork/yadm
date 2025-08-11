@@ -6,6 +6,7 @@ import type { TransactionState } from "./transaction.types";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
 import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
+import DoubleDiamondInCircle from "../../../shapes/DoubleDiamondInCircle";
 
 interface TransactionShapeProps {
   state: TransactionState;
@@ -34,25 +35,22 @@ const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
 
     case "unclear":
       return (
-        <g>
+        <g fill={fill} {...restSvgAttributes}>
+          <DiamondInCircle
+            width={width}
+            height={height}
+            fillOpacity={DEFAULT_FILL_OPACITY}
+            diamondAttributes={{ stroke: "var(--color-red-500)" }}
+          />
           <QuestionMark width={width} height={height} />
-          <g fill={fill} {...restSvgAttributes}>
-            <DiamondInCircle
-              width={width}
-              height={height}
-              fillOpacity={DEFAULT_FILL_OPACITY}
-              diamondAttributes={{ stroke: "var(--color-red-500)" }}
-            />
-          </g>
         </g>
       );
 
     case "double":
       return (
         <g>
-          <QuestionMark width={width} height={height} />
           <g fill={fill} {...restSvgAttributes}>
-            <DiamondInCircle
+            <DoubleDiamondInCircle
               width={width}
               height={height}
               fillOpacity={DEFAULT_FILL_OPACITY}

@@ -1,12 +1,21 @@
-import { NodeResizer, type NodeProps, Handle, Position } from "@xyflow/react";
+import {
+  NodeResizer,
+  type NodeProps,
+  Handle,
+  Position,
+  type NodeDimensionChange,
+  applyNodeChanges,
+} from "@xyflow/react";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Shape from "../../../shapes/Shape";
 import TransactionShape from "./TransactionShape";
 import type { TransactionNode as TransactionNodeType } from "./transaction.types";
 import DEMONodePrimitive from "../../DEMONodePrimitive";
 import uuid from "../../../../shared/utils/uuid";
 import EditableContent from "../../../editable_content/EditableContent";
+import { calculateDoubleDiamondInCircleDimensions } from "../../../shapes/utils/calculateDoubleDiamondInCircleDimensions";
+import { useDEMOModeler } from "../../../modeler/useDEMOModeler";
 
 const handlePositions = [
   Position.Top,
@@ -26,6 +35,13 @@ const TransactionNode = ({
 }: NodeProps<TransactionNodeType>) => {
   const { content, fontSize } = data;
 
+  const setNodes = useDEMOModeler((state) => state.setNodes);
+  const nodes = useDEMOModeler((state) => state.nodes);
+
+  if (data.state === "double" && height) {
+    width = calculateDoubleDiamondInCircleDimensions(height).width + 4;
+  }
+
   return (
     <>
       <DEMONodePrimitive
@@ -39,10 +55,11 @@ const TransactionNode = ({
       >
         <EditableContent
           content={content}
-          width={width}
+          width={data.state === "double" ? height : width}
           height={height}
-          editable={true}
           fontSize={fontSize}
+          hide={data.state === "unclear"}
+          editable={data.state !== "unclear"}
         />
       </DEMONodePrimitive>
     </>

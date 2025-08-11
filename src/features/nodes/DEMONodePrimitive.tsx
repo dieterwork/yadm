@@ -3,6 +3,7 @@ import {
   NodeResizer,
   Position,
   useNodeId,
+  useReactFlow,
   type NodeProps,
 } from "@xyflow/react";
 import { shapeMap } from "../shapes/shapeMap";
@@ -42,6 +43,7 @@ const DEMONodePrimitive = <T extends string>({
   actions = ["changeColor", "delete", "changeFontSize"],
 }: DEMONodePrimitiveProps<T>) => {
   const DEMOShape = shapeMap[type];
+  const { setNodes } = useReactFlow();
 
   const shapeRef = useRef<SVGSVGElement>(null!);
 
@@ -67,7 +69,7 @@ const DEMONodePrimitive = <T extends string>({
   };
 
   return (
-    <div>
+    <div style={{ width, height }}>
       {/* Controls */}
       {actions && (
         <NodeToolbar id={id} data={data} type={type} actions={actions} />

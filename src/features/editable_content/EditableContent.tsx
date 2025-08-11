@@ -25,6 +25,7 @@ interface EditableContentProps
   color?: string;
   maxLines?: number;
   ref?: RefObject<HTMLDivElement>;
+  hide?: boolean;
 }
 
 const getAlignContentStyle = (textPosition: TextPosition) => {
@@ -80,6 +81,7 @@ const EditableContent = ({
   color = "var(--color-black)",
   maxLines = 3,
   ref,
+  hide = false,
   ...restProps
 }: EditableContentProps) => {
   const nodeId = useNodeId();
@@ -92,7 +94,8 @@ const EditableContent = ({
   const classes = cn(
     "editable-content-wrapper | absolute inset-0 m-auto overflow-hidden text-center",
     { "w-full": !width, "h-full": !height },
-    getPadding(fontSize)
+    getPadding(fontSize),
+    hide && "hidden"
   );
 
   const props = useEditableContent({
