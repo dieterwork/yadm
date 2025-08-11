@@ -14,9 +14,9 @@ const PreviewNode = ({ type }: PreviewNodeProps) => {
   const DEMOShape = shapeMap[type];
   const size = DEFAULT_SIZE_MAP[type];
   const shapeRef = useRef<SVGSVGElement>(null!);
-  const { position, updatePosition } = usePreviewNode(
+  const { previewNode, updatePosition } = usePreviewNode(
     useShallow((state) => ({
-      position: state.position,
+      previewNode: state.previewNode,
       updatePosition: state.updatePosition,
     }))
   );
@@ -39,7 +39,10 @@ const PreviewNode = ({ type }: PreviewNodeProps) => {
       {createPortal(
         <div
           className={`preview-node | fixed z-9999 pointer-events-none`}
-          style={{ top: position.y, left: position.x }}
+          style={{
+            top: previewNode?.position.y ?? 0,
+            left: previewNode?.position.x ?? 0,
+          }}
         >
           <Shape
             ref={shapeRef}
