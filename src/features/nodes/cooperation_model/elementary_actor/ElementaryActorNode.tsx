@@ -15,7 +15,7 @@ const ElementaryActorNode = ({
   width,
   height,
 }: NodeProps<ElementaryActorNodeType>) => {
-  const { content } = data;
+  const { content, fontSize } = data;
 
   return (
     <>
@@ -33,6 +33,7 @@ const ElementaryActorNode = ({
           height={DEFAULT_SIZE_MAP["transaction"].height}
           editable={true}
           style={{ bottom: "auto" }}
+          fontSize={fontSize}
         />
       </DEMONodePrimitive>
     </>

@@ -11,7 +11,7 @@ const ActorNode = ({
   width,
   height,
 }: NodeProps<ActorNodeType>) => {
-  const { content } = data;
+  const { content, fontSize } = data;
 
   return (
     <>
@@ -28,6 +28,7 @@ const ActorNode = ({
           width={width}
           height={height}
           editable={true}
+          fontSize={fontSize}
         />
       </DEMONodePrimitive>
     </>

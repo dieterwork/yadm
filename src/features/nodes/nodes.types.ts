@@ -18,6 +18,7 @@ import TKExecutionNode from "./object_fact_diagram/tk_execution/TKExecutionNode"
 import TransactionTimeInnerNode from "./object_fact_diagram/transaction_time_inner/TransactionTimeInnerNode";
 import TransactionTimeNode from "./object_fact_diagram/transaction_time/TransactionTimeNode";
 import OFDTextNode from "./object_fact_diagram/text/OFDTextNode";
+import TextNode from "./text_node/TextNode";
 
 export const nodeTypes = {
   // cooperation model
@@ -44,6 +45,7 @@ export const nodeTypes = {
   production_event: ProductionEventNode,
   entity_class: EntityClassNode,
   derived_entity: DerivedEntityNode,
+  text_node: TextNode,
 };
 
 export type DEMONode<T> = BuiltInNode | CooperationModelNode<T>;

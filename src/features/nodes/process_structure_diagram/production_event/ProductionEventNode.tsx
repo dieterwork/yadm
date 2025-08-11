@@ -11,7 +11,7 @@ const ProductionEventNode = ({
   width,
   height,
 }: NodeProps<ProductionEventNodeType>) => {
-  const { content } = data;
+  const { content, fontSize } = data;
 
   return (
     <>
@@ -28,6 +28,7 @@ const ProductionEventNode = ({
           width={width}
           height={height}
           editable={true}
+          fontSize={fontSize}
           color={
             data.color === "default"
               ? "var(--color-white)"

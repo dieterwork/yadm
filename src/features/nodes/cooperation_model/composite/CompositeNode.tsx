@@ -14,7 +14,7 @@ const CompositeNode = ({
   width,
   height,
 }: NodeProps<CompositeNodeType>) => {
-  const { content } = data;
+  const { content, fontSize } = data;
 
   return (
     <>
@@ -31,6 +31,7 @@ const CompositeNode = ({
           width={width}
           height={height}
           editable={true}
+          fontSize={fontSize}
         />
       </DEMONodePrimitive>
     </>

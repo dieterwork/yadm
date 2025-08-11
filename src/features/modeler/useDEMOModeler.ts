@@ -44,6 +44,7 @@ export interface DEMOModelerState {
   updateNodeExtent: (nodeId: string, extent: CoordinateExtent) => void;
   getNodeAbsolutePosition: (nodeId: string) => { x: number; y: number };
   updateNodeContent: (nodeId: string, content: string) => void;
+  updateNodeFontSize: (nodeId: string, fontSize: number) => void;
   setModelFromJSONObject: (
     object: ReactFlowJsonObject<DEMONode<string>, Edge>
   ) => void;
@@ -114,6 +115,17 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
             return { ...node, data: { ...node.data, scope } };
+          }
+
+          return node;
+        }),
+      });
+    },
+    updateNodeFontSize: (nodeId: string, fontSize: number) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            return { ...node, data: { ...node.data, fontSize } };
           }
 
           return node;

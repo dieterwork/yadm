@@ -24,7 +24,7 @@ const TransactionNode = ({
   width,
   height,
 }: NodeProps<TransactionNodeType>) => {
-  const { content } = data;
+  const { content, fontSize } = data;
 
   return (
     <>
@@ -42,6 +42,7 @@ const TransactionNode = ({
           width={width}
           height={height}
           editable={true}
+          fontSize={fontSize}
         />
       </DEMONodePrimitive>
     </>

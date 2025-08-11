@@ -161,6 +161,11 @@ export const MIN_SIZE_MAP = {
     width: 100,
     height: 100,
   },
+
+  text_node: {
+    width: 100,
+    height: 100,
+  },
 };
 
 export const DEFAULT_CONTENT_MAP = {
@@ -183,4 +188,6 @@ export const DEFAULT_CONTENT_MAP = {
   production_event: "01",
   entity_class: "<div>A</div><div>1</div>",
   derived_entity: "<div>A</div><div>1</div>",
+  text_node: "",
+  textNode: "",
 };

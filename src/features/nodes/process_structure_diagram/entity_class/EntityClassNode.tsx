@@ -11,7 +11,7 @@ const EntityClassNode = ({
   width,
   height,
 }: NodeProps<EntityClassNodeType>) => {
-  const { content } = data;
+  const { content, fontSize } = data;
 
   return (
     <>
@@ -28,6 +28,8 @@ const EntityClassNode = ({
           width={width * 0.75}
           height={height * 0.75}
           editable={true}
+          fontSize={fontSize}
+          textPosition="top"
         />
       </DEMONodePrimitive>
     </>

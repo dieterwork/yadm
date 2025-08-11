@@ -15,7 +15,7 @@ const SelfActivationNode = ({
   width,
   height,
 }: NodeProps<SelfActivationNodeType>) => {
-  const { content } = data;
+  const { content, fontSize } = data;
 
   return (
     <>
@@ -32,6 +32,7 @@ const SelfActivationNode = ({
           width={DEFAULT_SIZE_MAP["transaction"].width}
           height={DEFAULT_SIZE_MAP["transaction"].height}
           editable={true}
+          fontSize={fontSize}
         />
       </DEMONodePrimitive>
     </>

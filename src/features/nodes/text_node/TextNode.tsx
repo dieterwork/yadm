@@ -21,13 +21,9 @@ const TextNode = ({
         width={width}
         height={height}
         type="text_node"
+        actions={["delete", "changeFontSize"]}
       >
-        <EditableContent
-          width={width}
-          height={height}
-          content={content}
-          as=""
-        />
+        <EditableContent width={width} height={height} content={content} />
       </DEMONodePrimitive>
     </>
   );

@@ -3,6 +3,7 @@ import {
   IconContext,
   PaintBrushIcon,
   SlidersHorizontalIcon,
+  TextAaIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
 import { NodeToolbar as _NodeToolbar, Position } from "@xyflow/react";
@@ -26,15 +27,21 @@ interface NodeToolbarProps {
 }
 
 const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
-  const { deleteNode, updateNodeState, updateNodeScope, updateNodeColor } =
-    useDEMOModeler(
-      useShallow((state: DEMOModelerState) => ({
-        deleteNode: state.deleteNode,
-        updateNodeState: state.updateNodeState,
-        updateNodeScope: state.updateNodeScope,
-        updateNodeColor: state.updateNodeColor,
-      }))
-    );
+  const {
+    deleteNode,
+    updateNodeState,
+    updateNodeScope,
+    updateNodeColor,
+    updateNodeFontSize,
+  } = useDEMOModeler(
+    useShallow((state: DEMOModelerState) => ({
+      deleteNode: state.deleteNode,
+      updateNodeState: state.updateNodeState,
+      updateNodeScope: state.updateNodeScope,
+      updateNodeColor: state.updateNodeColor,
+      updateNodeFontSize: state.updateNodeFontSize,
+    }))
+  );
   return (
     <>
       <IconContext value={{ size: 24 }}>
@@ -50,6 +57,33 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
               >
                 <TrashIcon />
               </Button>
+            )}
+            {actions?.indexOf("changeFontSize") !== -1 && (
+              <MenuTrigger>
+                <Button
+                  className="nodrag nopan cursor-pointer"
+                  onPress={() => {
+                    deleteNode(id);
+                  }}
+                  aria-label="Change font size"
+                >
+                  <TextAaIcon />
+                </Button>
+                <Popover placement="right top" className="nodrag nopan">
+                  <Menu>
+                    {[10, 12, 14, 16, 18, 20].map((num) => (
+                      <MenuItem
+                        className="cursor-pointer select-none"
+                        onAction={() => {
+                          updateNodeFontSize(id, num);
+                        }}
+                      >
+                        {num}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Popover>
+              </MenuTrigger>
             )}
             {data?.state && (
               <MenuTrigger>

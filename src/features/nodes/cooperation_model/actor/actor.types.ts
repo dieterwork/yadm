@@ -4,6 +4,12 @@ import type { Scope } from "../cooperation_model.types";
 export type ActorState = "default" | "unclear" | "missing";
 
 export type ActorNode = Node<
-  { state: ActorState; scope: Scope; content: string; color: string },
+  {
+    state: ActorState;
+    scope: Scope;
+    content: string;
+    color: string;
+    fontSize: number;
+  },
   "actor"
 >;

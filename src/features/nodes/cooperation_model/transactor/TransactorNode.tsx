@@ -12,7 +12,7 @@ const TransactorNode = ({
   width,
   height,
 }: NodeProps<TransactorNodeType>) => {
-  const { content } = data;
+  const { content, fontSize } = data;
 
   return (
     <>
@@ -29,6 +29,7 @@ const TransactorNode = ({
           height={height ? height - MEDIUM_NODE_SIZE / 2 : undefined}
           style={{ bottom: 0, top: "auto" }}
           content={content}
+          fontSize={fontSize}
         />
       </DEMONodePrimitive>
     </>

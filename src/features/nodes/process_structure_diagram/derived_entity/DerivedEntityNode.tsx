@@ -11,7 +11,7 @@ const DerivedEntityNode = ({
   width,
   height,
 }: NodeProps<DerivedEntityNodeType>) => {
-  const { content } = data;
+  const { content, fontSize } = data;
 
   return (
     <>
@@ -28,6 +28,8 @@ const DerivedEntityNode = ({
           width={width}
           height={height}
           editable={true}
+          textPosition="top"
+          fontSize={fontSize}
         />
       </DEMONodePrimitive>
     </>

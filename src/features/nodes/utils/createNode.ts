@@ -349,6 +349,20 @@ export const createNode = <T extends string>({
         selected: true,
       };
     }
+    case "text_node": {
+      return {
+        id,
+        type,
+        position,
+        parentId,
+        data: { fontSize: 12 },
+        style: {
+          width: 200,
+          height: 150,
+        },
+        selected: true,
+      };
+    }
     default:
       throw new Error(`Could not find node type ${type}`);
   }

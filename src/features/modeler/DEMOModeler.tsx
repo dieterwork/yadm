@@ -22,6 +22,7 @@ import { useShallow } from "zustand/react/shallow";
 import { convertAbsoluteToParentRelativePosition } from "../nodes/utils/getNodePositionInsideParent";
 import { SMALL_NODE_SIZE, X_SMALL_NODE_SIZE } from "../nodes/utils/consts";
 import uuid from "../../shared/utils/uuid";
+import SideMenu from "../side_menu/SideMenu";
 
 const transactionTimeNodes = [
   "c_act",
@@ -194,6 +195,7 @@ const DEMOModeler = () => {
           <Background />
           <MiniMap />
           <Controls />
+          <SideMenu />
         </ReactFlow>
       </div>
     </div>

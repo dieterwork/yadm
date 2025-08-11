@@ -104,10 +104,6 @@ const EditableContent = ({
     maxLines,
   });
 
-  useEffect(() => {
-    console.log(content);
-  }, [content]);
-
   return (
     <div
       {...restProps}

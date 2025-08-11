@@ -24,10 +24,10 @@ interface DEMONodePrimitiveProps<T> extends NodeProps<ActorNode<T>> {
   resizable?: boolean;
   keepAspectRatio?: boolean;
   children: ReactNode;
-  actions?: string[];
+  actions?: Action[];
 }
 
-type Action = "changeColor" | "delete";
+type Action = "changeColor" | "delete" | "changeFontSize";
 
 const DEMONodePrimitive = <T extends string>({
   id,
@@ -39,7 +39,7 @@ const DEMONodePrimitive = <T extends string>({
   resizable = true,
   keepAspectRatio = false,
   children,
-  actions = ["changeColor", "delete"],
+  actions = ["changeColor", "delete", "changeFontSize"],
 }: DEMONodePrimitiveProps<T>) => {
   const DEMOShape = shapeMap[type];
 

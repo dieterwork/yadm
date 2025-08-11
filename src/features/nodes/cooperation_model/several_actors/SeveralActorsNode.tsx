@@ -16,7 +16,7 @@ const SeveralActorsNode = ({
   width,
   height,
 }: NodeProps<SeveralActorsNodeType>) => {
-  const { content } = data;
+  const { content, fontSize } = data;
 
   return (
     <>
@@ -34,6 +34,7 @@ const SeveralActorsNode = ({
           height={DEFAULT_SIZE_MAP["transaction"].height}
           editable={true}
           style={{ bottom: "auto", right: 100 / 8 }}
+          fontSize={fontSize}
         />
       </DEMONodePrimitive>
     </>
