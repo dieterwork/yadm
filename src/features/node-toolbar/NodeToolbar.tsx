@@ -1,4 +1,10 @@
-import { TrashIcon } from "@phosphor-icons/react";
+import {
+  CrosshairIcon,
+  IconContext,
+  PaintBrushIcon,
+  SlidersHorizontalIcon,
+  TrashIcon,
+} from "@phosphor-icons/react";
 import { NodeToolbar as _NodeToolbar, Position } from "@xyflow/react";
 import {
   Button,
@@ -16,9 +22,10 @@ import { useShallow } from "zustand/react/shallow";
 interface NodeToolbarProps {
   id: string;
   type: string;
+  actions?: string[];
 }
 
-const NodeToolbar = ({ id, data, type }: NodeToolbarProps) => {
+const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
   const { deleteNode, updateNodeState, updateNodeScope, updateNodeColor } =
     useDEMOModeler(
       useShallow((state: DEMOModelerState) => ({
@@ -30,134 +37,190 @@ const NodeToolbar = ({ id, data, type }: NodeToolbarProps) => {
     );
   return (
     <>
-      <_NodeToolbar position={Position.Right}>
-        <div className="flex flex-col">
-          <Button
-            className="nodrag nopan"
-            onPress={() => {
-              deleteNode(id);
-            }}
-          >
-            <TrashIcon size={24} />
-          </Button>
-          {data?.state && (
-            <MenuTrigger>
-              <Button className="nodrag nopan">State</Button>
-              <Popover placement="right top">
-                <Menu>
-                  {type === "actor" || type === "transaction" ? (
-                    <>
-                      <MenuItem
-                        onAction={() => {
-                          updateNodeState(id, "default", type);
-                        }}
-                      >
-                        Default
-                      </MenuItem>
-                      <MenuItem
-                        onAction={() => {
-                          updateNodeState(id, "unclear", type);
-                        }}
-                      >
-                        Unclear
-                      </MenuItem>
-                      <MenuItem
-                        onAction={() => {
-                          updateNodeState(id, "missing", type);
-                        }}
-                      >
-                        Missing
-                      </MenuItem>
-                    </>
-                  ) : (
-                    <>
-                      <MenuItem
-                        onAction={() => {
-                          updateNodeState(id, "internal", type);
-                        }}
-                      >
-                        Internal
-                      </MenuItem>
-                      <MenuItem
-                        onAction={() => {
-                          updateNodeState(id, "external", type);
-                        }}
-                      >
-                        External
-                      </MenuItem>
-                    </>
-                  )}
-                </Menu>
-              </Popover>
-            </MenuTrigger>
-          )}
-          {data?.scope && (
-            <MenuTrigger>
-              <Button className="nodrag nopan">Scope</Button>
-              <Popover placement="right top">
-                <Menu className="bg-white">
-                  <MenuItem
-                    onAction={() => {
-                      updateNodeScope(id, "in", type);
-                    }}
-                  >
-                    In
-                  </MenuItem>
-                  <MenuItem
-                    onAction={() => {
-                      updateNodeScope(id, "out", type);
-                    }}
-                  >
-                    Out
-                  </MenuItem>
-                </Menu>
-              </Popover>
-            </MenuTrigger>
-          )}
-          <MenuTrigger>
-            <Button className="nodrag nopan">Color</Button>
-            <Popover placement="right top">
-              <Menu className="bg-white">
-                <MenuItem
-                  onAction={() => {
-                    updateNodeColor(id, "default");
-                  }}
+      <IconContext value={{ size: 24 }}>
+        <_NodeToolbar position={Position.Right}>
+          <div className="flex flex-col align-center gap-1">
+            {actions?.indexOf("delete") !== -1 && (
+              <Button
+                className="nodrag nopan cursor-pointer"
+                onPress={() => {
+                  deleteNode(id);
+                }}
+                aria-label="Delete"
+              >
+                <TrashIcon />
+              </Button>
+            )}
+            {data?.state && (
+              <MenuTrigger>
+                <Button
+                  className="nodrag nopan cursor-pointer select-none"
+                  aria-label="Change state"
                 >
-                  Default
-                </MenuItem>
-                <MenuItem
-                  onAction={() => {
-                    updateNodeColor(id, "blue");
-                  }}
+                  <SlidersHorizontalIcon />
+                </Button>
+                <Popover placement="right top" className="nodrag nopan">
+                  <Menu>
+                    {type === "actor" || type === "transaction" ? (
+                      <>
+                        <MenuItem
+                          className="cursor-pointer select-none"
+                          onAction={() => {
+                            updateNodeState(id, "default", type);
+                          }}
+                        >
+                          Default
+                        </MenuItem>
+                        <MenuItem
+                          className="cursor-pointer select-none"
+                          onAction={() => {
+                            updateNodeState(id, "unclear", type);
+                          }}
+                        >
+                          Unclear
+                        </MenuItem>
+                        <MenuItem
+                          className="cursor-pointer select-none"
+                          onAction={() => {
+                            updateNodeState(id, "missing", type);
+                          }}
+                        >
+                          Missing
+                        </MenuItem>
+                        {type === "transaction" && (
+                          <MenuItem
+                            className="cursor-pointer select-none"
+                            onAction={() => {
+                              updateNodeState(id, "double", type);
+                            }}
+                          >
+                            Double
+                          </MenuItem>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <MenuItem
+                          className="cursor-pointer select-none"
+                          onAction={() => {
+                            updateNodeState(id, "internal", type);
+                          }}
+                        >
+                          Internal
+                        </MenuItem>
+                        <MenuItem
+                          className="cursor-pointer select-none"
+                          onAction={() => {
+                            updateNodeState(id, "external", type);
+                          }}
+                        >
+                          External
+                        </MenuItem>
+                      </>
+                    )}
+                  </Menu>
+                </Popover>
+              </MenuTrigger>
+            )}
+            {data?.scope && (
+              <MenuTrigger>
+                <Button className="nodrag nopan cursor-pointer">
+                  <CrosshairIcon />
+                </Button>
+                <Popover placement="right top">
+                  <Menu className="bg-white">
+                    <MenuItem
+                      className="cursor-pointer select-none"
+                      onAction={() => {
+                        updateNodeScope(id, "in", type);
+                      }}
+                    >
+                      In
+                    </MenuItem>
+                    <MenuItem
+                      className="cursor-pointer select-none"
+                      onAction={() => {
+                        updateNodeScope(id, "out", type);
+                      }}
+                    >
+                      Out
+                    </MenuItem>
+                  </Menu>
+                </Popover>
+              </MenuTrigger>
+            )}
+            {actions.indexOf("changeColor") !== -1 && (
+              <MenuTrigger>
+                <Button
+                  className="nodrag nopan cursor-pointer select-none"
+                  aria-label="Change color"
                 >
-                  Blue
-                </MenuItem>
-                <MenuItem
-                  onAction={() => {
-                    updateNodeColor(id, "red");
-                  }}
-                >
-                  Red
-                </MenuItem>
-                <MenuItem
-                  onAction={() => {
-                    updateNodeColor(id, "green");
-                  }}
-                >
-                  Green
-                </MenuItem>
-                <MenuItem
-                  onAction={() => {
-                    updateNodeColor(id, "yellow");
-                  }}
-                >
-                  Yellow
-                </MenuItem>
-              </Menu>
-            </Popover>
-          </MenuTrigger>
-        </div>
-      </_NodeToolbar>
+                  <PaintBrushIcon />
+                </Button>
+                <Popover placement="right top">
+                  <Menu className="bg-white">
+                    <MenuItem
+                      isDisabled={data?.scope === "out"}
+                      className={
+                        "data-disabled:opacity-[0.5] cursor-pointer select-none"
+                      }
+                      onAction={() => {
+                        updateNodeColor(id, "default");
+                      }}
+                    >
+                      Default
+                    </MenuItem>
+                    <MenuItem
+                      className={
+                        "data-disabled:opacity-[0.5] cursor-pointer select-none"
+                      }
+                      isDisabled={data?.scope === "out"}
+                      onAction={() => {
+                        updateNodeColor(id, "blue");
+                      }}
+                    >
+                      Blue
+                    </MenuItem>
+                    <MenuItem
+                      className={
+                        "data-disabled:opacity-[0.5] cursor-pointer select-none"
+                      }
+                      isDisabled={data?.scope === "out"}
+                      onAction={() => {
+                        updateNodeColor(id, "red");
+                      }}
+                    >
+                      Red
+                    </MenuItem>
+                    <MenuItem
+                      className={
+                        "data-disabled:opacity-[0.5] cursor-pointer select-none"
+                      }
+                      isDisabled={data?.scope === "out"}
+                      onAction={() => {
+                        updateNodeColor(id, "green");
+                      }}
+                    >
+                      Green
+                    </MenuItem>
+                    <MenuItem
+                      className={
+                        "data-disabled:opacity-[0.5] cursor-pointer select-none"
+                      }
+                      isDisabled={data?.scope === "out"}
+                      onAction={() => {
+                        updateNodeColor(id, "yellow");
+                      }}
+                    >
+                      Yellow
+                    </MenuItem>
+                  </Menu>
+                </Popover>
+              </MenuTrigger>
+            )}
+          </div>
+        </_NodeToolbar>
+      </IconContext>
       <div>{data?.label}</div>
     </>
   );
