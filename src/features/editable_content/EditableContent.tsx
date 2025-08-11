@@ -95,12 +95,13 @@ const EditableContent = ({
     getPadding(fontSize)
   );
 
-  const { onInput, onKeyDown } = useEditableContent({
+  const props = useEditableContent({
     content,
     ref,
     onContentUpdate: (content) => {
       updateNodeContent(nodeId, content);
     },
+    maxLines,
   });
 
   useEffect(() => {
@@ -119,8 +120,7 @@ const EditableContent = ({
         suppressContentEditableWarning={true}
         className="block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
         style={{ alignContent: getAlignContentStyle(textPosition) }}
-        onKeyDown={onKeyDown}
-        onInput={onInput}
+        {...props}
       ></div>
     </div>
   );

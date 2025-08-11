@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useState,
   type FormEvent,
   type KeyboardEvent,
   type RefObject,
@@ -16,11 +17,14 @@ export const useEditableContent = ({
   content,
   ref,
   onContentUpdate,
+  maxLines,
 }: {
   content?: string;
   ref: RefObject<HTMLDivElement>;
   onContentUpdate: (e: string) => void;
+  maxLines?: number;
 }) => {
+  const [canEdit, setEdit] = useState(false);
   useEffect(() => {
     const el = ref?.current;
     if (!el || !content) return;
@@ -31,9 +35,12 @@ export const useEditableContent = ({
   }, [content]);
 
   const onInput = (e: FormEvent<HTMLDivElement>) => {
-    if (!(e.target instanceof HTMLElement)) return;
-    onContentUpdate(e.target.innerHTML);
+    const target = e.currentTarget;
+    if (!(target instanceof HTMLElement)) return;
+
+    onContentUpdate(target.innerHTML);
   };
+
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.ctrlKey && e.key === "b") {
       e.preventDefault();
