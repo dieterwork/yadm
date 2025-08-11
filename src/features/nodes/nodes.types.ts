@@ -17,6 +17,7 @@ import CActNode from "./object_fact_diagram/c_act/CActNode";
 import TKExecutionNode from "./object_fact_diagram/tk_execution/TKExecutionNode";
 import TransactionTimeInnerNode from "./object_fact_diagram/transaction_time_inner/TransactionTimeInnerNode";
 import TransactionTimeNode from "./object_fact_diagram/transaction_time/TransactionTimeNode";
+import OFDTextNode from "./object_fact_diagram/text/OFDTextNode";
 
 export const nodeTypes = {
   // cooperation model
@@ -37,6 +38,7 @@ export const nodeTypes = {
   c_fact: CFactNode,
   c_act: CActNode,
   tk_execution: TKExecutionNode,
+  ofd_text_node: OFDTextNode,
 
   // object fact diagram
   production_event: ProductionEventNode,

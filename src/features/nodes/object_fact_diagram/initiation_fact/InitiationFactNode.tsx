@@ -18,6 +18,7 @@ const InitiationFactNode = ({
         selected={selected}
         width={width}
         height={height}
+        resizable={false}
         type="initiation_fact"
       />
     </>

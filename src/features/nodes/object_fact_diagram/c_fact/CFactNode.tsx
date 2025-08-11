@@ -18,6 +18,7 @@ const CFactNode = ({
         selected={selected}
         width={width}
         height={height}
+        resizable={false}
         type="c_fact"
       />
     </>

@@ -5,6 +5,7 @@ import DiamondInCircle from "../../../shapes/DiamondInCircle";
 import Rectangle from "../../../shapes/Rectangle";
 import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
 import type { SelfActivationState } from "./selfActivation.types";
+import { MEDIUM_NODE_SIZE } from "../../utils/consts";
 
 interface SelfActivationShapeProps {
   state: SelfActivationState;
@@ -29,11 +30,15 @@ const SelfActivationShape = ({ state, color }: SelfActivationShapeProps) => {
           fillOpacity={DEFAULT_FILL_OPACITY}
         />
       </g>
-      <g transform={`translate(${+width / 4}, ${+height / 4})`}>
+      <g
+        transform={`translate(${+width / 2 - MEDIUM_NODE_SIZE / 2}, ${
+          +height / 2 - MEDIUM_NODE_SIZE / 2
+        })`}
+      >
         <DiamondInCircle
           fill={fill}
-          width={+width / 2}
-          height={+width / 2}
+          width={MEDIUM_NODE_SIZE}
+          height={MEDIUM_NODE_SIZE}
           fillOpacity={DEFAULT_FILL_OPACITY}
           diamondAttributes={{ stroke: "var(--color-red-500)" }}
         />

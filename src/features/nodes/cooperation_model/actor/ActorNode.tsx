@@ -1,6 +1,6 @@
 import { type NodeProps } from "@xyflow/react";
 
-import type { ActorNode } from "./actor.types";
+import type { ActorNode as ActorNodeType } from "./actor.types";
 import DEMONodePrimitive from "../../DEMONodePrimitive";
 import EditableContent from "../../../editable_content/EditableContent";
 
@@ -10,7 +10,7 @@ const ActorNode = ({
   selected,
   width,
   height,
-}: NodeProps<ActorNode>) => {
+}: NodeProps<ActorNodeType>) => {
   const { content } = data;
 
   return (

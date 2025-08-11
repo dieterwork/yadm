@@ -3,6 +3,7 @@ import { type NodeProps } from "@xyflow/react";
 import DEMONodePrimitive from "../../DEMONodePrimitive";
 import type { TransactorNode as TransactorNodeType } from "./transactor.types";
 import EditableContent from "../../../editable_content/EditableContent";
+import { MEDIUM_NODE_SIZE } from "../../utils/consts";
 
 const TransactorNode = ({
   id,
@@ -24,7 +25,9 @@ const TransactorNode = ({
         type="transactor"
       >
         <EditableContent
-          style={{ height: height && width ? height - width / 4 : 0 }}
+          width={width}
+          height={height ? height - MEDIUM_NODE_SIZE / 2 : undefined}
+          style={{ bottom: 0, top: "auto" }}
           content={content}
         />
       </DEMONodePrimitive>

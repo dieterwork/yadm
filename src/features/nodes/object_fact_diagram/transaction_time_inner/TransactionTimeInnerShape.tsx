@@ -1,6 +1,7 @@
 import Rectangle from "../../../shapes/Rectangle";
 import { useContext } from "react";
 import { ShapeContext } from "../../../shapes/ShapeContext";
+import { X_SMALL_NODE_SIZE } from "../../utils/consts";
 
 interface ActorShapeProps {
   color?: string;
@@ -13,8 +14,12 @@ const TransactionTimeInnerShape = ({ color }: ActorShapeProps) => {
 
   const fill = color ? color : restSvgAttributes.fill;
 
-  const rectWidth = width - 25;
-  const rectHeight = height - 25;
+  const strokeWidth = svgAttributes.strokeWidth
+    ? +svgAttributes.strokeWidth
+    : 0;
+
+  const rectWidth = width - X_SMALL_NODE_SIZE + 2 * strokeWidth;
+  const rectHeight = height - X_SMALL_NODE_SIZE + 2 * strokeWidth;
 
   return (
     <>

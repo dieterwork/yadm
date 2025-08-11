@@ -11,6 +11,7 @@ import { useRef, type ReactNode } from "react";
 import NodeToolbar from "../node-toolbar/NodeToolbar";
 import { useDEMOModeler } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
+import { MIN_SIZE_MAP } from "./utils/consts";
 
 const handlePositions = [
   Position.Top,
@@ -23,7 +24,10 @@ interface DEMONodePrimitiveProps<T> extends NodeProps<ActorNode<T>> {
   resizable?: boolean;
   keepAspectRatio?: boolean;
   children: ReactNode;
+  actions?: string[];
 }
+
+type Action = "changeColor" | "delete";
 
 const DEMONodePrimitive = <T extends string>({
   id,
@@ -35,6 +39,7 @@ const DEMONodePrimitive = <T extends string>({
   resizable = true,
   keepAspectRatio = false,
   children,
+  actions = ["changeColor", "delete"],
 }: DEMONodePrimitiveProps<T>) => {
   const DEMOShape = shapeMap[type];
 
@@ -64,22 +69,18 @@ const DEMONodePrimitive = <T extends string>({
   return (
     <div>
       {/* Controls */}
-      <NodeToolbar id={id} data={data} type={type} />
+      {actions && (
+        <NodeToolbar id={id} data={data} type={type} actions={actions} />
+      )}
       {resizable && (
         <NodeResizer
           keepAspectRatio={keepAspectRatio}
           isVisible={selected}
           onResize={changeChildExtent}
+          minHeight={MIN_SIZE_MAP[type].height}
+          minWidth={MIN_SIZE_MAP[type].width}
         />
       )}
-      {/* {handlePositions.map((position) => (
-        <Handle
-          id={position}
-          type="source"
-          position={position}
-          key={position}
-        />
-      ))} */}
       {/* Shape */}
       {DEMOShape && (
         <Shape ref={shapeRef} width={width} height={height} strokeWidth={2}>

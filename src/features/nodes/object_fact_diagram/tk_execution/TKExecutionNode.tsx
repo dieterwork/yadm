@@ -18,6 +18,7 @@ const TKExecutionNode = ({
         selected={selected}
         width={width}
         height={height}
+        resizable={false}
         type="tk_execution"
       />
     </>

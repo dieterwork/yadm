@@ -23,12 +23,15 @@ const TransactionKindNode = ({
         height={height}
         type="transaction_kind"
         resizable={false}
+        actions={null}
       >
         <EditableContent
           content={content}
           width={width}
           height={height}
           editable={true}
+          size="large"
+          as="input"
         />
       </DEMONodePrimitive>
     </>

@@ -24,10 +24,17 @@ const ProductionEventNode = ({
         type="production_event"
       >
         <EditableContent
+          as="input"
           content={content}
           width={width}
           height={height}
           editable={true}
+          color={
+            data.color === "default"
+              ? "var(--color-white)"
+              : "var(--color-black)"
+          }
+          size="large"
         />
       </DEMONodePrimitive>
     </>

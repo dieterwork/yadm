@@ -3,9 +3,10 @@ import { NodeResizer, type NodeProps, Handle, Position } from "@xyflow/react";
 import { useRef } from "react";
 import Shape from "../../../shapes/Shape";
 import TransactionShape from "./TransactionShape";
-import type { TransactionNode } from "./transaction.types";
+import type { TransactionNode as TransactionNodeType } from "./transaction.types";
 import DEMONodePrimitive from "../../DEMONodePrimitive";
 import uuid from "../../../../shared/utils/uuid";
+import EditableContent from "../../../editable_content/EditableContent";
 
 const handlePositions = [
   Position.Top,
@@ -22,7 +23,7 @@ const TransactionNode = ({
   selected,
   width,
   height,
-}: NodeProps<TransactionNode>) => {
+}: NodeProps<TransactionNodeType>) => {
   const { content } = data;
 
   const contentWithUUID = content.map((content) => ({ content, id: uuid() }));
@@ -36,7 +37,14 @@ const TransactionNode = ({
         width={width}
         height={height}
         type="transaction"
+        resizable={false}
       >
+        <EditableContent
+          as="input"
+          content={content}
+          width={width}
+          height={height}
+        />
         <div
           className={`transaction-wrapper | absolute top-[50%] left-[50%] translate-[-50%] w-full h-full p-${padding} overflow-hidden text-center`}
         >

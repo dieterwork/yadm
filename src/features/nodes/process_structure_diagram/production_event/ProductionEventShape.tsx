@@ -15,9 +15,8 @@ const ProductionEventShape = ({ color }: ProductionEventShapeProps) => {
 
   const { width, height, ...restSvgAttributes } = svgAttributes;
 
-  const fill = color ? color : svgAttributes?.fill;
-
-  console.log(svgAttributes);
+  const fill = color !== "default" ? color : svgAttributes?.fill;
+  const fillOpacity = color !== "default" ? 0.2 : 1;
 
   return (
     <>
@@ -26,7 +25,7 @@ const ProductionEventShape = ({ color }: ProductionEventShapeProps) => {
         width={width}
         height={height}
         fill={fill}
-        fillOpacity={1}
+        fillOpacity={fillOpacity}
       />
     </>
   );

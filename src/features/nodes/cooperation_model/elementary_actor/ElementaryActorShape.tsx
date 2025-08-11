@@ -5,6 +5,7 @@ import DiamondInCircle from "../../../shapes/DiamondInCircle";
 import type { ElementaryActorState } from "./elementaryActor.types";
 import Rectangle from "../../../shapes/Rectangle";
 import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
+import { DEFAULT_SIZE_MAP, MEDIUM_NODE_SIZE } from "../../utils/consts";
 
 interface TransactionShapeProps {
   state: ElementaryActorState;
@@ -23,25 +24,29 @@ const ElementaryActorShape = ({ state, color }: TransactionShapeProps) => {
       <g
         stroke={restSvgAttributes.stroke}
         strokeWidth={restSvgAttributes.strokeWidth}
-        transform={`translate(0, ${+width / 4})`}
+        transform={`translate(0, ${MEDIUM_NODE_SIZE / 2})`}
       >
-        <Rectangle width={width} height={+height - +width / 4} fill="white" />
+        <Rectangle
+          width={width}
+          height={+height - MEDIUM_NODE_SIZE / 2}
+          fill="white"
+        />
         <Rectangle
           fill={fill}
           width={width}
-          height={+height - +width / 4}
+          height={+height - MEDIUM_NODE_SIZE / 2}
           fillOpacity={DEFAULT_FILL_OPACITY}
         />
       </g>
       <g
-        transform={`translate(${+width / 4}, 0)`}
+        transform={`translate(${width / 2 - MEDIUM_NODE_SIZE / 2}, 0)`}
         stroke="black"
         strokeWidth={2}
       >
         <DiamondInCircle
           fill={fill}
-          width={+width / 2}
-          height={+width / 2}
+          width={MEDIUM_NODE_SIZE}
+          height={MEDIUM_NODE_SIZE}
           fillOpacity={DEFAULT_FILL_OPACITY}
           diamondAttributes={{ stroke: "var(--color-red-500)" }}
         />

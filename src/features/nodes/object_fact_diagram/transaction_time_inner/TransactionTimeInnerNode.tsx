@@ -19,6 +19,7 @@ const TransactionTimeInnerNode = ({
         width={width}
         height={height}
         type="transaction_time_inner"
+        actions={null}
       />
     </>
   );

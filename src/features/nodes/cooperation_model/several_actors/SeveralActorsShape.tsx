@@ -23,7 +23,7 @@ const SeveralActorsShape = ({ state, color }: TransactionShapeProps) => {
 
   const dimensions = calculateDoubleDiamondInCircleDimensions(
     DEFAULT_SIZE_MAP["transaction"].width,
-    1 / 8
+    1 / 12
   );
 
   return (
