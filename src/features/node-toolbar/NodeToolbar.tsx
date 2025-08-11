@@ -1,4 +1,5 @@
 import {
+  CheckIcon,
   CrosshairIcon,
   IconContext,
   PaintBrushIcon,
@@ -35,6 +36,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
     updateNodeFontSize,
   } = useDEMOModeler(
     useShallow((state: DEMOModelerState) => ({
+      getNode: state.getNode,
       deleteNode: state.deleteNode,
       updateNodeState: state.updateNodeState,
       updateNodeScope: state.updateNodeScope,
@@ -42,11 +44,12 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
       updateNodeFontSize: state.updateNodeFontSize,
     }))
   );
+
   return (
     <>
       <IconContext value={{ size: 24 }}>
         <_NodeToolbar position={Position.Right}>
-          <div className="flex flex-col align-center gap-1">
+          <div className="flex flex-col items-center gap-1">
             {actions?.indexOf("delete") !== -1 && (
               <Button
                 className="nodrag nopan cursor-pointer"
@@ -70,15 +73,18 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                   <TextAaIcon />
                 </Button>
                 <Popover placement="right top" className="nodrag nopan">
-                  <Menu>
+                  <Menu className="bg-white">
                     {[10, 12, 14, 16, 18, 20].map((num) => (
                       <MenuItem
-                        className="cursor-pointer select-none"
+                        className="cursor-pointer select-none flex items-center gap-1"
                         onAction={() => {
                           updateNodeFontSize(id, num);
                         }}
                       >
                         {num}
+                        {data.fontSize === num && (
+                          <CheckIcon size={14} color="var(--color-blue-900)" />
+                        )}
                       </MenuItem>
                     ))}
                   </Menu>
@@ -94,7 +100,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                   <SlidersHorizontalIcon />
                 </Button>
                 <Popover placement="right top" className="nodrag nopan">
-                  <Menu>
+                  <Menu className="bg-white">
                     {type === "actor" || type === "transaction" ? (
                       <>
                         <MenuItem
