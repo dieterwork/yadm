@@ -1,9 +1,16 @@
 import { cn } from "@sglara/cn";
-import type { HTMLAttributes } from "react";
+import {
+  useEffect,
+  useRef,
+  type FormEvent,
+  type HTMLAttributes,
+  type RefObject,
+} from "react";
 import { Input, TextField } from "react-aria-components";
 import { useDEMOModeler } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
 import { useNodeId } from "@xyflow/react";
+import { useEditableContent } from "./useEditableContent";
 
 type TextPosition = "top" | "bottom" | "center";
 
@@ -11,13 +18,13 @@ interface EditableContentProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "content"> {
   width?: number;
   height?: number;
-  content?: string[] | string;
+  content?: string;
   editable?: boolean;
   textPosition?: TextPosition;
-  as?: "contentEditable" | "input";
-  maxLength?: number;
-  size?: "small" | "medium" | "large";
+  fontSize?: number;
   color?: string;
+  maxLines?: number;
+  ref?: RefObject<HTMLDivElement>;
 }
 
 const getAlignContentStyle = (textPosition: TextPosition) => {
@@ -37,36 +44,28 @@ const getAlignContentStyle = (textPosition: TextPosition) => {
   }
 };
 
-const getPadding = (size: string) => {
-  switch (size) {
-    case "small": {
+const getPadding = (fontSize: number) => {
+  switch (fontSize) {
+    case 10: {
       return "p-6";
     }
-    case "medium": {
+    case 12: {
+      return "p-6";
+    }
+    case 14: {
       return "p-4";
     }
-    case "large": {
+    case 16: {
       return "p-2";
     }
-    default: {
-      throw new Error("Invalid size");
+    case 18: {
+      return "p-2";
     }
-  }
-};
-
-const getFontSize = (size: string) => {
-  switch (size) {
-    case "small": {
-      return "text-sm";
-    }
-    case "medium": {
-      return "text-base";
-    }
-    case "large": {
-      return "text-lg";
+    case 20: {
+      return "p-1";
     }
     default: {
-      throw new Error("Invalid size");
+      return "p-4";
     }
   }
 };
@@ -77,71 +76,52 @@ const EditableContent = ({
   content,
   editable = true,
   textPosition = "center",
-  as = "contentEditable",
-  size = "medium",
-  maxLength = 2,
+  fontSize = 14,
   color = "var(--color-black)",
+  maxLines = 3,
+  ref,
   ...restProps
 }: EditableContentProps) => {
+  const nodeId = useNodeId();
+  if (!nodeId) throw new Error("No node id found");
+
+  if (!ref) ref = useRef<HTMLDivElement>(null!);
+  const { updateNodeContent } = useDEMOModeler(
+    useShallow((state) => ({ updateNodeContent: state.updateNodeContent }))
+  );
   const classes = cn(
     "editable-content-wrapper | absolute inset-0 m-auto overflow-hidden text-center",
     { "w-full": !width, "h-full": !height },
-    getPadding(size),
-    getFontSize(size)
+    getPadding(fontSize)
   );
 
-  const nodeId = useNodeId();
+  const { onInput, onKeyDown } = useEditableContent({
+    content,
+    ref,
+    onContentUpdate: (content) => {
+      updateNodeContent(nodeId, content);
+    },
+  });
 
-  const { updateNodeContent, getNode } = useDEMOModeler(
-    useShallow((state) => ({
-      updateNodeContent: state.updateNodeContent,
-      getNode: state.getNode,
-    }))
-  );
+  useEffect(() => {
+    console.log(content);
+  }, [content]);
 
   return (
     <div
       {...restProps}
       className={cn(classes, restProps.className)}
-      style={{ ...restProps.style, width, height, color }}
+      style={{ ...restProps.style, width, height, color, fontSize }}
     >
-      {as === "contentEditable" ? (
-        <div
-          contentEditable={!!editable}
-          suppressContentEditableWarning={true}
-          className="block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
-          style={{ alignContent: getAlignContentStyle(textPosition) }}
-        >
-          {typeof content === "string" ? (
-            <>
-              <div>{content}</div>
-            </>
-          ) : (
-            Array.isArray(content) &&
-            content.map((text) => (
-              <>
-                <div>{text}</div>
-              </>
-            ))
-          )}
-        </div>
-      ) : (
-        typeof content === "string" && (
-          <TextField
-            className="block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
-            onChange={(val) => {
-              updateNodeContent(nodeId ?? "", val);
-            }}
-            defaultValue={content}
-            maxLength={maxLength}
-          >
-            <Input
-              className="block w-full h-full"
-              style={{ textAlign: getAlignContentStyle(textPosition) }}
-            />
-          </TextField>
-        )
-      )}
+      <div
+        ref={ref}
+        contentEditable={!!editable}
+        suppressContentEditableWarning={true}
+        className="block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
+        style={{ alignContent: getAlignContentStyle(textPosition) }}
+        onKeyDown={onKeyDown}
+        onInput={onInput}
+      ></div>
     </div>
   );
 };
