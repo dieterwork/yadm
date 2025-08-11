@@ -3,7 +3,7 @@
 
 export const calculateDoubleDiamondInCircleDimensions = (
   circleWidth: number,
-  offset: number = 1 / 8
+  offset: number = 1 / 12
 ) => {
   // get circleWidth and offsetWidth
   return {
