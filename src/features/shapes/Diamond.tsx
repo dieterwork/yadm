@@ -1,14 +1,14 @@
 import type { ShapeProps } from "./shapes.types";
 import { generatePath } from "./utils/generatePath";
 
-const Diamond = ({ width, height, ...svgAttributes }: ShapeProps) => {
+const Diamond = ({ width, height, x, y, ...svgAttributes }: ShapeProps) => {
   if (!width || !height)
     throw new Error("No width/height provided for diamond");
   const diamondPath = generatePath([
-    [0, height / 2],
-    [width / 2, 0],
-    [width, height / 2],
-    [width / 2, height],
+    [0 + 2, height / 2 + 2],
+    [width / 2 + 2, 0 + 2],
+    [width + 2, height / 2 + 2],
+    [width / 2 + 2, height + 2],
   ]);
 
   return (

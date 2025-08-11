@@ -21,8 +21,8 @@ const DiamondInCircle = ({
     ? +restSvgAttributes.strokeWidth
     : 0;
 
-  const diamondWidth = width - strokeWidth * 2;
-  const diamondHeight = height - strokeWidth * 2;
+  const diamondWidth = width - 2 * 2;
+  const diamondHeight = height - 2 * 2;
 
   return (
     <g {...restSvgAttributes}>
