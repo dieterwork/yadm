@@ -1,3 +1,6 @@
+import { useShallow } from "zustand/react/shallow";
+import { useDEMOModeler } from "../modeler/useDEMOModeler";
+
 const NodeResizer = () => {
   const { getNode, getChildrenNodes, updateNodeExtent } = useDEMOModeler(
     useShallow((state) => ({
