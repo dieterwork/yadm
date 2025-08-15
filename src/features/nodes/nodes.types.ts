@@ -1,8 +1,7 @@
-import type { BuiltInNode } from "@xyflow/react";
 import ActorNode from "./cooperation_model/actor/ActorNode";
 import TransactionNode from "./cooperation_model/transaction/TransactionNode";
 import TransactorNode from "./cooperation_model/transactor/TransactorNode";
-import type { CooperationModelNode } from "./cooperation_model/cooperation_model.types";
+import type { CooperationModelNode } from "./cooperation_model/cooperationModel.types";
 import SelfActivationNode from "./cooperation_model/self_activation/SelfActivationNode";
 import CompositeNode from "./cooperation_model/composite/CompositeNode";
 import ElementaryActorNode from "./cooperation_model/elementary_actor/ElementaryActorNode";
@@ -17,8 +16,9 @@ import CActNode from "./object_fact_diagram/c_act/CActNode";
 import TKExecutionNode from "./object_fact_diagram/tk_execution/TKExecutionNode";
 import TransactionTimeInnerNode from "./object_fact_diagram/transaction_time_inner/TransactionTimeInnerNode";
 import TransactionTimeNode from "./object_fact_diagram/transaction_time/TransactionTimeNode";
-import OFDTextNode from "./object_fact_diagram/text/OFDTextNode";
 import TextNode from "./text_node/TextNode";
+import type { ObjectFactDiagramNode } from "./object_fact_diagram/objectFactDiagram.types";
+import type { ProcessStructureDiagramNode } from "./process_structure_diagram/processStructureDiagram.types";
 
 export const nodeTypes = {
   // cooperation model
@@ -39,7 +39,6 @@ export const nodeTypes = {
   c_fact: CFactNode,
   c_act: CActNode,
   tk_execution: TKExecutionNode,
-  ofd_text_node: OFDTextNode,
 
   // object fact diagram
   production_event: ProductionEventNode,
@@ -48,6 +47,9 @@ export const nodeTypes = {
   text_node: TextNode,
 };
 
-export type DEMONode<T> = BuiltInNode | CooperationModelNode<T>;
+export type DEMONode =
+  | CooperationModelNode
+  | ObjectFactDiagramNode
+  | ProcessStructureDiagramNode;
 
 export type ColorType = "default" | string;
