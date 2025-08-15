@@ -20,10 +20,12 @@ import {
   type DEMOModelerState,
 } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
+import type { DEMONode } from "../nodes/nodes.types";
 
 interface NodeToolbarProps {
   id: string;
-  type: string;
+  type: DEMONode["type"];
+  data: DEMONode["data"];
   actions?: string[];
 }
 
@@ -189,7 +191,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                 </Popover>
               </MenuTrigger>
             )}
-            {actions.indexOf("changeColor") !== -1 && (
+            {actions?.indexOf("changeColor") !== -1 && (
               <MenuTrigger>
                 <Button
                   className="nodrag nopan cursor-pointer select-none"
@@ -261,7 +263,6 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
           </div>
         </_NodeToolbar>
       </IconContext>
-      <div>{data?.label}</div>
     </>
   );
 };
