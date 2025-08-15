@@ -15,15 +15,10 @@ import type {
   ReactFlowJsonObject,
 } from "@xyflow/react";
 import { useRef, type RefObject } from "react";
-
-const save = (instance: ReactFlowInstance<DEMONode<string>, Edge> | null) => {
-  if (!instance) return;
-  const jsonModel = JSON.stringify(instance.toObject());
-  localStorage.setItem("demo-model", jsonModel);
-};
+import { saveDEMOInstance } from "../../save/saveDEMOInstance";
 
 const exportAsJSON = (
-  instance: ReactFlowInstance<DEMONode<string>, Edge> | null,
+  instance: ReactFlowInstance<DEMONode, Edge> | null,
   id: string
 ) => {
   if (!instance) return;
@@ -66,7 +61,8 @@ const FileMenu = () => {
     if (file.type !== "application/json") throw new Error("Invalid file type");
     const reader = new FileReader();
     reader.onload = () => {
-      const demoModel: ReactFlowJsonObject<DEMONode<string>, Edge> = JSON.parse(
+      if (!reader.result || reader.result instanceof ArrayBuffer) return;
+      const demoModel: ReactFlowJsonObject<DEMONode, Edge> = JSON.parse(
         reader.result
       );
       setModelFromJSONObject(demoModel);
@@ -76,6 +72,7 @@ const FileMenu = () => {
     };
     reader.readAsText(file);
   };
+
   return (
     <>
       <input
@@ -88,10 +85,20 @@ const FileMenu = () => {
         <Button>File</Button>
         <Popover>
           <Menu className="bg-white">
-            <MenuItem>New</MenuItem>
             <MenuItem
               onAction={() => {
-                save(DEMOInstance);
+                setModelFromJSONObject({
+                  edges: [],
+                  nodes: [],
+                  viewport: { x: 0, y: 0, zoom: 1 },
+                });
+              }}
+            >
+              New
+            </MenuItem>
+            <MenuItem
+              onAction={() => {
+                saveDEMOInstance(DEMOInstance);
               }}
             >
               Save
@@ -120,7 +127,18 @@ const FileMenu = () => {
                 </Menu>
               </Popover>
             </SubmenuTrigger>
-            <MenuItem>Delete diagram</MenuItem>
+            <MenuItem
+              onAction={() => {
+                setModelFromJSONObject({
+                  edges: [],
+                  nodes: [],
+                  viewport: { x: 0, y: 0, zoom: 1 },
+                });
+                saveDEMOInstance(DEMOInstance);
+              }}
+            >
+              Delete diagram
+            </MenuItem>
             <MenuItem>Exit</MenuItem>
           </Menu>
         </Popover>
