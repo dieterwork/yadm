@@ -5,13 +5,12 @@ import {
   MiniMap,
   useReactFlow,
   type NodeMouseHandler,
-  type ReactFlowInstance,
   type Edge,
   type ReactFlowJsonObject,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
-import { edgeTypes } from "../edges/types";
+import { edgeTypes } from "../edges/edges.types";
 import { nodeTypes, type DEMONode } from "../nodes/nodes.types";
 
 import { useEffect, type MouseEvent } from "react";
@@ -23,6 +22,9 @@ import { convertAbsoluteToParentRelativePosition } from "../nodes/utils/getNodeP
 import { SMALL_NODE_SIZE, X_SMALL_NODE_SIZE } from "../nodes/utils/consts";
 import uuid from "../../shared/utils/uuid";
 import SideMenu from "../side_menu/SideMenu";
+import { saveDEMOInstance } from "../save/saveDEMOInstance";
+import { debounce } from "../../shared/utils/debounce";
+import ConnectionLine from "../edges/ConnectionLine";
 
 const transactionTimeNodes = [
   "c_act",
@@ -41,6 +43,7 @@ const DEMOModeler = () => {
     onNodesChange,
     getNodeAbsolutePosition,
     setDEMOInstance,
+    DEMOInstance,
     viewport,
     setViewport,
     setModelFromJSONObject,
@@ -54,6 +57,7 @@ const DEMOModeler = () => {
       addNode: state.addNode,
       getNodeAbsolutePosition: state.getNodeAbsolutePosition,
       setDEMOInstance: state.setDEMOInstance,
+      DEMOInstance: state.DEMOInstance,
       viewport: state.viewport,
       setViewport: state.setViewport,
       setModelFromJSONObject: state.setModelFromJSONObject,
@@ -67,11 +71,11 @@ const DEMOModeler = () => {
     }))
   );
 
-  const onNodeDragStart = (e: React.MouseEvent, node: DEMONode<unknown>) => {
+  const onNodeDragStart = (e: React.MouseEvent, node: DEMONode) => {
     const contentEditableElements = "";
   };
 
-  const onNodeDragStop = (e: React.MouseEvent, node: DEMONode<unknown>) => {};
+  const onNodeDragStop = (e: React.MouseEvent, node: DEMONode) => {};
 
   const addNodeFromSidebar = (e: MouseEvent) => {
     if (!previewNode) return; // If no preview node, ignore the click event
@@ -89,8 +93,6 @@ const DEMOModeler = () => {
 
     addNode(newNode);
 
-    console.log("Added new node");
-
     resetPreviewNode();
   };
 
@@ -101,7 +103,7 @@ const DEMOModeler = () => {
 
   const handleObjectFactDiagramNodeAdd = (
     e: MouseEvent,
-    clickedNode: DEMONode<string>
+    clickedNode: DEMONode
   ) => {
     if (!previewNode) return;
     if (
@@ -140,13 +142,17 @@ const DEMOModeler = () => {
     });
 
     // create text node
+
     const textNode = createNode({
-      type: "ofd_text_node",
+      type: "text_node",
       position: {
-        x: relativePosition.x,
-        y: relativePosition.y,
+        x: X_SMALL_NODE_SIZE + 2,
+        y: X_SMALL_NODE_SIZE / 2 - 20 / 2,
       },
       parentId: id,
+      width: 50,
+      height: 20,
+      content: "",
     });
 
     addNode(ofdNode);
@@ -156,17 +162,15 @@ const DEMOModeler = () => {
     resetPreviewNode();
   };
 
-  const handleNodeClick: NodeMouseHandler<DEMONode<string>> = (e, node) => {
+  const handleNodeClick: NodeMouseHandler<DEMONode> = (e, node) => {
     handleObjectFactDiagramNodeAdd(e, node);
   };
 
   useEffect(() => {
     const localDEMOModelJSON = localStorage.getItem("demo-model");
     if (!localDEMOModelJSON) return;
-    const localDEMOModel: ReactFlowJsonObject<
-      DEMONode<string>,
-      Edge
-    > = JSON.parse(localDEMOModelJSON);
+    const localDEMOModel: ReactFlowJsonObject<DEMONode, Edge> =
+      JSON.parse(localDEMOModelJSON);
     setModelFromJSONObject(localDEMOModel);
   }, []);
 
@@ -176,12 +180,32 @@ const DEMOModeler = () => {
         <ReactFlow
           nodes={nodes}
           nodeTypes={nodeTypes}
-          onNodesChange={onNodesChange}
+          onNodesChange={(changes) => {
+            onNodesChange(changes);
+            saveDEMOInstance(DEMOInstance);
+          }}
           edges={edges}
           edgeTypes={edgeTypes}
-          onEdgesChange={onEdgesChange}
+          onEdgesChange={(changes) => {
+            onEdgesChange(changes);
+            saveDEMOInstance(DEMOInstance);
+          }}
+          onEdgesDelete={() => {
+            saveDEMOInstance(DEMOInstance);
+          }}
+          onNodesDelete={() => {
+            saveDEMOInstance(DEMOInstance);
+          }}
           onConnect={onConnect}
           onNodeDragStart={onNodeDragStart}
+          onMove={() => {
+            debounce(() => {
+              saveDEMOInstance(DEMOInstance);
+            }, 1000);
+          }}
+          onBlur={() => {
+            saveDEMOInstance(DEMOInstance);
+          }}
           nodesFocusable={true}
           edgesFocusable={true}
           disableKeyboardA11y={false}
@@ -191,6 +215,7 @@ const DEMOModeler = () => {
           onInit={(instance) => setDEMOInstance(instance)}
           viewport={viewport}
           onViewportChange={(viewport) => setViewport(viewport)}
+          connectionLineComponent={ConnectionLine}
         >
           <Background />
           <MiniMap />

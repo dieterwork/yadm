@@ -21,36 +21,32 @@ import uuid from "../../shared/utils/uuid";
 
 export interface DEMOModelerState {
   id: string;
-  nodes: DEMONode<string>[];
+  nodes: DEMONode[];
   edges: Edge[];
   viewport: Viewport;
   setViewport: (viewport: Viewport) => void;
   onNodesChange: OnNodesChange<DEMONode>;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
-  setNodes: (nodes: DEMONode[] | ((nodes: DEMONode[]) => DEMONode[])) => void;
+  setNodes: (nodes: DEMONode[]) => void;
   setEdges: (edges: Edge[]) => void;
-  DEMOInstance: null | ReactFlowInstance<DEMONode<string>, Edge>;
-  setDEMOInstance: (
-    instance: ReactFlowInstance<DEMONode<string>, Edge>
-  ) => void;
+  DEMOInstance: null | ReactFlowInstance<DEMONode, Edge>;
+  setDEMOInstance: (instance: ReactFlowInstance<DEMONode, Edge>) => void;
   updateNodeColor: (nodeId: string, color: string) => void;
   updateNodeState: (nodeId: string, state: string, type: string) => void;
   updateNodeScope: (nodeId: string, scope: string, type: string) => void;
   deleteNode: (nodeId: string) => void;
-  addNode: (node: DEMONode<unknown>) => void;
-  getNode: (nodeId: string) => DEMONode<unknown>;
-  getChildrenNodes: (nodeId: string) => DEMONode<unknown>[];
+  addNode: (node: DEMONode) => void;
+  getNode: (nodeId: string) => DEMONode | undefined;
+  getChildrenNodes: (nodeId: string) => DEMONode[];
   updateNodeExtent: (nodeId: string, extent: CoordinateExtent) => void;
   getNodeAbsolutePosition: (nodeId: string) => { x: number; y: number };
   updateNodeContent: (nodeId: string, content: string) => void;
   updateNodeFontSize: (nodeId: string, fontSize: number) => void;
-  setModelFromJSONObject: (
-    object: ReactFlowJsonObject<DEMONode<string>, Edge>
-  ) => void;
+  setModelFromJSONObject: (object: ReactFlowJsonObject<DEMONode, Edge>) => void;
   updateNode: (
     id: string,
-    nodeUpdate: Partial<Node> | ((node: Node) => Partial<Node>),
+    nodeUpdate: Partial<Node>,
     options?: {
       replace: boolean;
     }
@@ -164,7 +160,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
     getNode: (nodeId: string) => get().nodes.find((node) => node.id === nodeId),
     getChildrenNodes: (nodeId: string) =>
       get().nodes.filter((node) => node.parentId === nodeId),
-    addNode: (node: DEMONode<unknown>) => {
+    addNode: (node: DEMONode) => {
       set({
         nodes: get()
           .nodes.map((node) => ({
@@ -183,7 +179,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
       const node = get().getNode(nodeId);
       let x = 0;
       let y = 0;
-      let host: DEMONode<string> | undefined = node;
+      let host: DEMONode | undefined = node;
 
       while (host) {
         x += host.position.x;
@@ -195,13 +191,15 @@ export const useDEMOModeler = create<DEMOModelerState>()(
       }
       return { x, y };
     },
-    setModelFromJSONObject: (
-      object: ReactFlowJsonObject<DEMONode<string>, Edge>
-    ) => {
+    setModelFromJSONObject: (object: ReactFlowJsonObject<DEMONode, Edge>) => {
       set({
         nodes: object.nodes,
         edges: object.edges,
-        viewport: { x: 0, y: 0, zoom: 1 },
+        viewport: {
+          x: object.viewport.x,
+          y: object.viewport.y,
+          zoom: object.viewport.zoom,
+        },
       });
     },
     updateNode(id, nodeUpdate, options) {
