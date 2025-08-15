@@ -4,17 +4,25 @@ import uuid from "../../../shared/utils/uuid";
 import { DEFAULT_CONTENT_MAP, DEFAULT_SIZE_MAP } from "./consts";
 
 interface CreateNodeParams {
-  type: "actor" | "transactor" | "transaction" | "self_activation";
+  type: DEMONode["type"];
   position: XYPosition;
   parentId?: string;
   id?: string;
+  width?: number;
+  height?: number;
+  content?: string;
+  selected?: boolean;
 }
-export const createNode = <T extends string>({
+export const createNode = ({
   type,
   position,
   parentId,
   id,
-}: CreateNodeParams): DEMONode<T> | DEMONode<T>[] => {
+  width,
+  height,
+  content,
+  selected,
+}: CreateNodeParams): DEMONode | DEMONode[] => {
   if (!id) id = uuid();
   switch (type) {
     case "actor": {
@@ -228,6 +236,7 @@ export const createNode = <T extends string>({
           },
           extent: "parent",
           selected: false,
+          connectable: false,
         },
         {
           id: uuid(),
@@ -241,7 +250,7 @@ export const createNode = <T extends string>({
               DEFAULT_SIZE_MAP["transaction_time_inner"].height / 2 -
               DEFAULT_SIZE_MAP["transaction_kind"].height / 2,
           },
-          data: { content: DEFAULT_CONTENT_MAP[type] },
+          data: { content: DEFAULT_CONTENT_MAP["transaction_kind"] },
           style: {
             width: DEFAULT_SIZE_MAP["transaction_kind"].width,
             height: DEFAULT_SIZE_MAP["transaction_kind"].height,
@@ -257,6 +266,7 @@ export const createNode = <T extends string>({
             ],
           ],
           selected: false,
+          connectable: false,
         },
       ];
     }
@@ -286,7 +296,7 @@ export const createNode = <T extends string>({
         type,
         position,
         parentId,
-        data: {},
+        data: { color: "default" },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -305,7 +315,7 @@ export const createNode = <T extends string>({
         type,
         position,
         parentId,
-        data: {},
+        data: { color: "default" },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -323,7 +333,7 @@ export const createNode = <T extends string>({
         type,
         position,
         parentId,
-        data: {},
+        data: { color: "default" },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -335,32 +345,23 @@ export const createNode = <T extends string>({
         extent: "parent",
       };
     }
-    case "ofd_text_node": {
-      return {
-        id,
-        type,
-        position,
-        parentId,
-        data: {},
-        style: {
-          width: 50,
-          height: 20,
-        },
-        selected: true,
-      };
-    }
     case "text_node": {
       return {
         id,
         type,
         position,
         parentId,
-        data: { fontSize: 12 },
-        style: {
-          width: 200,
-          height: 150,
+        data: {
+          fontSize: 12,
+          alignContent: "start",
+          textAlign: "start",
+          content: content ?? DEFAULT_CONTENT_MAP["text_node"],
         },
-        selected: true,
+        style: {
+          width: width ?? DEFAULT_SIZE_MAP["text_node"].width,
+          height: height ?? DEFAULT_SIZE_MAP["text_node"].height,
+        },
+        selected: selected ?? true,
       };
     }
     default:

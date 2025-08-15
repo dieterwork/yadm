@@ -1,5 +1,5 @@
 import type { Node } from "@xyflow/react";
-import type { Scope } from "../cooperation_model.types";
+import type { Scope } from "../cooperationModel.types";
 
 export type TransactionState = "default" | "unclear" | "missing" | "double";
 export type TransactionNode = Node<

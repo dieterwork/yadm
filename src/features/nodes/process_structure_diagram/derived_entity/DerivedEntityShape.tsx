@@ -4,7 +4,7 @@ import type { ColorType } from "../../../colors/colors.types";
 import Rectangle from "../../../shapes/Rectangle";
 import { DEFAULT_BORDER_RADIUS } from "../productionStructureDiagramConsts";
 import { getScopeFill } from "../../../../shared/utils/utils";
-import type { Scope } from "../../cooperation_model/cooperation_model.types";
+import type { Scope } from "../../cooperation_model/cooperationModel.types";
 
 type DerivedEntityShapeProps = {
   width: number;

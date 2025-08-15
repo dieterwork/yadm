@@ -83,6 +83,13 @@ export const DEFAULT_SIZE_MAP = {
     width: 100,
     height: 200,
   },
+
+  // misc
+
+  text_node: {
+    width: 150,
+    height: 100,
+  },
 };
 
 export const MIN_SIZE_MAP = {
@@ -162,15 +169,17 @@ export const MIN_SIZE_MAP = {
     height: 100,
   },
 
+  // misc
+
   text_node: {
-    width: 100,
-    height: 100,
+    width: 20,
+    height: 20,
   },
 };
 
 export const DEFAULT_CONTENT_MAP = {
   // cooperation model
-  actor: "<div>Actor</div><div>A!</div>",
+  actor: "<div>Actor</div><div>A</div>",
   transaction: "<div>01</div>",
   transactor: "<div>01</div>",
   self_activation: "<div>01</div>",
@@ -178,16 +187,15 @@ export const DEFAULT_CONTENT_MAP = {
   elementary_actor: "<div>01</div>",
   several_actors: "<div>01</div>",
   // transaction pattern diagram
-  transaction_time: "<div>A</div><div>1</div>",
-  transaction_kind: "<div>A</div><div>1</div>",
+  transaction_kind: "<div>A1</div>",
   initiation_fact: "<div>A</div><div>1</div>",
   c_fact: "<div>A</div><div>1</div>",
   c_act: "<div>A</div><div>1</div>",
   tk_execution: "<div>A</div><div>1</div>",
   // object fact diagram
-  production_event: "01",
+  production_event: "<div>01</div>",
   entity_class: "<div>A</div><div>1</div>",
   derived_entity: "<div>A</div><div>1</div>",
-  text_node: "",
-  textNode: "",
+  text_node: "<div>Insert text here</div>",
+  textNode: "<div>Insert text here</div>",
 };

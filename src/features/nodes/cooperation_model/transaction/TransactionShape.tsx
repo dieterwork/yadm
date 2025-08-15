@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import QuestionMark from "../../../shapes/QuestionMark";
-import type { Scope } from "../cooperation_model.types";
+import type { Scope } from "../cooperationModel.types";
 import { getScopeFill } from "../../../../shared/utils/utils";
 import type { TransactionState } from "./transaction.types";
 import { ShapeContext } from "../../../shapes/ShapeContext";
@@ -23,53 +23,59 @@ const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
   switch (state) {
     case "missing":
       return (
-        <g fill={fill} strokeDasharray="4 1" {...restSvgAttributes}>
-          <DiamondInCircle
-            width={width}
-            height={height}
-            fillOpacity={DEFAULT_FILL_OPACITY}
-            diamondAttributes={{ stroke: "var(--color-red-500)" }}
-          />
-        </g>
+        <DiamondInCircle
+          {...restSvgAttributes}
+          fill={fill}
+          strokeDasharray="4 1"
+          width={width}
+          height={height}
+          fillOpacity={DEFAULT_FILL_OPACITY}
+          diamondAttributes={{ stroke: "var(--color-red-500)" }}
+        />
       );
 
     case "unclear":
       return (
-        <g fill={fill} {...restSvgAttributes}>
+        <g>
           <DiamondInCircle
+            {...restSvgAttributes}
+            fill={fill}
             width={width}
             height={height}
             fillOpacity={DEFAULT_FILL_OPACITY}
             diamondAttributes={{ stroke: "var(--color-red-500)" }}
           />
-          <QuestionMark width={width} height={height} />
+          <QuestionMark
+            {...restSvgAttributes}
+            fill={fill}
+            width={width}
+            height={height}
+          />
         </g>
       );
 
     case "double":
       return (
-        <g>
-          <g fill={fill} {...restSvgAttributes}>
-            <DoubleDiamondInCircle
-              width={width}
-              height={height}
-              fillOpacity={DEFAULT_FILL_OPACITY}
-              diamondAttributes={{ stroke: "var(--color-red-500)" }}
-            />
-          </g>
-        </g>
+        <DoubleDiamondInCircle
+          {...restSvgAttributes}
+          fill={fill}
+          width={width}
+          height={height}
+          fillOpacity={DEFAULT_FILL_OPACITY}
+          diamondAttributes={{ stroke: "var(--color-red-500)" }}
+        />
       );
 
     default: {
       return (
-        <g fill={fill} {...restSvgAttributes}>
-          <DiamondInCircle
-            width={width}
-            height={height}
-            fillOpacity={DEFAULT_FILL_OPACITY}
-            diamondAttributes={{ stroke: "var(--color-red-500)" }}
-          />
-        </g>
+        <DiamondInCircle
+          {...restSvgAttributes}
+          fill={fill}
+          width={width}
+          height={height}
+          fillOpacity={DEFAULT_FILL_OPACITY}
+          diamondAttributes={{ stroke: "var(--color-red-500)" }}
+        />
       );
     }
   }

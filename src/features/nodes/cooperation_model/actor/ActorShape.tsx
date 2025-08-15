@@ -1,6 +1,6 @@
 import QuestionMark from "../../../shapes/QuestionMark";
 import Rectangle from "../../../shapes/Rectangle";
-import type { Scope } from "../cooperation_model.types";
+import type { Scope } from "../cooperationModel.types";
 import { getScopeFill } from "../../../../shared/utils/utils";
 import type { ActorState } from "./actor.types";
 import { useContext } from "react";

@@ -27,33 +27,27 @@ const SeveralActorsShape = ({ state, color }: TransactionShapeProps) => {
   );
 
   return (
-    <g {...restSvgAttributes} stroke={undefined} strokeWidth={undefined}>
-      <g
-        stroke={restSvgAttributes.stroke}
-        strokeWidth={restSvgAttributes.strokeWidth}
+    <g>
+      <Rectangle
+        {...restSvgAttributes}
         transform={`translate(0, 50)`}
-      >
-        <Rectangle width={width} height={+height - 50} fill="white" />
-        <Rectangle
-          fill={fill}
-          width={width}
-          height={+height - 50}
-          fillOpacity={DEFAULT_FILL_OPACITY}
-        />
-      </g>
-      <g
+        fill={fill}
+        width={width}
+        height={+height - 50}
+        fillOpacity={DEFAULT_FILL_OPACITY}
+        strokeWidth={4}
+      />
+      <DoubleDiamondInCircle
+        {...restSvgAttributes}
         transform={`translate(${width / 2 - dimensions.width / 2}, 0)`}
         stroke="black"
         strokeWidth={2}
-      >
-        <DoubleDiamondInCircle
-          fill={fill}
-          width={dimensions.width}
-          height={dimensions.height}
-          fillOpacity={DEFAULT_FILL_OPACITY}
-          diamondAttributes={{ stroke: "var(--color-red-500)" }}
-        />
-      </g>
+        fill={fill}
+        width={dimensions.width}
+        height={dimensions.height}
+        fillOpacity={DEFAULT_FILL_OPACITY}
+        diamondAttributes={{ stroke: "var(--color-red-500)" }}
+      />
     </g>
   );
 };

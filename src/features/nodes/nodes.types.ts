@@ -19,6 +19,7 @@ import TransactionTimeNode from "./object_fact_diagram/transaction_time/Transact
 import TextNode from "./text_node/TextNode";
 import type { ObjectFactDiagramNode } from "./object_fact_diagram/objectFactDiagram.types";
 import type { ProcessStructureDiagramNode } from "./process_structure_diagram/processStructureDiagram.types";
+import type { TextNode as TextNodeType } from "./text_node/textNode.types";
 
 export const nodeTypes = {
   // cooperation model
@@ -50,6 +51,7 @@ export const nodeTypes = {
 export type DEMONode =
   | CooperationModelNode
   | ObjectFactDiagramNode
-  | ProcessStructureDiagramNode;
+  | ProcessStructureDiagramNode
+  | TextNodeType;
 
 export type ColorType = "default" | string;

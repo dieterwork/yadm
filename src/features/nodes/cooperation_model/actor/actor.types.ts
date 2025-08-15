@@ -1,5 +1,5 @@
 import type { Node } from "@xyflow/react";
-import type { Scope } from "../cooperation_model.types";
+import type { Scope } from "../cooperationModel.types";
 
 export type ActorState = "default" | "unclear" | "missing";
 

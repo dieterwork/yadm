@@ -29,7 +29,7 @@ const EntityClassNode = ({
           height={height * 0.75}
           editable={true}
           fontSize={fontSize}
-          textPosition="top"
+          alignContent="top"
         />
       </DEMONodePrimitive>
     </>

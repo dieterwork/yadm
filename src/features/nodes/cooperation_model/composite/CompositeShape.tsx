@@ -18,17 +18,14 @@ const CompositeShape = ({ state, color }: CompositeShapeProps) => {
   const fill = getStateFill(state, color);
 
   return (
-    <g {...restSvgAttributes}>
-      <g>
-        <Rectangle width={width} height={height} fill="white" />
-        <Rectangle
-          fill={fill}
-          width={width}
-          height={height}
-          fillOpacity={DEFAULT_FILL_OPACITY}
-        />
-      </g>
-    </g>
+    <Rectangle
+      {...restSvgAttributes}
+      fill={fill}
+      width={width}
+      height={height}
+      fillOpacity={DEFAULT_FILL_OPACITY}
+      strokeWidth={4}
+    />
   );
 };
 

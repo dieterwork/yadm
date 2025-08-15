@@ -26,6 +26,13 @@ const TransactorNode = ({
       >
         <EditableContent
           width={width}
+          height={MEDIUM_NODE_SIZE}
+          style={{ top: 0, bottom: "auto" }}
+          content={content}
+          fontSize={fontSize}
+        />
+        <EditableContent
+          width={width}
           height={height ? height - MEDIUM_NODE_SIZE / 2 : undefined}
           style={{ bottom: 0, top: "auto" }}
           content={content}

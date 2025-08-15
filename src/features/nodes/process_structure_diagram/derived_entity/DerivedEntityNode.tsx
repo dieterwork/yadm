@@ -28,7 +28,7 @@ const DerivedEntityNode = ({
           width={width}
           height={height}
           editable={true}
-          textPosition="top"
+          alignContent="top"
           fontSize={fontSize}
         />
       </DEMONodePrimitive>

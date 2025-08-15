@@ -2,6 +2,7 @@ import {
   Handle,
   NodeResizer,
   Position,
+  useConnection,
   useNodeId,
   useReactFlow,
   type NodeProps,
@@ -13,15 +14,9 @@ import NodeToolbar from "../node-toolbar/NodeToolbar";
 import { useDEMOModeler } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
 import { MIN_SIZE_MAP } from "./utils/consts";
+import type { DEMONode } from "./nodes.types";
 
-const handlePositions = [
-  Position.Top,
-  Position.Right,
-  Position.Bottom,
-  Position.Left,
-];
-
-interface DEMONodePrimitiveProps<T> extends NodeProps<ActorNode<T>> {
+interface DEMONodePrimitiveProps extends NodeProps<DEMONode> {
   resizable?: boolean;
   keepAspectRatio?: boolean;
   children: ReactNode;
@@ -30,7 +25,7 @@ interface DEMONodePrimitiveProps<T> extends NodeProps<ActorNode<T>> {
 
 type Action = "changeColor" | "delete" | "changeFontSize";
 
-const DEMONodePrimitive = <T extends string>({
+const DEMONodePrimitive = ({
   id,
   data,
   selected,
@@ -41,10 +36,12 @@ const DEMONodePrimitive = <T extends string>({
   keepAspectRatio = false,
   children,
   actions = ["changeColor", "delete", "changeFontSize"],
-}: DEMONodePrimitiveProps<T>) => {
-  const DEMOShape = shapeMap[type];
-  const { setNodes } = useReactFlow();
+  isConnectable,
+}: DEMONodePrimitiveProps) => {
+  if (type === "text_node")
+    throw new Error("Cannot render node primitive with text node");
 
+  const DEMOShape = shapeMap[type];
   const shapeRef = useRef<SVGSVGElement>(null!);
 
   const { getNode, getChildrenNodes, updateNodeExtent } = useDEMOModeler(
@@ -58,6 +55,7 @@ const DEMONodePrimitive = <T extends string>({
   const changeChildExtent = () => {
     const parentNode = getNode(id);
     const childrenNodes = getChildrenNodes(id);
+    if (!parentNode?.width || !parentNode?.height) return;
 
     for (const child of childrenNodes) {
       if (!child || !child?.extent || child?.extent === "parent") return;
@@ -93,7 +91,6 @@ const DEMONodePrimitive = <T extends string>({
           />
         </Shape>
       )}
-      {/* Children Content */}
       {children}
     </div>
   );
