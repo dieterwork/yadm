@@ -1,4 +1,4 @@
-import type { Scope } from "../../features/nodes/cooperation_model/cooperation_model.types";
+import type { Scope } from "../../features/nodes/cooperation_model/cooperationModel.types";
 
 export const getScopeFill = (scope: Scope, color?: string) => {
   if (scope === "out") return "var(--color-slate-500)";
