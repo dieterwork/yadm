@@ -1,3 +1,5 @@
+import type { KeyboardEvent } from "react";
+
 const nodeWalk = (node, func) => {
   let result = func(node);
   for (
@@ -259,3 +261,52 @@ export function getInnerText(container: Node) {
   });
   return buffer.join("");
 }
+
+export const toggleBoldText = (e: KeyboardEvent<HTMLDivElement>) => {
+  e.preventDefault();
+  const target = e.currentTarget;
+  if (!(target instanceof Node)) throw new Error("Target is not a node");
+  const text = getCurrentFocusedText(target);
+  // get current selection
+  const [start, end] = getSelectionOffset(target);
+  if (!text) throw new Error("Could not find text");
+  const elements = target.querySelectorAll("*");
+  if (elements.length === 0) {
+    // must be inner text
+    target.innerHTML = "<b>" + target.innerText + "</b>";
+  }
+  let currentEl: HTMLElement | null = null;
+  for (const el of elements) {
+    console.log(el.innerText);
+    if (!(el instanceof Node))
+      throw new Error("Element is not an HTML element");
+    if (el.innerText.trim() === text.trim()) {
+      currentEl = el;
+    }
+  }
+  if (!currentEl) return;
+  if (currentEl?.nodeName === "B") {
+    const parentDiv = currentEl.parentNode;
+    if (!parentDiv) return;
+    parentDiv.innerHTML = text;
+  } else if (currentEl.nodeName === "DIV") {
+    currentEl.innerHTML = "<b>" + text + "</b>";
+  }
+  setSelectionOffset(target, start, end);
+};
+
+export const setMaxLength = (
+  e: KeyboardEvent<HTMLDivElement>,
+  maxLength: number
+) => {
+  const target = e.currentTarget;
+  if (!(target instanceof Node)) throw new Error("Target is not a node");
+  if (
+    target.innerText.length >= maxLength &&
+    e.key !== "Backspace" &&
+    e.key !== "Delete"
+  ) {
+    e.preventDefault();
+    return;
+  }
+};

@@ -1,18 +1,10 @@
 import { cn } from "@sglara/cn";
-import {
-  useEffect,
-  useRef,
-  type FormEvent,
-  type HTMLAttributes,
-  type RefObject,
-} from "react";
-import { Input, TextField } from "react-aria-components";
+import { useRef, type HTMLAttributes, type RefObject } from "react";
 import { useDEMOModeler } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
 import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
-
-type TextPosition = "top" | "bottom" | "center";
+import CSS from "csstype";
 
 interface EditableContentProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "content"> {
@@ -20,41 +12,26 @@ interface EditableContentProps
   height?: number;
   content?: string;
   editable?: boolean;
-  textPosition?: TextPosition;
   fontSize?: number;
   color?: string;
   maxLines?: number;
   ref?: RefObject<HTMLDivElement>;
   hide?: boolean;
+  textAlign?: CSS.Properties["textAlign"];
+  alignContent?: string;
+  maxLength?: number;
 }
-
-const getAlignContentStyle = (textPosition: TextPosition) => {
-  switch (textPosition) {
-    case "top": {
-      return "start";
-    }
-    case "bottom": {
-      return "end";
-    }
-    case "center": {
-      return "center";
-    }
-    default: {
-      throw new Error("Invalid textPosition value");
-    }
-  }
-};
 
 const getPadding = (fontSize: number) => {
   switch (fontSize) {
     case 10: {
-      return "p-6";
+      return "p-2";
     }
     case 12: {
-      return "p-6";
+      return "p-2";
     }
     case 14: {
-      return "p-4";
+      return "p-2";
     }
     case 16: {
       return "p-2";
@@ -63,10 +40,10 @@ const getPadding = (fontSize: number) => {
       return "p-2";
     }
     case 20: {
-      return "p-1";
+      return "p-2";
     }
     default: {
-      return "p-4";
+      return "p-2";
     }
   }
 };
@@ -76,12 +53,14 @@ const EditableContent = ({
   height,
   content,
   editable = true,
-  textPosition = "center",
   fontSize = 14,
   color = "var(--color-black)",
   maxLines = 3,
   ref,
   hide = false,
+  textAlign = "center",
+  alignContent = "center",
+  maxLength,
   ...restProps
 }: EditableContentProps) => {
   const nodeId = useNodeId();
@@ -92,9 +71,9 @@ const EditableContent = ({
     useShallow((state) => ({ updateNodeContent: state.updateNodeContent }))
   );
   const classes = cn(
-    "editable-content-wrapper | absolute inset-0 m-auto overflow-hidden text-center",
+    "editable-content-wrapper | absolute inset-0 m-auto overflow-hidden",
     { "w-full": !width, "h-full": !height },
-    getPadding(fontSize),
+    // getPadding(fontSize),
     hide && "hidden"
   );
 
@@ -111,14 +90,21 @@ const EditableContent = ({
     <div
       {...restProps}
       className={cn(classes, restProps.className)}
-      style={{ ...restProps.style, width, height, color, fontSize }}
+      style={{
+        ...restProps.style,
+        width,
+        height,
+        color,
+        fontSize,
+        textAlign,
+      }}
     >
       <div
         ref={ref}
         contentEditable={!!editable}
         suppressContentEditableWarning={true}
         className="block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
-        style={{ alignContent: getAlignContentStyle(textPosition) }}
+        style={{ alignContent }}
         {...props}
       ></div>
     </div>
