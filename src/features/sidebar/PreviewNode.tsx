@@ -32,7 +32,7 @@ const PreviewNode = ({ type }: PreviewNodeProps) => {
     };
   }, []);
 
-  if (!DEMOShape || !size) return null;
+  if (!size) return null;
 
   return (
     <>
@@ -44,15 +44,23 @@ const PreviewNode = ({ type }: PreviewNodeProps) => {
             left: previewNode?.position.x ?? 0,
           }}
         >
-          <Shape
-            ref={shapeRef}
-            width={size.width * zoom}
-            height={size.height * zoom}
-            stroke="black"
-            strokeWidth={2}
-          >
-            <DEMOShape />
-          </Shape>
+          {!DEMOShape && (
+            <div
+              className="aspect-square border-1"
+              style={{ width: size.width * zoom, height: size.height * zoom }}
+            ></div>
+          )}
+          {DEMOShape && (
+            <Shape
+              ref={shapeRef}
+              width={size.width * zoom}
+              height={size.height * zoom}
+              stroke="black"
+              strokeWidth={2}
+            >
+              <DEMOShape />
+            </Shape>
+          )}
         </div>,
         document.body
       )}
