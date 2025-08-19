@@ -25,6 +25,8 @@ import SideMenu from "../side_menu/SideMenu";
 import { saveDEMOInstance } from "../save/saveDEMOInstance";
 import { debounce } from "../../shared/utils/debounce";
 import ConnectionLine from "../edges/ConnectionLine";
+import useCopyPaste from "../copy_paste/useCopyPaste";
+import useLocalJSONModel from "./useLocalJSONModel";
 
 const transactionTimeNodes = [
   "c_act",
@@ -46,7 +48,6 @@ const DEMOModeler = () => {
     DEMOInstance,
     viewport,
     setViewport,
-    setModelFromJSONObject,
   } = useDEMOModeler(
     useShallow((state: DEMOModelerState) => ({
       nodes: state.nodes,
@@ -60,7 +61,6 @@ const DEMOModeler = () => {
       DEMOInstance: state.DEMOInstance,
       viewport: state.viewport,
       setViewport: state.setViewport,
-      setModelFromJSONObject: state.setModelFromJSONObject,
     }))
   );
   const { screenToFlowPosition } = useReactFlow();
@@ -166,13 +166,11 @@ const DEMOModeler = () => {
     handleObjectFactDiagramNodeAdd(e, node);
   };
 
-  useEffect(() => {
-    const localDEMOModelJSON = localStorage.getItem("demo-model");
-    if (!localDEMOModelJSON) return;
-    const localDEMOModel: ReactFlowJsonObject<DEMONode, Edge> =
-      JSON.parse(localDEMOModelJSON);
-    setModelFromJSONObject(localDEMOModel);
-  }, []);
+  useLocalJSONModel();
+
+  useCopyPaste({
+    disabledNodes: ["transaction_time_inner", "transaction_kind"],
+  });
 
   return (
     <div className="DEMO-modeler | [grid-area:modeler] h-full">
@@ -190,12 +188,6 @@ const DEMOModeler = () => {
             onEdgesChange(changes);
             saveDEMOInstance(DEMOInstance);
           }}
-          onEdgesDelete={() => {
-            saveDEMOInstance(DEMOInstance);
-          }}
-          onNodesDelete={() => {
-            saveDEMOInstance(DEMOInstance);
-          }}
           onConnect={onConnect}
           onNodeDragStart={onNodeDragStart}
           onMove={() => {
@@ -210,12 +202,15 @@ const DEMOModeler = () => {
           edgesFocusable={true}
           disableKeyboardA11y={false}
           fitView
-          onClick={handleClick}
+          onPaneClick={handleClick}
           onNodeClick={handleNodeClick}
           onInit={(instance) => setDEMOInstance(instance)}
           viewport={viewport}
           onViewportChange={(viewport) => setViewport(viewport)}
           connectionLineComponent={ConnectionLine}
+          connectionLineStyle={{
+            stroke: "#b1b1b7",
+          }}
         >
           <Background />
           <MiniMap />
