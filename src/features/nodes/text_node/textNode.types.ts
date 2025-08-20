@@ -1,12 +1,12 @@
 import type { Node } from "@xyflow/react";
-import CSS from "csstype";
+import type { CSSProperties } from "react";
 
 export type TextNode = Node<
   {
     content: string;
     fontSize: number;
     alignContent: string;
-    textAlign: CSS.Properties["textAlign"];
+    textAlign: CSSProperties["textAlign"];
   },
   "text_node"
 >;

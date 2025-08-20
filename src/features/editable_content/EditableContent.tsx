@@ -1,10 +1,14 @@
 import { cn } from "@sglara/cn";
-import { useRef, type HTMLAttributes, type RefObject } from "react";
+import {
+  useRef,
+  type CSSProperties,
+  type HTMLAttributes,
+  type RefObject,
+} from "react";
 import { useDEMOModeler } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
 import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
-import CSS from "csstype";
 
 interface EditableContentProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "content"> {
@@ -17,7 +21,7 @@ interface EditableContentProps
   maxLines?: number;
   ref?: RefObject<HTMLDivElement>;
   hide?: boolean;
-  textAlign?: CSS.Properties["textAlign"];
+  textAlign?: CSSProperties["textAlign"];
   alignContent?: string;
   maxLength?: number;
 }
