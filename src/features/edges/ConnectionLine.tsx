@@ -1,6 +1,7 @@
 import {
   getBezierPath,
   getSmoothStepPath,
+  MarkerType,
   type ConnectionLineComponentProps,
 } from "@xyflow/react";
 import { getEdgeParams } from "./utils";
@@ -31,30 +32,26 @@ const ConnectionLine = ({
     },
   };
 
-  const { sx, sy, tx, ty, sourcePos, targetPos } = getEdgeParams(
-    fromNode,
-    targetNode
-  );
+  const { sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition } =
+    getEdgeParams(fromNode, targetNode);
 
   const [edgePath] = getSmoothStepPath({
-    sourceX: sx,
-    sourceY: sy,
-    sourcePosition: sourcePos || fromPosition,
-    targetPosition: targetPos || toPosition,
-    targetX: tx || toX,
-    targetY: ty || toY,
+    sourceX,
+    sourceY,
+    sourcePosition: sourcePosition || fromPosition,
+    targetPosition: targetPosition || toPosition,
+    targetX: targetX || toX,
+    targetY: targetY || toY,
   });
 
   return (
     <g>
-      <path fill="none" stroke="#222" strokeWidth={1.5} d={edgePath} />
-      <circle
-        cx={tx || toX}
-        cy={ty || toY}
-        fill="#fff"
-        r={3}
+      <path
+        fill="none"
         stroke="#222"
         strokeWidth={1.5}
+        d={edgePath}
+        markerStart={MarkerType.Arrow}
       />
     </g>
   );
