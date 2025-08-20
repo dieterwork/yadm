@@ -277,7 +277,6 @@ export const toggleBoldText = (e: KeyboardEvent<HTMLDivElement>) => {
   }
   let currentEl: HTMLElement | null = null;
   for (const el of elements) {
-    console.log(el.innerText);
     if (!(el instanceof Node))
       throw new Error("Element is not an HTML element");
     if (el.innerText.trim() === text.trim()) {

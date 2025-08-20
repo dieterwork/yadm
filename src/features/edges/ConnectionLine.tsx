@@ -1,8 +1,11 @@
 import {
   getBezierPath,
+  getSmoothStepPath,
   type ConnectionLineComponentProps,
 } from "@xyflow/react";
 import { getEdgeParams } from "./utils";
+import type { DEMONode } from "../nodes/nodes.types";
+import { useEffect } from "react";
 
 const ConnectionLine = ({
   toX,
@@ -11,7 +14,7 @@ const ConnectionLine = ({
   toPosition,
   fromNode,
   ...restProps
-}: ConnectionLineComponentProps) => {
+}: ConnectionLineComponentProps<DEMONode>) => {
   if (!fromNode) {
     return null;
   }
@@ -33,7 +36,7 @@ const ConnectionLine = ({
     targetNode
   );
 
-  const [edgePath] = getBezierPath({
+  const [edgePath] = getSmoothStepPath({
     sourceX: sx,
     sourceY: sy,
     sourcePosition: sourcePos || fromPosition,
@@ -44,13 +47,7 @@ const ConnectionLine = ({
 
   return (
     <g>
-      <path
-        fill="none"
-        stroke="#222"
-        strokeWidth={1.5}
-        className="animated"
-        d={edgePath}
-      />
+      <path fill="none" stroke="#222" strokeWidth={1.5} d={edgePath} />
       <circle
         cx={tx || toX}
         cy={ty || toY}

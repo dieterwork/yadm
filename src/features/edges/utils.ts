@@ -1,11 +1,28 @@
-import { Position, MarkerType } from "@xyflow/react";
+import {
+  Position,
+  MarkerType,
+  type XYPosition,
+  type InternalNode,
+} from "@xyflow/react";
+import uuid from "../../shared/utils/uuid";
+import type { ControlPointData } from "./ControlPoint";
+import type { DEMONode } from "../nodes/nodes.types";
 
 // this helper function returns the intersection point
 // of the line between the center of the intersectionNode and the target node
-function getNodeIntersection(intersectionNode, targetNode) {
+function getNodeIntersection(
+  intersectionNode: InternalNode<DEMONode>,
+  targetNode: InternalNode<DEMONode>
+) {
   // https://math.stackexchange.com/questions/1724792/an-algorithm-for-finding-the-intersection-point-between-a-center-of-vision-and-a
   const { width: intersectionNodeWidth, height: intersectionNodeHeight } =
     intersectionNode.measured;
+  if (!intersectionNodeWidth || !intersectionNodeHeight)
+    throw new Error("Could not find interesection node width or height");
+
+  if (!targetNode.measured.width || !targetNode.measured.height)
+    throw new Error("Could not find target node width or height");
+
   const intersectionNodePosition = intersectionNode.internals.positionAbsolute;
   const targetPosition = targetNode.internals.positionAbsolute;
 
@@ -29,8 +46,13 @@ function getNodeIntersection(intersectionNode, targetNode) {
 }
 
 // returns the position (top,right,bottom or right) passed node compared to the intersection point
-function getEdgePosition(node, intersectionPoint) {
+function getEdgePosition(
+  node: InternalNode<DEMONode>,
+  intersectionPoint: { x: number; y: number }
+) {
   const n = { ...node.internals.positionAbsolute, ...node };
+  if (!n.measured.width || !n.measured.height)
+    throw new Error("could not find node width or height");
   const nx = Math.round(n.x);
   const ny = Math.round(n.y);
   const px = Math.round(intersectionPoint.x);
@@ -53,7 +75,10 @@ function getEdgePosition(node, intersectionPoint) {
 }
 
 // returns the parameters (sx, sy, tx, ty, sourcePos, targetPos) you need to create an edge
-export function getEdgeParams(source, target) {
+export function getEdgeParams(
+  source: InternalNode<DEMONode>,
+  target: InternalNode<DEMONode>
+) {
   const sourceIntersectionPoint = getNodeIntersection(source, target);
   const targetIntersectionPoint = getNodeIntersection(target, source);
 
@@ -70,31 +95,63 @@ export function getEdgeParams(source, target) {
   };
 }
 
-export function initialElements() {
-  const nodes = [];
-  const edges = [];
-  const center = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+export const createEdge = ({
+  type = "cooperation_model_edge",
+  source,
+  target,
+}: {
+  type: string;
+  source: string;
+  target: string;
+}) => {
+  return {
+    id: uuid(),
+    source,
+    target,
+    type,
+    markerEnd: {
+      type: MarkerType.Arrow,
+    },
+  };
+};
 
-  nodes.push({ id: "target", data: { label: "Target" }, position: center });
+export function getLinearPath(points: XYPosition[]) {
+  if (points.length < 1) return "";
 
-  for (let i = 0; i < 8; i++) {
-    const degrees = i * (360 / 8);
-    const radians = degrees * (Math.PI / 180);
-    const x = 250 * Math.cos(radians) + center.x;
-    const y = 250 * Math.sin(radians) + center.y;
+  let path = `M ${points[0].x} ${points[0].y}`;
 
-    nodes.push({ id: `${i}`, data: { label: "Source" }, position: { x, y } });
+  for (let i = 0; i < points.length; i++) {
+    path += ` L ${points[i].x} ${points[i].y}`;
+  }
 
-    edges.push({
-      id: `edge-${i}`,
-      target: "target",
-      source: `${i}`,
-      type: "floating",
-      markerEnd: {
-        type: MarkerType.Arrow,
-      },
+  return path;
+}
+
+export function getLinearControlPoints(
+  points: (ControlPointData | XYPosition)[]
+) {
+  const controlPoints = [] as ControlPointData[];
+
+  for (let i = 0; i < points.length - 1; i++) {
+    const p1 = points[i];
+    const p2 = points[i + 1];
+
+    if (isControlPoint(p1)) {
+      controlPoints.push(p1);
+    }
+
+    controlPoints.push({
+      prev: "id" in p1 ? p1.id : undefined,
+      id: uuid(),
+      active: false,
+      x: (p1.x + p2.x) / 2,
+      y: (p1.y + p2.y) / 2,
     });
   }
 
-  return { nodes, edges };
+  return controlPoints;
 }
+
+export const isControlPoint = (
+  point: ControlPointData | XYPosition
+): point is ControlPointData => "id" in point;

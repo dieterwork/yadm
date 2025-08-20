@@ -11,13 +11,17 @@ import useShortcut from "../keyboard/useShortcut";
 import { useDEMOModeler } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
 import type { DEMONode } from "../nodes/nodes.types";
-import { matchNode } from "./utils";
+import {
+  getChildNodes,
+  getDisabledNodes,
+  showDisabledNodesError,
+} from "./utils";
 import uuid from "../../shared/utils/uuid";
 
 interface UseCopyPasteParams {
-  disabledNodes: DEMONode["type"] | DEMONode["type"][];
+  disabledNodeTypes: DEMONode["type"][];
 }
-const useCopyPaste = ({ disabledNodes }: UseCopyPasteParams) => {
+const useCopyPaste = ({ disabledNodeTypes }: UseCopyPasteParams) => {
   const mousePosition = useRef<XYPosition>({ x: 0, y: 0 });
   const rfDomNode = useStore((state) => state.domNode);
 
@@ -67,8 +71,20 @@ const useCopyPaste = ({ disabledNodes }: UseCopyPasteParams) => {
     }
   }, [rfDomNode]);
 
-  const copy = () => {
+  const _copy = () => {
     const selectedNodes = nodes.filter((node) => node.selected);
+
+    const disabledNodes = getDisabledNodes(selectedNodes, disabledNodeTypes);
+
+    if (disabledNodes.length > 0) {
+      showDisabledNodesError(disabledNodes);
+      return;
+    }
+
+    const childNodes = getChildNodes(selectedNodes, nodes);
+
+    const combinedSelectedNodes = selectedNodes.concat(childNodes);
+
     const selectedEdges = getConnectedEdges(selectedNodes, edges).filter(
       (edge) => {
         const isExternalSource = selectedNodes.every(
@@ -82,32 +98,25 @@ const useCopyPaste = ({ disabledNodes }: UseCopyPasteParams) => {
       }
     );
 
-    setBufferedNodes(selectedNodes);
+    setBufferedNodes(combinedSelectedNodes);
     setBufferedEdges(selectedEdges);
+
+    return { selectedNodes: combinedSelectedNodes, selectedEdges };
+  };
+
+  const copy = () => {
+    _copy();
   };
 
   const cut = () => {
-    const selectedNodes = nodes.filter(
-      (node) => node.selected && matchNode(node, disabledNodes)
-    );
-    const selectedEdges = getConnectedEdges(selectedNodes, edges).filter(
-      (edge) => {
-        const isExternalSource = selectedNodes.every(
-          (n) => n.id !== edge.source
-        );
-        const isExternalTarget = selectedNodes.every(
-          (n) => n.id !== edge.target
-        );
+    const selectedElements = _copy();
 
-        return !(isExternalSource || isExternalTarget);
-      }
-    );
+    if (!selectedElements) return;
 
-    setBufferedNodes(selectedNodes);
-    setBufferedEdges(selectedEdges);
+    const { selectedEdges, selectedNodes } = selectedElements;
 
     // A cut action needs to remove the copied nodes and edges from the graph.
-    setNodes((nodes) => nodes.filter((node) => !node.selected));
+    setNodes((nodes) => nodes.filter((node) => !selectedNodes.includes(node)));
     setEdges((edges) => edges.filter((edge) => !selectedEdges.includes(edge)));
   };
 
@@ -117,15 +126,35 @@ const useCopyPaste = ({ disabledNodes }: UseCopyPasteParams) => {
       y: mousePosition.current.y,
     })
   ) => {
-    const minX = Math.min(...bufferedNodes.map((s) => s.position.x));
-    const minY = Math.min(...bufferedNodes.map((s) => s.position.y));
+    const minX = Math.min(
+      ...bufferedNodes
+        .filter((node) => !node.parentId)
+        .map((node) => node.position.x)
+    );
+    const minY = Math.min(
+      ...bufferedNodes
+        .filter((node) => !node.parentId)
+        .map((node) => node.position.y)
+    );
+
+    // create an old/new id map to keep track of old ids
+    const idMap = new Map<string, string>();
+    for (const node of bufferedNodes) {
+      idMap.set(node.id, uuid());
+    }
 
     const newNodes: DEMONode[] = bufferedNodes.map((node) => {
-      const id = uuid();
+      // get new id
+      const id = idMap.get(node.id)!;
+
+      // if has a parent id, fetch the id from the map, else it's undefined
+      const parentId = node.parentId ? idMap.get(node.parentId) : undefined;
+
       const x = pasteX + (node.position.x - minX);
       const y = pasteY + (node.position.y - minY);
+      const position = node.parentId ? node.position : { x, y };
 
-      return { ...node, id, position: { x, y } };
+      return { ...node, id, parentId, position };
     });
 
     const newEdges: Edge[] = bufferedEdges.map((edge) => {

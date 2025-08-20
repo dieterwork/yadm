@@ -15,15 +15,16 @@ import { useDEMOModeler } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
 import { MIN_SIZE_MAP } from "./utils/consts";
 import type { DEMONode } from "./nodes.types";
+import DEMOHandle from "../edges/DEMOHandle";
 
 interface DEMONodePrimitiveProps extends NodeProps<DEMONode> {
   resizable?: boolean;
   keepAspectRatio?: boolean;
   children: ReactNode;
-  actions?: Action[];
+  actions?: Action[] | null;
 }
 
-type Action = "changeColor" | "delete" | "changeFontSize";
+type Action = "changeColor" | "delete" | "changeFontSize" | "connect";
 
 const DEMONodePrimitive = ({
   id,
@@ -35,14 +36,16 @@ const DEMONodePrimitive = ({
   resizable = true,
   keepAspectRatio = false,
   children,
-  actions = ["changeColor", "delete", "changeFontSize"],
-  isConnectable,
+  actions = ["changeColor", "delete", "changeFontSize", "connect"],
 }: DEMONodePrimitiveProps) => {
   if (type === "text_node")
     throw new Error("Cannot render node primitive with text node");
 
   const DEMOShape = shapeMap[type];
   const shapeRef = useRef<SVGSVGElement>(null!);
+
+  const connection = useConnection();
+  const isTarget = connection.inProgress && connection.fromNode.id !== id;
 
   const { getNode, getChildrenNodes, updateNodeExtent } = useDEMOModeler(
     useShallow((state) => ({
@@ -90,6 +93,16 @@ const DEMONodePrimitive = ({
             color={data?.color}
           />
         </Shape>
+      )}
+      {!connection.inProgress && (
+        <DEMOHandle position={Position.Right} type="source" />
+      )}
+      {(!connection.inProgress || isTarget) && (
+        <DEMOHandle
+          position={Position.Left}
+          type="target"
+          isConnectableStart={false}
+        />
       )}
       {children}
     </div>

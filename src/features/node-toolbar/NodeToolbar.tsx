@@ -1,4 +1,5 @@
 import {
+  ArrowsLeftRightIcon,
   CheckIcon,
   CrosshairIcon,
   IconContext,
@@ -21,6 +22,7 @@ import {
 } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
 import type { DEMONode } from "../nodes/nodes.types";
+import { createEdge } from "../edges/utils";
 
 interface NodeToolbarProps {
   id: string;
@@ -36,6 +38,8 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
     updateNodeScope,
     updateNodeColor,
     updateNodeFontSize,
+    addEdge,
+    edges,
   } = useDEMOModeler(
     useShallow((state: DEMOModelerState) => ({
       getNode: state.getNode,
@@ -44,6 +48,8 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
       updateNodeScope: state.updateNodeScope,
       updateNodeColor: state.updateNodeColor,
       updateNodeFontSize: state.updateNodeFontSize,
+      addEdge: state.addEdge,
+      edges: state.edges,
     }))
   );
 
@@ -52,15 +58,13 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
       <IconContext value={{ size: 24 }}>
         <_NodeToolbar position={Position.Right}>
           <div className="flex flex-col items-center gap-1">
-            {actions?.indexOf("delete") !== -1 && (
+            {actions?.indexOf("connect") !== -1 && (
               <Button
                 className="nodrag nopan cursor-pointer"
-                onPress={() => {
-                  deleteNode(id);
-                }}
-                aria-label="Delete"
+                onPress={() => {}}
+                aria-label="Connect"
               >
-                <TrashIcon />
+                <ArrowsLeftRightIcon />
               </Button>
             )}
             {actions?.indexOf("changeFontSize") !== -1 && (
@@ -259,6 +263,17 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                   </Menu>
                 </Popover>
               </MenuTrigger>
+            )}
+            {actions?.indexOf("delete") !== -1 && (
+              <Button
+                className="nodrag nopan cursor-pointer"
+                onPress={() => {
+                  deleteNode(id);
+                }}
+                aria-label="Delete"
+              >
+                <TrashIcon />
+              </Button>
             )}
           </div>
         </_NodeToolbar>

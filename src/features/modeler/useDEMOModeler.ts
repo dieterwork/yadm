@@ -19,6 +19,8 @@ import { initialEdges } from "../edges/initialEdges";
 import type { DEMONode } from "../nodes/nodes.types";
 import uuid from "../../shared/utils/uuid";
 
+type ReactStyleStateSetter<T> = T | ((prev: T) => T);
+
 export interface DEMOModelerState {
   id: string;
   nodes: DEMONode[];
@@ -28,8 +30,8 @@ export interface DEMOModelerState {
   onNodesChange: OnNodesChange<DEMONode>;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
-  setNodes: (nodes: DEMONode[]) => void;
-  setEdges: (edges: Edge[]) => void;
+  setNodes: (newNodesOrSetterFn: ReactStyleStateSetter<DEMONode[]>) => void;
+  setEdges: (newEdgesOrSetterFn: ReactStyleStateSetter<Edge[]>) => void;
   DEMOInstance: null | ReactFlowInstance<DEMONode, Edge>;
   setDEMOInstance: (instance: ReactFlowInstance<DEMONode, Edge>) => void;
   updateNodeColor: (nodeId: string, color: string) => void;
@@ -37,6 +39,7 @@ export interface DEMOModelerState {
   updateNodeScope: (nodeId: string, scope: string, type: string) => void;
   deleteNode: (nodeId: string) => void;
   addNode: (node: DEMONode) => void;
+  addEdge: (edge: Edge) => void;
   getNode: (nodeId: string) => DEMONode | undefined;
   getChildrenNodes: (nodeId: string) => DEMONode[];
   updateNodeExtent: (nodeId: string, extent: CoordinateExtent) => void;
@@ -79,17 +82,52 @@ export const useDEMOModeler = create<DEMOModelerState>()(
     },
     onConnect: (connection) => {
       set({
-        edges: addEdge(connection, get().edges),
+        edges: addEdge(
+          { ...connection, type: "cooperation_model_edge" },
+          get().edges
+        ),
       });
     },
     setDEMOInstance: (instance) => {
       set({ DEMOInstance: instance });
     },
-    setNodes: (nodes) => {
-      set({ nodes });
+    setNodes: (newNodesOrSetterFn) => {
+      set(({ nodes }) => {
+        if (Array.isArray(newNodesOrSetterFn)) {
+          const newArr = newNodesOrSetterFn;
+          return { nodes: newArr };
+        }
+        const setterFn = newNodesOrSetterFn;
+        return {
+          nodes: setterFn(nodes),
+        };
+      });
     },
-    setEdges: (edges) => {
-      set({ edges });
+    setEdges: (newEdgesOrSetterFn) => {
+      set(({ edges }) => {
+        if (Array.isArray(newEdgesOrSetterFn)) {
+          const newArr = newEdgesOrSetterFn;
+          return { edges: newArr };
+        }
+        const setterFn = newEdgesOrSetterFn;
+        return {
+          edges: setterFn(edges),
+        };
+      });
+    },
+    addEdge: (edge: Edge) => {
+      set({
+        edges: get()
+          .edges.map((edge) => ({
+            ...edge,
+          }))
+          .concat([edge]),
+      });
+    },
+    deleteNode: (nodeId: string) => {
+      set({
+        nodes: get().nodes.filter((node) => node.id !== nodeId),
+      });
     },
     updateNodeColor: (nodeId: string, color: string) => {
       set({
@@ -170,11 +208,6 @@ export const useDEMOModeler = create<DEMOModelerState>()(
           .concat(Array.isArray(node) ? node : [node]),
       });
     },
-    deleteNode: (nodeId: string) => {
-      set({
-        nodes: get().nodes.filter((node) => node.id !== nodeId),
-      });
-    },
     getNodeAbsolutePosition: (nodeId: string) => {
       const node = get().getNode(nodeId);
       let x = 0;
@@ -190,6 +223,15 @@ export const useDEMOModeler = create<DEMOModelerState>()(
           : undefined;
       }
       return { x, y };
+    },
+    deleteDiagram: () => {
+      get().setModelFromJSONObject({
+        nodes: [],
+        edges: [],
+        viewport: { x: 0, y: 0, zoom: 1 },
+      });
+      const DEMOInstance = get().DEMOInstance;
+      if (DEMOInstance) get().setDEMOInstance(DEMOInstance);
     },
     setModelFromJSONObject: (object: ReactFlowJsonObject<DEMONode, Edge>) => {
       set({

@@ -12,6 +12,7 @@ interface CreateNodeParams {
   height?: number;
   content?: string;
   selected?: boolean;
+  zIndex?: number;
 }
 export const createNode = ({
   type,
@@ -22,12 +23,13 @@ export const createNode = ({
   height,
   content,
   selected,
+  zIndex,
 }: CreateNodeParams): DEMONode | DEMONode[] => {
   if (!id) id = uuid();
   switch (type) {
     case "actor": {
       return {
-        id: id,
+        id: `actor_${id}`,
         type: type,
         position,
         data: {
@@ -47,7 +49,7 @@ export const createNode = ({
 
     case "transaction": {
       return {
-        id: id,
+        id: `transaction_${id}`,
         type: type,
         position,
         data: { state: "default", content: DEFAULT_CONTENT_MAP[type] },
@@ -237,6 +239,7 @@ export const createNode = ({
           extent: "parent",
           selected: false,
           connectable: false,
+          zIndex: 1,
         },
         {
           id: uuid(),
@@ -267,6 +270,7 @@ export const createNode = ({
           ],
           selected: false,
           connectable: false,
+          zIndex: 2,
         },
       ];
     }
@@ -287,6 +291,7 @@ export const createNode = ({
         },
         selected: true,
         extent: "parent",
+        zIndex: 3,
       };
     }
 
@@ -306,6 +311,7 @@ export const createNode = ({
         },
         selected: true,
         extent: "parent",
+        zIndex: 3,
       };
     }
 
@@ -325,6 +331,7 @@ export const createNode = ({
         },
         selected: true,
         extent: "parent",
+        zIndex: 3,
       };
     }
     case "tk_execution": {
@@ -343,6 +350,7 @@ export const createNode = ({
         },
         selected: true,
         extent: "parent",
+        zIndex: 3,
       };
     }
     case "text_node": {
@@ -362,6 +370,7 @@ export const createNode = ({
           height: height ?? DEFAULT_SIZE_MAP["text_node"].height,
         },
         selected: selected ?? true,
+        zIndex,
       };
     }
     default:

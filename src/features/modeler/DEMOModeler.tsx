@@ -7,19 +7,20 @@ import {
   type NodeMouseHandler,
   type Edge,
   type ReactFlowJsonObject,
+  type NodeChange,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
 import { edgeTypes } from "../edges/edges.types";
 import { nodeTypes, type DEMONode } from "../nodes/nodes.types";
 
-import { useEffect, type MouseEvent } from "react";
+import { useState, type MouseEvent } from "react";
 import { usePreviewNode } from "../sidebar/usePreviewNode";
 import { useDEMOModeler, type DEMOModelerState } from "./useDEMOModeler";
 import { createNode } from "../nodes/utils/createNode";
 import { useShallow } from "zustand/react/shallow";
 import { convertAbsoluteToParentRelativePosition } from "../nodes/utils/getNodePositionInsideParent";
-import { SMALL_NODE_SIZE, X_SMALL_NODE_SIZE } from "../nodes/utils/consts";
+import { X_SMALL_NODE_SIZE } from "../nodes/utils/consts";
 import uuid from "../../shared/utils/uuid";
 import SideMenu from "../side_menu/SideMenu";
 import { saveDEMOInstance } from "../save/saveDEMOInstance";
@@ -27,6 +28,8 @@ import { debounce } from "../../shared/utils/debounce";
 import ConnectionLine from "../edges/ConnectionLine";
 import useCopyPaste from "../copy_paste/useCopyPaste";
 import useLocalJSONModel from "./useLocalJSONModel";
+import HelperLines from "../helper_lines/HelperLines";
+import { useHelperLines } from "../helper_lines/useHelperLines";
 
 const transactionTimeNodes = [
   "c_act",
@@ -162,15 +165,18 @@ const DEMOModeler = () => {
     resetPreviewNode();
   };
 
-  const handleNodeClick: NodeMouseHandler<DEMONode> = (e, node) => {
+  const handleNodeClick = (e: MouseEvent, node: DEMONode) => {
     handleObjectFactDiagramNodeAdd(e, node);
   };
 
   useLocalJSONModel();
 
   useCopyPaste({
-    disabledNodes: ["transaction_time_inner", "transaction_kind"],
+    disabledNodeTypes: ["transaction_time_inner", "transaction_kind"],
   });
+
+  const { helperLineHorizontal, helperLineVertical, updateHelperLines } =
+    useHelperLines();
 
   return (
     <div className="DEMO-modeler | [grid-area:modeler] h-full">
@@ -179,7 +185,8 @@ const DEMOModeler = () => {
           nodes={nodes}
           nodeTypes={nodeTypes}
           onNodesChange={(changes) => {
-            onNodesChange(changes);
+            const updatedChanges = updateHelperLines(changes, nodes);
+            onNodesChange(updatedChanges);
             saveDEMOInstance(DEMOInstance);
           }}
           edges={edges}
@@ -207,7 +214,7 @@ const DEMOModeler = () => {
           onInit={(instance) => setDEMOInstance(instance)}
           viewport={viewport}
           onViewportChange={(viewport) => setViewport(viewport)}
-          connectionLineComponent={ConnectionLine}
+          connectionLineComponent={(props) => <ConnectionLine {...props} />}
           connectionLineStyle={{
             stroke: "#b1b1b7",
           }}
@@ -216,6 +223,10 @@ const DEMOModeler = () => {
           <MiniMap />
           <Controls />
           <SideMenu />
+          <HelperLines
+            horizontal={helperLineHorizontal}
+            vertical={helperLineVertical}
+          />
         </ReactFlow>
       </div>
     </div>

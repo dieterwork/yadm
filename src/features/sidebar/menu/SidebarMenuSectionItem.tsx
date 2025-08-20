@@ -25,7 +25,7 @@ const SidebarMenuSectionItem = ({
   ...restProps
 }: SidebarMenuSectionItemProps) => {
   const DEMOShape = shapeMap[icon];
-  const { createPreviewNode, updatePreviewNodePosition } = usePreviewNode(
+  const { createPreviewNode } = usePreviewNode(
     useShallow((state) => ({
       createPreviewNode: state.createNode,
       updatePreviewNodeType: state.updateType,

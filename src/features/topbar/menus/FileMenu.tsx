@@ -44,16 +44,18 @@ const importJSON = (ref: RefObject<HTMLInputElement>) => {
 
 const FileMenu = () => {
   const inputRef = useRef<HTMLInputElement>(null!);
-  const { DEMOInstance, id, setModelFromJSONObject } = useDEMOModeler(
-    useShallow((state) => ({
-      DEMOInstance: state.DEMOInstance,
-      id: state.id,
-      setNodes: state.setNodes,
-      setEdges: state.setEdges,
-      setViewport: state.setViewport,
-      setModelFromJSONObject: state.setModelFromJSONObject,
-    }))
-  );
+  const { DEMOInstance, id, setModelFromJSONObject, deleteDiagram } =
+    useDEMOModeler(
+      useShallow((state) => ({
+        DEMOInstance: state.DEMOInstance,
+        id: state.id,
+        setNodes: state.setNodes,
+        setEdges: state.setEdges,
+        setViewport: state.setViewport,
+        setModelFromJSONObject: state.setModelFromJSONObject,
+        deleteDiagram: state.deleteDiagram,
+      }))
+    );
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const [file] = e.target.files ?? [];
@@ -129,12 +131,7 @@ const FileMenu = () => {
             </SubmenuTrigger>
             <MenuItem
               onAction={() => {
-                setModelFromJSONObject({
-                  edges: [],
-                  nodes: [],
-                  viewport: { x: 0, y: 0, zoom: 1 },
-                });
-                saveDEMOInstance(DEMOInstance);
+                deleteDiagram();
               }}
             >
               Delete diagram
