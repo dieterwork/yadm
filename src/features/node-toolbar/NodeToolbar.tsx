@@ -22,7 +22,6 @@ import {
 } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
 import type { DEMONode } from "../nodes/nodes.types";
-import { createEdge } from "../edges/utils";
 
 interface NodeToolbarProps {
   id: string;
@@ -38,8 +37,6 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
     updateNodeScope,
     updateNodeColor,
     updateNodeFontSize,
-    addEdge,
-    edges,
   } = useDEMOModeler(
     useShallow((state: DEMOModelerState) => ({
       getNode: state.getNode,
@@ -58,15 +55,6 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
       <IconContext value={{ size: 24 }}>
         <_NodeToolbar position={Position.Right}>
           <div className="flex flex-col items-center gap-1">
-            {actions?.indexOf("connect") !== -1 && (
-              <Button
-                className="nodrag nopan cursor-pointer"
-                onPress={() => {}}
-                aria-label="Connect"
-              >
-                <ArrowsLeftRightIcon />
-              </Button>
-            )}
             {actions?.indexOf("changeFontSize") !== -1 && (
               <MenuTrigger>
                 <Button
