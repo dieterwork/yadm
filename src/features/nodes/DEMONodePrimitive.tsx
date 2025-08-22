@@ -15,7 +15,6 @@ import { useDEMOModeler } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
 import { MIN_SIZE_MAP } from "./utils/consts";
 import type { DEMONode } from "./nodes.types";
-import DEMOHandle from "../edges/DEMOHandle";
 
 interface DEMONodePrimitiveProps extends NodeProps<DEMONode> {
   resizable?: boolean;
@@ -43,9 +42,6 @@ const DEMONodePrimitive = ({
 
   const DEMOShape = shapeMap[type];
   const shapeRef = useRef<SVGSVGElement>(null!);
-
-  const connection = useConnection();
-  const isTarget = connection.inProgress && connection.fromNode.id !== id;
 
   const { getNode, getChildrenNodes, updateNodeExtent } = useDEMOModeler(
     useShallow((state) => ({
@@ -82,6 +78,8 @@ const DEMONodePrimitive = ({
           onResize={changeChildExtent}
           minHeight={MIN_SIZE_MAP[type].height}
           minWidth={MIN_SIZE_MAP[type].width}
+          lineClassName="node-resizer-line"
+          handleClassName="node-resizer-handle"
         />
       )}
       {/* Shape */}
@@ -93,16 +91,6 @@ const DEMONodePrimitive = ({
             color={data?.color}
           />
         </Shape>
-      )}
-      {!connection.inProgress && (
-        <DEMOHandle position={Position.Right} type="source" />
-      )}
-      {(!connection.inProgress || isTarget) && (
-        <DEMOHandle
-          position={Position.Left}
-          type="target"
-          isConnectableStart={false}
-        />
       )}
       {children}
     </div>

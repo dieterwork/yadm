@@ -60,11 +60,11 @@ const EditableContent = ({
   fontSize = 14,
   color = "var(--color-black)",
   maxLines = 3,
+  maxLength = 50,
   ref,
   hide = false,
   textAlign = "center",
   alignContent = "center",
-  maxLength,
   ...restProps
 }: EditableContentProps) => {
   const nodeId = useNodeId();
@@ -88,6 +88,7 @@ const EditableContent = ({
       updateNodeContent(nodeId, content);
     },
     maxLines,
+    maxLength,
   });
 
   return (

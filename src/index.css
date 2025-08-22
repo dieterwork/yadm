@@ -15,3 +15,45 @@ body,
   height: 100svh;
   overflow: hidden;
 }
+
+.node-resizer-handle {
+}
+
+.react-flow__resize-control.react-flow__resize-control {
+  --_size: 2px;
+  &.line {
+    background-color: var(--color-blue-500);
+    &.top {
+      border-top-width: var(--_size);
+      height: var(--_size);
+    }
+    &.bottom {
+      border-bottom-width: var(--_size);
+      height: var(--_size);
+    }
+    &.left {
+      border-left-width: var(--_size);
+      width: var(--_size);
+    }
+    &.right {
+      border-right-width: var(--_size);
+      width: var(--_size);
+    }
+  }
+
+  &.handle {
+    width: 8px;
+    height: 8px;
+    border-color: var(--color-blue-900);
+    border-width: 2px;
+    background-color: var(--color-blue-500);
+    &.top.left {
+    }
+    &.top.right {
+    }
+    &.bottom.left {
+    }
+    &.bottom.right {
+    }
+  }
+}

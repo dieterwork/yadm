@@ -34,6 +34,7 @@ const ElementaryActorNode = ({
           editable={true}
           style={{ bottom: "auto" }}
           fontSize={fontSize}
+          maxLength={50}
         />
       </DEMONodePrimitive>
     </>

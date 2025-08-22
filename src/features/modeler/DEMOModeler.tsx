@@ -8,6 +8,7 @@ import {
   type Edge,
   type ReactFlowJsonObject,
   type NodeChange,
+  ConnectionMode,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
@@ -215,9 +216,7 @@ const DEMOModeler = () => {
           viewport={viewport}
           onViewportChange={(viewport) => setViewport(viewport)}
           connectionLineComponent={(props) => <ConnectionLine {...props} />}
-          connectionLineStyle={{
-            stroke: "#b1b1b7",
-          }}
+          connectionMode={ConnectionMode.Loose}
         >
           <Background />
           <MiniMap />

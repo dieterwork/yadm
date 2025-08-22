@@ -30,6 +30,7 @@ const TransactorNode = ({
           style={{ top: 0, bottom: "auto" }}
           content={content}
           fontSize={fontSize}
+          maxLength={5}
         />
         <EditableContent
           width={width}
@@ -37,6 +38,7 @@ const TransactorNode = ({
           style={{ bottom: 0, top: "auto" }}
           content={content}
           fontSize={fontSize}
+          maxLength={60}
         />
       </DEMONodePrimitive>
     </>

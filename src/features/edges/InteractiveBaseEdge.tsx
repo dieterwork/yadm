@@ -1,14 +1,24 @@
 import type { BaseEdgeProps } from "@xyflow/react";
+import type { CSSProperties } from "react";
 
-const ClickableBaseEdge = ({
+interface InteractiveBaseEdgeProps {
+  id: string;
+  path: string;
+  style: CSSProperties;
+  markerEnd?: string;
+  markerStart?: string;
+  markerMid?: string;
+  onPointerDown?: (e: PointerEvent) => void;
+}
+
+const InteractiveBaseEdge = ({
   id,
   path,
   style,
   markerEnd,
   markerStart,
   interactionWidth = 20,
-  onClick,
-  onContextMenu,
+  onPointerDown,
 }: BaseEdgeProps) => {
   return (
     <>
@@ -28,12 +38,11 @@ const ClickableBaseEdge = ({
           strokeOpacity={0}
           strokeWidth={interactionWidth}
           className="react-flow__edge-interaction"
-          onClick={onClick}
-          onContextMenu={onContextMenu}
+          onPointerDown={onPointerDown}
         />
       )}
     </>
   );
 };
 
-export default ClickableBaseEdge;
+export default InteractiveBaseEdge;

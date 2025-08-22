@@ -129,13 +129,6 @@ const FileMenu = () => {
                 </Menu>
               </Popover>
             </SubmenuTrigger>
-            <MenuItem
-              onAction={() => {
-                deleteDiagram();
-              }}
-            >
-              Delete diagram
-            </MenuItem>
             <MenuItem>Exit</MenuItem>
           </Menu>
         </Popover>

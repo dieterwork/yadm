@@ -30,6 +30,7 @@ const EntityClassNode = ({
           editable={true}
           fontSize={fontSize}
           alignContent="top"
+          maxLength={60}
         />
       </DEMONodePrimitive>
     </>

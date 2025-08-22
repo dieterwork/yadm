@@ -30,6 +30,7 @@ const DerivedEntityNode = ({
           editable={true}
           alignContent="top"
           fontSize={fontSize}
+          maxLength={60}
         />
       </DEMONodePrimitive>
     </>

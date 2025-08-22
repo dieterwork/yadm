@@ -12,28 +12,30 @@ import {
   type ReactFlowInstance,
   type Viewport,
   type ReactFlowJsonObject,
+  type XYPosition,
 } from "@xyflow/react";
 
 import { initialNodes } from "../nodes/initialNodes";
 import { initialEdges } from "../edges/initialEdges";
 import type { DEMONode } from "../nodes/nodes.types";
 import uuid from "../../shared/utils/uuid";
+import type { DEMOEdge } from "../edges/edges.types";
 
 type ReactStyleStateSetter<T> = T | ((prev: T) => T);
 
 export interface DEMOModelerState {
   id: string;
   nodes: DEMONode[];
-  edges: Edge[];
+  edges: DEMOEdge[];
   viewport: Viewport;
   setViewport: (viewport: Viewport) => void;
   onNodesChange: OnNodesChange<DEMONode>;
-  onEdgesChange: OnEdgesChange;
+  onEdgesChange: OnEdgesChange<DEMOEdge>;
   onConnect: OnConnect;
   setNodes: (newNodesOrSetterFn: ReactStyleStateSetter<DEMONode[]>) => void;
-  setEdges: (newEdgesOrSetterFn: ReactStyleStateSetter<Edge[]>) => void;
-  DEMOInstance: null | ReactFlowInstance<DEMONode, Edge>;
-  setDEMOInstance: (instance: ReactFlowInstance<DEMONode, Edge>) => void;
+  setEdges: (newEdgesOrSetterFn: ReactStyleStateSetter<DEMOEdge[]>) => void;
+  DEMOInstance: null | ReactFlowInstance<DEMONode, DEMOEdge>;
+  setDEMOInstance: (instance: ReactFlowInstance<DEMONode, DEMOEdge>) => void;
   updateNodeColor: (nodeId: string, color: string) => void;
   updateNodeState: (nodeId: string, state: string, type: string) => void;
   updateNodeScope: (nodeId: string, scope: string, type: string) => void;
@@ -54,6 +56,8 @@ export interface DEMOModelerState {
       replace: boolean;
     }
   ) => void;
+  connectionLinePath: XYPosition[];
+  setConnectionLinePath: (connectionLinePath: XYPosition[]) => void;
 }
 
 export const useDEMOModeler = create<DEMOModelerState>()(
@@ -66,6 +70,10 @@ export const useDEMOModeler = create<DEMOModelerState>()(
       x: 0,
       y: 0,
       zoom: 1,
+    },
+    connectionLinePath: [],
+    setConnectionLinePath: (connectionLinePath: XYPosition[]) => {
+      set({ connectionLinePath });
     },
     setViewport: (viewport) => {
       set({ viewport });
@@ -83,7 +91,12 @@ export const useDEMOModeler = create<DEMOModelerState>()(
     onConnect: (connection) => {
       set({
         edges: addEdge(
-          { ...connection, type: "cooperation_model_edge" },
+          {
+            ...connection,
+            id: uuid(),
+            type: "cooperation_model_edge",
+            data: { points: [] },
+          },
           get().edges
         ),
       });

@@ -13,6 +13,7 @@ const NodeResizer = () => {
   const changeChildExtent = () => {
     const parentNode = getNode(id);
     const childrenNodes = getChildrenNodes(id);
+    if (!parentNode?.width || !parentNode?.height) return;
 
     for (const child of childrenNodes) {
       if (!child || !child?.extent || child?.extent === "parent") return;

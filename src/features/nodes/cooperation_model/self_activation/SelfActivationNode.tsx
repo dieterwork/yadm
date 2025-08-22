@@ -33,6 +33,7 @@ const SelfActivationNode = ({
           height={DEFAULT_SIZE_MAP["transaction"].height}
           editable={true}
           fontSize={fontSize}
+          maxLength={50}
         />
       </DEMONodePrimitive>
     </>

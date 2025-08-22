@@ -35,6 +35,7 @@ const SeveralActorsNode = ({
           editable={true}
           style={{ bottom: "auto", right: 100 / 8 }}
           fontSize={fontSize}
+          maxLength={50}
         />
       </DEMONodePrimitive>
     </>

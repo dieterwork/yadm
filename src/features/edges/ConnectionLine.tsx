@@ -1,57 +1,95 @@
+import { useEffect, useState } from "react";
 import {
-  getBezierPath,
   getSmoothStepPath,
   MarkerType,
   type ConnectionLineComponentProps,
 } from "@xyflow/react";
-import { getEdgeParams } from "./utils";
-import type { DEMONode } from "../nodes/nodes.types";
-import { useEffect } from "react";
+
+import { COLORS, DEFAULT_ALGORITHM } from "./constants";
+import { useDEMOModeler } from "../modeler/useDEMOModeler";
+import { useShallow } from "zustand/react/shallow";
+import { getPath } from "./path";
+
+// The distance between points when free drawing
+const DISTANCE = 25;
 
 const ConnectionLine = ({
+  fromX,
+  fromY,
   toX,
   toY,
   fromPosition,
   toPosition,
-  fromNode,
-  ...restProps
-}: ConnectionLineComponentProps<DEMONode>) => {
-  if (!fromNode) {
-    return null;
-  }
+  connectionStatus,
+}: ConnectionLineComponentProps) => {
+  const { connectionLinePath, setConnectionLinePath } = useDEMOModeler(
+    useShallow((state) => ({
+      connectionLinePath: state.connectionLinePath,
+      setConnectionLinePath: state.setConnectionLinePath,
+    }))
+  );
+  const [freeDrawing, setFreeDrawing] = useState(false);
 
-  // Create a mock target node at the cursor position
-  const targetNode = {
-    id: "connection-target",
-    measured: {
-      width: 1,
-      height: 1,
-    },
-    internals: {
-      positionAbsolute: { x: toX, y: toY },
-    },
+  // Check how far the cursor is from the last point in the path
+  // and add a new point if it's far enough
+  const prev = connectionLinePath[connectionLinePath.length - 1] ?? {
+    x: fromX,
+    y: fromY,
   };
+  const distance = Math.hypot(prev.x - toX, prev.y - toY);
+  const shouldAddPoint = freeDrawing && distance > DISTANCE;
 
-  const { sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition } =
-    getEdgeParams(fromNode, targetNode);
+  useEffect(() => {
+    if (shouldAddPoint) {
+      setConnectionLinePath([...connectionLinePath, { x: toX, y: toY }]);
+    }
+  }, [connectionLinePath, setConnectionLinePath, shouldAddPoint, toX, toY]);
 
-  const [edgePath] = getSmoothStepPath({
-    sourceX,
-    sourceY,
-    sourcePosition: sourcePosition || fromPosition,
-    targetPosition: targetPosition || toPosition,
-    targetX: targetX || toX,
-    targetY: targetY || toY,
+  useEffect(() => {
+    // pressing or holding the space key enables free drawing
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === " ") {
+        setFreeDrawing(true);
+      }
+    }
+
+    function onKeyUp(e: KeyboardEvent) {
+      if (e.key === " ") {
+        setFreeDrawing(false);
+      }
+    }
+
+    setConnectionLinePath([]);
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+      setFreeDrawing(false);
+    };
+  }, [setConnectionLinePath]);
+
+  const [path] = getSmoothStepPath({
+    sourceX: fromX,
+    sourceY: fromY,
+    targetX: toX,
+    targetY: toY,
+    sourcePosition: fromPosition,
+    targetPosition: toPosition,
   });
 
   return (
     <g>
       <path
         fill="none"
-        stroke="#222"
-        strokeWidth={1.5}
-        d={edgePath}
-        markerStart={MarkerType.Arrow}
+        stroke={COLORS[DEFAULT_ALGORITHM]}
+        strokeWidth={2}
+        className={connectionStatus === "valid" ? "" : "animated"}
+        d={path}
+        markerStart={MarkerType.ArrowClosed}
+        markerWidth={25}
+        markerEnd={MarkerType.ArrowClosed}
       />
     </g>
   );
