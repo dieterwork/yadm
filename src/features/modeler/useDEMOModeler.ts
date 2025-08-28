@@ -13,6 +13,8 @@ import {
   type Viewport,
   type ReactFlowJsonObject,
   type XYPosition,
+  reconnectEdge,
+  type OnReconnect,
 } from "@xyflow/react";
 
 import { initialNodes } from "../nodes/initialNodes";
@@ -25,13 +27,16 @@ type ReactStyleStateSetter<T> = T | ((prev: T) => T);
 
 export interface DEMOModelerState {
   id: string;
+  fileName: string;
   nodes: DEMONode[];
   edges: DEMOEdge[];
   viewport: Viewport;
+  setFileName: (filename: string) => void;
   setViewport: (viewport: Viewport) => void;
   onNodesChange: OnNodesChange<DEMONode>;
   onEdgesChange: OnEdgesChange<DEMOEdge>;
   onConnect: OnConnect;
+  onReconnect: OnReconnect<DEMOEdge>;
   setNodes: (newNodesOrSetterFn: ReactStyleStateSetter<DEMONode[]>) => void;
   setEdges: (newEdgesOrSetterFn: ReactStyleStateSetter<DEMOEdge[]>) => void;
   DEMOInstance: null | ReactFlowInstance<DEMONode, DEMOEdge>;
@@ -63,6 +68,7 @@ export interface DEMOModelerState {
 export const useDEMOModeler = create<DEMOModelerState>()(
   temporal((set, get) => ({
     id: uuid(),
+    fileName: `demo-model_${uuid()}`,
     nodes: initialNodes,
     edges: initialEdges,
     DEMOInstance: null,
@@ -74,6 +80,9 @@ export const useDEMOModeler = create<DEMOModelerState>()(
     connectionLinePath: [],
     setConnectionLinePath: (connectionLinePath: XYPosition[]) => {
       set({ connectionLinePath });
+    },
+    setFileName: (fileName) => {
+      set({ fileName });
     },
     setViewport: (viewport) => {
       set({ viewport });
@@ -99,6 +108,11 @@ export const useDEMOModeler = create<DEMOModelerState>()(
           },
           get().edges
         ),
+      });
+    },
+    onReconnect: (oldEdge, newConnection) => {
+      set({
+        edges: reconnectEdge(oldEdge, newConnection, get().edges),
       });
     },
     setDEMOInstance: (instance) => {

@@ -51,6 +51,7 @@ const DEMOModeler = () => {
     setDEMOInstance,
     DEMOInstance,
     viewport,
+    onReconnect,
     setViewport,
   } = useDEMOModeler(
     useShallow((state: DEMOModelerState) => ({
@@ -65,6 +66,7 @@ const DEMOModeler = () => {
       DEMOInstance: state.DEMOInstance,
       viewport: state.viewport,
       setViewport: state.setViewport,
+      onReconnect: state.onReconnect,
     }))
   );
   const { screenToFlowPosition } = useReactFlow();
@@ -206,6 +208,7 @@ const DEMOModeler = () => {
           onBlur={() => {
             saveDEMOInstance(DEMOInstance);
           }}
+          onReconnect={onReconnect}
           nodesFocusable={true}
           edgesFocusable={true}
           disableKeyboardA11y={false}
