@@ -16,6 +16,7 @@
     "@tailwindcss/vite": "^4.1.11",
     "@xyflow/react": "^12.8.2",
     "clsx": "^2.1.1",
+    "nanoid": "^5.1.5",
     "react": "^19.1.1",
     "react-aria": "^3.42.0",
     "react-aria-components": "^1.11.0",

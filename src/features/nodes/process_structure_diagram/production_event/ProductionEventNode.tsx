@@ -22,6 +22,7 @@ const ProductionEventNode = ({
         width={width}
         height={height}
         type="production_event"
+        keepAspectRatio={true}
       >
         <EditableContent
           content={content}
