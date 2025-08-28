@@ -68,7 +68,7 @@ export interface DEMOModelerState {
 export const useDEMOModeler = create<DEMOModelerState>()(
   temporal((set, get) => ({
     id: uuid(),
-    fileName: `demo-model_${uuid()}`,
+    fileName: `demo-model_${(new Date()).toISOString()}`,
     nodes: initialNodes,
     edges: initialEdges,
     DEMOInstance: null,
