@@ -19,7 +19,7 @@ import { saveDEMOInstance } from "../../save/saveDEMOInstance";
 
 const exportAsJSON = (
   instance: ReactFlowInstance<DEMONode, Edge> | null,
-  id: string
+  fileName: string
 ) => {
   if (!instance) return;
   const jsonModel = JSON.stringify(instance.toObject());
@@ -28,7 +28,7 @@ const exportAsJSON = (
   const url = URL.createObjectURL(file);
   link.style.display = "none";
   link.href = url;
-  link.download = `DEMO-model-${id}.json`;
+  link.download = `${fileName}.json`;
   link.click();
 
   // cleanup
@@ -44,18 +44,17 @@ const importJSON = (ref: RefObject<HTMLInputElement>) => {
 
 const FileMenu = () => {
   const inputRef = useRef<HTMLInputElement>(null!);
-  const { DEMOInstance, id, setModelFromJSONObject, deleteDiagram } =
-    useDEMOModeler(
-      useShallow((state) => ({
-        DEMOInstance: state.DEMOInstance,
-        id: state.id,
-        setNodes: state.setNodes,
-        setEdges: state.setEdges,
-        setViewport: state.setViewport,
-        setModelFromJSONObject: state.setModelFromJSONObject,
-        deleteDiagram: state.deleteDiagram,
-      }))
-    );
+  const { DEMOInstance, fileName, setModelFromJSONObject } = useDEMOModeler(
+    useShallow((state) => ({
+      DEMOInstance: state.DEMOInstance,
+      id: state.id,
+      setNodes: state.setNodes,
+      setEdges: state.setEdges,
+      setViewport: state.setViewport,
+      setModelFromJSONObject: state.setModelFromJSONObject,
+      fileName: state.fileName,
+    }))
+  );
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const [file] = e.target.files ?? [];
@@ -119,7 +118,7 @@ const FileMenu = () => {
                 <Menu>
                   <MenuItem
                     onAction={() => {
-                      exportAsJSON(DEMOInstance, id);
+                      exportAsJSON(DEMOInstance, fileName);
                     }}
                   >
                     JSON
