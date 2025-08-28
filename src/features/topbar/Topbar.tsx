@@ -41,9 +41,10 @@ const Topbar = () => {
                 <TextField
                   aria-label="Change file name"
                   onChange={(e) => {
-                    setFileName(e);
+                    const date = (new Date()).toISOString();
+                    setFileName(`${e}_` + date);
                     if (e === "") {
-                      setFileName("demo-model_" + uuid());
+                      setFileName("demo-model_" + date);
                     }
                   }}
                   className="border-1 border-slate-300 rounded-sm text-md h-[2.25rem] content-center px-2"
