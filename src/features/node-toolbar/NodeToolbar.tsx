@@ -68,7 +68,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                 </Button>
                 <Popover placement="right top" className="nodrag nopan">
                   <Menu className="bg-white">
-                    {[10, 12, 14, 16, 18, 20].map((num) => (
+                    {[10, 12, 14, 16, 18, 24].map((num) => (
                       <MenuItem
                         className="cursor-pointer select-none flex items-center gap-1"
                         onAction={() => {
