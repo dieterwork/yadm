@@ -1,16 +1,19 @@
-import { useReactFlow, type Edge, type EdgeProps } from "@xyflow/react";
+import {
+  useInternalNode,
+  useReactFlow,
+  type Edge,
+  type EdgeProps,
+} from "@xyflow/react";
 
 import { ControlPoint } from "./ControlPoint";
-import { Algorithm } from "./constants";
 import { useDEMOModeler } from "../modeler/useDEMOModeler";
 import { useEditableEdge } from "./useEditableEdge";
 import type { ControlPoint as ControlPointType } from "./edges.types";
 import InteractiveBaseEdge from "./InteractiveBaseEdge";
 import uuid from "../../shared/utils/uuid";
-import { useEffect } from "react";
+import { getEdgeParams } from "./edges.utils";
 
 export type EditableEdge = Edge<{
-  algorithm?: Algorithm;
   points: ControlPointType[];
 }>;
 
@@ -18,27 +21,38 @@ export function EditableEdgeComponent({
   id,
   sourceX,
   sourceY,
+  source,
   sourcePosition,
   targetX,
   targetY,
+  target,
   targetPosition,
   style,
   data = { points: [] },
 }: EdgeProps<EditableEdge>) {
-  const color = "var(--color-black)";
-
-  const edgeSegmentsArray = useEditableEdge({
-    controlPoints: data.points,
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-    sourcePosition,
-    targetPosition,
-  });
-
+  const sourceNode = useInternalNode(source);
+  const targetNode = useInternalNode(target);
   const setEdges = useDEMOModeler((state) => state.setEdges);
   const { screenToFlowPosition } = useReactFlow();
+  const { sx, sy, tx, ty, sourcePos, targetPos } = getEdgeParams(
+    sourceNode,
+    targetNode
+  );
+  const edgeSegmentsArray = useEditableEdge({
+    controlPoints: data.points,
+    sourceX: sx,
+    sourceY: sy,
+    targetX: tx,
+    targetY: ty,
+    sourcePosition: sourcePos,
+    targetPosition: targetPos,
+  });
+
+  if (!sourceNode || !targetNode) {
+    return null;
+  }
+
+  const color = "var(--color-black)";
 
   const setControlPoints = (
     update: (points: ControlPointType[]) => ControlPointType[]
@@ -64,23 +78,26 @@ export function EditableEdgeComponent({
               x: e.clientX,
               y: e.clientY,
             });
-            setControlPoints((points) => [
-              ...points,
-              { id: uuid(), ...position, activeEdge: index },
-            ]);
+            setControlPoints((points) =>
+              points
+                .map((point) => ({ ...point, active: false }))
+                .concat([
+                  { id: uuid(), x: position.x, y: position.y, active: true },
+                ])
+            );
           }}
           key={`edge${id}_segment${index}`}
           path={path}
           style={style}
         />
       ))}
-      {data.points.map(({ id, x, y, activeEdge }, index) => (
+      {data.points.map(({ id, x, y, active }, index) => (
         <ControlPoint
           setControlPoints={setControlPoints}
           id={id}
           color={color}
           key={`edge${id}_handler${index}`}
-          activeEdge={activeEdge}
+          active={active}
           x={x}
           y={y}
         />

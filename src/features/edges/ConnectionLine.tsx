@@ -5,10 +5,8 @@ import {
   type ConnectionLineComponentProps,
 } from "@xyflow/react";
 
-import { COLORS, DEFAULT_ALGORITHM } from "./constants";
 import { useDEMOModeler } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
-import { getPath } from "./path";
 
 // The distance between points when free drawing
 const DISTANCE = 25;
@@ -83,7 +81,7 @@ const ConnectionLine = ({
     <g>
       <path
         fill="none"
-        stroke={COLORS[DEFAULT_ALGORITHM]}
+        stroke={"red"}
         strokeWidth={2}
         className={connectionStatus === "valid" ? "" : "animated"}
         d={path}

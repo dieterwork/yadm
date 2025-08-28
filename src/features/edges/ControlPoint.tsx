@@ -9,7 +9,7 @@ export type ControlPointProps = {
   x: number;
   y: number;
   color: string;
-  activeEdge?: boolean;
+  active?: boolean;
   setControlPoints: (
     update: (points: ControlPointType[]) => ControlPointType[]
   ) => void;
@@ -20,7 +20,7 @@ export function ControlPoint({
   x,
   y,
   color,
-  activeEdge,
+  active,
   setControlPoints,
 }: ControlPointProps) {
   const container = useStore((store) => store.domNode);
@@ -35,13 +35,13 @@ export function ControlPoint({
   const updatePosition = (position: XYPosition) => {
     setControlPoints((points) => {
       return points.map((point) =>
-        point.id === id ? { ...point, ...position, activeEdge } : point
+        point.id === id ? { ...point, ...position, active: true } : point
       );
     });
   };
 
   useEffect(() => {
-    if (!container || activeEdge === -1 || !dragging) return;
+    if (!container || !active || !dragging) return;
     const onPointerMove = (e: PointerEvent) => {
       updatePosition(
         screenToFlowPosition({
@@ -54,7 +54,7 @@ export function ControlPoint({
     const onPointerUp = (e: PointerEvent) => {
       container.removeEventListener("pointermove", onPointerMove);
 
-      if (activeEdge === -1) {
+      if (!active) {
         e.preventDefault();
       }
 
@@ -73,7 +73,7 @@ export function ControlPoint({
 
       setDragging(false);
     };
-  }, [container, dragging, activeEdge, screenToFlowPosition]);
+  }, [container, dragging, active, screenToFlowPosition]);
 
   // RENDER --------------------------------------------------------------------
 
@@ -84,17 +84,14 @@ export function ControlPoint({
       className={"nopan nodrag"}
       cx={x}
       cy={y}
-      r={activeEdge !== -1 ? 4 : 3}
-      strokeOpacity={activeEdge !== -1 ? 1 : 0.3}
+      r={active ? 4 : 3}
+      strokeOpacity={active ? 1 : 0.3}
       stroke={color}
-      fill={activeEdge ? color : "white"}
+      fill={active ? color : "white"}
       style={{ pointerEvents: "all" }}
       onContextMenu={(e) => {
         e.preventDefault();
-        // delete point by right clicking
-        if (activeEdge === -1) {
-          deletePoint();
-        }
+        deletePoint();
       }}
       onPointerDown={(e) => {
         if (e.button === 2) return;
