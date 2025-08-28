@@ -20,32 +20,41 @@ body,
 }
 
 .react-flow__resize-control.react-flow__resize-control {
-  --_size: 2px;
+  --_size: 20px;
+  --_offset: calc(var(--_size) / 2);
+  --_line-size: 1px;
   &.line {
-    background-color: var(--color-blue-500);
+    border-color: var(--color-blue-500);
     &.top {
-      border-top-width: var(--_size);
+      border-top-width: 0;
+      border-bottom-width: var(--_line-size);
       height: var(--_size);
+      top: calc(-1 * var(--_offset));
     }
     &.bottom {
-      border-bottom-width: var(--_size);
+      border-bottom-width: 0;
+      border-top-width: var(--_line-size);
       height: var(--_size);
+      top: calc(100% + var(--_offset));
     }
     &.left {
-      border-left-width: var(--_size);
+      border-left-width: 0;
+      border-width: none;
+      border-right-width: var(--_line-size);
       width: var(--_size);
+      left: calc(-1 * var(--_offset));
     }
     &.right {
-      border-right-width: var(--_size);
+      border-right-width: 0;
+      border-left-width: var(--_line-size);
       width: var(--_size);
+      left: calc(100% + var(--_offset));
     }
   }
 
   &.handle {
-    width: 8px;
-    height: 8px;
-    border-color: var(--color-blue-900);
-    border-width: 2px;
+    width: 6px;
+    height: 6px;
     background-color: var(--color-blue-500);
     &.top.left {
     }
