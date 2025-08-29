@@ -1,4 +1,5 @@
 import type { Node } from "@xyflow/react";
+import type { DEMOHandlesData } from "../../nodes.types";
 
 export type SelfActivationState = "internal" | "external";
 
@@ -8,6 +9,7 @@ export type SelfActivationNode = Node<
     content: string;
     color: string;
     fontSize: number;
+    handles: DEMOHandlesData;
   },
   "self_activation"
 >;

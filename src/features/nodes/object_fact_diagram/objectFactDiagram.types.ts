@@ -4,7 +4,6 @@ import type { InitiationFactNode } from "./initiation_fact/initiationFact.types"
 import type { TKExecutionNode } from "./tk_execution/tkExecution.types";
 import type { TransactionKindNode } from "./transaction_kind/transactionKind.types";
 import type { TransactionTimeNode } from "./transaction_time/transactionTime.types";
-import type { TransactionTimeInnerNode } from "./transaction_time_inner/transactionTimeInner.types";
 
 export type ObjectFactDiagramNode =
   | CActNode
@@ -12,5 +11,4 @@ export type ObjectFactDiagramNode =
   | InitiationFactNode
   | TKExecutionNode
   | TransactionKindNode
-  | TransactionTimeNode
-  | TransactionTimeInnerNode;
+  | TransactionTimeNode;

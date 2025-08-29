@@ -1,5 +1,6 @@
 import type { Node } from "@xyflow/react";
 import type { Scope } from "../cooperationModel.types";
+import type { DEMOHandlesData } from "../../nodes.types";
 
 export type TransactionState = "default" | "unclear" | "missing" | "double";
 export type TransactionNode = Node<
@@ -9,6 +10,7 @@ export type TransactionNode = Node<
     content: string;
     color: string;
     fontSize: number;
+    handles: DEMOHandlesData;
   },
   "transaction"
 >;

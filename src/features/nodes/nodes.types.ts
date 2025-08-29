@@ -14,12 +14,13 @@ import CFactNode from "./object_fact_diagram/c_fact/CFactNode";
 import InitiationFactNode from "./object_fact_diagram/initiation_fact/InitiationFactNode";
 import CActNode from "./object_fact_diagram/c_act/CActNode";
 import TKExecutionNode from "./object_fact_diagram/tk_execution/TKExecutionNode";
-import TransactionTimeInnerNode from "./object_fact_diagram/transaction_time_inner/TransactionTimeInnerNode";
 import TransactionTimeNode from "./object_fact_diagram/transaction_time/TransactionTimeNode";
 import TextNode from "./text_node/TextNode";
 import type { ObjectFactDiagramNode } from "./object_fact_diagram/objectFactDiagram.types";
 import type { ProcessStructureDiagramNode } from "./process_structure_diagram/processStructureDiagram.types";
 import type { TextNode as TextNodeType } from "./text_node/textNode.types";
+import type { CSSProperties } from "react";
+import type { Position } from "@xyflow/react";
 
 export const nodeTypes = {
   // cooperation model
@@ -32,7 +33,6 @@ export const nodeTypes = {
   several_actors: SeveralActorsNode,
 
   // transaction pattern diagram
-  transaction_time_inner: TransactionTimeInnerNode,
   transaction_time: TransactionTimeNode,
   transaction_kind: TransactionKindNode,
   //
@@ -55,3 +55,16 @@ export type DEMONode =
   | TextNodeType;
 
 export type ColorType = "default" | string;
+
+export type DEMOHandle = { id: string; type?: string; style?: CSSProperties };
+
+export type DEMOHandlePosition = Position;
+
+export type DEMOHandlesData = {
+  [key in Position]?: {
+    handles?: DEMOHandle[];
+    max?: number;
+    offset?: number;
+    step?: number;
+  };
+};

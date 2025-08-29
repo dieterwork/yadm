@@ -53,6 +53,7 @@ const DEMOModeler = () => {
     viewport,
     onReconnect,
     setViewport,
+    addEdge,
   } = useDEMOModeler(
     useShallow((state: DEMOModelerState) => ({
       nodes: state.nodes,
@@ -67,6 +68,7 @@ const DEMOModeler = () => {
       viewport: state.viewport,
       setViewport: state.setViewport,
       onReconnect: state.onReconnect,
+      addEdge: state.addEdge,
     }))
   );
   const { screenToFlowPosition } = useReactFlow();
@@ -97,6 +99,21 @@ const DEMOModeler = () => {
 
     const newNode = createNode({ type: previewNode.type, position });
 
+    if (previewNode.type === "transaction_time") {
+      addEdge({
+        id: uuid(),
+        type: "transaction_time_edge",
+        source: newNode[0].id,
+        sourceHandle: newNode[0].data.handles.left[0],
+      });
+      addEdge({
+        id: uuid(),
+        type: "transaction_time_edge",
+        source: newNode[0].id,
+        sourceHandle: newNode[0].data.handles.right[0],
+      });
+    }
+
     addNode(newNode);
 
     resetPreviewNode();
@@ -113,7 +130,7 @@ const DEMOModeler = () => {
   ) => {
     if (!previewNode) return;
     if (
-      clickedNode.type !== "transaction_time_inner" &&
+      clickedNode.type !== "transaction_time" &&
       clickedNode.type !== "transaction_kind"
     )
       return;
@@ -175,7 +192,7 @@ const DEMOModeler = () => {
   useLocalJSONModel();
 
   useCopyPaste({
-    disabledNodeTypes: ["transaction_time_inner", "transaction_kind"],
+    disabledNodeTypes: ["transaction_time", "transaction_kind"],
   });
 
   const { helperLineHorizontal, helperLineVertical, updateHelperLines } =

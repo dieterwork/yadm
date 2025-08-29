@@ -1,6 +1,7 @@
 import { useState } from "react";
 import uuid from "../../shared/utils/uuid";
 import { MEDIUM_NODE_SIZE } from "../nodes/utils/consts";
+import { useUpdateNodeInternals } from "@xyflow/react";
 
 type PosArrParams =
   | {
@@ -14,16 +15,8 @@ type PosArrParams =
     }
   | true;
 
-export const useResizerHandles = ({
-  top,
-  left,
-  bottom,
-  right,
-  width,
-  height,
-  defaultSizeWidth = MEDIUM_NODE_SIZE,
-  defaultSizeHeight = MEDIUM_NODE_SIZE,
-}: {
+interface UseResizerHandlesParams {
+  nodeId: string;
   top?: PosArrParams;
   left?: PosArrParams;
   bottom?: PosArrParams;
@@ -32,7 +25,19 @@ export const useResizerHandles = ({
   height?: number;
   defaultSizeWidth?: number;
   defaultSizeHeight?: number;
-}) => {
+}
+
+export const useResizerHandles = ({
+  nodeId,
+  top,
+  left,
+  bottom,
+  right,
+  width,
+  height,
+  defaultSizeWidth = MEDIUM_NODE_SIZE,
+  defaultSizeHeight = MEDIUM_NODE_SIZE,
+}: UseResizerHandlesParams) => {
   const [prevWidth, setPrevWidth] = useState(width ? width : undefined);
   const [prevHeight, setPrevHeight] = useState(height ? height : undefined);
   const [leftArr, setLeftArr] = useState(

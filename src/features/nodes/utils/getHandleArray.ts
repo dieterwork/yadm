@@ -13,7 +13,6 @@ export const getHandleParams = ({
   direction?: "horizontal" | "vertical";
 }) => {
   const num = Math.floor(size / defaultSize);
-  console.log(num);
   const arr = new Array(num).fill(null).map((_, i) => {
     return {
       id: uuid(),

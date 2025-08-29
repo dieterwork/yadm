@@ -1,4 +1,4 @@
-import type { XYPosition } from "@xyflow/react";
+import { Position, type XYPosition } from "@xyflow/react";
 import type { DEMONode } from "../nodes.types";
 import uuid from "../../../shared/utils/uuid";
 import { DEFAULT_CONTENT_MAP, DEFAULT_SIZE_MAP } from "./consts";
@@ -14,6 +14,7 @@ interface CreateNodeParams {
   selected?: boolean;
   zIndex?: number;
 }
+
 export const createNode = ({
   type,
   position,
@@ -36,6 +37,20 @@ export const createNode = ({
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
           scope: "in",
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
         },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
@@ -52,7 +67,24 @@ export const createNode = ({
         id: `transaction_${id}`,
         type: type,
         position,
-        data: { state: "default", content: DEFAULT_CONTENT_MAP[type] },
+        data: {
+          state: "default",
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -68,7 +100,24 @@ export const createNode = ({
         id: id,
         type: type,
         position,
-        data: { state: "default", content: DEFAULT_CONTENT_MAP[type] },
+        data: {
+          state: "default",
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -84,7 +133,24 @@ export const createNode = ({
         id: id,
         type: type,
         position,
-        data: { state: "default", content: DEFAULT_CONTENT_MAP[type] },
+        data: {
+          state: "default",
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -100,7 +166,24 @@ export const createNode = ({
         id: id,
         type: type,
         position,
-        data: { state: "default", content: DEFAULT_CONTENT_MAP[type] },
+        data: {
+          state: "default",
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -117,7 +200,24 @@ export const createNode = ({
         id: id,
         type: type,
         position,
-        data: { state: "default", content: DEFAULT_CONTENT_MAP[type] },
+        data: {
+          state: "default",
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -134,7 +234,24 @@ export const createNode = ({
         id: id,
         type: type,
         position,
-        data: { state: "default", content: DEFAULT_CONTENT_MAP[type] },
+        data: {
+          state: "default",
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -151,7 +268,23 @@ export const createNode = ({
         id: id,
         type: type,
         position,
-        data: { content: DEFAULT_CONTENT_MAP[type] },
+        data: {
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -169,7 +302,23 @@ export const createNode = ({
         id: id,
         type: type,
         position,
-        data: { content: DEFAULT_CONTENT_MAP[type] },
+        data: {
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -186,7 +335,24 @@ export const createNode = ({
         id,
         type: type,
         position,
-        data: { scope: "in", content: DEFAULT_CONTENT_MAP[type] },
+        data: {
+          scope: "in",
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -200,13 +366,21 @@ export const createNode = ({
 
     // transaction pattern diagram
     case "transaction_time": {
-      const innerId = uuid();
       return [
         {
-          id: id,
-          position,
+          id,
           type: "transaction_time",
-          data: {},
+          position,
+          data: {
+            handles: {
+              left: {
+                handles: [{ id: uuid(), type: "source" }],
+              },
+              right: {
+                handles: [{ id: uuid(), type: "source" }],
+              },
+            },
+          },
           style: {
             width: DEFAULT_SIZE_MAP["transaction_time"].width,
             height: DEFAULT_SIZE_MAP["transaction_time"].height,
@@ -214,24 +388,27 @@ export const createNode = ({
             strokeWidth: 2,
             stroke: "black",
           },
+          extent: "parent",
           selected: true,
         },
         {
-          id: innerId,
-          type: "transaction_time_inner",
+          id: uuid(),
           parentId: id,
+          type: "transaction_kind",
           position: {
             x:
               DEFAULT_SIZE_MAP["transaction_time"].width / 2 -
-              DEFAULT_SIZE_MAP["transaction_time_inner"].width / 2,
+              DEFAULT_SIZE_MAP["transaction_kind"].width / 2,
             y:
               DEFAULT_SIZE_MAP["transaction_time"].height / 2 -
-              DEFAULT_SIZE_MAP["transaction_time_inner"].height / 2,
+              DEFAULT_SIZE_MAP["transaction_kind"].height / 2,
           },
-          data: {},
+          data: {
+            content: DEFAULT_CONTENT_MAP["transaction_kind"],
+          },
           style: {
-            width: DEFAULT_SIZE_MAP["transaction_time_inner"].width,
-            height: DEFAULT_SIZE_MAP["transaction_time_inner"].height,
+            width: DEFAULT_SIZE_MAP["transaction_kind"].width,
+            height: DEFAULT_SIZE_MAP["transaction_kind"].height,
             fill: "white",
             strokeWidth: 2,
             stroke: "black",
@@ -240,37 +417,6 @@ export const createNode = ({
           selected: false,
           connectable: false,
           zIndex: 1,
-        },
-        {
-          id: uuid(),
-          parentId: innerId,
-          type: "transaction_kind",
-          position: {
-            x:
-              DEFAULT_SIZE_MAP["transaction_time_inner"].width / 2 -
-              DEFAULT_SIZE_MAP["transaction_kind"].width / 2,
-            y:
-              DEFAULT_SIZE_MAP["transaction_time_inner"].height / 2 -
-              DEFAULT_SIZE_MAP["transaction_kind"].height / 2,
-          },
-          data: { content: DEFAULT_CONTENT_MAP["transaction_kind"] },
-          style: {
-            width: DEFAULT_SIZE_MAP["transaction_kind"].width,
-            height: DEFAULT_SIZE_MAP["transaction_kind"].height,
-            fill: "white",
-            strokeWidth: 2,
-            stroke: "black",
-          },
-          extent: [
-            [12.5, 12.5],
-            [
-              DEFAULT_SIZE_MAP["transaction_time_inner"].width - 12.5,
-              DEFAULT_SIZE_MAP["transaction_time_inner"].height - 12.5,
-            ],
-          ],
-          selected: false,
-          connectable: false,
-          zIndex: 2,
         },
       ];
     }
@@ -281,7 +427,23 @@ export const createNode = ({
         type,
         position,
         parentId,
-        data: {},
+        data: {
+          color: "default",
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -290,8 +452,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        extent: "parent",
-        zIndex: 3,
+        zIndex: 2,
       };
     }
 
@@ -301,7 +462,23 @@ export const createNode = ({
         type,
         position,
         parentId,
-        data: { color: "default" },
+        data: {
+          color: "default",
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -310,8 +487,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        extent: "parent",
-        zIndex: 3,
+        zIndex: 2,
       };
     }
 
@@ -321,7 +497,23 @@ export const createNode = ({
         type,
         position,
         parentId,
-        data: { color: "default" },
+        data: {
+          color: "default",
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -330,8 +522,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        extent: "parent",
-        zIndex: 3,
+        zIndex: 2,
       };
     }
     case "tk_execution": {
@@ -340,7 +531,23 @@ export const createNode = ({
         type,
         position,
         parentId,
-        data: { color: "default" },
+        data: {
+          color: "default",
+          handles: {
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
@@ -349,8 +556,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        extent: "parent",
-        zIndex: 3,
+        zIndex: 2,
       };
     }
     case "text_node": {

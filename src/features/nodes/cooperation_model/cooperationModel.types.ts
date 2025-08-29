@@ -3,7 +3,7 @@ import type { ActorNode } from "./actor/actor.types";
 import type { TransactionNode } from "./transaction/transaction.types";
 import type { TransactorNode } from "./transactor/transactor.types";
 import type { SelfActivationNode } from "./self_activation/selfActivation.types";
-import type { CompositeNode } from "./composite/compositetypes";
+import type { CompositeNode } from "./composite/composite.types";
 import type { ElementaryActorNode } from "./elementary_actor/elementaryActor.types";
 import type { SeveralActorsNode } from "./several_actors/severalActors.types";
 

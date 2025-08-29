@@ -19,7 +19,11 @@ import {
 
 import { initialNodes } from "../nodes/initialNodes";
 import { initialEdges } from "../edges/initialEdges";
-import type { DEMONode } from "../nodes/nodes.types";
+import type {
+  DEMONode,
+  DEMOHandle,
+  DEMOHandlesData,
+} from "../nodes/nodes.types";
 import uuid from "../../shared/utils/uuid";
 import type { DEMOEdge } from "../edges/edges.types";
 
@@ -61,6 +65,10 @@ export interface DEMOModelerState {
       replace: boolean;
     }
   ) => void;
+  updateNodeHandles: (
+    id: string,
+    handles: ReactStyleStateSetter<DEMOHandlesData>
+  ) => void;
   connectionLinePath: XYPosition[];
   setConnectionLinePath: (connectionLinePath: XYPosition[]) => void;
 }
@@ -68,7 +76,7 @@ export interface DEMOModelerState {
 export const useDEMOModeler = create<DEMOModelerState>()(
   temporal((set, get) => ({
     id: uuid(),
-    fileName: `demo-model_${(new Date()).toISOString()}`,
+    fileName: `demo-model_${new Date().toISOString()}`,
     nodes: initialNodes,
     edges: initialEdges,
     DEMOInstance: null,
@@ -78,7 +86,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
       zoom: 1,
     },
     connectionLinePath: [],
-    setConnectionLinePath: (connectionLinePath: XYPosition[]) => {
+    setConnectionLinePath: (connectionLinePath) => {
       set({ connectionLinePath });
     },
     setFileName: (fileName) => {
@@ -104,7 +112,6 @@ export const useDEMOModeler = create<DEMOModelerState>()(
             ...connection,
             id: uuid(),
             type: "cooperation_model_edge",
-            data: { points: [] },
           },
           get().edges
         ),
@@ -142,7 +149,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         };
       });
     },
-    addEdge: (edge: Edge) => {
+    addEdge: (edge) => {
       set({
         edges: get()
           .edges.map((edge) => ({
@@ -151,12 +158,12 @@ export const useDEMOModeler = create<DEMOModelerState>()(
           .concat([edge]),
       });
     },
-    deleteNode: (nodeId: string) => {
+    deleteNode: (nodeId) => {
       set({
         nodes: get().nodes.filter((node) => node.id !== nodeId),
       });
     },
-    updateNodeColor: (nodeId: string, color: string) => {
+    updateNodeColor: (nodeId, color) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
@@ -167,7 +174,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         }),
       });
     },
-    updateNodeState: (nodeId: string, state: string, type: string) => {
+    updateNodeState: (nodeId, state: string, type) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
@@ -178,7 +185,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         }),
       });
     },
-    updateNodeScope: (nodeId: string, scope: string) => {
+    updateNodeScope: (nodeId, scope) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
@@ -189,7 +196,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         }),
       });
     },
-    updateNodeFontSize: (nodeId: string, fontSize: number) => {
+    updateNodeFontSize: (nodeId, fontSize) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
@@ -200,7 +207,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         }),
       });
     },
-    updateNodeExtent: (nodeId: string, extent: CoordinateExtent) => {
+    updateNodeExtent: (nodeId, extent) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
@@ -211,7 +218,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         }),
       });
     },
-    updateNodeContent: (nodeId: string, content: string) => {
+    updateNodeContent: (nodeId, content) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
@@ -222,10 +229,38 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         }),
       });
     },
-    getNode: (nodeId: string) => get().nodes.find((node) => node.id === nodeId),
-    getChildrenNodes: (nodeId: string) =>
+    updateNodeHandles: (nodeId, newHandlesOrSetterFn) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            if (typeof newHandlesOrSetterFn === "object") {
+              const newHandles = newHandlesOrSetterFn;
+              return {
+                ...node,
+                data: {
+                  ...node.data,
+                  handles: { ...node.handles, handles: newHandles },
+                },
+              };
+            }
+            const setterFn = newHandlesOrSetterFn;
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                handles: setterFn(node.data.handles),
+              },
+            };
+          }
+
+          return node;
+        }),
+      });
+    },
+    getNode: (nodeId) => get().nodes.find((node) => node.id === nodeId),
+    getChildrenNodes: (nodeId) =>
       get().nodes.filter((node) => node.parentId === nodeId),
-    addNode: (node: DEMONode) => {
+    addNode: (node) => {
       set({
         nodes: get()
           .nodes.map((node) => ({
@@ -235,7 +270,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
           .concat(Array.isArray(node) ? node : [node]),
       });
     },
-    getNodeAbsolutePosition: (nodeId: string) => {
+    getNodeAbsolutePosition: (nodeId) => {
       const node = get().getNode(nodeId);
       let x = 0;
       let y = 0;
@@ -260,7 +295,7 @@ export const useDEMOModeler = create<DEMOModelerState>()(
       const DEMOInstance = get().DEMOInstance;
       if (DEMOInstance) get().setDEMOInstance(DEMOInstance);
     },
-    setModelFromJSONObject: (object: ReactFlowJsonObject<DEMONode, Edge>) => {
+    setModelFromJSONObject: (object) => {
       set({
         nodes: object.nodes,
         edges: object.edges,

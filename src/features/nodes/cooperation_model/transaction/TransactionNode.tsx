@@ -13,11 +13,6 @@ const handlePositions = [
   Position.Left,
 ];
 
-const topId = uuid();
-const bottomId = uuid();
-const leftId = uuid();
-const rightId = uuid();
-
 const TransactionNode = ({
   id,
   data,
@@ -51,10 +46,6 @@ const TransactionNode = ({
           editable={data.state !== "unclear"}
           maxLength={50}
         />
-        <Handle position={Position.Top} type="source" id={topId} />
-        <Handle position={Position.Bottom} type="source" id={bottomId} />
-        <Handle position={Position.Right} type="source" id={rightId} />
-        <Handle position={Position.Left} type="source" id={leftId} />
       </DEMONodePrimitive>
     </>
   );

@@ -1,15 +1,14 @@
 import type { Node } from "@xyflow/react";
 import type { DEMOHandlesData } from "../../nodes.types";
 
-export type TransactorState = "internal" | "external";
+export type CompositeState = "internal" | "external";
 
-export type TransactorNode = Node<
+export type CompositeNode = Node<
   {
-    state: TransactorState;
+    state: CompositeState;
     content: string;
     color: string;
-    fontSize: number;
     handles: DEMOHandlesData;
   },
-  "transactor"
+  "self_activation"
 >;

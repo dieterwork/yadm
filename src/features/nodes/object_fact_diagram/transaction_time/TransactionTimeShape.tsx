@@ -1,3 +1,4 @@
+import Rectangle from "../../../shapes/Rectangle";
 import { useContext } from "react";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 
@@ -10,16 +11,22 @@ const TransactionTimeShape = ({ color }: ActorShapeProps) => {
   if (!svgAttributes) return null;
   const { width, height, ...restSvgAttributes } = svgAttributes;
 
+  const fill = color ? color : restSvgAttributes.fill;
+
+  const strokeWidth = svgAttributes.strokeWidth
+    ? +svgAttributes.strokeWidth
+    : 0;
+
   return (
     <>
-      <line
+      <Rectangle
+        rx={height / 2}
+        ry={height / 2}
+        width={width}
+        height={height}
+        fill={fill}
+        fillOpacity={0.2}
         {...restSvgAttributes}
-        y={height / 2}
-        x1={0}
-        x2={width}
-        y1={height / 2}
-        y2={height / 2}
-        stroke={color ? color : "var(--color-slate-500)"}
       />
     </>
   );

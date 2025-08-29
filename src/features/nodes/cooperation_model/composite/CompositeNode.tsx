@@ -1,7 +1,7 @@
 import { type NodeProps } from "@xyflow/react";
 
 import DEMONodePrimitive from "../../DEMONodePrimitive";
-import type { CompositeNode as CompositeNodeType } from "./compositetypes";
+import type { CompositeNode as CompositeNodeType } from "./composite.types";
 import uuid from "../../../../shared/utils/uuid";
 import EditableContent from "../../../editable_content/EditableContent";
 

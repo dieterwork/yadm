@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { DEMONode } from "../nodes/nodes.types";
 
 interface PreviewNodeState {
   previewNode: {
@@ -17,7 +18,7 @@ interface PreviewNodeState {
     position,
     content,
   }: {
-    type: string;
+    type: DEMONode["type"];
     width: number;
     height: number;
     isDisabled?: boolean;

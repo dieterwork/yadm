@@ -1,20 +1,20 @@
 import {
+  BaseEdge,
+  getEdgeCenter,
+  getSmoothStepPath,
+  Position,
   useInternalNode,
-  useReactFlow,
   type Edge,
   type EdgeProps,
 } from "@xyflow/react";
 
 import { ControlPoint } from "./ControlPoint";
 import { useDEMOModeler } from "../modeler/useDEMOModeler";
-import { useEditableEdge } from "./useEditableEdge";
-import type { ControlPoint as ControlPointType } from "./edges.types";
-import InteractiveBaseEdge from "./InteractiveBaseEdge";
-import uuid from "../../shared/utils/uuid";
-import { getEdgeParams } from "./edges.utils";
+import type { ControlPointData } from "./edges.types";
+import { type DEMONode } from "../nodes/nodes.types";
 
 export type EditableEdge = Edge<{
-  points: ControlPointType[];
+  controlPoint: ControlPointData;
 }>;
 
 export function EditableEdgeComponent({
@@ -28,80 +28,73 @@ export function EditableEdgeComponent({
   target,
   targetPosition,
   style,
-  data = { points: [] },
+  data,
 }: EdgeProps<EditableEdge>) {
-  const sourceNode = useInternalNode(source);
-  const targetNode = useInternalNode(target);
-  const setEdges = useDEMOModeler((state) => state.setEdges);
-  const { screenToFlowPosition } = useReactFlow();
-  const { sx, sy, tx, ty, sourcePos, targetPos } = getEdgeParams(
-    sourceNode,
-    targetNode
-  );
-  const edgeSegmentsArray = useEditableEdge({
-    controlPoints: data.points,
-    sourceX: sx,
-    sourceY: sy,
-    targetX: tx,
-    targetY: ty,
-    sourcePosition: sourcePos,
-    targetPosition: targetPos,
-  });
-
+  const sourceNode = useInternalNode<DEMONode>(source);
+  const targetNode = useInternalNode<DEMONode>(target);
   if (!sourceNode || !targetNode) {
     return null;
   }
 
-  const color = "var(--color-black)";
+  const setEdges = useDEMOModeler((state) => state.setEdges);
 
-  const setControlPoints = (
-    update: (points: ControlPointType[]) => ControlPointType[]
+  const controlPoint: ControlPointData = data?.controlPoint
+    ? data.controlPoint
+    : {
+        x: 0,
+        y: 0,
+        active: true,
+      };
+
+  const setControlPoint = (
+    update: (point: ControlPointData) => ControlPointData
   ) => {
     setEdges((edges) =>
       edges.map((edge) => {
         if (edge.id !== id) return edge;
 
-        const points = edge.data?.points ?? [];
-        const data = { ...edge.data, points: update(points) };
+        const _controlPoint = edge.data?.controlPoint ?? controlPoint;
+
+        const newControlPoint = update(_controlPoint);
+
+        const data = {
+          ...edge.data,
+          controlPoint: newControlPoint,
+        };
 
         return { ...edge, data };
       })
     );
   };
 
+  const [centerX, centerY] = getEdgeCenter({
+    sourceX: sourceX,
+    sourceY: sourceY,
+    targetX: targetX,
+    targetY: targetY,
+  });
+
+  const [path] = getSmoothStepPath({
+    sourceX: sourceX,
+    sourceY: sourceY,
+    targetX: targetX,
+    targetY: targetY,
+    sourcePosition: sourcePosition,
+    targetPosition: targetPosition,
+    centerX: centerX - controlPoint.x,
+    centerY: centerY - controlPoint.y,
+  });
+
   return (
     <>
-      {edgeSegmentsArray.map(({ path, labelX, labelY }, index) => (
-        <InteractiveBaseEdge
-          onPointerDown={(e) => {
-            const position = screenToFlowPosition({
-              x: e.clientX,
-              y: e.clientY,
-            });
-            setControlPoints((points) =>
-              points
-                .map((point) => ({ ...point, active: false }))
-                .concat([
-                  { id: uuid(), x: position.x, y: position.y, active: true },
-                ])
-            );
-          }}
-          key={`edge${id}_segment${index}`}
-          path={path}
-          style={style}
-        />
-      ))}
-      {data.points.map(({ id, x, y, active }, index) => (
-        <ControlPoint
-          setControlPoints={setControlPoints}
-          id={id}
-          color={color}
-          key={`edge${id}_handler${index}`}
-          active={active}
-          x={x}
-          y={y}
-        />
-      ))}
+      <BaseEdge path={path} style={style} />
+      <ControlPoint
+        setControlPoint={setControlPoint}
+        color="var(--color-black)"
+        active={controlPoint.active}
+        x={centerX - controlPoint.x}
+        y={centerY - controlPoint.y}
+      />
     </>
   );
 }

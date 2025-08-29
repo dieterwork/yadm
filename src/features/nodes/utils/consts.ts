@@ -3,11 +3,9 @@ export const SMALL_NODE_SIZE = 50;
 export const MEDIUM_NODE_SIZE = 100;
 export const LARGE_NODE_SIZE = 200;
 
-const TRANSACTION_TIME_INNER_SIZE = 300;
-const TRANSACTION_TIME_OFFSET = 100;
+const TRANSACTION_TIME_SIZE = 300;
 
-const TRANSACTION_TIME_INNER_MIN_SIZE = 100;
-const TRANSACTION_TIME_MIN_OFFSET = 50;
+const TRANSACTION_TIME_MIN_SIZE = 100;
 
 export const DEFAULT_SIZE_MAP = {
   actor: {
@@ -41,13 +39,8 @@ export const DEFAULT_SIZE_MAP = {
 
   // transaction pattern diagram
   transaction_time: {
-    width:
-      TRANSACTION_TIME_INNER_SIZE + X_SMALL_NODE_SIZE + TRANSACTION_TIME_OFFSET,
-    height: SMALL_NODE_SIZE + X_SMALL_NODE_SIZE,
-  },
-  transaction_time_inner: {
-    width: TRANSACTION_TIME_INNER_SIZE + X_SMALL_NODE_SIZE,
-    height: SMALL_NODE_SIZE + X_SMALL_NODE_SIZE,
+    width: TRANSACTION_TIME_SIZE,
+    height: SMALL_NODE_SIZE,
   },
   transaction_kind: {
     width: SMALL_NODE_SIZE,
@@ -124,15 +117,8 @@ export const MIN_SIZE_MAP = {
 
   // transaction pattern diagram
   transaction_time: {
-    width:
-      TRANSACTION_TIME_INNER_MIN_SIZE +
-      X_SMALL_NODE_SIZE +
-      TRANSACTION_TIME_MIN_OFFSET,
-    height: SMALL_NODE_SIZE + X_SMALL_NODE_SIZE,
-  },
-  transaction_time_inner: {
-    width: TRANSACTION_TIME_INNER_MIN_SIZE + X_SMALL_NODE_SIZE,
-    height: SMALL_NODE_SIZE + X_SMALL_NODE_SIZE,
+    width: TRANSACTION_TIME_MIN_SIZE,
+    height: SMALL_NODE_SIZE,
   },
   transaction_kind: {
     width: SMALL_NODE_SIZE,

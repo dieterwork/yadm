@@ -1,11 +1,13 @@
-import { Position, type InternalNode } from "@xyflow/react";
-import type { DEMONode } from "../nodes/nodes.types";
+import { Position, type InternalNode, type Node } from "@xyflow/react";
 
 // returns the position (top,right,bottom or right) passed node compared to
-function getParams(
-  nodeA: InternalNode<DEMONode>,
-  nodeB: InternalNode<DEMONode>
-) {
+function getParams<
+  NodeAType extends Node = Node,
+  NodeBType extends Node = Node
+>(
+  nodeA: InternalNode<NodeAType>,
+  nodeB: InternalNode<NodeBType>
+): [number, number, Position] {
   const centerA = getNodeCenter(nodeA);
   const centerB = getNodeCenter(nodeB);
 
@@ -26,16 +28,18 @@ function getParams(
   return [x, y, position];
 }
 
-function getHandleCoordsByPosition(
-  node: InternalNode<DEMONode>,
+function getHandleCoordsByPosition<NodeType extends Node = Node>(
+  node: InternalNode<NodeType>,
   handlePosition: Position
 ) {
   if (!node.internals?.handleBounds || !node.internals.handleBounds.source)
     throw new Error("Could not find handle bounds source");
   // all handles are from type source, that's why we use handleBounds.source here
-  const handle = node.internals.handleBounds.source.find(
+  const handles = node.internals.handleBounds.source.filter(
     (h) => h.position === handlePosition
   );
+
+  const handle = handles[Math.floor(handles.length / 2)];
 
   if (!handle) throw new Error("Could not find handle source");
 
@@ -66,7 +70,7 @@ function getHandleCoordsByPosition(
   return [x, y];
 }
 
-function getNodeCenter(node: InternalNode<DEMONode>) {
+function getNodeCenter<NodeType extends Node>(node: InternalNode<NodeType>) {
   if (!node.measured.width || !node.measured.height)
     throw new Error("Could not find node width or height");
   return {
@@ -76,10 +80,10 @@ function getNodeCenter(node: InternalNode<DEMONode>) {
 }
 
 // returns the parameters (sx, sy, tx, ty, sourcePos, targetPos) you need to create an edge
-export function getEdgeParams(
-  source: InternalNode<DEMONode>,
-  target: InternalNode<DEMONode>
-) {
+export function getEdgeParams<
+  NodeTypeSource extends Node = Node,
+  NodeTypeTarget extends Node = Node
+>(source: InternalNode<NodeTypeSource>, target: InternalNode<NodeTypeTarget>) {
   const [sx, sy, sourcePos] = getParams(source, target);
   const [tx, ty, targetPos] = getParams(target, source);
 

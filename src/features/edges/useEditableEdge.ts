@@ -53,6 +53,7 @@ export const useEditableEdge = ({
       targetY: segmentTargetY,
       targetPosition,
     });
+
     edgeSegmentsArray.push({ path, labelX, labelY });
   }
 

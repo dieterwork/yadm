@@ -1,84 +1,45 @@
 import type { XYPosition } from "@xyflow/react";
 
-import { useEffect, useRef, useState } from "react";
-import { useReactFlow, useStore } from "@xyflow/react";
-import type { ControlPoint as ControlPointType } from "./edges.types";
+import { useRef, useState } from "react";
+import { useReactFlow, useStore, useViewport } from "@xyflow/react";
+import type { ControlPointData } from "./edges.types";
+import { useDrag, useGesture, type Vector2 } from "@use-gesture/react";
 
 export type ControlPointProps = {
-  id: string;
   x: number;
   y: number;
   color: string;
   active?: boolean;
-  setControlPoints: (
-    update: (points: ControlPointType[]) => ControlPointType[]
+  setControlPoint: (
+    update: (point: ControlPointData) => ControlPointData
   ) => void;
 };
 
 export function ControlPoint({
-  id,
   x,
   y,
   color,
   active,
-  setControlPoints,
+  setControlPoint,
 }: ControlPointProps) {
-  const container = useStore((store) => store.domNode);
-  const { screenToFlowPosition } = useReactFlow();
-  const [dragging, setDragging] = useState(false);
+  const { zoom } = useViewport();
   const ref = useRef<SVGCircleElement>(null);
 
-  const deletePoint = () => {
-    setControlPoints((points) => points.filter((point) => point.id !== id));
+  const updatePosition = (delta: Vector2) => {
+    setControlPoint((point) => ({
+      ...point,
+      x: point.x - delta[0] / zoom,
+      y: point.y - delta[1] / zoom,
+    }));
   };
 
-  const updatePosition = (position: XYPosition) => {
-    setControlPoints((points) => {
-      return points.map((point) =>
-        point.id === id ? { ...point, ...position, active: true } : point
-      );
-    });
-  };
-
-  useEffect(() => {
-    if (!container || !active || !dragging) return;
-    const onPointerMove = (e: PointerEvent) => {
-      updatePosition(
-        screenToFlowPosition({
-          x: e.clientX,
-          y: e.clientY,
-        })
-      );
-    };
-
-    const onPointerUp = (e: PointerEvent) => {
-      container.removeEventListener("pointermove", onPointerMove);
-
-      if (!active) {
-        e.preventDefault();
-      }
-
-      setDragging(false);
-      updatePosition(screenToFlowPosition({ x: e.clientX, y: e.clientY }));
-    };
-
-    container.addEventListener("pointermove", onPointerMove);
-    container.addEventListener("pointerup", onPointerUp, { once: true });
-    container.addEventListener("pointerleave", onPointerUp, { once: true });
-
-    return () => {
-      container.removeEventListener("pointermove", onPointerMove);
-      container.removeEventListener("pointerup", onPointerUp);
-      container.removeEventListener("pointerleave", onPointerUp);
-
-      setDragging(false);
-    };
-  }, [container, dragging, active, screenToFlowPosition]);
-
-  // RENDER --------------------------------------------------------------------
+  const bind = useDrag((state) => {
+    updatePosition(state.delta);
+  });
 
   return (
     <circle
+      aria-label="Control Point"
       ref={ref}
       tabIndex={0}
       className={"nopan nodrag"}
@@ -89,16 +50,7 @@ export function ControlPoint({
       stroke={color}
       fill={active ? color : "white"}
       style={{ pointerEvents: "all" }}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        deletePoint();
-      }}
-      onPointerDown={(e) => {
-        if (e.button === 2) return;
-        updatePosition({ x, y });
-        setDragging(true);
-      }}
-      onPointerUp={() => setDragging(false)}
+      {...bind()}
     />
   );
 }

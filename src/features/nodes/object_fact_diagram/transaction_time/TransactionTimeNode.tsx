@@ -1,4 +1,5 @@
 import { type NodeProps } from "@xyflow/react";
+
 import DEMONodePrimitive from "../../DEMONodePrimitive";
 import type { TransactionTimeNode as TransactionTimeNodeType } from "./transactionTime.types";
 
@@ -18,6 +19,7 @@ const TransactionTimeNode = ({
         width={width}
         height={height}
         type="transaction_time"
+        actions={["changeColor", "delete"]}
       />
     </>
   );
