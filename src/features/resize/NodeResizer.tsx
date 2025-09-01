@@ -16,6 +16,8 @@ const DEMONodeResizer = ({
   keepAspectRatio = false,
   isVisible,
   type,
+  maxHeight,
+  maxWidth,
   ...restProps
 }: NodeResizerProps & { type: DEMONode["type"] }) => {
   if (!nodeId) throw new Error("Could not find nodeId");

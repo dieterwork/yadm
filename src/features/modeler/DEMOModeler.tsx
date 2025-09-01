@@ -12,16 +12,21 @@ import {
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
-import { edgeTypes } from "../edges/edges.types";
+import { edgeTypes, type DEMOEdge } from "../edges/edges.types";
 import { nodeTypes, type DEMONode } from "../nodes/nodes.types";
 
-import { useState, type MouseEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { usePreviewNode } from "../sidebar/usePreviewNode";
 import { useDEMOModeler, type DEMOModelerState } from "./useDEMOModeler";
 import { createNode } from "../nodes/utils/createNode";
 import { useShallow } from "zustand/react/shallow";
-import { convertAbsoluteToParentRelativePosition } from "../nodes/utils/getNodePositionInsideParent";
-import { X_SMALL_NODE_SIZE } from "../nodes/utils/consts";
+import { convertAbsoluteToParentRelativePosition } from "../nodes/utils/convertAbsoluteToParentRelativePosition";
+import {
+  MEDIUM_NODE_SIZE,
+  SMALL_NODE_SIZE,
+  TRANSACTION_TIME_SIZE,
+  X_SMALL_NODE_SIZE,
+} from "../nodes/utils/consts";
 import uuid from "../../shared/utils/uuid";
 import SideMenu from "../side_menu/SideMenu";
 import { saveDEMOInstance } from "../save/saveDEMOInstance";
@@ -30,14 +35,10 @@ import ConnectionLine from "../edges/ConnectionLine";
 import useCopyPaste from "../copy_paste/useCopyPaste";
 import useLocalJSONModel from "./useLocalJSONModel";
 import HelperLines from "../helper_lines/HelperLines";
-import { useHelperLines } from "../helper_lines/useHelperLines";
+import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
+import { useHelperLinesStore } from "../helper_lines/useHelperLinesStore";
 
-const transactionTimeNodes = [
-  "c_act",
-  "c_fact",
-  "initiation_fact",
-  "tk_execution",
-];
+const transactionTimeNodes = ["c_act", "c_fact", "tk_execution"];
 
 const DEMOModeler = () => {
   const {
@@ -69,6 +70,8 @@ const DEMOModeler = () => {
       setViewport: state.setViewport,
       onReconnect: state.onReconnect,
       addEdge: state.addEdge,
+      setNodes: state.setNodes,
+      setEdges: state.setEdges,
     }))
   );
   const { screenToFlowPosition } = useReactFlow();
@@ -78,6 +81,15 @@ const DEMOModeler = () => {
       resetPreviewNode: state.reset,
     }))
   );
+
+  const {
+    horizontal: horizontalHelperLine,
+    vertical: verticalHelperLine,
+    updateHelperLines,
+    isEnabled,
+  } = useHelperLinesStore();
+
+  const { onConnectEnd, onEdgesDelete, onReconnectEnd } = useIncompleteEdge();
 
   const onNodeDragStart = (e: React.MouseEvent, node: DEMONode) => {
     const contentEditableElements = "";
@@ -99,22 +111,51 @@ const DEMOModeler = () => {
 
     const newNode = createNode({ type: previewNode.type, position });
 
+    addNode(newNode);
+
     if (previewNode.type === "transaction_time") {
-      addEdge({
-        id: uuid(),
-        type: "transaction_time_edge",
-        source: newNode[0].id,
-        sourceHandle: newNode[0].data.handles.left[0],
+      const ghostNode1Id = uuid();
+      const ghostNode2Id = uuid();
+
+      // add ghosts
+      addNode({
+        id: `ghost-${ghostNode1Id}`,
+        type: "ghost",
+        position: {
+          x: 40 + TRANSACTION_TIME_SIZE,
+          y: SMALL_NODE_SIZE / 2 + 3,
+        },
+        data: {},
+        parentId: newNode[0].id,
       });
+
+      addNode({
+        id: `ghost-${ghostNode2Id}`,
+        type: "ghost",
+        position: {
+          x: -40,
+          y: SMALL_NODE_SIZE / 2 + 3,
+        },
+        data: {},
+        parentId: newNode[0].id,
+      });
+
       addEdge({
-        id: uuid(),
+        id: `${newNode[0].id}->ghost-${ghostNode1Id}`,
         type: "transaction_time_edge",
         source: newNode[0].id,
-        sourceHandle: newNode[0].data.handles.right[0],
+        sourceHandle: newNode[0].data.handles.right.handles[0].id,
+        target: `ghost-${ghostNode1Id}`,
+      });
+
+      addEdge({
+        id: `${newNode[0].id}->ghost-${ghostNode2Id}`,
+        type: "transaction_time_edge",
+        source: newNode[0].id,
+        sourceHandle: newNode[0].data.handles.left.handles[0].id,
+        target: `ghost-${ghostNode2Id}`,
       });
     }
-
-    addNode(newNode);
 
     resetPreviewNode();
   };
@@ -165,7 +206,6 @@ const DEMOModeler = () => {
     });
 
     // create text node
-
     const textNode = createNode({
       type: "text_node",
       position: {
@@ -195,9 +235,6 @@ const DEMOModeler = () => {
     disabledNodeTypes: ["transaction_time", "transaction_kind"],
   });
 
-  const { helperLineHorizontal, helperLineVertical, updateHelperLines } =
-    useHelperLines();
-
   return (
     <div className="DEMO-modeler | [grid-area:modeler] h-full">
       <div className="react-flow-wrapper | h-full">
@@ -215,8 +252,9 @@ const DEMOModeler = () => {
             onEdgesChange(changes);
             saveDEMOInstance(DEMOInstance);
           }}
+          onEdgesDelete={onEdgesDelete}
           onConnect={onConnect}
-          onNodeDragStart={onNodeDragStart}
+          onConnectEnd={onConnectEnd}
           onMove={() => {
             debounce(() => {
               saveDEMOInstance(DEMOInstance);
@@ -226,6 +264,7 @@ const DEMOModeler = () => {
             saveDEMOInstance(DEMOInstance);
           }}
           onReconnect={onReconnect}
+          onReconnectEnd={onReconnectEnd}
           nodesFocusable={true}
           edgesFocusable={true}
           disableKeyboardA11y={false}
@@ -237,14 +276,17 @@ const DEMOModeler = () => {
           onViewportChange={(viewport) => setViewport(viewport)}
           connectionLineComponent={(props) => <ConnectionLine {...props} />}
           connectionMode={ConnectionMode.Loose}
+          snapToGrid
+          snapGrid={[10, 10]}
         >
           <Background />
           <MiniMap />
           <Controls />
           <SideMenu />
           <HelperLines
-            horizontal={helperLineHorizontal}
-            vertical={helperLineVertical}
+            isDisabled={!isEnabled}
+            horizontal={verticalHelperLine}
+            vertical={horizontalHelperLine}
           />
         </ReactFlow>
       </div>

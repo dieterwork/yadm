@@ -21,6 +21,8 @@ import type { ProcessStructureDiagramNode } from "./process_structure_diagram/pr
 import type { TextNode as TextNodeType } from "./text_node/textNode.types";
 import type { CSSProperties } from "react";
 import type { Position } from "@xyflow/react";
+import type { GhostNode as GhostNodeType } from "./ghost/ghost.types";
+import { GhostNode } from "./ghost/GhostNode";
 
 export const nodeTypes = {
   // cooperation model
@@ -46,13 +48,15 @@ export const nodeTypes = {
   entity_class: EntityClassNode,
   derived_entity: DerivedEntityNode,
   text_node: TextNode,
+  ghost: GhostNode,
 };
 
 export type DEMONode =
   | CooperationModelNode
   | ObjectFactDiagramNode
   | ProcessStructureDiagramNode
-  | TextNodeType;
+  | TextNodeType
+  | GhostNodeType;
 
 export type ColorType = "default" | string;
 

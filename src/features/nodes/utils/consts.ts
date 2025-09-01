@@ -3,9 +3,8 @@ export const SMALL_NODE_SIZE = 50;
 export const MEDIUM_NODE_SIZE = 100;
 export const LARGE_NODE_SIZE = 200;
 
-const TRANSACTION_TIME_SIZE = 300;
-
-const TRANSACTION_TIME_MIN_SIZE = 100;
+export const TRANSACTION_TIME_SIZE = 300;
+export const TRANSACTION_TIME_MIN_SIZE = 100;
 
 export const DEFAULT_SIZE_MAP = {
   actor: {

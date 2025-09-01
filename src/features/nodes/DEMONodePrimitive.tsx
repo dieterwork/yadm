@@ -1,4 +1,4 @@
-import { type NodeProps } from "@xyflow/react";
+import { type NodeProps, type NodeResizerProps } from "@xyflow/react";
 import { shapeMap } from "../shapes/shapeMap";
 import Shape from "../shapes/Shape";
 import { useRef, type ReactNode } from "react";
@@ -13,6 +13,7 @@ interface DEMONodePrimitiveProps extends NodeProps<DEMONode> {
   keepAspectRatio?: boolean;
   children: ReactNode;
   actions?: Action[] | null;
+  resizerProps?: NodeResizerProps;
 }
 
 type Action = "changeColor" | "delete" | "changeFontSize" | "connect";
@@ -28,6 +29,7 @@ const DEMONodePrimitive = ({
   keepAspectRatio = false,
   children,
   actions = ["changeColor", "delete", "changeFontSize", "connect"],
+  resizerProps,
 }: DEMONodePrimitiveProps) => {
   if (type === "text_node")
     throw new Error("Cannot render node primitive with text node");
@@ -43,6 +45,7 @@ const DEMONodePrimitive = ({
       )}
       {resizable && (
         <DEMONodeResizer
+          {...resizerProps}
           nodeId={id}
           keepAspectRatio={keepAspectRatio}
           isVisible={selected}

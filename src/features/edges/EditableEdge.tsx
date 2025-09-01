@@ -2,7 +2,6 @@ import {
   BaseEdge,
   getEdgeCenter,
   getSmoothStepPath,
-  Position,
   useInternalNode,
   type Edge,
   type EdgeProps,
