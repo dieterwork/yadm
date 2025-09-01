@@ -29,6 +29,7 @@ const HelperLines = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    console.log(horizontal, vertical, isDisabled);
     if (isDisabled) return;
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");

@@ -276,8 +276,6 @@ const DEMOModeler = () => {
           onViewportChange={(viewport) => setViewport(viewport)}
           connectionLineComponent={(props) => <ConnectionLine {...props} />}
           connectionMode={ConnectionMode.Loose}
-          snapToGrid
-          snapGrid={[10, 10]}
         >
           <Background />
           <MiniMap />
