@@ -44,6 +44,19 @@ export const useHelperLinesStore = create<DEMOModelerState>()(
         const helperLines = getHelperLines({
           change: changes[0],
           nodes,
+          filteredNodeTypes: [
+            "actor",
+            "derived_entity",
+            "elementary_actor",
+            "entity_class",
+            "production_event",
+            "transactor",
+            "transaction_time",
+            "transaction",
+            "several_actors",
+            "self_activation",
+            "production_event",
+          ],
         });
 
         // if we have a helper line, we snap the node to the helper line position
