@@ -16,7 +16,7 @@ export interface DEMOModelerState {
 }
 
 export const useHelperLinesStore = create<DEMOModelerState>()(
-  temporal((set) => ({
+  temporal((set, get) => ({
     isEnabled: true,
     horizontal: undefined,
     vertical: undefined,
@@ -30,9 +30,12 @@ export const useHelperLinesStore = create<DEMOModelerState>()(
         vertical: undefined,
       });
 
+      const isEnabled = get().isEnabled;
+
       // this will be true if it's a single node being dragged
       // inside we calculate the helper lines and snap position for the position where the node is being moved to
       if (
+        isEnabled &&
         changes.length === 1 &&
         changes[0].type === "position" &&
         changes[0].dragging &&
@@ -41,7 +44,6 @@ export const useHelperLinesStore = create<DEMOModelerState>()(
         const helperLines = getHelperLines({
           change: changes[0],
           nodes,
-          filteredNodeTypes: ["actor"],
         });
 
         // if we have a helper line, we snap the node to the helper line position
