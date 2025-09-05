@@ -2,6 +2,7 @@ import {
   ArrowsLeftRightIcon,
   CheckIcon,
   CrosshairIcon,
+  DotOutlineIcon,
   IconContext,
   PaintBrushIcon,
   SlidersHorizontalIcon,
@@ -22,6 +23,7 @@ import {
 } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
 import type { DEMONode } from "../nodes/nodes.types";
+import uuid from "../../shared/utils/uuid";
 
 interface NodeToolbarProps {
   id: string;
@@ -30,25 +32,37 @@ interface NodeToolbarProps {
   actions?: string[];
 }
 
+const positions: Position[] = [
+  Position.Top,
+  Position.Left,
+  Position.Bottom,
+  Position.Right,
+];
+
 const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
   const {
+    getNode,
     deleteNode,
     updateNodeState,
     updateNodeScope,
     updateNodeColor,
     updateNodeFontSize,
+    updateNodeHandles,
   } = useDEMOModeler(
-    useShallow((state: DEMOModelerState) => ({
+    useShallow((state) => ({
       getNode: state.getNode,
       deleteNode: state.deleteNode,
       updateNodeState: state.updateNodeState,
       updateNodeScope: state.updateNodeScope,
       updateNodeColor: state.updateNodeColor,
       updateNodeFontSize: state.updateNodeFontSize,
+      updateNodeHandles: state.updateNodeHandles,
       addEdge: state.addEdge,
       edges: state.edges,
     }))
   );
+
+  const node = getNode(id);
 
   return (
     <>
@@ -79,6 +93,46 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                         {data.fontSize === num && (
                           <CheckIcon size={14} color="var(--color-blue-900)" />
                         )}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Popover>
+              </MenuTrigger>
+            )}
+            {actions?.indexOf("addConnectionHandle") !== -1 && (
+              <MenuTrigger>
+                <Button
+                  className="nodrag nopan cursor-pointer"
+                  aria-label="Add connection handle"
+                >
+                  <DotOutlineIcon />
+                </Button>
+                <Popover placement="right top" className="nodrag nopan">
+                  <Menu className="bg-white">
+                    {positions.map((pos) => (
+                      <MenuItem
+                        className="cursor-pointer select-none flex items-center gap-1 data-[disabled='true']:opacity-[.5]"
+                        isDisabled={
+                          node?.data.handles &&
+                          node?.data.handles[pos].max ===
+                            node?.data.handles[pos].handles.length
+                        }
+                        onAction={() => {
+                          updateNodeHandles(id, (handles) => ({
+                            ...handles,
+                            [pos]: {
+                              ...handles[pos],
+                              handles: handles[pos]?.handles
+                                ? [
+                                    ...handles[pos]?.handles,
+                                    { id: uuid(), type },
+                                  ]
+                                : [{ id: uuid(), type }],
+                            },
+                          }));
+                        }}
+                      >
+                        {pos[0].toUpperCase() + pos.split(pos[0])[1]}
                       </MenuItem>
                     ))}
                   </Menu>

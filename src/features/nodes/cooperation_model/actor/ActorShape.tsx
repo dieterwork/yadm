@@ -5,6 +5,7 @@ import { getScopeFill } from "../../../../shared/utils/utils";
 import type { ActorState } from "./actor.types";
 import { useContext } from "react";
 import { ShapeContext } from "../../../shapes/ShapeContext";
+import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
 
 interface ActorShapeProps {
   state: ActorState;
@@ -21,42 +22,27 @@ const ActorShape = ({ state, scope, color }: ActorShapeProps) => {
   switch (state) {
     case "missing":
       return (
-        <>
-          <Rectangle
-            width={width}
-            height={height}
-            fill={"white"}
-            strokeDasharray={"4 1"}
-            fillOpacity={1}
-            {...restSvgAttributes}
-          />
-          <Rectangle
-            width={width}
-            height={height}
-            fill={fill}
-            strokeDasharray={"4 1"}
-            fillOpacity={0.2}
-            {...restSvgAttributes}
-          />
-        </>
+        <Rectangle
+          {...restSvgAttributes}
+          width={width}
+          height={height}
+          fill={fill}
+          strokeDasharray={"6 4"}
+          fillOpacity={0.2}
+        />
       );
 
     case "unclear":
       return (
-        <g {...restSvgAttributes}>
+        <g>
           <Rectangle
-            width={width}
-            height={height}
-            fill={"white"}
             {...restSvgAttributes}
-          />
-          <Rectangle
             width={width}
             height={height}
             fill={fill}
-            fillOpacity={0.2}
+            fillOpacity={DEFAULT_FILL_OPACITY}
           />
-          <QuestionMark width={width} height={height} />
+          <QuestionMark {...restSvgAttributes} width={width} height={height} />
         </g>
       );
 
@@ -64,17 +50,11 @@ const ActorShape = ({ state, scope, color }: ActorShapeProps) => {
       return (
         <>
           <Rectangle
-            width={width}
-            height={height}
-            fill={"white"}
             {...restSvgAttributes}
-          />
-          <Rectangle
             width={width}
             height={height}
             fill={fill}
-            fillOpacity={0.2}
-            {...restSvgAttributes}
+            fillOpacity={DEFAULT_FILL_OPACITY}
           />
         </>
       );

@@ -26,7 +26,7 @@ const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
         <DiamondInCircle
           {...restSvgAttributes}
           fill={fill}
-          strokeDasharray="4 1"
+          strokeDasharray={"6 4"}
           width={width}
           height={height}
           fillOpacity={DEFAULT_FILL_OPACITY}

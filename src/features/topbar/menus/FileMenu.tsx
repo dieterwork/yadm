@@ -50,7 +50,6 @@ const FileMenu = () => {
       id: state.id,
       setNodes: state.setNodes,
       setEdges: state.setEdges,
-      setViewport: state.setViewport,
       setModelFromJSONObject: state.setModelFromJSONObject,
       fileName: state.fileName,
     }))

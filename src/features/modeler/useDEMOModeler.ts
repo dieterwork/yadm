@@ -36,7 +36,6 @@ export interface DEMOModelerState {
   edges: DEMOEdge[];
   viewport: Viewport;
   setFileName: (filename: string) => void;
-  setViewport: (viewport: Viewport) => void;
   onNodesChange: OnNodesChange<DEMONode>;
   onEdgesChange: OnEdgesChange<DEMOEdge>;
   onConnect: OnConnect;
@@ -74,248 +73,252 @@ export interface DEMOModelerState {
 }
 
 export const useDEMOModeler = create<DEMOModelerState>()(
-  temporal((set, get) => ({
-    id: uuid(),
-    fileName: `demo-model_${new Date().toISOString()}`,
-    nodes: initialNodes,
-    edges: initialEdges,
-    DEMOInstance: null,
-    viewport: {
-      x: 0,
-      y: 0,
-      zoom: 1,
-    },
-    connectionLinePath: [],
-    setConnectionLinePath: (connectionLinePath) => {
-      set({ connectionLinePath });
-    },
-    setFileName: (fileName) => {
-      set({ fileName });
-    },
-    setViewport: (viewport) => {
-      set({ viewport });
-    },
-    onNodesChange: (changes) => {
-      set({
-        nodes: applyNodeChanges(changes, get().nodes),
-      });
-    },
-    onEdgesChange: (changes) => {
-      set({
-        edges: applyEdgeChanges(changes, get().edges),
-      });
-    },
-    onConnect: (connection) => {
-      set({
-        edges: addEdge(
-          {
-            ...connection,
-            id: uuid(),
-            type: "cooperation_model_edge",
-          },
-          get().edges
-        ),
-      });
-    },
-    onReconnect: (oldEdge, newConnection) => {
-      set({
-        edges: reconnectEdge(oldEdge, newConnection, get().edges),
-      });
-    },
-    setDEMOInstance: (instance) => {
-      set({ DEMOInstance: instance });
-    },
-    setNodes: (newNodesOrSetterFn) => {
-      set(({ nodes }) => {
-        if (Array.isArray(newNodesOrSetterFn)) {
-          const newArr = newNodesOrSetterFn;
-          return { nodes: newArr };
-        }
-        const setterFn = newNodesOrSetterFn;
-        return {
-          nodes: setterFn(nodes),
-        };
-      });
-    },
-    setEdges: (newEdgesOrSetterFn) => {
-      set(({ edges }) => {
-        if (Array.isArray(newEdgesOrSetterFn)) {
-          const newArr = newEdgesOrSetterFn;
-          return { edges: newArr };
-        }
-        const setterFn = newEdgesOrSetterFn;
-        return {
-          edges: setterFn(edges),
-        };
-      });
-    },
-    addEdge: (edge) => {
-      set({
-        edges: get()
-          .edges.map((edge) => ({
-            ...edge,
-          }))
-          .concat([edge]),
-      });
-    },
-    deleteNode: (nodeId) => {
-      set({
-        nodes: get().nodes.filter((node) => node.id !== nodeId),
-      });
-    },
-    updateNodeColor: (nodeId, color) => {
-      set({
-        nodes: get().nodes.map((node) => {
-          if (node.id === nodeId) {
-            return { ...node, data: { ...node.data, color } };
+  temporal(
+    (set, get) => ({
+      id: uuid(),
+      fileName: `demo-model_${new Date().toISOString()}`,
+      nodes: initialNodes,
+      edges: initialEdges,
+      DEMOInstance: null,
+      connectionLinePath: [],
+      setConnectionLinePath: (connectionLinePath) => {
+        set({ connectionLinePath });
+      },
+      setFileName: (fileName) => {
+        set({ fileName });
+      },
+      onNodesChange: (changes) => {
+        set({
+          nodes: applyNodeChanges(changes, get().nodes),
+        });
+      },
+      onEdgesChange: (changes) => {
+        set({
+          edges: applyEdgeChanges(changes, get().edges),
+        });
+      },
+      onConnect: (connection) => {
+        set({
+          edges: addEdge(
+            {
+              ...connection,
+              id: uuid(),
+              type: "cooperation_model_edge",
+            },
+            get().edges
+          ),
+        });
+      },
+      onReconnect: (oldEdge, newConnection) => {
+        set({
+          edges: reconnectEdge(oldEdge, newConnection, get().edges),
+        });
+      },
+      setDEMOInstance: (instance) => {
+        set({ DEMOInstance: instance });
+      },
+      setNodes: (newNodesOrSetterFn) => {
+        set(({ nodes }) => {
+          if (Array.isArray(newNodesOrSetterFn)) {
+            const newArr = newNodesOrSetterFn;
+            return { nodes: newArr };
           }
-
-          return node;
-        }),
-      });
-    },
-    updateNodeState: (nodeId, state: string, type) => {
-      set({
-        nodes: get().nodes.map((node) => {
-          if (node.id === nodeId) {
-            return { ...node, data: { ...node.data, state } };
+          const setterFn = newNodesOrSetterFn;
+          return {
+            nodes: setterFn(nodes),
+          };
+        });
+      },
+      setEdges: (newEdgesOrSetterFn) => {
+        set(({ edges }) => {
+          if (Array.isArray(newEdgesOrSetterFn)) {
+            const newArr = newEdgesOrSetterFn;
+            return { edges: newArr };
           }
+          const setterFn = newEdgesOrSetterFn;
+          return {
+            edges: setterFn(edges),
+          };
+        });
+      },
+      addEdge: (edge) => {
+        set({
+          edges: get()
+            .edges.map((edge) => ({
+              ...edge,
+            }))
+            .concat([edge]),
+        });
+      },
+      deleteNode: (nodeId) => {
+        set({
+          nodes: get().nodes.filter((node) => node.id !== nodeId),
+        });
+      },
+      updateNodeColor: (nodeId, color) => {
+        set({
+          nodes: get().nodes.map((node) => {
+            if (node.id === nodeId) {
+              return { ...node, data: { ...node.data, color } };
+            }
 
-          return node;
-        }),
-      });
-    },
-    updateNodeScope: (nodeId, scope) => {
-      set({
-        nodes: get().nodes.map((node) => {
-          if (node.id === nodeId) {
-            return { ...node, data: { ...node.data, scope } };
-          }
+            return node;
+          }),
+        });
+      },
+      updateNodeState: (nodeId, state: string, type) => {
+        set({
+          nodes: get().nodes.map((node) => {
+            if (node.id === nodeId) {
+              return { ...node, data: { ...node.data, state } };
+            }
 
-          return node;
-        }),
-      });
-    },
-    updateNodeFontSize: (nodeId, fontSize) => {
-      set({
-        nodes: get().nodes.map((node) => {
-          if (node.id === nodeId) {
-            return { ...node, data: { ...node.data, fontSize } };
-          }
+            return node;
+          }),
+        });
+      },
+      updateNodeScope: (nodeId, scope) => {
+        set({
+          nodes: get().nodes.map((node) => {
+            if (node.id === nodeId) {
+              return { ...node, data: { ...node.data, scope } };
+            }
 
-          return node;
-        }),
-      });
-    },
-    updateNodeExtent: (nodeId, extent) => {
-      set({
-        nodes: get().nodes.map((node) => {
-          if (node.id === nodeId) {
-            return { ...node, extent };
-          }
+            return node;
+          }),
+        });
+      },
+      updateNodeFontSize: (nodeId, fontSize) => {
+        set({
+          nodes: get().nodes.map((node) => {
+            if (node.id === nodeId) {
+              return { ...node, data: { ...node.data, fontSize } };
+            }
 
-          return node;
-        }),
-      });
-    },
-    updateNodeContent: (nodeId, content) => {
-      set({
-        nodes: get().nodes.map((node) => {
-          if (node.id === nodeId) {
-            return { ...node, content };
-          }
+            return node;
+          }),
+        });
+      },
+      updateNodeExtent: (nodeId, extent) => {
+        set({
+          nodes: get().nodes.map((node) => {
+            if (node.id === nodeId) {
+              return { ...node, extent };
+            }
 
-          return node;
-        }),
-      });
-    },
-    updateNodeHandles: (nodeId, newHandlesOrSetterFn) => {
-      set({
-        nodes: get().nodes.map((node) => {
-          if (node.id === nodeId) {
-            if (typeof newHandlesOrSetterFn === "object") {
-              const newHandles = newHandlesOrSetterFn;
+            return node;
+          }),
+        });
+      },
+      updateNodeContent: (nodeId, content) => {
+        set({
+          nodes: get().nodes.map((node) => {
+            if (node.id === nodeId) {
+              return { ...node, content };
+            }
+
+            return node;
+          }),
+        });
+      },
+      updateNodeHandles: (nodeId, newHandlesOrSetterFn) => {
+        set({
+          nodes: get().nodes.map((node) => {
+            if (node.id === nodeId) {
+              if (typeof newHandlesOrSetterFn === "object") {
+                const newHandles = newHandlesOrSetterFn;
+                return {
+                  ...node,
+                  data: {
+                    ...node.data,
+                    handles: newHandles,
+                  },
+                };
+              }
+              const setterFn = newHandlesOrSetterFn;
               return {
                 ...node,
                 data: {
                   ...node.data,
-                  handles: { ...node.handles, handles: newHandles },
+                  handles: setterFn(node.data.handles),
                 },
               };
             }
-            const setterFn = newHandlesOrSetterFn;
-            return {
+
+            return node;
+          }),
+        });
+      },
+      getNode: (nodeId) => get().nodes.find((node) => node.id === nodeId),
+      getChildrenNodes: (nodeId) =>
+        get().nodes.filter((node) => node.parentId === nodeId),
+      addNode: (node) => {
+        set({
+          nodes: get()
+            .nodes.map((node) => ({
               ...node,
-              data: {
-                ...node.data,
-                handles: setterFn(node.data.handles),
-              },
-            };
-          }
+              selected: false,
+            }))
+            .concat(Array.isArray(node) ? node : [node]),
+        });
+      },
+      getNodeAbsolutePosition: (nodeId) => {
+        const node = get().getNode(nodeId);
+        let x = 0;
+        let y = 0;
+        let host: DEMONode | undefined = node;
 
-          return node;
-        }),
-      });
-    },
-    getNode: (nodeId) => get().nodes.find((node) => node.id === nodeId),
-    getChildrenNodes: (nodeId) =>
-      get().nodes.filter((node) => node.parentId === nodeId),
-    addNode: (node) => {
-      set({
-        nodes: get()
-          .nodes.map((node) => ({
-            ...node,
-            selected: false,
-          }))
-          .concat(Array.isArray(node) ? node : [node]),
-      });
-    },
-    getNodeAbsolutePosition: (nodeId) => {
-      const node = get().getNode(nodeId);
-      let x = 0;
-      let y = 0;
-      let host: DEMONode | undefined = node;
+        while (host) {
+          x += host.position.x;
+          y += host.position.y;
 
-      while (host) {
-        x += host.position.x;
-        y += host.position.y;
+          host = host.parentId
+            ? get().nodes.find((node) => node.id === host?.parentId)
+            : undefined;
+        }
+        return { x, y };
+      },
+      deleteDiagram: () => {
+        get().setModelFromJSONObject({
+          nodes: [],
+          edges: [],
+          viewport: { x: 0, y: 0, zoom: 1 },
+        });
+        const DEMOInstance = get().DEMOInstance;
+        if (DEMOInstance) get().setDEMOInstance(DEMOInstance);
+      },
+      setModelFromJSONObject: (object) => {
+        set({
+          nodes: object.nodes,
+          edges: object.edges,
+          viewport: {
+            x: object.viewport.x,
+            y: object.viewport.y,
+            zoom: object.viewport.zoom,
+          },
+        });
+      },
+      updateNode(id, nodeUpdate, options) {
+        set({
+          nodes: get().nodes.map((node) => {
+            if (node.id === id) {
+              return options?.replace ? nodeUpdate : { ...node, ...nodeUpdate };
+            }
 
-        host = host.parentId
-          ? get().nodes.find((node) => node.id === host?.parentId)
-          : undefined;
-      }
-      return { x, y };
-    },
-    deleteDiagram: () => {
-      get().setModelFromJSONObject({
-        nodes: [],
-        edges: [],
-        viewport: { x: 0, y: 0, zoom: 1 },
-      });
-      const DEMOInstance = get().DEMOInstance;
-      if (DEMOInstance) get().setDEMOInstance(DEMOInstance);
-    },
-    setModelFromJSONObject: (object) => {
-      set({
-        nodes: object.nodes,
-        edges: object.edges,
-        viewport: {
-          x: object.viewport.x,
-          y: object.viewport.y,
-          zoom: object.viewport.zoom,
-        },
-      });
-    },
-    updateNode(id, nodeUpdate, options) {
-      set({
-        nodes: get().nodes.map((node) => {
-          if (node.id === id) {
-            return options?.replace ? nodeUpdate : { ...node, ...nodeUpdate };
-          }
-
-          return node;
-        }),
-      });
-    },
-  }))
+            return node;
+          }),
+        });
+      },
+    }),
+    {
+      onSave: (state) => {},
+      partialize: (state) => {
+        const { nodes } = state;
+        return {
+          ...state,
+          nodes: nodes.map((node) => ({ ...node, selected: undefined })),
+        };
+      },
+    }
+  )
 );

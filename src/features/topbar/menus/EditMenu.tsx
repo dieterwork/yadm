@@ -8,7 +8,7 @@ import {
 import { useDEMOModeler } from "../../modeler/useDEMOModeler";
 
 const EditMenu = () => {
-  const { undo, redo, clear } = useDEMOModeler.temporal.getState();
+  const { undo, redo } = useDEMOModeler.temporal.getState();
   return (
     <MenuTrigger>
       <Button>Edit</Button>
@@ -16,7 +16,6 @@ const EditMenu = () => {
         <Menu className="bg-white">
           <MenuItem onAction={() => undo()}>Undo</MenuItem>
           <MenuItem onAction={() => redo()}>Redo</MenuItem>
-          <MenuItem onAction={() => clear()}>Clear</MenuItem>
         </Menu>
       </Popover>
     </MenuTrigger>

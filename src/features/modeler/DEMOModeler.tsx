@@ -37,6 +37,7 @@ import useLocalJSONModel from "./useLocalJSONModel";
 import HelperLines from "../helper_lines/HelperLines";
 import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
 import { useHelperLinesStore } from "../helper_lines/useHelperLinesStore";
+import BottomMenu from "../bottom_menu/BottomMenu";
 
 const transactionTimeNodes = ["c_act", "c_fact", "tk_execution"];
 
@@ -51,9 +52,7 @@ const DEMOModeler = () => {
     getNodeAbsolutePosition,
     setDEMOInstance,
     DEMOInstance,
-    viewport,
     onReconnect,
-    setViewport,
     addEdge,
   } = useDEMOModeler(
     useShallow((state: DEMOModelerState) => ({
@@ -66,8 +65,6 @@ const DEMOModeler = () => {
       getNodeAbsolutePosition: state.getNodeAbsolutePosition,
       setDEMOInstance: state.setDEMOInstance,
       DEMOInstance: state.DEMOInstance,
-      viewport: state.viewport,
-      setViewport: state.setViewport,
       onReconnect: state.onReconnect,
       addEdge: state.addEdge,
       setNodes: state.setNodes,
@@ -140,21 +137,21 @@ const DEMOModeler = () => {
         parentId: newNode[0].id,
       });
 
-      addEdge({
-        id: `${newNode[0].id}->ghost-${ghostNode1Id}`,
-        type: "transaction_time_edge",
-        source: newNode[0].id,
-        sourceHandle: newNode[0].data.handles.right.handles[0].id,
-        target: `ghost-${ghostNode1Id}`,
-      });
+      // addEdge({
+      //   id: `${newNode[0].id}->ghost-${ghostNode1Id}`,
+      //   type: "transaction_time_edge",
+      //   source: newNode[0].id,
+      //   sourceHandle: newNode[0].data.handles.right.handles[0].id,
+      //   target: `ghost-${ghostNode1Id}`,
+      // });
 
-      addEdge({
-        id: `${newNode[0].id}->ghost-${ghostNode2Id}`,
-        type: "transaction_time_edge",
-        source: newNode[0].id,
-        sourceHandle: newNode[0].data.handles.left.handles[0].id,
-        target: `ghost-${ghostNode2Id}`,
-      });
+      // addEdge({
+      //   id: `${newNode[0].id}->ghost-${ghostNode2Id}`,
+      //   type: "transaction_time_edge",
+      //   source: newNode[0].id,
+      //   sourceHandle: newNode[0].data.handles.left.handles[0].id,
+      //   target: `ghost-${ghostNode2Id}`,
+      // });
     }
 
     resetPreviewNode();
@@ -272,15 +269,13 @@ const DEMOModeler = () => {
           onPaneClick={handleClick}
           onNodeClick={handleNodeClick}
           onInit={(instance) => setDEMOInstance(instance)}
-          viewport={viewport}
-          onViewportChange={(viewport) => setViewport(viewport)}
           connectionLineComponent={(props) => <ConnectionLine {...props} />}
           connectionMode={ConnectionMode.Loose}
         >
           <Background />
           <MiniMap />
-          <Controls />
           <SideMenu />
+          <BottomMenu />
           <HelperLines
             isDisabled={!isEnabled}
             horizontal={verticalHelperLine}

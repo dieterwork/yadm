@@ -1,7 +1,12 @@
 import { Position, type XYPosition } from "@xyflow/react";
 import type { DEMONode } from "../nodes.types";
 import uuid from "../../../shared/utils/uuid";
-import { DEFAULT_CONTENT_MAP, DEFAULT_SIZE_MAP } from "./consts";
+import {
+  DEFAULT_CONTENT_MAP,
+  DEFAULT_SIZE_MAP,
+  MEDIUM_NODE_SIZE,
+  SMALL_NODE_SIZE,
+} from "./consts";
 
 interface CreateNodeParams {
   type: DEMONode["type"];
@@ -73,15 +78,19 @@ export const createNode = ({
           handles: {
             top: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             bottom: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             left: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             right: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
           },
         },
@@ -106,15 +115,18 @@ export const createNode = ({
           handles: {
             top: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             bottom: {
               handles: [{ id: uuid(), type: "source" }],
             },
             left: {
               handles: [{ id: uuid(), type: "source" }],
+              offset: MEDIUM_NODE_SIZE / 2,
             },
             right: {
               handles: [{ id: uuid(), type: "source" }],
+              offset: MEDIUM_NODE_SIZE / 2,
             },
           },
         },
@@ -206,15 +218,18 @@ export const createNode = ({
           handles: {
             top: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             bottom: {
               handles: [{ id: uuid(), type: "source" }],
             },
             left: {
               handles: [{ id: uuid(), type: "source" }],
+              offset: MEDIUM_NODE_SIZE / 2,
             },
             right: {
               handles: [{ id: uuid(), type: "source" }],
+              offset: MEDIUM_NODE_SIZE / 2,
             },
           },
         },
@@ -246,9 +261,11 @@ export const createNode = ({
             },
             left: {
               handles: [{ id: uuid(), type: "source" }],
+              offset: MEDIUM_NODE_SIZE / 2,
             },
             right: {
               handles: [{ id: uuid(), type: "source" }],
+              offset: MEDIUM_NODE_SIZE / 2,
             },
           },
         },
@@ -273,15 +290,23 @@ export const createNode = ({
           handles: {
             top: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
+              step: SMALL_NODE_SIZE,
             },
             bottom: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
+              step: SMALL_NODE_SIZE,
             },
             left: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
+              step: SMALL_NODE_SIZE,
             },
             right: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
+              step: SMALL_NODE_SIZE,
             },
           },
         },

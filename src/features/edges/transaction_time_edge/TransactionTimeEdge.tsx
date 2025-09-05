@@ -11,7 +11,7 @@ const TransactionTimeEdge = ({
   return (
     <BaseEdge
       path={path}
-      style={{ stroke: "var(--color-slate-500)", strokeWidth: 3 }}
+      style={{ stroke: "var(--color-slate-500)", strokeWidth: 2 }}
     />
   );
 };

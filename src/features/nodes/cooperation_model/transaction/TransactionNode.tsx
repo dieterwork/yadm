@@ -35,7 +35,7 @@ const TransactionNode = ({
         width={width}
         height={height}
         type="transaction"
-        resizable={false}
+        keepAspectRatio={true}
       >
         <EditableContent
           content={content}

@@ -36,6 +36,7 @@ const ActorNode = ({
           editable={true}
           fontSize={fontSize}
           maxLength={60}
+          hidden={data.state === "unclear"}
         />
       </DEMONodePrimitive>
     </>

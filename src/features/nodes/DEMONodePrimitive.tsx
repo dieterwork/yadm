@@ -16,7 +16,12 @@ interface DEMONodePrimitiveProps extends NodeProps<DEMONode> {
   resizerProps?: NodeResizerProps;
 }
 
-type Action = "changeColor" | "delete" | "changeFontSize" | "connect";
+type Action =
+  | "changeColor"
+  | "delete"
+  | "changeFontSize"
+  | "connect"
+  | "addConnectionHandle";
 
 const DEMONodePrimitive = ({
   id,
@@ -28,7 +33,13 @@ const DEMONodePrimitive = ({
   resizable = true,
   keepAspectRatio = false,
   children,
-  actions = ["changeColor", "delete", "changeFontSize", "connect"],
+  actions = [
+    "changeColor",
+    "delete",
+    "changeFontSize",
+    "connect",
+    "addConnectionHandle",
+  ],
   resizerProps,
 }: DEMONodePrimitiveProps) => {
   if (type === "text_node")
@@ -56,7 +67,13 @@ const DEMONodePrimitive = ({
           type={type}
         />
       )}
-      {data?.handles && <Handles handles={data.handles} />}
+      {data?.handles && (
+        <Handles
+          nodeId={id}
+          handles={data.handles}
+          nodeDimensions={{ width, height }}
+        />
+      )}
       {/* Shape */}
       {DEMOShape && (
         <Shape ref={shapeRef} width={width} height={height} strokeWidth={2}>

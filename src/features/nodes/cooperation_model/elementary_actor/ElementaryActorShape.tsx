@@ -21,36 +21,25 @@ const ElementaryActorShape = ({ state, color }: TransactionShapeProps) => {
 
   return (
     <g {...restSvgAttributes} stroke={undefined} strokeWidth={undefined}>
-      <g
+      <Rectangle
         stroke={restSvgAttributes.stroke}
-        strokeWidth={restSvgAttributes.strokeWidth}
+        strokeWidth={4}
         transform={`translate(0, ${MEDIUM_NODE_SIZE / 2})`}
-      >
-        <Rectangle
-          width={width}
-          height={+height - MEDIUM_NODE_SIZE / 2}
-          fill="white"
-        />
-        <Rectangle
-          fill={fill}
-          width={width}
-          height={+height - MEDIUM_NODE_SIZE / 2}
-          fillOpacity={DEFAULT_FILL_OPACITY}
-        />
-      </g>
-      <g
+        fill={fill}
+        width={width}
+        height={+height - MEDIUM_NODE_SIZE / 2}
+        fillOpacity={DEFAULT_FILL_OPACITY}
+      />
+      <DiamondInCircle
         transform={`translate(${width / 2 - MEDIUM_NODE_SIZE / 2}, 0)`}
         stroke="black"
         strokeWidth={2}
-      >
-        <DiamondInCircle
-          fill={fill}
-          width={MEDIUM_NODE_SIZE}
-          height={MEDIUM_NODE_SIZE}
-          fillOpacity={DEFAULT_FILL_OPACITY}
-          diamondAttributes={{ stroke: "var(--color-red-500)" }}
-        />
-      </g>
+        fill={fill}
+        width={MEDIUM_NODE_SIZE}
+        height={MEDIUM_NODE_SIZE}
+        fillOpacity={DEFAULT_FILL_OPACITY}
+        diamondAttributes={{ stroke: "var(--color-red-500)" }}
+      />
     </g>
   );
 };
