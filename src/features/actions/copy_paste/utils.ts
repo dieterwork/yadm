@@ -1,5 +1,4 @@
-import uuid from "../../shared/utils/uuid";
-import type { DEMONode } from "../nodes/nodes.types";
+import type { DEMONode } from "../../nodes/nodes.types";
 
 const collectChildNodes = (
   parentNodes: DEMONode[],

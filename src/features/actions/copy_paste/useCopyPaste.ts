@@ -1,22 +1,21 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
-  type Node,
   useReactFlow,
   getConnectedEdges,
   type Edge,
   type XYPosition,
   useStore,
 } from "@xyflow/react";
-import useShortcut from "../keyboard/useShortcut";
-import { useDEMOModeler } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
-import type { DEMONode } from "../nodes/nodes.types";
 import {
   getChildNodes,
   getDisabledNodes,
   showDisabledNodesError,
 } from "./utils";
-import uuid from "../../shared/utils/uuid";
+import type { DEMONode } from "../../nodes/nodes.types";
+import { useDEMOModeler } from "../../modeler/useDEMOModeler";
+import useShortcut from "../../keyboard/useShortcut";
+import uuid from "$/shared/utils/uuid";
 
 interface UseCopyPasteParams {
   disabledNodeTypes: DEMONode["type"][];

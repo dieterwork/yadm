@@ -20,6 +20,12 @@ const InitiationFactNode = ({
         height={height}
         resizable={false}
         type="initiation_fact"
+        actions={[
+          "delete",
+          "changeColor",
+          "attachNode",
+          "toggleConnectionHandlesVisibility",
+        ]}
       />
     </>
   );

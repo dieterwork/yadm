@@ -20,6 +20,12 @@ const CFactNode = ({
         height={height}
         resizable={false}
         type="c_fact"
+        actions={[
+          "delete",
+          "changeColor",
+          "attachNode",
+          "toggleConnectionHandlesVisibility",
+        ]}
       />
     </>
   );

@@ -457,15 +457,19 @@ export const createNode = ({
           handles: {
             top: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             bottom: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             left: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             right: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
           },
         },
@@ -492,15 +496,19 @@ export const createNode = ({
           handles: {
             top: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             bottom: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             left: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             right: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
           },
         },
@@ -527,15 +535,19 @@ export const createNode = ({
           handles: {
             top: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             bottom: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             left: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             right: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
           },
         },
@@ -561,15 +573,19 @@ export const createNode = ({
           handles: {
             top: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             bottom: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             left: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
             right: {
               handles: [{ id: uuid(), type: "source" }],
+              max: 1,
             },
           },
         },
@@ -595,6 +611,7 @@ export const createNode = ({
           alignContent: "start",
           textAlign: "start",
           content: content ?? DEFAULT_CONTENT_MAP["text_node"],
+          isBorderVisible: true,
         },
         style: {
           width: width ?? DEFAULT_SIZE_MAP["text_node"].width,

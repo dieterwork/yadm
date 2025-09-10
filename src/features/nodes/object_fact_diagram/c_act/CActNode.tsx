@@ -19,6 +19,12 @@ const CActNode = ({
         width={width}
         height={height}
         type="c_act"
+        actions={[
+          "delete",
+          "changeColor",
+          "attachNode",
+          "toggleConnectionHandlesVisibility",
+        ]}
       />
     </>
   );

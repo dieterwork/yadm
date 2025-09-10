@@ -17,12 +17,17 @@ const TextNode = ({
   const { content, textAlign, alignContent, fontSize } = data;
   return (
     <>
-      <div style={{ width, height }}>
+      <div
+        className={cn(
+          data.isBorderVisible ? "border-1 border-red-500" : "border-none"
+        )}
+        style={{ width, height }}
+      >
         <NodeToolbar
           id={id}
           data={data}
           type="text_node"
-          actions={["delete", "changeFontSize"]}
+          actions={["delete", "changeFontSize", "showBorder"]}
         />
         <NodeResizer
           isVisible={selected}

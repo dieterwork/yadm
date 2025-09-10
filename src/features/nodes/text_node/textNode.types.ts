@@ -7,6 +7,7 @@ export type TextNode = Node<
     fontSize: number;
     alignContent: string;
     textAlign: CSSProperties["textAlign"];
+    isBorderVisible?: boolean;
   },
   "text_node"
 >;

@@ -20,6 +20,12 @@ const TKExecutionNode = ({
         height={height}
         resizable={false}
         type="tk_execution"
+        actions={[
+          "delete",
+          "changeColor",
+          "attachNode",
+          "toggleConnectionHandlesVisibility",
+        ]}
       />
     </>
   );

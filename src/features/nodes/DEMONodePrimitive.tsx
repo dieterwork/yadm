@@ -1,7 +1,7 @@
 import { type NodeProps, type NodeResizerProps } from "@xyflow/react";
 import { shapeMap } from "../shapes/shapeMap";
 import Shape from "../shapes/Shape";
-import { useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import NodeToolbar from "../node-toolbar/NodeToolbar";
 import { MIN_SIZE_MAP } from "./utils/consts";
 import type { DEMONode } from "./nodes.types";
@@ -20,8 +20,9 @@ type Action =
   | "changeColor"
   | "delete"
   | "changeFontSize"
-  | "connect"
-  | "addConnectionHandle";
+  | "addConnectionHandle"
+  | "toggleConnectionHandlesVisibility"
+  | "attachNode";
 
 const DEMONodePrimitive = ({
   id,
@@ -37,8 +38,8 @@ const DEMONodePrimitive = ({
     "changeColor",
     "delete",
     "changeFontSize",
-    "connect",
     "addConnectionHandle",
+    "toggleConnectionHandlesVisibility",
   ],
   resizerProps,
 }: DEMONodePrimitiveProps) => {
@@ -72,6 +73,7 @@ const DEMONodePrimitive = ({
           nodeId={id}
           handles={data.handles}
           nodeDimensions={{ width, height }}
+          isVisible={data.handles.isVisible}
         />
       )}
       {/* Shape */}

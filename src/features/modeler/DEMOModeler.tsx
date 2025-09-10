@@ -32,12 +32,13 @@ import SideMenu from "../side_menu/SideMenu";
 import { saveDEMOInstance } from "../save/saveDEMOInstance";
 import { debounce } from "../../shared/utils/debounce";
 import ConnectionLine from "../edges/ConnectionLine";
-import useCopyPaste from "../copy_paste/useCopyPaste";
 import useLocalJSONModel from "./useLocalJSONModel";
 import HelperLines from "../helper_lines/HelperLines";
 import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
 import { useHelperLinesStore } from "../helper_lines/useHelperLinesStore";
 import BottomMenu from "../bottom_menu/BottomMenu";
+import useDelete from "../keyboard/useDelete";
+import useCopyPaste from "../actions/copy_paste/useCopyPaste";
 
 const transactionTimeNodes = ["c_act", "c_fact", "tk_execution"];
 
@@ -88,18 +89,14 @@ const DEMOModeler = () => {
 
   const { onConnectEnd, onEdgesDelete, onReconnectEnd } = useIncompleteEdge();
 
-  const onNodeDragStart = (e: React.MouseEvent, node: DEMONode) => {
-    const contentEditableElements = "";
-  };
+  // const onNodeDragStart = (e: React.MouseEvent, node: DEMONode) => {
+  //   const contentEditableElements = "";
+  // };
 
-  const onNodeDragStop = (e: React.MouseEvent, node: DEMONode) => {};
+  // const onNodeDragStop = (e: React.MouseEvent, node: DEMONode) => {};
 
   const addNodeFromSidebar = (e: MouseEvent) => {
     if (!previewNode) return; // If no preview node, ignore the click event
-
-    // cancel node add for c-act, c-fact, initiation-fact, tk-excution
-    // only add these if transaction time node was clicked
-    if (transactionTimeNodes.includes(previewNode.type)) return;
 
     const position = screenToFlowPosition({
       x: e.clientX,
@@ -167,11 +164,6 @@ const DEMOModeler = () => {
     clickedNode: DEMONode
   ) => {
     if (!previewNode) return;
-    if (
-      clickedNode.type !== "transaction_time" &&
-      clickedNode.type !== "transaction_kind"
-    )
-      return;
 
     const absolutePosition = screenToFlowPosition({
       x: e.clientX,
@@ -194,20 +186,27 @@ const DEMOModeler = () => {
     // create ofd node
     const ofdNode = createNode({
       type: previewNode.type,
-      position: relativePosition,
+      position:
+        clickedNode.type === "transaction_time" ||
+        clickedNode.type === "transaction_kind"
+          ? relativePosition
+          : absolutePosition,
       id,
       parentId:
+        clickedNode.type === "transaction_time" ||
         clickedNode.type === "transaction_kind"
-          ? clickedNode.parentId
-          : clickedNode.id,
+          ? clickedNode.type === "transaction_kind"
+            ? clickedNode.parentId
+            : clickedNode.id
+          : undefined,
     });
 
     // create text node
     const textNode = createNode({
       type: "text_node",
       position: {
-        x: X_SMALL_NODE_SIZE + 2,
-        y: X_SMALL_NODE_SIZE / 2 - 20 / 2,
+        x: X_SMALL_NODE_SIZE / 2 - 50 / 2,
+        y: -X_SMALL_NODE_SIZE,
       },
       parentId: id,
       width: 50,
@@ -229,8 +228,10 @@ const DEMOModeler = () => {
   useLocalJSONModel();
 
   useCopyPaste({
-    disabledNodeTypes: ["transaction_time", "transaction_kind"],
+    disabledNodeTypes: ["transaction_kind"],
   });
+
+  useDelete();
 
   return (
     <div className="DEMO-modeler | [grid-area:modeler] h-full">

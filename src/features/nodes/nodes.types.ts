@@ -64,11 +64,17 @@ export type DEMOHandle = { id: string; type?: string; style?: CSSProperties };
 
 export type DEMOHandlePosition = Position;
 
+export type DEMOHandlesPositionData = {
+  handles?: DEMOHandle[];
+  max?: number;
+  offset?: number;
+  step?: number;
+};
+
 export type DEMOHandlesData = {
-  [key in Position]?: {
-    handles?: DEMOHandle[];
-    max?: number;
-    offset?: number;
-    step?: number;
-  };
+  top?: DEMOHandlesPositionData;
+  bottom?: DEMOHandlesPositionData;
+  left?: DEMOHandlesPositionData;
+  right?: DEMOHandlesPositionData;
+  isVisible: boolean;
 };

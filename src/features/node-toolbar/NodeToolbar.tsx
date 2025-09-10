@@ -3,7 +3,11 @@ import {
   CheckIcon,
   CrosshairIcon,
   DotOutlineIcon,
+  EyeClosedIcon,
+  EyeIcon,
   IconContext,
+  LinkBreakIcon,
+  LinkIcon,
   PaintBrushIcon,
   SlidersHorizontalIcon,
   TextAaIcon,
@@ -24,6 +28,8 @@ import {
 import { useShallow } from "zustand/react/shallow";
 import type { DEMONode } from "../nodes/nodes.types";
 import uuid from "../../shared/utils/uuid";
+import { useAttachNodes } from "../actions/attach/useAttachNodes";
+import useDetachNodes from "../actions/attach/useDetachNodes";
 
 interface NodeToolbarProps {
   id: string;
@@ -48,6 +54,8 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
     updateNodeColor,
     updateNodeFontSize,
     updateNodeHandles,
+    updateNodeConnectionHandlesVisibility,
+    updateNodeBorderVisibility,
   } = useDEMOModeler(
     useShallow((state) => ({
       getNode: state.getNode,
@@ -57,12 +65,18 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
       updateNodeColor: state.updateNodeColor,
       updateNodeFontSize: state.updateNodeFontSize,
       updateNodeHandles: state.updateNodeHandles,
+      updateNodeConnectionHandlesVisibility:
+        state.updateNodeConnectionHandlesVisibility,
+      updateNodeBorderVisibility: state.updateNodeBorderVisibility,
       addEdge: state.addEdge,
       edges: state.edges,
     }))
   );
 
   const node = getNode(id);
+
+  const attachNodes = useAttachNodes();
+  const detachNodes = useDetachNodes();
 
   return (
     <>
@@ -315,6 +329,54 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                 aria-label="Delete"
               >
                 <TrashIcon />
+              </Button>
+            )}
+            {actions?.indexOf("toggleConnectionHandlesVisibility") !== -1 && (
+              <Button
+                className="nodrag nopan cursor-pointer"
+                onPress={() => {
+                  updateNodeConnectionHandlesVisibility(
+                    id,
+                    (isVisible) => !isVisible
+                  );
+                }}
+                aria-label={
+                  node?.data?.handles.isVisible
+                    ? "Hide connection handles"
+                    : "Show connection handles"
+                }
+              >
+                {node?.data?.handles.isVisible ? (
+                  <EyeClosedIcon />
+                ) : (
+                  <EyeIcon />
+                )}
+              </Button>
+            )}
+            {actions?.indexOf("attachNode") !== -1 && (
+              <Button
+                className="nodrag nopan cursor-pointer"
+                onPress={() => {
+                  detachNodes([id]);
+                }}
+                aria-label={
+                  node?.data?.handles.isVisible ? "Attach node" : "Detach node"
+                }
+              >
+                {node?.parentId ? <LinkBreakIcon /> : <LinkIcon />}
+              </Button>
+            )}
+            {actions?.indexOf("showBorder") !== -1 && (
+              <Button
+                className="nodrag nopan cursor-pointer"
+                onPress={() => {
+                  updateNodeBorderVisibility(id, (isVisible) => !isVisible);
+                }}
+                aria-label={
+                  node?.data?.isBorderVisible ? "Show border" : "Hide border"
+                }
+              >
+                {node?.data?.isBorderVisible ? <EyeIcon /> : <EyeClosedIcon />}
               </Button>
             )}
           </div>

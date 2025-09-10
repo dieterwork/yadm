@@ -19,11 +19,7 @@ import {
 
 import { initialNodes } from "../nodes/initialNodes";
 import { initialEdges } from "../edges/initialEdges";
-import type {
-  DEMONode,
-  DEMOHandle,
-  DEMOHandlesData,
-} from "../nodes/nodes.types";
+import type { DEMONode, DEMOHandlesData } from "../nodes/nodes.types";
 import uuid from "../../shared/utils/uuid";
 import type { DEMOEdge } from "../edges/edges.types";
 
@@ -67,6 +63,14 @@ export interface DEMOModelerState {
   updateNodeHandles: (
     id: string,
     handles: ReactStyleStateSetter<DEMOHandlesData>
+  ) => void;
+  updateNodeConnectionHandlesVisibility: (
+    id: string,
+    isVisible: ReactStyleStateSetter<boolean>
+  ) => void;
+  updateNodeBorderVisibility: (
+    id: string,
+    isVisible: ReactStyleStateSetter<boolean>
   ) => void;
   connectionLinePath: XYPosition[];
   setConnectionLinePath: (connectionLinePath: XYPosition[]) => void;
@@ -215,6 +219,71 @@ export const useDEMOModeler = create<DEMOModelerState>()(
           nodes: get().nodes.map((node) => {
             if (node.id === nodeId) {
               return { ...node, content };
+            }
+
+            return node;
+          }),
+        });
+      },
+      updateNodeConnectionHandlesVisibility: (
+        nodeId,
+        newVisibilityOrSetterFn
+      ) => {
+        set({
+          nodes: get().nodes.map((node) => {
+            if (node.id === nodeId) {
+              if (typeof newVisibilityOrSetterFn === "boolean") {
+                const newVisibility = newVisibilityOrSetterFn;
+                return {
+                  ...node,
+                  data: {
+                    ...node.data,
+                    handles: {
+                      ...node.data.handles,
+                      isVisible: newVisibility,
+                    },
+                  },
+                };
+              }
+              const setterFn = newVisibilityOrSetterFn;
+              return {
+                ...node,
+                data: {
+                  ...node.data,
+                  handles: {
+                    ...node.data.handles,
+                    isVisible: setterFn(node.data.handles.isVisible),
+                  },
+                },
+              };
+            }
+
+            return node;
+          }),
+        });
+      },
+      updateNodeBorderVisibility: (nodeId, newBorderVisibilityOrSetterFn) => {
+        set({
+          nodes: get().nodes.map((node) => {
+            if (node.id === nodeId) {
+              if (typeof newBorderVisibilityOrSetterFn === "boolean") {
+                const newBorderVisibility = newBorderVisibilityOrSetterFn;
+                return {
+                  ...node,
+                  data: {
+                    ...node.data,
+                    isBorderVisible: newBorderVisibility,
+                  },
+                };
+              }
+              const setterFn = newBorderVisibilityOrSetterFn;
+              return {
+                ...node,
+                data: {
+                  ...node.data,
+                  isBorderVisible: setterFn(node.data.isBorderVisible),
+                },
+              };
             }
 
             return node;
