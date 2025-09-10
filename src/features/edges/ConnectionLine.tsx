@@ -3,7 +3,25 @@ import {
   getStraightPath,
   MarkerType,
   type ConnectionLineComponentProps,
+  type XYPosition,
 } from "@xyflow/react";
+
+const calcConnectionLineTargetXForTransactionTimeEdge = (
+  toX: number,
+  fromX: number,
+  nodeDimensions: { width?: number; height?: number },
+  nodePosition: XYPosition
+) => {
+  if (!nodeDimensions.width || !nodeDimensions.height) return toX;
+  if (
+    toX < nodePosition.x - nodeDimensions.width / 2 ||
+    toX > nodePosition.x + nodeDimensions.width / 2
+  ) {
+    return toX;
+  } else {
+    return fromX;
+  }
+};
 
 const ConnectionLine = ({
   fromX,
@@ -27,7 +45,15 @@ const ConnectionLine = ({
   const [linearPath] = getStraightPath({
     sourceX: fromX,
     sourceY: fromY,
-    targetX: toX,
+    targetX:
+      fromNode.type === "transaction_time"
+        ? calcConnectionLineTargetXForTransactionTimeEdge(
+            toX,
+            fromX,
+            { width: fromNode.width, height: fromNode.height },
+            fromNode.position
+          )
+        : toX,
     targetY: fromNode.type === "transaction_time" ? fromY : toY,
   });
 
