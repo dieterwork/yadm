@@ -13,7 +13,11 @@ import {
   TextAaIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
-import { NodeToolbar as _NodeToolbar, Position } from "@xyflow/react";
+import {
+  NodeToolbar as _NodeToolbar,
+  Position,
+  useUpdateNodeInternals,
+} from "@xyflow/react";
 import {
   Button,
   Menu,
@@ -30,6 +34,7 @@ import type { DEMONode } from "../nodes/nodes.types";
 import uuid from "../../shared/utils/uuid";
 import { useAttachNodes } from "../actions/attach/useAttachNodes";
 import useDetachNodes from "../actions/attach/useDetachNodes";
+import useDelete from "../keyboard/useDelete";
 
 interface NodeToolbarProps {
   id: string;
@@ -74,6 +79,10 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
   );
 
   const node = getNode(id);
+
+  const updateNodeInternals = useUpdateNodeInternals();
+
+  const { deleteElement } = useDelete();
 
   const attachNodes = useAttachNodes();
   const detachNodes = useDetachNodes();
@@ -324,7 +333,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
               <Button
                 className="nodrag nopan cursor-pointer"
                 onPress={() => {
-                  deleteNode(id);
+                  deleteElement(id);
                 }}
                 aria-label="Delete"
               >

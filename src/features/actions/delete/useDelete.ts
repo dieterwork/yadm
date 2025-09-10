@@ -7,15 +7,14 @@ import {
   type XYPosition,
   useStore,
 } from "@xyflow/react";
-import useShortcut from "../keyboard/useShortcut";
-import { useDEMOModeler } from "../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
-import type { DEMONode } from "../nodes/nodes.types";
 import {
   getChildNodes,
   getDisabledNodes,
   showDisabledNodesError,
 } from "../copy_paste/utils";
+import type { DEMONode } from "$/features/nodes/nodes.types";
+import { useDEMOModeler } from "$/features/modeler/useDEMOModeler";
 
 interface UseDeleteParams {
   disabledNodeTypes?: DEMONode["type"][];

@@ -156,7 +156,10 @@ export const useDEMOModeler = create<DEMOModelerState>()(
       },
       deleteNode: (nodeId) => {
         set({
-          nodes: get().nodes.filter((node) => node.id !== nodeId),
+          nodes: get().nodes.filter((node) => {
+            if (node.id !== nodeId && node.parentId !== nodeId) return true;
+            return false;
+          }),
         });
       },
       updateNodeColor: (nodeId, color) => {

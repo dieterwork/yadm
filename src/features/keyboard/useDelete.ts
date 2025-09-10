@@ -15,19 +15,22 @@ import { getChildNodes } from "../actions/copy_paste/utils";
 
 interface UseDeleteParams {
   disabledNodeTypes?: DEMONode["type"][];
+  nodeId?: string;
 }
 const useDelete = ({ disabledNodeTypes }: UseDeleteParams = {}) => {
-  const { nodes, edges, setNodes, setEdges } = useDEMOModeler(
+  const { nodes, edges, setNodes, setEdges, getNode } = useDEMOModeler(
     useShallow((state) => ({
       nodes: state.nodes,
       edges: state.edges,
       setNodes: state.setNodes,
       setEdges: state.setEdges,
+      getNode: state.getNode,
     }))
   );
 
-  const deleteElement = () => {
-    const selectedNodes = nodes.filter((node) => node.selected);
+  const deleteElement = (nodeId: string) => {
+    const node = getNode(nodeId ?? "");
+    const selectedNodes = node ? [node] : nodes.filter((node) => node.selected);
 
     const childNodes = getChildNodes(selectedNodes, nodes);
 
@@ -46,11 +49,17 @@ const useDelete = ({ disabledNodeTypes }: UseDeleteParams = {}) => {
       }
     );
 
-    if (!combinedSelectedNodes && !selectedEdges) return;
-
     // A delete action needs to remove the copied nodes and edges from the graph.
-    setNodes((nodes) => nodes.filter((node) => !selectedNodes.includes(node)));
-    setEdges((edges) => edges.filter((edge) => !selectedEdges.includes(edge)));
+    if (combinedSelectedNodes) {
+      setNodes((nodes) =>
+        nodes.filter((node) => !combinedSelectedNodes.includes(node))
+      );
+    }
+    if (selectedEdges) {
+      setEdges((edges) =>
+        edges.filter((edge) => !selectedEdges.includes(edge))
+      );
+    }
   };
 
   useShortcut(["Meta+d", "Control+d"], deleteElement);
