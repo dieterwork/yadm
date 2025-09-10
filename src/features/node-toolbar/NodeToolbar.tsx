@@ -20,6 +20,7 @@ import {
 } from "@xyflow/react";
 import {
   Button,
+  Collection,
   Menu,
   MenuItem,
   MenuTrigger,
@@ -43,12 +44,16 @@ interface NodeToolbarProps {
   actions?: string[];
 }
 
-const positions: Position[] = [
-  Position.Top,
-  Position.Left,
-  Position.Bottom,
-  Position.Right,
+const positions: { id: Position; value: Position; label: string }[] = [
+  { id: Position.Top, value: Position.Top, label: "Top" },
+  { id: Position.Right, value: Position.Right, label: "Right" },
+  { id: Position.Bottom, value: Position.Bottom, label: "Bottom" },
+  { id: Position.Left, value: Position.Left, label: "Left" },
 ];
+
+const fontSizes: { id: string; value: number; label: string }[] = [
+  10, 12, 14, 16, 18, 24,
+].map((num) => ({ id: num.toString(), value: num, label: num.toString() }));
 
 const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
   const {
@@ -105,19 +110,24 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                 </Button>
                 <Popover placement="right top" className="nodrag nopan">
                   <Menu className="bg-white">
-                    {[10, 12, 14, 16, 18, 24].map((num) => (
-                      <MenuItem
-                        className="cursor-pointer select-none flex items-center gap-1"
-                        onAction={() => {
-                          updateNodeFontSize(id, num);
-                        }}
-                      >
-                        {num}
-                        {data.fontSize === num && (
-                          <CheckIcon size={14} color="var(--color-blue-900)" />
-                        )}
-                      </MenuItem>
-                    ))}
+                    <Collection items={fontSizes}>
+                      {(fontSize) => (
+                        <MenuItem
+                          className="cursor-pointer select-none flex items-center gap-1"
+                          onAction={() => {
+                            updateNodeFontSize(id, fontSize.value);
+                          }}
+                        >
+                          {fontSize.label}
+                          {data.fontSize === fontSize.value && (
+                            <CheckIcon
+                              size={14}
+                              color="var(--color-blue-900)"
+                            />
+                          )}
+                        </MenuItem>
+                      )}
+                    </Collection>
                   </Menu>
                 </Popover>
               </MenuTrigger>
@@ -132,32 +142,34 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                 </Button>
                 <Popover placement="right top" className="nodrag nopan">
                   <Menu className="bg-white">
-                    {positions.map((pos) => (
-                      <MenuItem
-                        className="cursor-pointer select-none flex items-center gap-1 data-[disabled='true']:opacity-[.5]"
-                        isDisabled={
-                          node?.data.handles &&
-                          node?.data.handles[pos].max ===
-                            node?.data.handles[pos].handles.length
-                        }
-                        onAction={() => {
-                          updateNodeHandles(id, (handles) => ({
-                            ...handles,
-                            [pos]: {
-                              ...handles[pos],
-                              handles: handles[pos]?.handles
-                                ? [
-                                    ...handles[pos]?.handles,
-                                    { id: uuid(), type },
-                                  ]
-                                : [{ id: uuid(), type }],
-                            },
-                          }));
-                        }}
-                      >
-                        {pos[0].toUpperCase() + pos.split(pos[0])[1]}
-                      </MenuItem>
-                    ))}
+                    <Collection items={positions}>
+                      {(position) => (
+                        <MenuItem
+                          className="cursor-pointer select-none flex items-center gap-1 data-[disabled='true']:opacity-[.5]"
+                          isDisabled={
+                            node?.data.handles &&
+                            node?.data.handles[position.value].max ===
+                              node?.data.handles[position.value].handles.length
+                          }
+                          onAction={() => {
+                            updateNodeHandles(id, (handles) => ({
+                              ...handles,
+                              [position.value]: {
+                                ...handles[position.value],
+                                handles: handles[position.value]?.handles
+                                  ? [
+                                      ...handles[position.value]?.handles,
+                                      { id: uuid(), type },
+                                    ]
+                                  : [{ id: uuid(), type }],
+                              },
+                            }));
+                          }}
+                        >
+                          {position.label}
+                        </MenuItem>
+                      )}
+                    </Collection>
                   </Menu>
                 </Popover>
               </MenuTrigger>

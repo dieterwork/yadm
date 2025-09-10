@@ -40,7 +40,7 @@ import BottomMenu from "../bottom_menu/BottomMenu";
 import useDelete from "../keyboard/useDelete";
 import useCopyPaste from "../actions/copy_paste/useCopyPaste";
 
-const transactionTimeNodes = ["c_act", "c_fact", "tk_execution"];
+const ofdNodes = ["c_fact", "c_act", "tk_execution", "initiation_fact"];
 
 const DEMOModeler = () => {
   const {
@@ -103,9 +103,27 @@ const DEMOModeler = () => {
       y: e.clientY,
     });
 
-    const newNode = createNode({ type: previewNode.type, position });
+    const id = uuid();
+
+    const newNode = createNode({ id, type: previewNode.type, position });
 
     addNode(newNode);
+
+    if (ofdNodes.includes(previewNode.type)) {
+      // create text node
+      const textNode = createNode({
+        type: "text_node",
+        position: {
+          x: X_SMALL_NODE_SIZE / 2 - 50 / 2,
+          y: -X_SMALL_NODE_SIZE,
+        },
+        parentId: id,
+        width: 50,
+        height: 20,
+        content: "",
+      });
+      addNode(textNode);
+    }
 
     if (previewNode.type === "transaction_time") {
       const ghostNode1Id = uuid();
@@ -163,7 +181,12 @@ const DEMOModeler = () => {
     e: MouseEvent,
     clickedNode: DEMONode
   ) => {
-    if (!previewNode) return;
+    if (
+      !previewNode ||
+      !ofdNodes.includes(previewNode.type) ||
+      !["transaction_time", "transaction_kind"].includes(clickedNode.type)
+    )
+      return;
 
     const absolutePosition = screenToFlowPosition({
       x: e.clientX,

@@ -15,10 +15,12 @@ import {
 } from "../copy_paste/utils";
 import type { DEMONode } from "$/features/nodes/nodes.types";
 import { useDEMOModeler } from "$/features/modeler/useDEMOModeler";
+import useShortcut from "$/features/keyboard/useShortcut";
 
 interface UseDeleteParams {
   disabledNodeTypes?: DEMONode["type"][];
 }
+
 const useDelete = ({ disabledNodeTypes }: UseDeleteParams = {}) => {
   const { nodes, edges, setNodes, setEdges } = useDEMOModeler(
     useShallow((state) => ({

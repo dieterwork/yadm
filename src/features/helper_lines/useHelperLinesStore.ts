@@ -56,6 +56,11 @@ export const useHelperLinesStore = create<DEMOModelerState>()(
             "several_actors",
             "self_activation",
             "production_event",
+            "c_act",
+            "c_fact",
+            "tk_execution",
+            "initiation_fact",
+            "text_node",
           ],
         });
 
