@@ -4,9 +4,7 @@ import { useShallow } from "zustand/react/shallow";
 
 export const useDetachNodes = () => {
   const { getInternalNode } = useReactFlow();
-  const { setNodes } = useDEMOModeler(
-    useShallow((state) => ({ nodes: state.nodes, setNodes: state.setNodes }))
-  );
+  const setNodes = useDEMOModeler((state) => state.setNodes);
 
   const detachNodes = (ids: string[], removeParentId?: string) => {
     setNodes((nodes) => {

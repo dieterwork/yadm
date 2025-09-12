@@ -22,6 +22,7 @@ import { initialEdges } from "../edges/initialEdges";
 import type { DEMONode, DEMOHandlesData } from "../nodes/nodes.types";
 import uuid from "../../shared/utils/uuid";
 import type { DEMOEdge } from "../edges/edges.types";
+import type { CSSProperties } from "react";
 
 type ReactStyleStateSetter<T> = T | ((prev: T) => T);
 
@@ -31,10 +32,27 @@ export interface DEMOModelerState {
   nodes: DEMONode[];
   edges: DEMOEdge[];
   viewport: Viewport;
+  isEnabled: boolean;
   grid: {
     isVisible: boolean;
     isSnapEnabled: boolean;
   };
+  createNode: ({
+    id,
+    type,
+    data,
+    width,
+    height,
+    selected,
+  }: {
+    id?: string;
+    type: DEMONode["type"];
+    data?: DEMONode["data"];
+    width?: string;
+    height?: string;
+    selected?: boolean;
+  }) => DEMONode;
+  setEnabled: (isEnabled: ReactStyleStateSetter<boolean>) => void;
   setFileName: (filename: string) => void;
   onNodesChange: OnNodesChange<DEMONode>;
   onEdgesChange: OnEdgesChange<DEMOEdge>;
@@ -44,22 +62,22 @@ export interface DEMOModelerState {
   setEdges: (newEdgesOrSetterFn: ReactStyleStateSetter<DEMOEdge[]>) => void;
   DEMOInstance: null | ReactFlowInstance<DEMONode, DEMOEdge>;
   setDEMOInstance: (instance: ReactFlowInstance<DEMONode, DEMOEdge>) => void;
-  updateNodeColor: (nodeId: string, color: string) => void;
-  updateNodeState: (nodeId: string, state: string, type: string) => void;
-  updateNodeScope: (nodeId: string, scope: string, type: string) => void;
-  deleteNode: (nodeId: string) => void;
+  updateNodeColor: (id: string, color: string) => void;
+  updateNodeState: (id: string, state: string, type: string) => void;
+  updateNodeScope: (id: string, scope: string, type: string) => void;
+  deleteNode: (id: string) => void;
   addNode: (node: DEMONode) => void;
   addEdge: (edge: Edge) => void;
-  getNode: (nodeId: string) => DEMONode | undefined;
-  getChildrenNodes: (nodeId: string) => DEMONode[];
-  updateNodeExtent: (nodeId: string, extent: CoordinateExtent) => void;
-  getNodeAbsolutePosition: (nodeId: string) => { x: number; y: number };
-  updateNodeContent: (nodeId: string, content: string) => void;
-  updateNodeFontSize: (nodeId: string, fontSize: number) => void;
+  getNode: (id: string) => DEMONode | undefined;
+  getChildNodes: (id: string) => DEMONode[];
+  updateNodeExtent: (id: string, extent: CoordinateExtent) => void;
+  getNodeAbsolutePosition: (id: string) => { x: number; y: number };
+  updateNodeContent: (id: string, content: string) => void;
+  updateNodeFontSize: (id: string, fontSize: number) => void;
   setModelFromJSONObject: (object: ReactFlowJsonObject<DEMONode, Edge>) => void;
   updateNode: (
     id: string,
-    nodeUpdate: Partial<DEMONode>,
+    data: Partial<DEMONode["data"]>,
     options?: {
       replace: boolean;
     }
@@ -76,7 +94,13 @@ export interface DEMOModelerState {
     id: string,
     isVisible: ReactStyleStateSetter<boolean>
   ) => void;
+  updateNodeTextAlign: (
+    id: string,
+    textAlign: CSSProperties["textAlign"]
+  ) => void;
   connectionLinePath: XYPosition[];
+  selectionOnDrag: boolean;
+  panOnDrag: boolean;
   setConnectionLinePath: (connectionLinePath: XYPosition[]) => void;
   setGridVisibility: (isVisible: ReactStyleStateSetter<boolean>) => void;
   setGridSnapability: (isSnapEnabled: ReactStyleStateSetter<boolean>) => void;
@@ -95,6 +119,9 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         isVisible: true,
         isSnapEnabled: true,
       },
+      selectionOnDrag: false,
+      panOnDrag: true,
+      isEnabled: true,
       setConnectionLinePath: (connectionLinePath) => {
         set({ connectionLinePath });
       },
@@ -109,6 +136,14 @@ export const useDEMOModeler = create<DEMOModelerState>()(
       onEdgesChange: (changes) => {
         set({
           edges: applyEdgeChanges(changes, get().edges),
+        });
+      },
+      setEnabled: (isEnabledSetter) => {
+        set({
+          isEnabled:
+            typeof isEnabledSetter === "boolean"
+              ? isEnabledSetter
+              : isEnabledSetter(get().isEnabled),
         });
       },
       onConnect: (connection) => {
@@ -164,143 +199,49 @@ export const useDEMOModeler = create<DEMOModelerState>()(
             .concat([edge]),
         });
       },
-      deleteNode: (nodeId) => {
+      deleteNode: (id) => {
         set({
           nodes: get().nodes.filter((node) => {
-            if (node.id !== nodeId && node.parentId !== nodeId) return true;
+            if (node.id !== id && node.parentId !== id) return true;
             return false;
           }),
         });
       },
-      updateNodeColor: (nodeId, color) => {
-        set({
-          nodes: get().nodes.map((node) => {
-            if (node.id === nodeId) {
-              return { ...node, data: { ...node.data, color } };
-            }
-
-            return node;
-          }),
+      updateNodeColor: (id, color) => {
+        get().updateNode(id, { color });
+      },
+      updateNodeState: (id, state) => {
+        get().updateNode(id, { state });
+      },
+      updateNodeScope: (id, scope) => {
+        get().updateNode(id, { scope });
+      },
+      updateNodeFontSize: (id, fontSize) => {
+        get().updateNode(id, { fontSize });
+      },
+      updateNodeContent: (id, content) => {
+        get().updateNode(id, { content });
+      },
+      updateNodeConnectionHandlesVisibility: (id, newVisibilityOrSetterFn) => {
+        const node = get().getNode(id);
+        get().updateNode(id, {
+          handles: {
+            ...node?.handles,
+            isVisible:
+              typeof newVisibilityOrSetterFn === "boolean"
+                ? newVisibilityOrSetterFn
+                : newVisibilityOrSetterFn(node?.data.handles.isVisible),
+          },
         });
       },
-      updateNodeState: (nodeId, state: string, type) => {
-        set({
-          nodes: get().nodes.map((node) => {
-            if (node.id === nodeId) {
-              return { ...node, data: { ...node.data, state } };
-            }
-
-            return node;
-          }),
-        });
-      },
-      updateNodeScope: (nodeId, scope) => {
-        set({
-          nodes: get().nodes.map((node) => {
-            if (node.id === nodeId) {
-              return { ...node, data: { ...node.data, scope } };
-            }
-
-            return node;
-          }),
-        });
-      },
-      updateNodeFontSize: (nodeId, fontSize) => {
-        set({
-          nodes: get().nodes.map((node) => {
-            if (node.id === nodeId) {
-              return { ...node, data: { ...node.data, fontSize } };
-            }
-
-            return node;
-          }),
-        });
-      },
-      updateNodeExtent: (nodeId, extent) => {
-        set({
-          nodes: get().nodes.map((node) => {
-            if (node.id === nodeId) {
-              return { ...node, extent };
-            }
-
-            return node;
-          }),
-        });
-      },
-      updateNodeContent: (nodeId, content) => {
-        set({
-          nodes: get().nodes.map((node) => {
-            if (node.id === nodeId) {
-              return { ...node, content };
-            }
-
-            return node;
-          }),
-        });
-      },
-      updateNodeConnectionHandlesVisibility: (
-        nodeId,
-        newVisibilityOrSetterFn
-      ) => {
-        set({
-          nodes: get().nodes.map((node) => {
-            if (node.id === nodeId) {
-              if (typeof newVisibilityOrSetterFn === "boolean") {
-                const newVisibility = newVisibilityOrSetterFn;
-                return {
-                  ...node,
-                  data: {
-                    ...node.data,
-                    handles: {
-                      ...node.data.handles,
-                      isVisible: newVisibility,
-                    },
-                  },
-                };
-              }
-              const setterFn = newVisibilityOrSetterFn;
-              return {
-                ...node,
-                data: {
-                  ...node.data,
-                  handles: {
-                    ...node.data.handles,
-                    isVisible: setterFn(node.data.handles.isVisible),
-                  },
-                },
-              };
-            }
-
-            return node;
-          }),
-        });
-      },
-      updateNodeBorderVisibility: (nodeId, newBorderVisibilityOrSetterFn) => {
-        set({
-          nodes: get().nodes.map((node) => {
-            if (node.id === nodeId) {
-              if (typeof newBorderVisibilityOrSetterFn === "boolean") {
-                const newBorderVisibility = newBorderVisibilityOrSetterFn;
-                return {
-                  ...node,
-                  data: {
-                    ...node.data,
-                    isBorderVisible: newBorderVisibility,
-                  },
-                };
-              }
-              const setterFn = newBorderVisibilityOrSetterFn;
-              return {
-                ...node,
-                data: {
-                  ...node.data,
-                  isBorderVisible: setterFn(node.data.isBorderVisible),
-                },
-              };
-            }
-
-            return node;
-          }),
+      updateNodeBorderVisibility: (id, newBorderVisibilityOrSetterFn) => {
+        get().updateNode(id, {
+          isBorderVisible:
+            typeof newBorderVisibilityOrSetterFn === "boolean"
+              ? newBorderVisibilityOrSetterFn
+              : newBorderVisibilityOrSetterFn(
+                  get().getNode(id)?.data.isBorderVisible
+                ),
         });
       },
       setGridVisibility: (newGridVisibilityOrSetterFn) => {
@@ -325,37 +266,16 @@ export const useDEMOModeler = create<DEMOModelerState>()(
           },
         });
       },
-      updateNodeHandles: (nodeId, newHandlesOrSetterFn) => {
-        set({
-          nodes: get().nodes.map((node) => {
-            if (node.id === nodeId) {
-              if (typeof newHandlesOrSetterFn === "object") {
-                const newHandles = newHandlesOrSetterFn;
-                return {
-                  ...node,
-                  data: {
-                    ...node.data,
-                    handles: newHandles,
-                  },
-                };
-              }
-              const setterFn = newHandlesOrSetterFn;
-              return {
-                ...node,
-                data: {
-                  ...node.data,
-                  handles: setterFn(node.data.handles),
-                },
-              };
-            }
-
-            return node;
-          }),
+      updateNodeHandles: (id, newHandlesOrSetterFn) => {
+        get().updateNode(id, {
+          handles:
+            typeof newHandlesOrSetterFn === "object"
+              ? newHandlesOrSetterFn
+              : newHandlesOrSetterFn(get().getNode(id)?.data.handles),
         });
       },
-      getNode: (nodeId) => get().nodes.find((node) => node.id === nodeId),
-      getChildrenNodes: (nodeId) =>
-        get().nodes.filter((node) => node.parentId === nodeId),
+      getNode: (id) => get().nodes.find((node) => node.id === id),
+      getChildNodes: (id) => get().nodes.filter((node) => node.parentId === id),
       addNode: (node) => {
         set({
           nodes: get()
@@ -365,22 +285,6 @@ export const useDEMOModeler = create<DEMOModelerState>()(
             }))
             .concat(Array.isArray(node) ? node : [node]),
         });
-      },
-      getNodeAbsolutePosition: (nodeId) => {
-        const node = get().getNode(nodeId);
-        let x = 0;
-        let y = 0;
-        let host: DEMONode | undefined = node;
-
-        while (host) {
-          x += host.position.x;
-          y += host.position.y;
-
-          host = host.parentId
-            ? get().nodes.find((node) => node.id === host?.parentId)
-            : undefined;
-        }
-        return { x, y };
       },
       deleteDiagram: () => {
         get().setModelFromJSONObject({
@@ -402,16 +306,21 @@ export const useDEMOModeler = create<DEMOModelerState>()(
           },
         });
       },
-      updateNode(id, nodeUpdate, options) {
+      updateNode(id, data, options) {
         set({
           nodes: get().nodes.map((node) => {
             if (node.id === id) {
-              return options?.replace ? nodeUpdate : { ...node, ...nodeUpdate };
+              return options?.replace
+                ? { ...node, data }
+                : { ...node, data: { ...node.data, ...data } };
             }
 
             return node;
           }),
         });
+      },
+      updateNodeTextAlign(id, textAlign) {
+        get().updateNode(id, { textAlign });
       },
     }),
     {
@@ -426,3 +335,25 @@ export const useDEMOModeler = create<DEMOModelerState>()(
     }
   )
 );
+
+export const setSelectionOnDrag = (
+  isEnabledSetter: ReactStyleStateSetter<boolean>
+) => {
+  useDEMOModeler.setState((state) => ({
+    selectionOnDrag:
+      typeof isEnabledSetter === "boolean"
+        ? isEnabledSetter
+        : isEnabledSetter(state.selectionOnDrag),
+  }));
+};
+
+export const setPanOnDrag = (
+  isEnabledSetter: ReactStyleStateSetter<boolean>
+) => {
+  useDEMOModeler.setState((state) => ({
+    panOnDrag:
+      typeof isEnabledSetter === "boolean"
+        ? isEnabledSetter
+        : isEnabledSetter(state.panOnDrag),
+  }));
+};

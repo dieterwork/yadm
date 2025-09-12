@@ -78,7 +78,7 @@ export const DEFAULT_SIZE_MAP = {
 
   // misc
 
-  text_node: {
+  text: {
     width: 150,
     height: 100,
   },
@@ -156,7 +156,7 @@ export const MIN_SIZE_MAP = {
 
   // misc
 
-  text_node: {
+  text: {
     width: 20,
     height: 20,
   },
@@ -181,6 +181,6 @@ export const DEFAULT_CONTENT_MAP = {
   production_event: "<div>01</div>",
   entity_class: "<div>A</div><div>1</div>",
   derived_entity: "<div>A</div><div>1</div>",
-  text_node: "<div>Insert text here</div>",
+  text: "<div>Insert text here</div>",
   textNode: "<div>Insert text here</div>",
 };

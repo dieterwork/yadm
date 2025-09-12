@@ -6,7 +6,6 @@ import {
   type RefObject,
 } from "react";
 import { useDEMOModeler } from "../modeler/useDEMOModeler";
-import { useShallow } from "zustand/react/shallow";
 import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
 
@@ -72,7 +71,7 @@ const EditableContent = ({
   if (!ref) ref = useRef<HTMLDivElement>(null!);
 
   const updateNodeContent = useDEMOModeler((state) => state.updateNodeContent);
-
+  const isEnabled = useDEMOModeler((state) => state.isEnabled);
   const props = useEditableContent({
     content,
     ref,
@@ -104,7 +103,7 @@ const EditableContent = ({
     >
       <div
         ref={ref}
-        contentEditable={!!editable}
+        contentEditable={editable && isEnabled}
         spellCheck={false}
         suppressContentEditableWarning={true}
         className="block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"

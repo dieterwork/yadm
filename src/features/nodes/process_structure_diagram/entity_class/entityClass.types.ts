@@ -1,6 +1,7 @@
 import type { Node } from "@xyflow/react";
+import type { DEMONodeBaseData } from "../../nodes.types";
 
 export type EntityClassNode = Node<
-  { content: string; color: string; fontSize: number },
+  DEMONodeBaseData<"process_structure_diagram">,
   "entity_class"
 >;

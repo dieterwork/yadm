@@ -1,4 +1,5 @@
 import {
+  AlignLeftIcon,
   ArrowsLeftRightIcon,
   CheckIcon,
   CrosshairIcon,
@@ -11,6 +12,9 @@ import {
   PaintBrushIcon,
   SlidersHorizontalIcon,
   TextAaIcon,
+  TextAlignCenterIcon,
+  TextAlignLeftIcon,
+  TextAlignRightIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
 import {
@@ -57,6 +61,7 @@ const fontSizes: { id: string; value: number; label: string }[] = [
 ].map((num) => ({ id: num.toString(), value: num, label: num.toString() }));
 
 const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
+  const updateNodeInternals = useUpdateNodeInternals();
   const {
     getNode,
     deleteNode,
@@ -67,6 +72,8 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
     updateNodeHandles,
     updateNodeConnectionHandlesVisibility,
     updateNodeBorderVisibility,
+    getChildNodes,
+    updateNodeTextAlign,
   } = useDEMOModeler(
     useShallow((state) => ({
       getNode: state.getNode,
@@ -81,6 +88,9 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
       updateNodeBorderVisibility: state.updateNodeBorderVisibility,
       addEdge: state.addEdge,
       edges: state.edges,
+      getChildNodes: state.getChildNodes,
+      updateNode: state.updateNode,
+      updateNodeTextAlign: state.updateNodeTextAlign,
     }))
   );
 
@@ -383,11 +393,12 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
               <Button
                 className="nodrag nopan cursor-pointer"
                 onPress={() => {
-                  if (node?.parentId) {
-                    detachNodes([id]);
-                  } else {
+                  const childNodeIds = getChildNodes(id).map((node) => node.id);
+                  if (childNodeIds.length === 0) {
                     setChildNodeIdAttach(id);
                     setAttaching(true);
+                  } else {
+                    detachNodes(childNodeIds, id);
                   }
                 }}
                 aria-label={node?.parentId ? "Detach node" : "Attach node"}
@@ -407,6 +418,41 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
               >
                 {node?.data?.isBorderVisible ? <EyeIcon /> : <EyeClosedIcon />}
               </Button>
+            )}
+            {actions?.indexOf("changeTextAlign") !== -1 && (
+              <MenuTrigger>
+                <Button
+                  className="nodrag nopan cursor-pointer select-none"
+                  aria-label="Change color"
+                >
+                  <PaintBrushIcon />
+                </Button>
+                <Popover placement="right top">
+                  <Menu className="bg-white">
+                    <MenuItem
+                      onAction={() => {
+                        updateNodeTextAlign(id, "left");
+                      }}
+                    >
+                      <TextAlignLeftIcon />
+                    </MenuItem>
+                    <MenuItem
+                      onAction={() => {
+                        updateNodeTextAlign(id, "center");
+                      }}
+                    >
+                      <TextAlignCenterIcon />
+                    </MenuItem>
+                    <MenuItem
+                      onAction={() => {
+                        updateNodeTextAlign(id, "right");
+                      }}
+                    >
+                      <TextAlignRightIcon />
+                    </MenuItem>
+                  </Menu>
+                </Popover>
+              </MenuTrigger>
             )}
           </div>
         </_NodeToolbar>

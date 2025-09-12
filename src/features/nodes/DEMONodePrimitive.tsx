@@ -1,7 +1,7 @@
 import { type NodeProps, type NodeResizerProps } from "@xyflow/react";
 import { shapeMap } from "../shapes/shapeMap";
 import Shape from "../shapes/Shape";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import NodeToolbar from "../node-toolbar/NodeToolbar";
 import { MIN_SIZE_MAP } from "./utils/consts";
 import type { DEMONode } from "./nodes.types";
@@ -44,7 +44,7 @@ const DEMONodePrimitive = ({
   ],
   resizerProps,
 }: DEMONodePrimitiveProps) => {
-  if (type === "text_node")
+  if (type === "text")
     throw new Error("Cannot render node primitive with text node");
 
   const DEMOShape = shapeMap[type];

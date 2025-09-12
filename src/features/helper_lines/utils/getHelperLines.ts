@@ -1,5 +1,7 @@
 import type { DEMONode } from "$/features/nodes/nodes.types";
 import type { NodePositionChange, XYPosition } from "@xyflow/react";
+import filterNodesAvailableForHelperLines from "./filterNodesAvailableForHelperLines";
+import convertRelativeToAbsolutePosition from "$/features/nodes/utils/convertRelativeToAbsolutePosition";
 
 type GetHelperLinesResult = {
   horizontal?: number;
@@ -13,17 +15,12 @@ interface GetHelperLinesParams {
   change: NodePositionChange;
   nodes: DEMONode[];
   distance?: number;
-  filteredNodeTypes?: DEMONode["type"][];
 }
 export function getHelperLines({
   change,
   nodes,
   distance = 5,
-  filteredNodeTypes,
 }: GetHelperLinesParams): GetHelperLinesResult {
-  if (filteredNodeTypes) {
-    nodes = nodes.filter((node) => filteredNodeTypes.includes(node.type));
-  }
   const defaultResult = {
     horizontal: undefined,
     vertical: undefined,
@@ -35,11 +32,17 @@ export function getHelperLines({
     return defaultResult;
   }
 
+  const absoluteCoordinates = convertRelativeToAbsolutePosition(
+    change.position,
+    nodeA,
+    nodes
+  );
+
   const nodeABounds = {
-    left: change.position.x,
-    right: change.position.x + (nodeA.measured?.width ?? 0),
-    top: change.position.y,
-    bottom: change.position.y + (nodeA.measured?.height ?? 0),
+    left: absoluteCoordinates.x ?? 0,
+    right: (absoluteCoordinates.x ?? 0) + (nodeA.measured?.width ?? 0),
+    top: absoluteCoordinates.y ?? 0,
+    bottom: (absoluteCoordinates.y ?? 0) + (nodeA.measured?.height ?? 0),
     width: nodeA.measured?.width ?? 0,
     height: nodeA.measured?.height ?? 0,
   };
@@ -48,13 +51,21 @@ export function getHelperLines({
   let verticalDistance = distance;
 
   return nodes
-    .filter((node) => node.id !== nodeA.id)
+    .filter(
+      (node) =>
+        node.id !== nodeA.id && filterNodesAvailableForHelperLines(nodeA, node)
+    )
     .reduce<GetHelperLinesResult>((result, nodeB) => {
+      const absoluteCoordinates = convertRelativeToAbsolutePosition(
+        nodeB.position,
+        nodeB,
+        nodes
+      );
       const nodeBBounds = {
-        left: nodeB.position.x,
-        right: nodeB.position.x + (nodeB.measured?.width ?? 0),
-        top: nodeB.position.y,
-        bottom: nodeB.position.y + (nodeB.measured?.height ?? 0),
+        left: absoluteCoordinates.x ?? 0,
+        right: (absoluteCoordinates.x ?? 0) + (nodeB.measured?.width ?? 0),
+        top: absoluteCoordinates.y ?? 0,
+        bottom: (absoluteCoordinates.y ?? 0) + (nodeB.measured?.height ?? 0),
         width: nodeB.measured?.width ?? 0,
         height: nodeB.measured?.height ?? 0,
       };

@@ -1,3 +1,4 @@
 import type { Node } from "@xyflow/react";
+import type { DEMONodeBaseData } from "../../nodes.types";
 
-export type CActNode = Node<{ color: string }, "c_act">;
+export type CActNode = Node<DEMONodeBaseData<"object_fact_diagram">, "c_act">;

@@ -7,6 +7,7 @@ import {
   MEDIUM_NODE_SIZE,
   SMALL_NODE_SIZE,
 } from "./consts";
+import type { CSSProperties } from "react";
 
 interface CreateNodeParams {
   type: DEMONode["type"];
@@ -18,6 +19,7 @@ interface CreateNodeParams {
   content?: string;
   selected?: boolean;
   zIndex?: number;
+  textAlign?: CSSProperties["textAlign"];
 }
 
 export const createNode = ({
@@ -30,6 +32,7 @@ export const createNode = ({
   content,
   selected,
   zIndex,
+  textAlign,
 }: CreateNodeParams): DEMONode | DEMONode[] => {
   if (!id) id = uuid();
   switch (type) {
@@ -600,7 +603,7 @@ export const createNode = ({
         zIndex: 2,
       };
     }
-    case "text_node": {
+    case "text": {
       return {
         id,
         type,
@@ -609,13 +612,13 @@ export const createNode = ({
         data: {
           fontSize: 12,
           alignContent: "start",
-          textAlign: "start",
-          content: content ?? DEFAULT_CONTENT_MAP["text_node"],
+          textAlign,
+          content: content ?? DEFAULT_CONTENT_MAP["text"],
           isBorderVisible: true,
         },
         style: {
-          width: width ?? DEFAULT_SIZE_MAP["text_node"].width,
-          height: height ?? DEFAULT_SIZE_MAP["text_node"].height,
+          width: width ?? DEFAULT_SIZE_MAP["text"].width,
+          height: height ?? DEFAULT_SIZE_MAP["text"].height,
         },
         selected: selected ?? true,
         zIndex,

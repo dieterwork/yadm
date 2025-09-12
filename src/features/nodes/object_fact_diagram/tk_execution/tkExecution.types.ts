@@ -1,3 +1,7 @@
 import type { Node } from "@xyflow/react";
+import type { DEMONodeBaseData } from "../../nodes.types";
 
-export type TKExecutionNode = Node<{ color: string }, "tk_execution">;
+export type TKExecutionNode = Node<
+  DEMONodeBaseData<"object_fact_diagram">,
+  "tk_execution"
+>;

@@ -14,7 +14,7 @@ const TextNode = ({
   data,
   id,
 }: NodeProps<TextNodeType>) => {
-  const { content, textAlign, alignContent, fontSize } = data;
+  const { content, textAlign, alignContent, fontSize, color } = data;
   return (
     <>
       <div
@@ -26,13 +26,13 @@ const TextNode = ({
         <NodeToolbar
           id={id}
           data={data}
-          type="text_node"
-          actions={["delete", "changeFontSize", "showBorder"]}
+          type="text"
+          actions={["delete", "changeFontSize", "showBorder", "changeColor"]}
         />
         <NodeResizer
           isVisible={selected}
-          minHeight={MIN_SIZE_MAP["text_node"].height}
-          minWidth={MIN_SIZE_MAP["text_node"].width}
+          minHeight={MIN_SIZE_MAP["text"].height}
+          minWidth={MIN_SIZE_MAP["text"].width}
         />
         <EditableContent
           width={width}
@@ -41,6 +41,7 @@ const TextNode = ({
           alignContent={alignContent}
           textAlign={textAlign}
           fontSize={fontSize}
+          color={color}
         />
       </div>
     </>

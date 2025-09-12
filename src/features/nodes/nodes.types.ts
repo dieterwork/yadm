@@ -15,10 +15,10 @@ import InitiationFactNode from "./object_fact_diagram/initiation_fact/Initiation
 import CActNode from "./object_fact_diagram/c_act/CActNode";
 import TKExecutionNode from "./object_fact_diagram/tk_execution/TKExecutionNode";
 import TransactionTimeNode from "./object_fact_diagram/transaction_time/TransactionTimeNode";
-import TextNode from "./text_node/TextNode";
+import TextNode from "./text/TextNode";
 import type { ObjectFactDiagramNode } from "./object_fact_diagram/objectFactDiagram.types";
 import type { ProcessStructureDiagramNode } from "./process_structure_diagram/processStructureDiagram.types";
-import type { TextNode as TextNodeType } from "./text_node/textNode.types";
+import type { TextNode as TextNodeType } from "./text/textNode.types";
 import type { CSSProperties } from "react";
 import type { Position } from "@xyflow/react";
 import type { GhostNode as GhostNodeType } from "./ghost/ghost.types";
@@ -47,7 +47,9 @@ export const nodeTypes = {
   production_event: ProductionEventNode,
   entity_class: EntityClassNode,
   derived_entity: DerivedEntityNode,
-  text_node: TextNode,
+
+  // misc
+  text: TextNode,
   ghost: GhostNode,
 };
 
@@ -77,4 +79,17 @@ export type DEMOHandlesData = {
   left?: DEMOHandlesPositionData;
   right?: DEMOHandlesPositionData;
   isVisible: boolean;
+};
+
+export type DEMONodeBaseData<
+  SubModel extends
+    | "cooperation_model"
+    | "object_fact_diagram"
+    | "process_structure_diagram"
+> = {
+  handles: DEMOHandlesData;
+  subModel: SubModel;
+  fontSize?: string;
+  color?: string;
+  content?: string;
 };

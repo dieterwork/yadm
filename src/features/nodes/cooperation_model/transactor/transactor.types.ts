@@ -1,15 +1,11 @@
 import type { Node } from "@xyflow/react";
-import type { DEMOHandlesData } from "../../nodes.types";
+import type { DEMONodeBaseData } from "../../nodes.types";
 
 export type TransactorState = "internal" | "external";
 
 export type TransactorNode = Node<
   {
     state: TransactorState;
-    content: string;
-    color: string;
-    fontSize: number;
-    handles: DEMOHandlesData;
-  },
+  } & DEMONodeBaseData<"cooperation_model">,
   "transactor"
 >;

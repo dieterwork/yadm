@@ -4,26 +4,39 @@ import {
   CornersInIcon,
   DotsNineIcon,
   FilePlusIcon,
+  HandIcon,
   IconContext,
   SelectionIcon,
+  SelectionPlusIcon,
 } from "@phosphor-icons/react";
 import { cn } from "@sglara/cn";
 import { useShallow } from "zustand/react/shallow";
-import { useDEMOModeler } from "$/features/modeler/useDEMOModeler";
+import {
+  setPanOnDrag,
+  setSelectionOnDrag,
+  useDEMOModeler,
+} from "$/features/modeler/useDEMOModeler";
 import { usePreviewNode } from "$/features/sidebar/usePreviewNode";
 import { useHelperLinesStore } from "$/features/helper_lines/useHelperLinesStore";
 import { DEFAULT_CONTENT_MAP } from "$/features/nodes/utils/consts";
 
 const SideMenu = () => {
-  const { addNode, setGridVisibility, grid, setGridSnapability } =
-    useDEMOModeler(
-      useShallow((state) => ({
-        addNode: state.addNode,
-        setGridVisibility: state.setGridVisibility,
-        setGridSnapability: state.setGridSnapability,
-        grid: state.grid,
-      }))
-    );
+  const {
+    setGridVisibility,
+    grid,
+    setGridSnapability,
+    panOnDrag,
+    selectionOnDrag,
+  } = useDEMOModeler(
+    useShallow((state) => ({
+      addNode: state.addNode,
+      setGridVisibility: state.setGridVisibility,
+      setGridSnapability: state.setGridSnapability,
+      grid: state.grid,
+      panOnDrag: state.panOnDrag,
+      selectionOnDrag: state.selectionOnDrag,
+    }))
+  );
 
   const { createNode } = usePreviewNode(
     useShallow((state) => ({
@@ -45,13 +58,27 @@ const SideMenu = () => {
         <IconContext value={{ size: 32 }}>
           <Menu className="bg-white">
             <MenuItem
+              onAction={() => {
+                setSelectionOnDrag(false);
+                setPanOnDrag(true);
+              }}
+              className="cursor-pointer select-none"
+              aria-label="Activate hand tool"
+            >
+              <HandIcon
+                color={
+                  panOnDrag ? "var(--color-blue-500)" : "var(--color-black)"
+                }
+              />
+            </MenuItem>
+            <MenuItem
               onClick={(e) => {
                 createNode({
-                  type: "text_node",
+                  type: "text",
                   width: 100,
                   height: 100,
                   position: { x: e.clientX, y: e.clientY },
-                  content: DEFAULT_CONTENT_MAP["text_node"],
+                  content: DEFAULT_CONTENT_MAP["text"],
                 });
               }}
               className="cursor-pointer select-none"
@@ -93,11 +120,20 @@ const SideMenu = () => {
               />
             </MenuItem>
             <MenuItem
-              onAction={() => {}}
+              onAction={() => {
+                setSelectionOnDrag(true);
+                setPanOnDrag(false);
+              }}
               className="cursor-pointer select-none"
-              aria-label="Select nodes"
+              aria-label="Activate selection tool"
             >
-              <SelectionIcon />
+              <SelectionPlusIcon
+                color={
+                  selectionOnDrag
+                    ? "var(--color-blue-500)"
+                    : "var(--color-black)"
+                }
+              />
             </MenuItem>
           </Menu>
         </IconContext>

@@ -17,7 +17,7 @@ export type CooperationModelShapeType =
   | "self_activation"
   | "composite"
   | "elementary_actor"
-  | "several_actors-";
+  | "several_actors";
 
 export type CooperationModelShapeProps = {
   width: number;
@@ -37,4 +37,5 @@ export type CooperationModelNode =
   | SelfActivationNode
   | SeveralActorsNode
   | TransactionNode
-  | TransactorNode;
+  | TransactorNode
+  | CompositeNode;

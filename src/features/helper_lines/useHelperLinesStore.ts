@@ -3,6 +3,7 @@ import { temporal } from "zundo";
 import type { DEMONode } from "../nodes/nodes.types";
 import type { NodeChange } from "@xyflow/react";
 import { getHelperLines } from "./utils/getHelperLines";
+import convertAbsoluteToRelativePosition from "../nodes/utils/convertAbsoluteToRelativePosition";
 
 export interface DEMOModelerState {
   isEnabled: boolean;
@@ -34,42 +35,36 @@ export const useHelperLinesStore = create<DEMOModelerState>()(
 
       // this will be true if it's a single node being dragged
       // inside we calculate the helper lines and snap position for the position where the node is being moved to
+      const change = changes[0];
       if (
         isEnabled &&
         changes.length === 1 &&
-        changes[0].type === "position" &&
-        changes[0].dragging &&
-        changes[0].position
+        change.type === "position" &&
+        change.dragging &&
+        change.position
       ) {
+        const changedNode = nodes.find((node) => node.id === change.id);
         const helperLines = getHelperLines({
-          change: changes[0],
+          change,
           nodes,
-          filteredNodeTypes: [
-            "actor",
-            "derived_entity",
-            "elementary_actor",
-            "entity_class",
-            "production_event",
-            "transactor",
-            "transaction_time",
-            "transaction",
-            "several_actors",
-            "self_activation",
-            "production_event",
-            "c_act",
-            "c_fact",
-            "tk_execution",
-            "initiation_fact",
-            "text_node",
-          ],
         });
+
+        const helperLinesRelativePosition = changedNode
+          ? convertAbsoluteToRelativePosition(
+              helperLines.snapPosition,
+              changedNode,
+              nodes
+            )
+          : undefined;
 
         // if we have a helper line, we snap the node to the helper line position
         // this is being done by manipulating the node position inside the change object
-        changes[0].position.x =
-          helperLines.snapPosition.x ?? changes[0].position.x;
-        changes[0].position.y =
-          helperLines.snapPosition.y ?? changes[0].position.y;
+        change.position.x = helperLinesRelativePosition?.x
+          ? helperLinesRelativePosition.x
+          : change.position.x;
+        change.position.y = helperLinesRelativePosition?.y
+          ? helperLinesRelativePosition.y
+          : change.position.y;
 
         // if helper lines are returned, we set them so that they can be displayed
         set({
