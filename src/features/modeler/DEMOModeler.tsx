@@ -294,7 +294,6 @@ const DEMOModeler = () => {
           panOnDrag={panOnDrag}
           selectionMode={SelectionMode.Partial}
           onSelectionEnd={() => {
-            // TODO fix this later
             setTimeout(() => {
               setPanOnDrag(true);
               setSelectionOnDrag(false);
