@@ -357,3 +357,36 @@ export const setPanOnDrag = (
         : isEnabledSetter(state.panOnDrag),
   }));
 };
+
+export const getNode = (id: string) => {
+  return useDEMOModeler.getState().nodes.filter((node) => node.id === id);
+};
+
+export const updateNode = (
+  id: string,
+  dataSetter: ReactStyleStateSetter<DEMONode["data"]>
+) => {
+  useDEMOModeler.setState((state) => ({
+    nodes: state.nodes.map<DEMONode>((node) => {
+      if (node.id !== id) return node;
+      const data =
+        typeof dataSetter === "object" ? dataSetter : dataSetter(node.data);
+      return { ...node, data: { ...node.data, ...data } };
+    }),
+  }));
+};
+
+export const updateNodeConnectionHandlesVisibility = (
+  id: string,
+  newVisibilityOrSetterFn: ReactStyleStateSetter<boolean>
+) => {
+  updateNode(id, (data) => ({
+    handles: {
+      ...data.handles,
+      isVisible:
+        typeof newVisibilityOrSetterFn === "boolean"
+          ? newVisibilityOrSetterFn
+          : newVisibilityOrSetterFn(data.handles.isVisible),
+    },
+  }));
+};

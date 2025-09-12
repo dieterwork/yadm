@@ -31,6 +31,7 @@ import {
   Popover,
 } from "react-aria-components";
 import {
+  updateNodeConnectionHandlesVisibility,
   useDEMOModeler,
   type DEMOModelerState,
 } from "../modeler/useDEMOModeler";
@@ -70,7 +71,6 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
     updateNodeColor,
     updateNodeFontSize,
     updateNodeHandles,
-    updateNodeConnectionHandlesVisibility,
     updateNodeBorderVisibility,
     getChildNodes,
     updateNodeTextAlign,
@@ -83,8 +83,6 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
       updateNodeColor: state.updateNodeColor,
       updateNodeFontSize: state.updateNodeFontSize,
       updateNodeHandles: state.updateNodeHandles,
-      updateNodeConnectionHandlesVisibility:
-        state.updateNodeConnectionHandlesVisibility,
       updateNodeBorderVisibility: state.updateNodeBorderVisibility,
       addEdge: state.addEdge,
       edges: state.edges,
