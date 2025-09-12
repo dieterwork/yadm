@@ -31,6 +31,10 @@ export interface DEMOModelerState {
   nodes: DEMONode[];
   edges: DEMOEdge[];
   viewport: Viewport;
+  grid: {
+    isVisible: boolean;
+    isSnapEnabled: boolean;
+  };
   setFileName: (filename: string) => void;
   onNodesChange: OnNodesChange<DEMONode>;
   onEdgesChange: OnEdgesChange<DEMOEdge>;
@@ -55,7 +59,7 @@ export interface DEMOModelerState {
   setModelFromJSONObject: (object: ReactFlowJsonObject<DEMONode, Edge>) => void;
   updateNode: (
     id: string,
-    nodeUpdate: Partial<Node>,
+    nodeUpdate: Partial<DEMONode>,
     options?: {
       replace: boolean;
     }
@@ -74,17 +78,23 @@ export interface DEMOModelerState {
   ) => void;
   connectionLinePath: XYPosition[];
   setConnectionLinePath: (connectionLinePath: XYPosition[]) => void;
+  setGridVisibility: (isVisible: ReactStyleStateSetter<boolean>) => void;
+  setGridSnapability: (isSnapEnabled: ReactStyleStateSetter<boolean>) => void;
 }
 
 export const useDEMOModeler = create<DEMOModelerState>()(
   temporal(
     (set, get) => ({
       id: uuid(),
-      fileName: `demo-model_${new Date().toISOString()}`,
+      fileName: `DEMO Model_${new Date().toISOString()}`,
       nodes: initialNodes,
       edges: initialEdges,
       DEMOInstance: null,
       connectionLinePath: [],
+      grid: {
+        isVisible: true,
+        isSnapEnabled: true,
+      },
       setConnectionLinePath: (connectionLinePath) => {
         set({ connectionLinePath });
       },
@@ -291,6 +301,28 @@ export const useDEMOModeler = create<DEMOModelerState>()(
 
             return node;
           }),
+        });
+      },
+      setGridVisibility: (newGridVisibilityOrSetterFn) => {
+        set({
+          grid: {
+            ...get().grid,
+            isVisible:
+              typeof newGridVisibilityOrSetterFn === "boolean"
+                ? newGridVisibilityOrSetterFn
+                : newGridVisibilityOrSetterFn(get().grid.isVisible),
+          },
+        });
+      },
+      setGridSnapability: (newGridSnapabilityOrSetterFn) => {
+        set({
+          grid: {
+            ...get().grid,
+            isSnapEnabled:
+              typeof newGridSnapabilityOrSetterFn === "boolean"
+                ? newGridSnapabilityOrSetterFn
+                : newGridSnapabilityOrSetterFn(get().grid.isSnapEnabled),
+          },
         });
       },
       updateNodeHandles: (nodeId, newHandlesOrSetterFn) => {

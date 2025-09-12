@@ -1,13 +1,5 @@
-import { type CSSProperties, useEffect, useRef } from "react";
-import { type ReactFlowState, useStore } from "@xyflow/react";
-
-const canvasStyle: CSSProperties = {
-  width: "100%",
-  height: "100%",
-  position: "absolute",
-  zIndex: 10,
-  pointerEvents: "none",
-};
+import { useEffect, useRef } from "react";
+import { useStore } from "@xyflow/react";
 
 export type HelperLinesProps = {
   horizontal?: number;
@@ -61,8 +53,7 @@ const HelperLines = ({
   return (
     <canvas
       ref={canvasRef}
-      className="react-flow__canvas"
-      style={canvasStyle}
+      className="react-flow__canvas | w-full h-full absolute z-10 pointer-events-none"
     />
   );
 };

@@ -4,7 +4,8 @@ import {
   type KeyboardEvent,
   type RefObject,
 } from "react";
-import { setMaxLength, toggleBoldText } from "./utils";
+import { setMaxLength } from "./utils/setMaxLength";
+import { toggleBoldText } from "./utils/toggleBoldText";
 export const useEditableContent = ({
   content,
   ref,
@@ -35,12 +36,14 @@ export const useEditableContent = ({
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    // set max length
     if (maxLength) {
       setMaxLength(e, maxLength);
     }
 
-    // toggle bold text
+    if (maxLines) {
+      //  setMaxLines
+    }
+
     if (e.ctrlKey && e.key === "b") {
       toggleBoldText(e);
     }

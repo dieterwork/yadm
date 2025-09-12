@@ -1,60 +1,62 @@
 import {
   ReactFlow,
   Background,
-  Controls,
   MiniMap,
   useReactFlow,
-  type NodeMouseHandler,
-  type Edge,
-  type ReactFlowJsonObject,
-  type NodeChange,
   ConnectionMode,
+  BackgroundVariant,
+  useUpdateNodeInternals,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
-import { edgeTypes, type DEMOEdge } from "../edges/edges.types";
+import { edgeTypes } from "../edges/edges.types";
 import { nodeTypes, type DEMONode } from "../nodes/nodes.types";
 
-import { useEffect, useState, type MouseEvent } from "react";
+import { type MouseEvent } from "react";
 import { usePreviewNode } from "../sidebar/usePreviewNode";
 import { useDEMOModeler, type DEMOModelerState } from "./useDEMOModeler";
 import { createNode } from "../nodes/utils/createNode";
 import { useShallow } from "zustand/react/shallow";
 import { convertAbsoluteToParentRelativePosition } from "../nodes/utils/convertAbsoluteToParentRelativePosition";
 import {
-  MEDIUM_NODE_SIZE,
   SMALL_NODE_SIZE,
   TRANSACTION_TIME_SIZE,
   X_SMALL_NODE_SIZE,
 } from "../nodes/utils/consts";
 import uuid from "../../shared/utils/uuid";
-import SideMenu from "../side_menu/SideMenu";
 import { saveDEMOInstance } from "../save/saveDEMOInstance";
 import { debounce } from "../../shared/utils/debounce";
-import ConnectionLine from "../edges/ConnectionLine";
+import ConnectionLine from "../connection_line/ConnectionLine";
 import useLocalJSONModel from "./useLocalJSONModel";
 import HelperLines from "../helper_lines/HelperLines";
 import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
 import { useHelperLinesStore } from "../helper_lines/useHelperLinesStore";
-import BottomMenu from "../bottom_menu/BottomMenu";
 import useDelete from "../keyboard/useDelete";
 import useCopyPaste from "../actions/copy_paste/useCopyPaste";
+import { cn } from "@sglara/cn";
+import SideMenu from "../menus/side_menu/SideMenu";
+import BottomMenu from "../menus/bottom_menu/BottomMenu";
+import { useCursor } from "../cursor/useCursor";
+import { useAttachStore } from "../actions/attach/useAttachStore";
 
 const ofdNodes = ["c_fact", "c_act", "tk_execution", "initiation_fact"];
 
 const DEMOModeler = () => {
+  const updateNodeInternals = useUpdateNodeInternals();
   const {
     addNode,
+    setNodes,
     nodes,
     edges,
     onConnect,
     onEdgesChange,
     onNodesChange,
-    getNodeAbsolutePosition,
     setDEMOInstance,
     DEMOInstance,
     onReconnect,
-    addEdge,
+    grid,
+    getNode,
+    updateNode,
   } = useDEMOModeler(
     useShallow((state: DEMOModelerState) => ({
       nodes: state.nodes,
@@ -70,6 +72,9 @@ const DEMOModeler = () => {
       addEdge: state.addEdge,
       setNodes: state.setNodes,
       setEdges: state.setEdges,
+      grid: state.grid,
+      getNode: state.getNode,
+      updateNode: state.updateNode,
     }))
   );
   const { screenToFlowPosition } = useReactFlow();
@@ -77,6 +82,14 @@ const DEMOModeler = () => {
     useShallow((state) => ({
       previewNode: state.previewNode,
       resetPreviewNode: state.reset,
+    }))
+  );
+
+  const { childNodeIdAttach, resetAttachStore, isAttaching } = useAttachStore(
+    useShallow((state) => ({
+      childNodeIdAttach: state.childNodeId,
+      resetAttachStore: state.reset,
+      isAttaching: state.isAttaching,
     }))
   );
 
@@ -177,89 +190,48 @@ const DEMOModeler = () => {
     addNodeFromSidebar(e);
   };
 
-  const handleObjectFactDiagramNodeAdd = (
-    e: MouseEvent,
-    clickedNode: DEMONode
-  ) => {
-    if (
-      !previewNode ||
-      !ofdNodes.includes(previewNode.type) ||
-      !["transaction_time", "transaction_kind"].includes(clickedNode.type)
-    )
-      return;
-
-    const absolutePosition = screenToFlowPosition({
-      x: e.clientX,
-      y: e.clientY,
-    });
-
-    // get parent absolute position
-    const parentAbsolutePosition = getNodeAbsolutePosition(clickedNode.id);
-
-    // get relative position of ofd node
-    const relativePosition = convertAbsoluteToParentRelativePosition({
-      absolutePosition,
-      nodeDimensions: { width: X_SMALL_NODE_SIZE, height: X_SMALL_NODE_SIZE },
-      parentNode: clickedNode,
-      parentAbsolutePosition,
-    });
-
-    const id = uuid();
-
-    // create ofd node
-    const ofdNode = createNode({
-      type: previewNode.type,
-      position:
-        clickedNode.type === "transaction_time" ||
-        clickedNode.type === "transaction_kind"
-          ? relativePosition
-          : absolutePosition,
-      id,
-      parentId:
-        clickedNode.type === "transaction_time" ||
-        clickedNode.type === "transaction_kind"
-          ? clickedNode.type === "transaction_kind"
-            ? clickedNode.parentId
-            : clickedNode.id
-          : undefined,
-    });
-
-    // create text node
-    const textNode = createNode({
-      type: "text_node",
-      position: {
-        x: X_SMALL_NODE_SIZE / 2 - 50 / 2,
-        y: -X_SMALL_NODE_SIZE,
-      },
-      parentId: id,
-      width: 50,
-      height: 20,
-      content: "",
-    });
-
-    addNode(ofdNode);
-    addNode(textNode);
-
-    // reset the preview node after clicking
-    resetPreviewNode();
-  };
-
-  const handleNodeClick = (e: MouseEvent, node: DEMONode) => {
-    handleObjectFactDiagramNodeAdd(e, node);
-  };
-
   useLocalJSONModel();
-
   useCopyPaste({
     disabledNodeTypes: ["transaction_kind"],
   });
-
   useDelete();
+
+  const handleNodeAttach = (node: DEMONode) => {
+    if (!isAttaching || !childNodeIdAttach) return;
+    const childNode = getNode(childNodeIdAttach);
+    if (!childNode) {
+      return console.error("Could not find child node");
+    }
+    if (node.parentId && node.type !== "transaction_kind") {
+      return console.warn("Cannot attach to a node with an existing parent");
+    }
+    let parentNode;
+    if (node.type === "transaction_kind" && node.parentId) {
+      // get parent node
+      const transactionTimeNode = getNode(node.parentId);
+      if (!transactionTimeNode)
+        throw new Error("Transaction kind does not have parent");
+      parentNode = transactionTimeNode;
+    } else {
+      parentNode = node;
+    }
+    const oldPosition = childNode.position;
+    const newPosition = convertAbsoluteToParentRelativePosition({
+      absolutePosition: oldPosition,
+      parentAbsolutePosition: parentNode.position,
+    });
+    updateNode(childNodeIdAttach, {
+      parentId: parentNode.id,
+      position: newPosition,
+    });
+    resetAttachStore();
+  };
 
   return (
     <div className="DEMO-modeler | [grid-area:modeler] h-full">
       <div className="react-flow-wrapper | h-full">
         <ReactFlow
+          className="react-flow-container"
           nodes={nodes}
           nodeTypes={nodeTypes}
           onNodesChange={(changes) => {
@@ -267,6 +239,7 @@ const DEMOModeler = () => {
             onNodesChange(updatedChanges);
             saveDEMOInstance(DEMOInstance);
           }}
+          onClick={handleClick}
           edges={edges}
           edgeTypes={edgeTypes}
           onEdgesChange={(changes) => {
@@ -284,26 +257,36 @@ const DEMOModeler = () => {
           onBlur={() => {
             saveDEMOInstance(DEMOInstance);
           }}
+          onPaneClick={() => {
+            resetAttachStore();
+          }}
           onReconnect={onReconnect}
           onReconnectEnd={onReconnectEnd}
           nodesFocusable={true}
           edgesFocusable={true}
           disableKeyboardA11y={false}
           fitView
-          onPaneClick={handleClick}
-          onNodeClick={handleNodeClick}
+          onNodeClick={(e, node) => {
+            handleNodeAttach(node);
+          }}
           onInit={(instance) => setDEMOInstance(instance)}
           connectionLineComponent={(props) => <ConnectionLine {...props} />}
           connectionMode={ConnectionMode.Loose}
+          snapToGrid={grid.isSnapEnabled}
+          snapGrid={[10, 10]}
         >
-          <Background />
+          <Background
+            color="var(--color-slate-400)"
+            variant={BackgroundVariant.Dots}
+            className={cn(grid.isVisible ? "visible" : "invisible")}
+          />
           <MiniMap />
           <SideMenu />
           <BottomMenu />
           <HelperLines
             isDisabled={!isEnabled}
-            horizontal={verticalHelperLine}
-            vertical={horizontalHelperLine}
+            horizontal={horizontalHelperLine}
+            vertical={verticalHelperLine}
           />
         </ReactFlow>
       </div>

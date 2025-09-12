@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { temporal } from "zundo";
 import type { DEMONode } from "../nodes/nodes.types";
-import { getHelperLines } from "./helperLines.utils";
 import type { NodeChange } from "@xyflow/react";
+import { getHelperLines } from "./utils/getHelperLines";
 
 export interface DEMOModelerState {
   isEnabled: boolean;
@@ -72,7 +72,6 @@ export const useHelperLinesStore = create<DEMOModelerState>()(
           helperLines.snapPosition.y ?? changes[0].position.y;
 
         // if helper lines are returned, we set them so that they can be displayed
-
         set({
           horizontal: helperLines.horizontal,
           vertical: helperLines.vertical,

@@ -1,5 +1,5 @@
 import { getSmoothStepPath, Position, type XYPosition } from "@xyflow/react";
-import type { ControlPoint } from "./edges.types";
+import type { ControlPoint } from "../edges.types";
 
 interface UseEditableEdgeParams {
   controlPoints: ControlPoint[];

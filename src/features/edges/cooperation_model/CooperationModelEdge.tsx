@@ -1,5 +1,8 @@
 import { type EdgeProps } from "@xyflow/react";
-import { EditableEdgeComponent, type EditableEdge } from "../EditableEdge";
+import {
+  EditableEdgeComponent,
+  type EditableEdge,
+} from "../editable/EditableEdge";
 
 const CooperationModelEdge = ({ ...restProps }: EdgeProps<EditableEdge>) => {
   return <EditableEdgeComponent {...restProps} />;

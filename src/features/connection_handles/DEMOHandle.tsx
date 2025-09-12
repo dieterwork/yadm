@@ -11,6 +11,7 @@ const DEMOHandle = ({
   return (
     <Handle
       {...restProps}
+      className="demo-handle"
       id={id}
       position={position}
       onContextMenu={(e) => {

@@ -5,6 +5,7 @@ import { sortNodes } from "../../../shared/utils/sortNodes";
 
 export const useAttachNodes = () => {
   const setNodes = useDEMOModeler((state) => state.setNodes);
+  const isAttaching = useDEMOModeler((state) => state.attach.isAttaching);
 
   const attachNodes = (
     childNodeIds: string[],

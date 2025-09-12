@@ -2,13 +2,12 @@ import { Menu, MenuItem } from "react-aria-components";
 import {
   ArrowClockwiseIcon,
   ArrowCounterClockwiseIcon,
-  ArrowsInLineHorizontalIcon,
   CornersOutIcon,
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
 } from "@phosphor-icons/react";
 import { useReactFlow, useViewport } from "@xyflow/react";
-import { useDEMOModeler } from "../modeler/useDEMOModeler";
+import { useDEMOModeler } from "$/features/modeler/useDEMOModeler";
 
 const BottomMenu = () => {
   const { setViewport, zoomIn, zoomOut, fitView } = useReactFlow();

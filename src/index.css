@@ -16,11 +16,8 @@ body,
   overflow: hidden;
 }
 
-.node-resizer-handle {
-}
-
 .react-flow__resize-control.react-flow__resize-control {
-  --_size: 20px;
+  --_size: 6px;
   --_offset: calc(var(--_size) / 2);
   --_line-size: 1px;
   &.line {
@@ -49,6 +46,25 @@ body,
       border-left-width: var(--_line-size);
       width: var(--_size);
       left: calc(100% + var(--_offset));
+    }
+  }
+
+  .react-flow__handle.react-flow__handle {
+    --_size: 16px;
+    --_min-size: calc(var(--_size) - 1px);
+    --_circle-size: 1px;
+    border-radius: calc(infinity * 1px);
+    min-width: var(--_min-size);
+    min-height: var(--_min-size);
+    width: var(--_size);
+    height: var(--_size);
+    & .react-flow__handle-left {
+    }
+    & .react-flow__handle-right {
+    }
+    & .react-flow__handle-top {
+    }
+    & .react-flow__handle-bottom {
     }
   }
 

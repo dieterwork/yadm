@@ -36,6 +36,7 @@ import uuid from "../../shared/utils/uuid";
 import { useAttachNodes } from "../actions/attach/useAttachNodes";
 import useDetachNodes from "../actions/attach/useDetachNodes";
 import useDelete from "../keyboard/useDelete";
+import { useAttachStore } from "../actions/attach/useAttachStore";
 
 interface NodeToolbarProps {
   id: string;
@@ -85,18 +86,22 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
 
   const node = getNode(id);
 
-  const updateNodeInternals = useUpdateNodeInternals();
-
   const { deleteElement } = useDelete();
 
-  const attachNodes = useAttachNodes();
   const detachNodes = useDetachNodes();
+
+  const { setChildNodeIdAttach, setAttaching } = useAttachStore(
+    useShallow((state) => ({
+      setChildNodeIdAttach: state.setChildNodeId,
+      setAttaching: state.setAttaching,
+    }))
+  );
 
   return (
     <>
       <IconContext value={{ size: 24 }}>
         <_NodeToolbar position={Position.Right}>
-          <div className="flex flex-col items-center gap-1">
+          <div className="grid grid-cols-3 items-center gap-1">
             {actions?.indexOf("changeFontSize") !== -1 && (
               <MenuTrigger>
                 <Button
@@ -378,11 +383,14 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
               <Button
                 className="nodrag nopan cursor-pointer"
                 onPress={() => {
-                  detachNodes([id]);
+                  if (node?.parentId) {
+                    detachNodes([id]);
+                  } else {
+                    setChildNodeIdAttach(id);
+                    setAttaching(true);
+                  }
                 }}
-                aria-label={
-                  node?.data?.handles.isVisible ? "Attach node" : "Detach node"
-                }
+                aria-label={node?.parentId ? "Detach node" : "Attach node"}
               >
                 {node?.parentId ? <LinkBreakIcon /> : <LinkIcon />}
               </Button>

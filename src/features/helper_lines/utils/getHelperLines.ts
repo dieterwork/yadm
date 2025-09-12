@@ -1,5 +1,5 @@
+import type { DEMONode } from "$/features/nodes/nodes.types";
 import type { NodePositionChange, XYPosition } from "@xyflow/react";
-import type { DEMONode } from "../nodes/nodes.types";
 
 type GetHelperLinesResult = {
   horizontal?: number;
@@ -150,7 +150,7 @@ export function getHelperLines({
         horizontalDistance = distanceBottomTop;
       }
 
-      //  |‾‾‾‾‾‾‾‾‾‾‾|     |‾‾‾‾‾‾‾‾‾‾‾|
+      //  |‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|     |‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
       //  |     A     |     |     B     |
       //  |___________|_____|___________|
       const distanceBottomBottom = Math.abs(
@@ -213,6 +213,72 @@ export function getHelperLines({
           nodeBBounds.top + nodeBBounds.height / 2 - nodeABounds.height / 2;
         result.horizontal = nodeBBounds.top + nodeBBounds.height / 2;
         horizontalDistance = distanceCenterHorizontal;
+      }
+
+      //  |‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
+      //  |    A    |‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
+      //  |_________|     |    B    |
+      //                  |_________|
+
+      const distanceCenterTopHorizontal = Math.abs(
+        nodeABounds.top + nodeABounds.height / 2 - nodeBBounds.top
+      );
+
+      if (distanceCenterTopHorizontal < horizontalDistance) {
+        result.snapPosition.y = nodeBBounds.top - nodeABounds.height / 2;
+        result.horizontal = nodeBBounds.top;
+        horizontalDistance = distanceCenterTopHorizontal;
+      }
+
+      //                  |‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
+      //  |‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|     |    B    |
+      //  |    A    |_____|_________|
+      //  |_________|
+
+      const distanceCenterBottomHorizontal = Math.abs(
+        nodeABounds.top + nodeABounds.height / 2 - nodeBBounds.bottom
+      );
+
+      if (distanceCenterBottomHorizontal < horizontalDistance) {
+        result.snapPosition.y = nodeBBounds.bottom - nodeABounds.height / 2;
+        result.horizontal = nodeBBounds.bottom;
+        horizontalDistance = distanceCenterBottomHorizontal;
+      }
+
+      //  |‾‾‾‾‾‾‾‾‾‾‾|
+      //  |     A     |
+      //  |___________|
+      //         |
+      //         |
+      //         |‾‾‾‾‾‾‾‾‾‾‾|
+      //         |     B     |
+      //         |___________|
+      const distanceCenterLeftVertical = Math.abs(
+        nodeABounds.left + nodeABounds.width / 2 - nodeBBounds.left
+      );
+
+      if (distanceCenterLeftVertical < verticalDistance) {
+        result.snapPosition.x = nodeBBounds.left - nodeABounds.width / 2;
+        result.vertical = nodeBBounds.left;
+        verticalDistance = distanceCenterLeftVertical;
+      }
+
+      //               |‾‾‾‾‾‾‾‾‾‾‾|
+      //               |     A     |
+      //               |___________|
+      //                     |
+      //                     |
+      //         |‾‾‾‾‾‾‾‾‾‾‾     |
+      //         |     B     |
+      //         |___________|
+      const distanceCenterRightVertical = Math.abs(
+        nodeABounds.left + nodeABounds.width / 2 - nodeBBounds.right
+      );
+
+      if (distanceCenterRightVertical < verticalDistance) {
+        result.snapPosition.x = nodeBBounds.right - nodeABounds.width / 2;
+        result.vertical = nodeBBounds.right;
+        verticalDistance = distanceCenterRightVertical;
       }
 
       return result;

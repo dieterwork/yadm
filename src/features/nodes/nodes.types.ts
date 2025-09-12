@@ -4,7 +4,7 @@ import TransactorNode from "./cooperation_model/transactor/TransactorNode";
 import type { CooperationModelNode } from "./cooperation_model/cooperationModel.types";
 import SelfActivationNode from "./cooperation_model/self_activation/SelfActivationNode";
 import CompositeNode from "./cooperation_model/composite/CompositeNode";
-import ElementaryActorNode from "../handles/ElementaryActorNode";
+import ElementaryActorNode from "../connection_handles/ElementaryActorNode";
 import SeveralActorsNode from "./cooperation_model/several_actors/SeveralActorsNode";
 import EntityClassNode from "./process_structure_diagram/entity_class/EntityClassNode";
 import ProductionEventNode from "./process_structure_diagram/production_event/ProductionEventNode";

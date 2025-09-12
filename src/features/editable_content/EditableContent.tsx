@@ -69,17 +69,9 @@ const EditableContent = ({
 }: EditableContentProps) => {
   const nodeId = useNodeId();
   if (!nodeId) throw new Error("No node id found");
-
   if (!ref) ref = useRef<HTMLDivElement>(null!);
-  const { updateNodeContent } = useDEMOModeler(
-    useShallow((state) => ({ updateNodeContent: state.updateNodeContent }))
-  );
-  const classes = cn(
-    "editable-content-wrapper | absolute inset-0 m-auto overflow-hidden",
-    { "w-full": !width, "h-full": !height },
-    // getPadding(fontSize),
-    hide && "hidden"
-  );
+
+  const updateNodeContent = useDEMOModeler((state) => state.updateNodeContent);
 
   const props = useEditableContent({
     content,
@@ -94,7 +86,13 @@ const EditableContent = ({
   return (
     <div
       {...restProps}
-      className={cn(classes, restProps.className)}
+      className={cn(
+        "editable-content-wrapper | absolute inset-0 m-auto overflow-hidden",
+        { "w-full": !width, "h-full": !height },
+        // getPadding(fontSize),
+        hide && "hidden",
+        restProps.className
+      )}
       style={{
         ...restProps.style,
         width,
@@ -107,6 +105,7 @@ const EditableContent = ({
       <div
         ref={ref}
         contentEditable={!!editable}
+        spellCheck={false}
         suppressContentEditableWarning={true}
         className="block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
         style={{ alignContent }}

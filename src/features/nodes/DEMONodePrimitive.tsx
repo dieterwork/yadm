@@ -6,7 +6,8 @@ import NodeToolbar from "../node-toolbar/NodeToolbar";
 import { MIN_SIZE_MAP } from "./utils/consts";
 import type { DEMONode } from "./nodes.types";
 import DEMONodeResizer from "../resize/NodeResizer";
-import Handles from "../handles/Handles";
+import Handles from "../connection_handles/Handles";
+import { cn } from "@sglara/cn";
 
 interface DEMONodePrimitiveProps extends NodeProps<DEMONode> {
   resizable?: boolean;
@@ -50,7 +51,10 @@ const DEMONodePrimitive = ({
   const shapeRef = useRef<SVGSVGElement>(null!);
 
   return (
-    <div style={{ width, height }}>
+    <div
+      className={cn(`demo-node-${type} | `, "isolate")}
+      style={{ width, height }}
+    >
       {/* Controls */}
       {actions && (
         <NodeToolbar id={id} data={data} type={type} actions={actions} />

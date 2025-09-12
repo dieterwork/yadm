@@ -4,7 +4,7 @@ import { useShallow } from "zustand/react/shallow";
 import uuid from "../../../shared/utils/uuid";
 import type { DEMOEdge } from "../edges.types";
 import { convertAbsoluteToParentRelativePosition } from "../../nodes/utils/convertAbsoluteToParentRelativePosition";
-import { MEDIUM_NODE_SIZE, SMALL_NODE_SIZE } from "../../nodes/utils/consts";
+import { SMALL_NODE_SIZE } from "../../nodes/utils/consts";
 
 export function useIncompleteEdge() {
   const { screenToFlowPosition } = useReactFlow();

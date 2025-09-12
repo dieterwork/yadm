@@ -7,10 +7,10 @@ import {
   type EdgeProps,
 } from "@xyflow/react";
 
-import { ControlPoint } from "./ControlPoint";
-import { useDEMOModeler } from "../modeler/useDEMOModeler";
-import type { ControlPointData } from "./edges.types";
-import { type DEMONode } from "../nodes/nodes.types";
+import { ControlPoint } from "../ControlPoint";
+import { useDEMOModeler } from "../../modeler/useDEMOModeler";
+import type { ControlPointData } from "../edges.types";
+import { type DEMONode } from "../../nodes/nodes.types";
 
 export type EditableEdge = Edge<{
   controlPoint: ControlPointData;
