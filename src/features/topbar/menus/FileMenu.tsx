@@ -1,11 +1,3 @@
-import {
-  Button,
-  Menu,
-  MenuItem,
-  MenuTrigger,
-  Popover,
-  SubmenuTrigger,
-} from "react-aria-components";
 import { useDEMOModeler } from "../../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
 import type { DEMONode } from "../../nodes/nodes.types";
@@ -17,10 +9,8 @@ import type {
 import { useRef, type RefObject } from "react";
 import { saveDEMOInstance } from "../../save/saveDEMOInstance";
 import TopbarMenuButton from "../_components/TopbarMenuButton";
-import TopbarMenuPopover from "../_components/TopbarMenuPopover";
 import TopbarMenuItem from "../_components/TopbarMenuItem";
 import TopbarSubMenuButton from "../_components/TopbarSubMenuButton";
-import type { TopbarMenuProps } from "../topbar.types";
 
 const exportAsJSON = (
   instance: ReactFlowInstance<DEMONode, Edge> | null,
