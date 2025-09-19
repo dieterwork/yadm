@@ -15,6 +15,7 @@ import {
   type XYPosition,
   reconnectEdge,
   type OnReconnect,
+  MarkerType,
 } from "@xyflow/react";
 
 import { initialNodes } from "../nodes/initialNodes";
@@ -147,12 +148,29 @@ export const useDEMOModeler = create<DEMOModelerState>()(
         });
       },
       onConnect: (connection) => {
+        const marker = () => {
+          const sourceNode = get().getNode(connection.source);
+          const targetNode = get().getNode(connection.target);
+          if (sourceNode?.type === "actor" && targetNode?.type === "actor") {
+            return {
+              markerEnd: {
+                type: MarkerType.ArrowClosed,
+              },
+            };
+          }
+          return {
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+            },
+          };
+        };
         set({
           edges: addEdge(
             {
               ...connection,
               id: uuid(),
               type: "cooperation_model_edge",
+              ...marker(),
             },
             get().edges
           ),

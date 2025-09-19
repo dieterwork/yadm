@@ -27,6 +27,9 @@ export function EditableEdgeComponent({
   targetPosition,
   style,
   data,
+  markerEnd,
+  markerStart,
+  markerMid,
   ...restProps
 }: EdgeProps<EditableEdge>) {
   const sourceNode = useInternalNode<DEMONode>(source);
@@ -50,7 +53,9 @@ export function EditableEdgeComponent({
       className="react-flow__edge-path"
       d={path}
       strokeWidth={5}
-      markerEnd={MarkerType.Arrow}
+      markerEnd={markerEnd}
+      markerStart={markerStart}
+      markerMid={markerMid}
       style={style}
     />
   );
