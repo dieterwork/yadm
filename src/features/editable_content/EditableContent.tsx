@@ -57,7 +57,7 @@ const EditableContent = ({
   content,
   editable = true,
   fontSize = 14,
-  color = "var(--color-black)",
+  color = "var(--color-slate-900)",
   maxLines = 3,
   maxLength = 50,
   ref,

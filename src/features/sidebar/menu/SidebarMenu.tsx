@@ -1,28 +1,27 @@
 import type { AriaMenuProps } from "react-aria";
 import { useTreeState } from "react-stately";
 import { useMenu } from "react-aria";
-import { MenuItem, MenuSection } from "react-aria-components";
 import { useRef } from "react";
-import SidebarMenuSection from "./SidebarMenuSection";
+import { cn } from "@sglara/cn";
+import { Menu, type MenuProps } from "react-aria-components";
 
-const SidebarMenu = <T extends object>(props: AriaMenuProps<T>) => {
-  // Create menu state based on the incoming props
-  let state = useTreeState(props);
-
-  // Get props for the menu element
-  let ref = useRef(null);
-  let { menuProps } = useMenu(props, state, ref);
-
+const SidebarMenu = <T extends object>({
+  isOpen,
+  ...restProps
+}: MenuProps<T> & { isOpen?: boolean }) => {
   return (
-    <ul {...menuProps} ref={ref}>
-      {[...state.collection].map((item) =>
-        item.type === "section" ? (
-          <SidebarMenuSection key={item.key} section={item} state={state} />
-        ) : (
-          <MenuItem key={item.key} item={item} state={state} />
-        )
+    <div
+      data-state={isOpen ? "open" : isOpen === false ? "closed" : undefined}
+      className={cn(
+        isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        "grid transition-all duration-300 ease-out"
       )}
-    </ul>
+    >
+      <Menu
+        {...restProps}
+        className={cn(restProps.className, "flex flex-col overflow-hidden ")}
+      />
+    </div>
   );
 };
 

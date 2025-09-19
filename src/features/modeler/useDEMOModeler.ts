@@ -359,7 +359,7 @@ export const setPanOnDrag = (
 };
 
 export const getNode = (id: string) => {
-  return useDEMOModeler.getState().nodes.filter((node) => node.id === id);
+  return useDEMOModeler.getState().nodes.filter((node) => node.id === id)[0];
 };
 
 export const updateNode = (
@@ -389,4 +389,10 @@ export const updateNodeConnectionHandlesVisibility = (
           : newVisibilityOrSetterFn(data.handles.isVisible),
     },
   }));
+};
+
+export const deleteEdge = (id: string) => {
+  useDEMOModeler
+    .getState()
+    .setEdges((edges) => edges.filter((edge) => edge.id !== id));
 };

@@ -1,26 +1,17 @@
-import {
-  Button,
-  Menu,
-  MenuItem,
-  MenuTrigger,
-  Popover,
-} from "react-aria-components";
+import TopbarMenuButton from "../_components/TopbarMenuButton";
+import TopbarMenuItem from "../_components/TopbarMenuItem";
+import type { TopbarMenuProps } from "../topbar.types";
 
 const HelpMenu = () => {
   return (
     <>
-      <MenuTrigger>
-        <Button>File</Button>
-        <Popover>
-          <Menu className="bg-white">
-            <MenuItem>Short codes</MenuItem>
-            <MenuItem>DEMO Cheat sheet</MenuItem>
-            <MenuItem>DEMO Info</MenuItem>
-            <MenuItem>About modeller</MenuItem>
-            <MenuItem>Exit</MenuItem>
-          </Menu>
-        </Popover>
-      </MenuTrigger>
+      <TopbarMenuButton label="Help">
+        <TopbarMenuItem>Short codes</TopbarMenuItem>
+        <TopbarMenuItem>DEMO Cheat sheet</TopbarMenuItem>
+        <TopbarMenuItem>DEMO Info</TopbarMenuItem>
+        <TopbarMenuItem>About modeller</TopbarMenuItem>
+        <TopbarMenuItem>Exit</TopbarMenuItem>
+      </TopbarMenuButton>
     </>
   );
 };

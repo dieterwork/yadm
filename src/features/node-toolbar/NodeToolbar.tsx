@@ -177,6 +177,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                                   : [{ id: uuid(), type }],
                               },
                             }));
+                            updateNodeInternals(id);
                           }}
                         >
                           {position.label}
@@ -203,6 +204,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                           className="cursor-pointer select-none"
                           onAction={() => {
                             updateNodeState(id, "default", type);
+                            updateNodeInternals(id);
                           }}
                         >
                           Default
@@ -211,6 +213,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                           className="cursor-pointer select-none"
                           onAction={() => {
                             updateNodeState(id, "unclear", type);
+                            updateNodeInternals(id);
                           }}
                         >
                           Unclear
@@ -219,6 +222,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                           className="cursor-pointer select-none"
                           onAction={() => {
                             updateNodeState(id, "missing", type);
+                            updateNodeInternals(id);
                           }}
                         >
                           Missing
@@ -228,6 +232,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                             className="cursor-pointer select-none"
                             onAction={() => {
                               updateNodeState(id, "double", type);
+                              updateNodeInternals(id);
                             }}
                           >
                             Double
@@ -240,6 +245,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                           className="cursor-pointer select-none"
                           onAction={() => {
                             updateNodeState(id, "internal", type);
+                            updateNodeInternals(id);
                           }}
                         >
                           Internal
@@ -248,6 +254,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                           className="cursor-pointer select-none"
                           onAction={() => {
                             updateNodeState(id, "external", type);
+                            updateNodeInternals(id);
                           }}
                         >
                           External
@@ -269,6 +276,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                       className="cursor-pointer select-none"
                       onAction={() => {
                         updateNodeScope(id, "in", type);
+                        updateNodeInternals(id);
                       }}
                     >
                       In
@@ -277,6 +285,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                       className="cursor-pointer select-none"
                       onAction={() => {
                         updateNodeScope(id, "out", type);
+                        updateNodeInternals(id);
                       }}
                     >
                       Out
@@ -302,6 +311,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                       }
                       onAction={() => {
                         updateNodeColor(id, "default");
+                        updateNodeInternals(id);
                       }}
                     >
                       Default
@@ -313,6 +323,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                       isDisabled={data?.scope === "out"}
                       onAction={() => {
                         updateNodeColor(id, "blue");
+                        updateNodeInternals(id);
                       }}
                     >
                       Blue
@@ -324,6 +335,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                       isDisabled={data?.scope === "out"}
                       onAction={() => {
                         updateNodeColor(id, "red");
+                        updateNodeInternals(id);
                       }}
                     >
                       Red
@@ -335,6 +347,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                       isDisabled={data?.scope === "out"}
                       onAction={() => {
                         updateNodeColor(id, "green");
+                        updateNodeInternals(id);
                       }}
                     >
                       Green
@@ -346,6 +359,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                       isDisabled={data?.scope === "out"}
                       onAction={() => {
                         updateNodeColor(id, "yellow");
+                        updateNodeInternals(id);
                       }}
                     >
                       Yellow
@@ -373,6 +387,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                     id,
                     (isVisible) => !isVisible
                   );
+                  updateNodeInternals(id);
                 }}
                 aria-label={
                   node?.data?.handles.isVisible
@@ -409,6 +424,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                 className="nodrag nopan cursor-pointer"
                 onPress={() => {
                   updateNodeBorderVisibility(id, (isVisible) => !isVisible);
+                  updateNodeInternals(id);
                 }}
                 aria-label={
                   node?.data?.isBorderVisible ? "Show border" : "Hide border"
@@ -430,6 +446,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                     <MenuItem
                       onAction={() => {
                         updateNodeTextAlign(id, "left");
+                        updateNodeInternals(id);
                       }}
                     >
                       <TextAlignLeftIcon />
@@ -437,6 +454,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                     <MenuItem
                       onAction={() => {
                         updateNodeTextAlign(id, "center");
+                        updateNodeInternals(id);
                       }}
                     >
                       <TextAlignCenterIcon />
@@ -444,6 +462,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                     <MenuItem
                       onAction={() => {
                         updateNodeTextAlign(id, "right");
+                        updateNodeInternals(id);
                       }}
                     >
                       <TextAlignRightIcon />

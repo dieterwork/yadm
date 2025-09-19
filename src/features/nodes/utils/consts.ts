@@ -1,10 +1,11 @@
-export const X_SMALL_NODE_SIZE = 25;
-export const SMALL_NODE_SIZE = 50;
-export const MEDIUM_NODE_SIZE = 100;
-export const LARGE_NODE_SIZE = 200;
+import type { DEMONode } from "../nodes.types";
 
-export const TRANSACTION_TIME_SIZE = 300;
-export const TRANSACTION_TIME_MIN_SIZE = 100;
+export const X_SMALL_NODE_SIZE = 25 as const;
+export const SMALL_NODE_SIZE = 50 as const;
+export const MEDIUM_NODE_SIZE = 100 as const;
+export const LARGE_NODE_SIZE = 200 as const;
+export const TRANSACTION_TIME_SIZE = 300 as const;
+export const TRANSACTION_TIME_MIN_SIZE = 100 as const;
 
 export const DEFAULT_SIZE_MAP = {
   actor: {
@@ -82,7 +83,8 @@ export const DEFAULT_SIZE_MAP = {
     width: 150,
     height: 100,
   },
-};
+  ghost: null,
+} satisfies Record<DEMONode["type"], { width: number; height: number } | null>;
 
 export const MIN_SIZE_MAP = {
   actor: {
@@ -155,12 +157,12 @@ export const MIN_SIZE_MAP = {
   },
 
   // misc
-
   text: {
     width: 20,
     height: 20,
   },
-};
+  ghost: null,
+} satisfies Record<DEMONode["type"], { width: number; height: number } | null>;
 
 export const DEFAULT_CONTENT_MAP = {
   // cooperation model
@@ -182,5 +184,6 @@ export const DEFAULT_CONTENT_MAP = {
   entity_class: "<div>A</div><div>1</div>",
   derived_entity: "<div>A</div><div>1</div>",
   text: "<div>Insert text here</div>",
-  textNode: "<div>Insert text here</div>",
-};
+  transaction_time: null,
+  ghost: null,
+} satisfies Record<DEMONode["type"], string | null>;

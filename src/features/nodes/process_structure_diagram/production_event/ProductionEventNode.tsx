@@ -33,7 +33,7 @@ const ProductionEventNode = ({
           color={
             data.color === "default"
               ? "var(--color-white)"
-              : "var(--color-black)"
+              : "var(--color-slate-900)"
           }
         />
       </DEMONodePrimitive>

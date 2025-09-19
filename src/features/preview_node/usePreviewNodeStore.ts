@@ -33,7 +33,7 @@ interface PreviewNodeState {
   reset: () => void;
 }
 
-export const usePreviewNode = create<PreviewNodeState>()((set, get) => ({
+export const usePreviewNodeStore = create<PreviewNodeState>()((set, get) => ({
   previewNode: null,
   createNode: ({ type, height, width, position, content, isDisabled }) =>
     set(() => {

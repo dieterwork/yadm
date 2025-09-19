@@ -16,6 +16,11 @@ import type {
 } from "@xyflow/react";
 import { useRef, type RefObject } from "react";
 import { saveDEMOInstance } from "../../save/saveDEMOInstance";
+import TopbarMenuButton from "../_components/TopbarMenuButton";
+import TopbarMenuPopover from "../_components/TopbarMenuPopover";
+import TopbarMenuItem from "../_components/TopbarMenuItem";
+import TopbarSubMenuButton from "../_components/TopbarSubMenuButton";
+import type { TopbarMenuProps } from "../topbar.types";
 
 const exportAsJSON = (
   instance: ReactFlowInstance<DEMONode, Edge> | null,
@@ -81,56 +86,46 @@ const FileMenu = () => {
         className="hidden"
         onChange={handleInputChange}
       />
-      <MenuTrigger>
-        <Button>File</Button>
-        <Popover>
-          <Menu className="bg-white">
-            <MenuItem
-              onAction={() => {
-                setModelFromJSONObject({
-                  edges: [],
-                  nodes: [],
-                  viewport: { x: 0, y: 0, zoom: 1 },
-                });
-              }}
-            >
-              New
-            </MenuItem>
-            <MenuItem
-              onAction={() => {
-                saveDEMOInstance(DEMOInstance);
-              }}
-            >
-              Save
-            </MenuItem>
+      <TopbarMenuButton label="File">
+        <TopbarMenuItem
+          onAction={() => {
+            setModelFromJSONObject({
+              edges: [],
+              nodes: [],
+              viewport: { x: 0, y: 0, zoom: 1 },
+            });
+          }}
+        >
+          New
+        </TopbarMenuItem>
+        <TopbarMenuItem
+          onAction={() => {
+            saveDEMOInstance(DEMOInstance);
+          }}
+        >
+          Save
+        </TopbarMenuItem>
 
-            <MenuItem
-              onAction={() => {
-                importJSON(inputRef);
-              }}
-            >
-              Import JSON
-            </MenuItem>
-            <SubmenuTrigger>
-              <MenuItem>Export as</MenuItem>
-              <Popover>
-                <Menu>
-                  <MenuItem
-                    onAction={() => {
-                      exportAsJSON(DEMOInstance, fileName);
-                    }}
-                  >
-                    JSON
-                  </MenuItem>
-                  <MenuItem>PNG</MenuItem>
-                  <MenuItem>PDF</MenuItem>
-                </Menu>
-              </Popover>
-            </SubmenuTrigger>
-            <MenuItem>Exit</MenuItem>
-          </Menu>
-        </Popover>
-      </MenuTrigger>
+        <TopbarMenuItem
+          onAction={() => {
+            importJSON(inputRef);
+          }}
+        >
+          Import JSON
+        </TopbarMenuItem>
+        <TopbarSubMenuButton label="Export as">
+          <TopbarMenuItem
+            onAction={() => {
+              exportAsJSON(DEMOInstance, fileName);
+            }}
+          >
+            JSON
+          </TopbarMenuItem>
+          <TopbarMenuItem>PNG</TopbarMenuItem>
+          <TopbarMenuItem>PDF</TopbarMenuItem>
+        </TopbarSubMenuButton>
+        <TopbarMenuItem>Exit</TopbarMenuItem>
+      </TopbarMenuButton>
     </>
   );
 };

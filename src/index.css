@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@plugin "tailwindcss-react-aria-components";
+@plugin "tailwindcss-animate";
 
 @custom-variant content-editable (&:is([contenteditable="true"]));
 @custom-variant content-not-editable (&:is([contenteditable="true"]));
@@ -48,30 +50,12 @@ body,
       left: calc(100% + var(--_offset));
     }
   }
-
-  .react-flow__handle.react-flow__handle {
-    --_size: 16px;
-    --_min-size: calc(var(--_size) - 1px);
-    --_circle-size: 1px;
-    border-radius: calc(infinity * 1px);
-    min-width: var(--_min-size);
-    min-height: var(--_min-size);
-    width: var(--_size);
-    height: var(--_size);
-    & .react-flow__handle-left {
-    }
-    & .react-flow__handle-right {
-    }
-    & .react-flow__handle-top {
-    }
-    & .react-flow__handle-bottom {
-    }
-  }
-
   &.handle {
     width: 6px;
     height: 6px;
-    background-color: var(--color-blue-500);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-blue-500);
+    border-radius: 0;
     &.top.left {
     }
     &.top.right {
@@ -83,6 +67,36 @@ body,
   }
 }
 
-[data-selecting] {
-  cursor: "crosshair";
+.react-flow__handle.react-flow__handle {
+  --_size: 12px;
+  --_min-size: calc(var(--_size) - 1px);
+  --_circle-size: 8px;
+  border-radius: calc(9999px);
+  min-width: var(--_min-size);
+  min-height: var(--_min-size);
+  width: var(--_size);
+  height: var(--_size);
+  background-color: transparent;
+  border: none;
+  &::before {
+    content: "";
+    display: block;
+    aspect-ratio: 1;
+    width: var(--_circle-size);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-slate-900);
+    border-radius: 9999px;
+    position: absolute;
+    inset: 0;
+    margin: auto;
+  }
+  &.react-flow__handle-left {
+    left: calc(-10px);
+  }
+  &.react-flow__handle-right {
+  }
+  &.react-flow__handle-top {
+  }
+  &.react-flow__handle-bottom {
+  }
 }

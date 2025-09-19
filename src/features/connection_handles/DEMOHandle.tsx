@@ -1,5 +1,11 @@
-import { Handle, type HandleProps } from "@xyflow/react";
-import { useDEMOModeler } from "../modeler/useDEMOModeler";
+import {
+  getConnectedEdges,
+  Handle,
+  useUpdateNodeInternals,
+  type HandleProps,
+} from "@xyflow/react";
+import { getNode, useDEMOModeler } from "../modeler/useDEMOModeler";
+import type { DEMONode } from "../nodes/nodes.types";
 
 const DEMOHandle = ({
   id,
@@ -7,7 +13,13 @@ const DEMOHandle = ({
   position,
   ...restProps
 }: HandleProps & { nodeId: string }) => {
+  const node = getNode(nodeId);
   const updateNodeHandles = useDEMOModeler((state) => state.updateNodeHandles);
+  const edges = useDEMOModeler((state) => state.edges);
+  const setEdges = useDEMOModeler((state) => state.setEdges);
+  const setNodes = useDEMOModeler((state) => state.setNodes);
+  const updateNodeInternals = useUpdateNodeInternals();
+
   return (
     <Handle
       {...restProps}
@@ -16,6 +28,28 @@ const DEMOHandle = ({
       position={position}
       onContextMenu={(e) => {
         e.preventDefault();
+        const connectedEdges = getConnectedEdges([node], edges).filter(
+          (edge) => {
+            edge.sourceHandle === id || edge.targetHandle === id;
+          }
+        );
+
+        const targetNodes = connectedEdges.map((edge) => edge.target);
+
+        if (connectedEdges) {
+          setEdges((edges) =>
+            edges.filter((edge) => !connectedEdges.includes(edge))
+          );
+        }
+
+        if (targetNodes) {
+          setNodes((nodes) =>
+            nodes.filter(
+              (node) => !targetNodes.includes(node) && node.type !== "ghost"
+            )
+          );
+        }
+
         updateNodeHandles(nodeId, (handles) => ({
           ...handles,
           [position]: {
@@ -25,6 +59,7 @@ const DEMOHandle = ({
             ),
           },
         }));
+        updateNodeInternals(nodeId);
       }}
     />
   );

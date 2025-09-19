@@ -1,31 +1,55 @@
 import { CaretDownIcon } from "@phosphor-icons/react";
-import type { ReactNode } from "react";
-import type { AriaButtonProps, AriaMenuTriggerProps } from "react-aria";
-import { Button, Menu, MenuTrigger } from "react-aria-components";
+import { cn } from "@sglara/cn";
+import { useState } from "react";
+import {
+  Button,
+  Menu,
+  MenuTrigger,
+  Popover,
+  type ButtonProps,
+  type MenuProps,
+  type MenuTriggerProps,
+} from "react-aria-components";
+import SidebarMenu from "./SidebarMenu";
 
-interface SidebarMenuButtonProps extends AriaMenuTriggerProps {
-  label: string;
-  icon?: string;
-  children?: ReactNode;
-}
+type TopbarMenuButtonProps<T> = MenuProps<T> &
+  Omit<MenuTriggerProps, "children"> & {
+    label?: string;
+  };
 
-const SidebarMenuButton = ({
+const SidebarMenuButton = <T extends object>({
   label,
-  icon,
   children,
   ...restProps
-}: SidebarMenuButtonProps) => {
+}: TopbarMenuButtonProps<T>) => {
+  const [isOpen, setOpen] = useState(false);
   return (
-    <>
+    <div>
       <MenuTrigger {...restProps}>
-        <Button className="flex items-center gap-2 px-4 py-4 font-medium text-sm w-[264px]">
-          <div className="bg-red-500 w-7 aspect-square"></div>
+        <Button
+          className="outline-hidden flex justify-between items-center gap-2 h-[3rem] font-medium text-sm w-[264px]"
+          onPress={() => {
+            setOpen((isOpen) => !isOpen);
+          }}
+        >
           {label}
-          <CaretDownIcon size={12} className="ml-auto" />
+          <CaretDownIcon
+            size={12}
+            className={cn(
+              isOpen ? "-rotate-180" : "rotate-0",
+              "transition ease-linear duration-150"
+            )}
+          />
         </Button>
-        {children}
+        <SidebarMenu
+          {...restProps}
+          isOpen={isOpen}
+          className="flex flex-col gap-6 mt-2 mb-8"
+        >
+          {children}
+        </SidebarMenu>
       </MenuTrigger>
-    </>
+    </div>
   );
 };
 

@@ -16,7 +16,7 @@ import {
   setSelectionOnDrag,
   useDEMOModeler,
 } from "$/features/modeler/useDEMOModeler";
-import { usePreviewNode } from "$/features/sidebar/usePreviewNode";
+import { usePreviewNodeStore } from "$/features/preview_node/usePreviewNodeStore";
 import { useHelperLinesStore } from "$/features/helper_lines/useHelperLinesStore";
 import { DEFAULT_CONTENT_MAP } from "$/features/nodes/utils/consts";
 
@@ -38,7 +38,7 @@ const SideMenu = () => {
     }))
   );
 
-  const { createNode } = usePreviewNode(
+  const { createNode } = usePreviewNodeStore(
     useShallow((state) => ({
       createNode: state.createNode,
     }))
@@ -67,7 +67,7 @@ const SideMenu = () => {
             >
               <HandIcon
                 color={
-                  panOnDrag ? "var(--color-blue-500)" : "var(--color-black)"
+                  panOnDrag ? "var(--color-blue-500)" : "var(--color-slate-900)"
                 }
               />
             </MenuItem>
@@ -131,7 +131,7 @@ const SideMenu = () => {
                 color={
                   selectionOnDrag
                     ? "var(--color-blue-500)"
-                    : "var(--color-black)"
+                    : "var(--color-slate-900)"
                 }
               />
             </MenuItem>

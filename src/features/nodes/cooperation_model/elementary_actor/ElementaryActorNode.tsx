@@ -1,10 +1,10 @@
 import { type NodeProps } from "@xyflow/react";
 
-import DEMONodePrimitive from "../nodes/DEMONodePrimitive";
-import type { ElementaryActorNode as ElementaryActorNodeType } from "../nodes/cooperation_model/elementary_actor/elementaryActor.types";
-import uuid from "../../shared/utils/uuid";
-import EditableContent from "../editable_content/EditableContent";
-import { DEFAULT_SIZE_MAP } from "../nodes/utils/consts";
+import DEMONodePrimitive from "../../DEMONodePrimitive";
+import type { ElementaryActorNode as ElementaryActorNodeType } from "./elementaryActor.types";
+import uuid from "../../../../shared/utils/uuid";
+import EditableContent from "../../../editable_content/EditableContent";
+import { DEFAULT_SIZE_MAP } from "../../utils/consts";
 
 const padding = 4;
 

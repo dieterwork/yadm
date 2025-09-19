@@ -7,14 +7,14 @@ import {
   BackgroundVariant,
   useUpdateNodeInternals,
   SelectionMode,
+  type Connection,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
-import { edgeTypes } from "../edges/edges.types";
+import { edgeTypes, type DEMOEdge } from "../edges/edges.types";
 import { nodeTypes, type DEMONode } from "../nodes/nodes.types";
 
-import { type MouseEvent } from "react";
-import { usePreviewNode } from "../sidebar/usePreviewNode";
+import { useEffect, useRef, type MouseEvent } from "react";
 import {
   setPanOnDrag,
   setSelectionOnDrag,
@@ -43,13 +43,98 @@ import SideMenu from "../menus/side_menu/SideMenu";
 import BottomMenu from "../menus/bottom_menu/BottomMenu";
 import { useAttachStore } from "../actions/attach/useAttachStore";
 import convertAbsoluteToRelativePosition from "../nodes/utils/convertAbsoluteToRelativePosition";
+import { usePreviewNodeStore } from "../preview_node/usePreviewNodeStore";
+import { usePreviewNode } from "../preview_node/usePreviewNode";
 
-const ofdNodes = ["c_fact", "c_act", "tk_execution", "initiation_fact"];
+const allowedConnectionMap = {
+  // cooperation model
+  actor: [
+    "actor",
+    "transaction",
+    "self_activation",
+    "composite",
+    "elementary_actor",
+    "several_actors",
+    "ghost",
+  ],
+  transaction: [
+    "actor",
+    "self_activation",
+    "composite",
+    "elementary_actor",
+    "ghost",
+  ],
+  transactor: [
+    "transaction",
+    "self_activation",
+    "composite",
+    "elementary_actor",
+    "several_actors",
+    "ghost",
+  ],
+  self_activation: [
+    "actor",
+    "transaction",
+    "transactor",
+    "self_activation",
+    "composite",
+    "elementary_actor",
+    "several_actors",
+    "ghost",
+  ],
+  composite: [
+    "actor",
+    "transaction",
+    "transactor",
+    "self_activation",
+    "composite",
+    "elementary_actor",
+    "several_actors",
+    "ghost",
+  ],
+  elementary_actor: ["transaction", "self_activation", "composite", "ghost"],
+  several_actors: ["actor", "self_activation", "composite", "ghost"],
+  // psd
+  transaction_time: [
+    "transaction_time",
+    "initiation_fact",
+    "c_fact",
+    "c_act",
+    "tk_execution",
+    "ghost",
+  ],
+  initiation_fact: ["initiation_fact", "c_fact", "c_act", "ghost"],
+  c_fact: ["initiation_fact", "c_fact", "c_act", "tk_execution", "ghost"],
+  c_act: ["initiation_fact", "c_fact", "tk_execution", "ghost"],
+  tk_execution: ["c_fact", "c_act", "ghost"],
+  // ofd
+  production_event: ["entity_class", "derived_entity"],
+  entity_class: ["entity_class", "derived_entity", "production_event"],
+  derived_entity: ["entity_class", "derived_entity", "production_event"],
+  ghost: [
+    "actor",
+    "c_act",
+    "c_fact",
+    "composite",
+    "derived_entity",
+    "elementary_actor",
+    "entity_class",
+    "initiation_fact",
+    "production_event",
+    "self_activation",
+    "several_actors",
+    "tk_execution",
+    "transaction_time",
+    "transactor",
+  ],
+} satisfies Omit<
+  Record<DEMONode["type"], DEMONode["type"][]>,
+  "text" | "transaction_kind"
+>;
 
 const DEMOModeler = () => {
   const {
     isEnabled,
-    addNode,
     nodes,
     edges,
     onConnect,
@@ -85,13 +170,10 @@ const DEMOModeler = () => {
       panOnDrag: state.panOnDrag,
     }))
   );
-  const { screenToFlowPosition } = useReactFlow();
-  const { previewNode, resetPreviewNode } = usePreviewNode(
-    useShallow((state) => ({
-      previewNode: state.previewNode,
-      resetPreviewNode: state.reset,
-    }))
-  );
+
+  const ref = useRef<HTMLDivElement>(null!);
+
+  usePreviewNode({ reactFlowRef: ref });
 
   const { childNodeIdAttach, resetAttachStore, isAttaching } = useAttachStore(
     useShallow((state) => ({
@@ -115,88 +197,6 @@ const DEMOModeler = () => {
   // };
 
   // const onNodeDragStop = (e: React.MouseEvent, node: DEMONode) => {};
-
-  const addNodeFromSidebar = (e: MouseEvent) => {
-    if (!previewNode) return; // If no preview node, ignore the click event
-
-    const position = screenToFlowPosition({
-      x: e.clientX,
-      y: e.clientY,
-    });
-
-    const id = uuid();
-
-    const newNode = createNode({ id, type: previewNode.type, position });
-
-    addNode(newNode);
-
-    if (ofdNodes.includes(previewNode.type)) {
-      // create text node
-      const textNode = createNode({
-        type: "text",
-        position: {
-          x: X_SMALL_NODE_SIZE / 2 - 50 / 2,
-          y: -X_SMALL_NODE_SIZE,
-        },
-        parentId: id,
-        width: 50,
-        height: 20,
-        content: "",
-      });
-      addNode(textNode);
-    }
-
-    if (previewNode.type === "transaction_time") {
-      const ghostNode1Id = uuid();
-      const ghostNode2Id = uuid();
-
-      // add ghosts
-      addNode({
-        id: `ghost-${ghostNode1Id}`,
-        type: "ghost",
-        position: {
-          x: 40 + TRANSACTION_TIME_SIZE,
-          y: SMALL_NODE_SIZE / 2 + 3,
-        },
-        data: {},
-        parentId: newNode[0].id,
-      });
-
-      addNode({
-        id: `ghost-${ghostNode2Id}`,
-        type: "ghost",
-        position: {
-          x: -40,
-          y: SMALL_NODE_SIZE / 2 + 3,
-        },
-        data: {},
-        parentId: newNode[0].id,
-      });
-
-      // addEdge({
-      //   id: `${newNode[0].id}->ghost-${ghostNode1Id}`,
-      //   type: "transaction_time_edge",
-      //   source: newNode[0].id,
-      //   sourceHandle: newNode[0].data.handles.right.handles[0].id,
-      //   target: `ghost-${ghostNode1Id}`,
-      // });
-
-      // addEdge({
-      //   id: `${newNode[0].id}->ghost-${ghostNode2Id}`,
-      //   type: "transaction_time_edge",
-      //   source: newNode[0].id,
-      //   sourceHandle: newNode[0].data.handles.left.handles[0].id,
-      //   target: `ghost-${ghostNode2Id}`,
-      // });
-    }
-
-    resetPreviewNode();
-  };
-
-  const handleClick = (e: MouseEvent) => {
-    e.stopPropagation();
-    addNodeFromSidebar(e);
-  };
 
   useLocalJSONModel();
   useCopyPaste({
@@ -235,14 +235,33 @@ const DEMOModeler = () => {
     resetAttachStore();
   };
 
+  const previewNode = usePreviewNodeStore((state) => state.previewNode);
+
+  const isValidConnection = (connection: DEMOEdge | Connection) => {
+    const sourceNode = getNode(connection.source);
+    const targetNode = getNode(connection.target);
+    if (
+      !sourceNode ||
+      !targetNode ||
+      sourceNode.type === "transaction_kind" ||
+      sourceNode.type === "text"
+    )
+      return false;
+    const allowedConnections = allowedConnectionMap[sourceNode?.type];
+    if (!allowedConnections.includes(targetNode.type)) return false;
+    return true;
+  };
+
   return (
     <div
       className="DEMO-modeler | [grid-area:modeler] h-full"
       data-selecting={selectionOnDrag}
       data-panning={panOnDrag}
+      data-dropping={!!previewNode}
     >
       <div className="react-flow-wrapper | h-full">
         <ReactFlow
+          ref={ref}
           nodes={nodes}
           nodeTypes={nodeTypes}
           onNodesChange={(changes) => {
@@ -250,7 +269,6 @@ const DEMOModeler = () => {
             onNodesChange(updatedChanges);
             saveDEMOInstance(DEMOInstance);
           }}
-          onClick={handleClick}
           edges={edges}
           edgeTypes={edgeTypes}
           onEdgesChange={(changes) => {
@@ -260,6 +278,10 @@ const DEMOModeler = () => {
           onEdgesDelete={onEdgesDelete}
           onConnect={onConnect}
           onConnectEnd={onConnectEnd}
+          onConnectStart={() => {
+            console.log("start");
+          }}
+          isValidConnection={isValidConnection}
           onMove={() => {
             debounce(() => {
               saveDEMOInstance(DEMOInstance);

@@ -28,7 +28,8 @@
     "paths": {
       "$/*": ["./src/*"],
       "$features/*": ["./src/features/*"],
-      "$shared/*": ["./src/shared/*"]
+      "$shared/*": ["./src/shared/*"],
+      "$assets/*": ["./src/assets/*"]
     }
   },
   "include": ["src"]

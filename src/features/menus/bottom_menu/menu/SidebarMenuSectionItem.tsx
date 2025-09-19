@@ -1,7 +1,7 @@
 import { useEffect, type Ref } from "react";
 import Shape from "../../shapes/Shape";
 import { shapeMap } from "../../shapes/shapeMap";
-import { usePreviewNode } from "../usePreviewNode";
+import { usePreviewNodeStore } from "../usePreviewNodeStore";
 import {
   DEFAULT_CONTENT_MAP,
   DEFAULT_SIZE_MAP,
@@ -25,7 +25,7 @@ const SidebarMenuSectionItem = ({
   ...restProps
 }: SidebarMenuSectionItemProps) => {
   const DEMOShape = shapeMap[icon];
-  const { createPreviewNode, updatePreviewNodePosition } = usePreviewNode(
+  const { createPreviewNode, updatePreviewNodePosition } = usePreviewNodeStore(
     useShallow((state) => ({
       createPreviewNode: state.createNode,
       updatePreviewNodeType: state.updateType,

@@ -40,7 +40,6 @@ const Handles = ({
             type="source"
             position={Position.Top}
             nodeId={nodeId}
-            isConnectable={isVisible}
           />
         ))}
       {handles.bottom?.handles &&
@@ -52,7 +51,6 @@ const Handles = ({
             type="source"
             position={Position.Bottom}
             nodeId={nodeId}
-            isConnectable={isVisible}
           />
         ))}
       {handles.left?.handles &&
@@ -64,7 +62,6 @@ const Handles = ({
             type="source"
             position={Position.Left}
             nodeId={nodeId}
-            isConnectable={isVisible}
           />
         ))}
       {handles.right?.handles &&
@@ -76,7 +73,6 @@ const Handles = ({
             type="source"
             position={Position.Right}
             nodeId={nodeId}
-            isConnectable={isVisible}
           />
         ))}
     </div>
