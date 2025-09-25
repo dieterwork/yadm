@@ -50,21 +50,6 @@ const markerMap: Partial<
     { id: "c_act", markerEnd: closedMarker },
     { id: "ghost", markerEnd: closedMarker },
   ],
-  // ofd
-  production_event: [
-    { id: "entity_class", markerEnd: closedMarker },
-    { id: "derived_entity", markerEnd: closedMarker },
-  ],
-  entity_class: [
-    { id: "entity_class", markerEnd: closedMarker },
-    { id: "derived_entity", markerEnd: closedMarker },
-    { id: "production_event", markerEnd: closedMarker },
-  ],
-  derived_entity: [
-    { id: "entity_class", markerEnd: closedMarker },
-    { id: "derived_entity", markerEnd: closedMarker },
-    { id: "production_event", markerEnd: closedMarker },
-  ],
 };
 
 export default markerMap;
