@@ -28,14 +28,13 @@ import DEMOMenuSection from "../_components/DEMOMenuSection";
 import DEMOMenuTooltip from "../_components/DEMOMenuTooltip";
 
 const BottomMenu = () => {
-  const { setViewport, zoomIn, zoomOut, fitView } = useReactFlow();
+  const { zoomIn, zoomOut, fitView, zoomTo } = useReactFlow();
   const { setEnabled, isEnabled } = useDEMOModeler(
     useShallow((state) => ({
       setEnabled: state.setEnabled,
       isEnabled: state.isEnabled,
     }))
   );
-  const { zoom, x, y } = useViewport();
   const { undo, redo } = useDEMOModeler.temporal.getState();
   return (
     <div className="bottom-menu | absolute bottom-4 left-[50%] translate-x-[-50%] z-9999">
@@ -79,7 +78,7 @@ const BottomMenu = () => {
               aria-label="Current zoom level (click to zoom to 100%)"
               autoWidth
               onAction={() => {
-                setViewport({ zoom: 1, x, y }, { duration: 500 });
+                zoomTo(1, { duration: 500 });
               }}
             >
               {Math.floor(zoom * 100) + "%"}

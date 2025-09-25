@@ -99,7 +99,7 @@ const SideMenu = () => {
               }}
             >
               <ArrowsInLineHorizontalIcon
-                className={cn(!areHelperLinesEnabled && "opacity-[0.5]")}
+                className={cn(!areHelperLinesEnabled && "opacity-[0.3]")}
               />
             </DEMOMenuItem>
           </DEMOMenuSection>

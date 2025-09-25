@@ -19,7 +19,7 @@ const TextNode = ({
     <>
       <div
         className={cn(
-          "rounded",
+          "rounded border-dashed",
           data.isBorderVisible ? "border-1 border-slate-300" : "border-none"
         )}
         style={{ width, height }}
