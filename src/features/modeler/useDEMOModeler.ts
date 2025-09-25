@@ -286,10 +286,18 @@ export const useDEMOModeler = create<DEMOModelerState>()(
     {
       onSave: (state) => {},
       partialize: (state) => {
-        const { nodes } = state;
+        const { nodes, edges } = state;
+        const savedNodes = nodes.map((node) => {
+          const { selected, ...restNode } = node;
+          return { ...restNode };
+        });
+        const savedEdges = edges.map((edge) => {
+          const { selected, ...restEdge } = edge;
+          return { ...restEdge };
+        });
         return {
-          ...state,
-          nodes: nodes.map((node) => ({ ...node, selected: undefined })),
+          nodes: savedNodes,
+          edges: savedEdges,
         };
       },
     }
