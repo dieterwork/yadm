@@ -49,7 +49,7 @@ const Topbar = () => {
                         setFileName("demo-model_" + date);
                       }
                     }}
-                    className="border-1 border-slate-200 rounded-sm text-sm h-[2rem] content-center px-2 focus-within:ring-2 focus-within:ring-blue-500"
+                    className="border-1 border-slate-200 rounded-sm text-sm h-[2rem] content-center px-2 focus-within:ring-2 focus-within:ring-sky-500"
                   >
                     <VisuallyHidden>
                       <Label>Change file name</Label>

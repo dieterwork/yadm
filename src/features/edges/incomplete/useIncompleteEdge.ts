@@ -1,34 +1,47 @@
-import { useReactFlow, type OnConnectEnd } from "@xyflow/react";
-import { useDEMOModeler } from "../../modeler/useDEMOModeler";
-import { useShallow } from "zustand/react/shallow";
-import uuid from "../../../shared/utils/uuid";
+import { convertAbsoluteToParentRelativePosition } from "$/features/nodes/utils/convertAbsoluteToParentRelativePosition";
+import uuid from "$/shared/utils/uuid";
+import {
+  MarkerType,
+  Position,
+  useReactFlow,
+  type OnConnectEnd,
+} from "@xyflow/react";
 import type { DEMOEdge } from "../edges.types";
-import { convertAbsoluteToParentRelativePosition } from "../../nodes/utils/convertAbsoluteToParentRelativePosition";
-import { SMALL_NODE_SIZE } from "../../nodes/utils/consts";
+import { SMALL_NODE_SIZE } from "$/features/nodes/utils/consts";
+import { addEdge, addNode } from "$/features/modeler/useDEMOModeler";
+import type { GhostNode } from "$/features/nodes/ghost/ghost.types";
+import getEdgeType from "$/features/modeler/utils/getEdgeType";
+import type { DEMONode } from "$/features/nodes/nodes.types";
+import getMarkerType from "$/features/modeler/utils/getMarkerType";
 
-export function useIncompleteEdge() {
+const getPosition = (fromPosition: Position | null) => {
+  switch (fromPosition) {
+    case Position.Top:
+      return Position.Bottom;
+    case Position.Left:
+      return Position.Right;
+    case Position.Right:
+      return Position.Left;
+    case Position.Bottom:
+      return Position.Top;
+    default:
+      return Position.Top;
+  }
+};
+
+export const useIncompleteEdge = () => {
   const { screenToFlowPosition } = useReactFlow();
-
-  const { setNodes, setEdges, addNode, addEdge } = useDEMOModeler(
-    useShallow((state) => ({
-      setNodes: state.setNodes,
-      setEdges: state.setEdges,
-      addNode: state.addNode,
-      addEdge: state.addEdge,
-    }))
-  );
-
   const onConnectEnd: OnConnectEnd = (event, connectionState) => {
     if (
       connectionState.isValid ||
-      connectionState.fromHandle?.type === "target"
+      connectionState.fromHandle?.type === "target" ||
+      !connectionState.fromNode
     ) {
       return;
     }
-
     const fromNodeId = connectionState.fromNode?.id;
-    const fromNodeType = connectionState.fromNode?.type;
-    const id = `ghost-${uuid()}`;
+    const fromNodeType = connectionState.fromNode?.type as DEMONode["type"];
+    const ghostId = `ghost_${uuid()}`;
     const { clientX, clientY } =
       "changedTouches" in event ? event.changedTouches[0] : event;
 
@@ -42,8 +55,8 @@ export function useIncompleteEdge() {
       parentAbsolutePosition: connectionState.fromNode?.position,
     });
 
-    const newNode = {
-      id: `ghost-${id}`,
+    const ghostNode = {
+      id: ghostId,
       type: "ghost",
       position:
         fromNodeType === "transaction_time"
@@ -51,63 +64,25 @@ export function useIncompleteEdge() {
               x: relativeParentCoordinates.x,
               y: SMALL_NODE_SIZE / 2 + 2,
             }
-          : screenToFlowPosition({
-              x: clientX,
-              y: clientY,
-            }),
-      data: {},
+          : position,
+      data: { position: getPosition(connectionState.fromPosition) },
       parentId: fromNodeType === "transaction_time" ? fromNodeId : undefined,
-    };
+    } satisfies GhostNode;
 
-    const newEdge: DEMOEdge = {
-      id: `${fromNodeId}->ghost-${id}`,
+    const newEdgeType = getEdgeType(fromNodeType, "ghost");
+    const newEdgeMarker = getMarkerType(fromNodeType, "ghost");
+    const newEdge = {
+      id: `${fromNodeId}->${ghostId}`,
       source: fromNodeId,
-      target: `ghost-${id}`,
+      target: ghostId,
       reconnectable: "target",
-      type:
-        fromNodeType === "transaction_time"
-          ? "transaction_time_edge"
-          : "cooperation_model_edge",
+      type: newEdgeType,
       sourceHandle: connectionState.fromHandle?.id,
-    };
-    addNode(newNode);
+      ...newEdgeMarker,
+    } satisfies DEMOEdge;
+
+    addNode(ghostNode);
     addEdge(newEdge);
   };
-
-  const onReconnectEnd = (_, oldEdge, handleType) => {
-    if (handleType === "source") {
-      setNodes((nodes) => {
-        return nodes.filter((node) => {
-          const isGhost = node.type === "ghost";
-          const isTarget = node.id === oldEdge.target;
-
-          return !(isGhost && isTarget);
-        });
-      });
-
-      setEdges((edges) => edges.filter((edge) => edge.id !== oldEdge.id));
-    }
-  };
-
-  const onEdgesDelete = (deletedEdges: DEMOEdge[]) => {
-    setNodes((nodes) => {
-      return deletedEdges.reduce(
-        (acc, edge) =>
-          acc.filter((n) => {
-            const isGhost = n.type === "ghost";
-            const isSourceOrTarget =
-              n.id === edge.source || n.id === edge.target;
-
-            return !(isGhost && isSourceOrTarget);
-          }),
-        nodes
-      );
-    });
-  };
-
-  return {
-    onConnectEnd,
-    onReconnectEnd,
-    onEdgesDelete,
-  };
-}
+  return onConnectEnd;
+};

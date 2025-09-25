@@ -1,26 +1,34 @@
 import { cn } from "@sglara/cn";
-import { MenuItem, type MenuItemProps } from "react-aria-components";
+import {
+  ListBoxItem,
+  MenuItem,
+  type ListBoxItemProps,
+  type MenuItemProps,
+} from "react-aria-components";
 
-interface SidebarMenuSectionItemProps extends MenuItemProps {
+interface SidebarMenuSectionItemProps extends ListBoxItemProps {
   label?: string;
   icon?: string;
-  isActive?: boolean;
 }
 
 const SidebarMenuSectionItem = ({
-  isActive,
   label,
   icon,
   ...restProps
 }: SidebarMenuSectionItemProps) => {
   return (
-    <MenuItem
+    <ListBoxItem
       {...restProps}
-      className={cn(
-        "sidebar-menu-section-item",
-        isActive ? "bg-blue-500" : "bg-white",
-        "outline-hidden hover:bg-slate-100 flex items-center border-1 border-slate-200 px-4 py-4 not-first:mt-2 rounded-md"
-      )}
+      textValue={label}
+      className={({ isSelected }) =>
+        cn(
+          "sidebar-menu-section-item",
+          isSelected
+            ? "border-sky-500 bg-sky-500 text-white"
+            : "hover:bg-slate-100 border-slate-200 text-slate-900 bg-white",
+          "outline-hidden flex items-center border-1 px-4 py-4 not-first:mt-2 rounded-md"
+        )
+      }
     >
       <div className="icon | h-[32px] aspect-square">
         <img src={icon} alt="" className="w-full h-full object-cover" />
@@ -28,7 +36,7 @@ const SidebarMenuSectionItem = ({
       <div className="label | font-medium text-center text-xs ml-2.5">
         {label}
       </div>
-    </MenuItem>
+    </ListBoxItem>
   );
 };
 

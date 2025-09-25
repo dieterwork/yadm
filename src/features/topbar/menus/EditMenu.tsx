@@ -1,4 +1,4 @@
-import { useDEMOModeler } from "../../modeler/useDEMOModeler";
+import { clearModel, useDEMOModeler } from "../../modeler/useDEMOModeler";
 import TopbarMenuButton from "../_components/TopbarMenuButton";
 import TopbarMenuItem from "../_components/TopbarMenuItem";
 
@@ -8,6 +8,7 @@ const EditMenu = () => {
     <TopbarMenuButton label="Edit">
       <TopbarMenuItem onAction={() => undo()}>Undo</TopbarMenuItem>
       <TopbarMenuItem onAction={() => redo()}>Redo</TopbarMenuItem>
+      <TopbarMenuItem onAction={() => clearModel()}>Clear</TopbarMenuItem>
     </TopbarMenuButton>
   );
 };

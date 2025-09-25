@@ -22,7 +22,7 @@ import type { TextNode as TextNodeType } from "./text/textNode.types";
 import type { CSSProperties } from "react";
 import type { Position } from "@xyflow/react";
 import type { GhostNode as GhostNodeType } from "./ghost/ghost.types";
-import { GhostNode } from "./ghost/GhostNode";
+import GhostNode from "./ghost/GhostNode";
 
 export const nodeTypes = {
   // cooperation model
@@ -66,6 +66,11 @@ export type DEMOHandle = { id: string; type?: string; style?: CSSProperties };
 
 export type DEMOHandlePosition = Position;
 
+export type SubModel =
+  | "cooperation_model"
+  | "object_fact_diagram"
+  | "process_structure_diagram";
+
 export type DEMOHandlesPositionData = {
   handles?: DEMOHandle[];
   max?: number;
@@ -81,14 +86,9 @@ export type DEMOHandlesData = {
   isVisible: boolean;
 };
 
-export type DEMONodeBaseData<
-  SubModel extends
-    | "cooperation_model"
-    | "object_fact_diagram"
-    | "process_structure_diagram"
-> = {
+export type DEMONodeBaseData<T extends SubModel> = {
   handles: DEMOHandlesData;
-  subModel: SubModel;
+  subModel: T;
   fontSize?: string;
   color?: string;
   content?: string;

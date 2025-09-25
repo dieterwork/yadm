@@ -45,12 +45,12 @@ const ConnectionLine = ({
     <g>
       <path
         fill="none"
-        stroke={"red"}
+        stroke="var(--color-rose-500)"
         strokeWidth={2}
         className={connectionStatus === "valid" ? "" : "animated"}
         d={fromNode.type === "transaction_time" ? linearPath : smoothStepPath}
         markerStart={MarkerType.ArrowClosed}
-        markerWidth={25}
+        markerWidth={20}
         markerEnd={MarkerType.ArrowClosed}
       />
     </g>

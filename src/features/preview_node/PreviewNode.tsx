@@ -1,6 +1,5 @@
 import { createPortal } from "react-dom";
 import { usePreviewNodeStore } from "./usePreviewNodeStore";
-import { useShallow } from "zustand/react/shallow";
 import actorIcon from "$assets/Actor.svg";
 import transactionIcon from "$assets/Transaction.svg";
 import transactorIcon from "$assets/Transactor.svg";
@@ -41,7 +40,7 @@ const previewNodeMap = {
 } satisfies Record<DEMONode["type"], string | null>;
 
 interface PreviewNodeProps {
-  type: DEMONode["type"];
+  type: DEMONode["type"] | null;
 }
 const PreviewNode = ({ type }: PreviewNodeProps) => {
   if (!type) return null;

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { temporal } from "zundo";
 import {
-  addEdge,
+  addEdge as _addEdge,
   applyNodeChanges,
   applyEdgeChanges,
   type Edge,
@@ -16,6 +16,14 @@ import {
   reconnectEdge,
   type OnReconnect,
   MarkerType,
+  type FinalConnectionState,
+  type HandleType,
+  type OnConnectEnd,
+  useStore,
+  useStoreApi,
+  type ReactFlowState,
+  useReactFlow,
+  type Connection,
 } from "@xyflow/react";
 
 import { initialNodes } from "../nodes/initialNodes";
@@ -24,6 +32,9 @@ import type { DEMONode, DEMOHandlesData } from "../nodes/nodes.types";
 import uuid from "../../shared/utils/uuid";
 import type { DEMOEdge } from "../edges/edges.types";
 import type { CSSProperties } from "react";
+import { convertAbsoluteToParentRelativePosition } from "../nodes/utils/convertAbsoluteToParentRelativePosition";
+import getEdgeType from "./utils/getEdgeType";
+import getMarkerType from "./utils/getMarkerType";
 
 type ReactStyleStateSetter<T> = T | ((prev: T) => T);
 
@@ -55,18 +66,12 @@ export interface DEMOModelerState {
   }) => DEMONode;
   setEnabled: (isEnabled: ReactStyleStateSetter<boolean>) => void;
   setFileName: (filename: string) => void;
-  onNodesChange: OnNodesChange<DEMONode>;
-  onEdgesChange: OnEdgesChange<DEMOEdge>;
-  onConnect: OnConnect;
-  onReconnect: OnReconnect<DEMOEdge>;
   setNodes: (newNodesOrSetterFn: ReactStyleStateSetter<DEMONode[]>) => void;
   setEdges: (newEdgesOrSetterFn: ReactStyleStateSetter<DEMOEdge[]>) => void;
   DEMOInstance: null | ReactFlowInstance<DEMONode, DEMOEdge>;
-  setDEMOInstance: (instance: ReactFlowInstance<DEMONode, DEMOEdge>) => void;
   updateNodeColor: (id: string, color: string) => void;
   updateNodeState: (id: string, state: string, type: string) => void;
   updateNodeScope: (id: string, scope: string, type: string) => void;
-  deleteNode: (id: string) => void;
   addNode: (node: DEMONode) => void;
   addEdge: (edge: Edge) => void;
   getNode: (id: string) => DEMONode | undefined;
@@ -107,6 +112,16 @@ export interface DEMOModelerState {
   setGridSnapability: (isSnapEnabled: ReactStyleStateSetter<boolean>) => void;
 }
 
+const getMarker = (connection: Connection) => {
+  const sourceNode = getNode(connection.source);
+  const targetNode = getNode(connection.target);
+  return {
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+    },
+  };
+};
+
 export const useDEMOModeler = create<DEMOModelerState>()(
   temporal(
     (set, get) => ({
@@ -129,16 +144,6 @@ export const useDEMOModeler = create<DEMOModelerState>()(
       setFileName: (fileName) => {
         set({ fileName });
       },
-      onNodesChange: (changes) => {
-        set({
-          nodes: applyNodeChanges(changes, get().nodes),
-        });
-      },
-      onEdgesChange: (changes) => {
-        set({
-          edges: applyEdgeChanges(changes, get().edges),
-        });
-      },
       setEnabled: (isEnabledSetter) => {
         set({
           isEnabled:
@@ -146,43 +151,6 @@ export const useDEMOModeler = create<DEMOModelerState>()(
               ? isEnabledSetter
               : isEnabledSetter(get().isEnabled),
         });
-      },
-      onConnect: (connection) => {
-        const marker = () => {
-          const sourceNode = get().getNode(connection.source);
-          const targetNode = get().getNode(connection.target);
-          if (sourceNode?.type === "actor" && targetNode?.type === "actor") {
-            return {
-              markerEnd: {
-                type: MarkerType.ArrowClosed,
-              },
-            };
-          }
-          return {
-            markerEnd: {
-              type: MarkerType.ArrowClosed,
-            },
-          };
-        };
-        set({
-          edges: addEdge(
-            {
-              ...connection,
-              id: uuid(),
-              type: "cooperation_model_edge",
-              ...marker(),
-            },
-            get().edges
-          ),
-        });
-      },
-      onReconnect: (oldEdge, newConnection) => {
-        set({
-          edges: reconnectEdge(oldEdge, newConnection, get().edges),
-        });
-      },
-      setDEMOInstance: (instance) => {
-        set({ DEMOInstance: instance });
       },
       setNodes: (newNodesOrSetterFn) => {
         set(({ nodes }) => {
@@ -206,23 +174,6 @@ export const useDEMOModeler = create<DEMOModelerState>()(
           return {
             edges: setterFn(edges),
           };
-        });
-      },
-      addEdge: (edge) => {
-        set({
-          edges: get()
-            .edges.map((edge) => ({
-              ...edge,
-            }))
-            .concat([edge]),
-        });
-      },
-      deleteNode: (id) => {
-        set({
-          nodes: get().nodes.filter((node) => {
-            if (node.id !== id && node.parentId !== id) return true;
-            return false;
-          }),
         });
       },
       updateNodeColor: (id, color) => {
@@ -304,15 +255,6 @@ export const useDEMOModeler = create<DEMOModelerState>()(
             .concat(Array.isArray(node) ? node : [node]),
         });
       },
-      deleteDiagram: () => {
-        get().setModelFromJSONObject({
-          nodes: [],
-          edges: [],
-          viewport: { x: 0, y: 0, zoom: 1 },
-        });
-        const DEMOInstance = get().DEMOInstance;
-        if (DEMOInstance) get().setDEMOInstance(DEMOInstance);
-      },
       setModelFromJSONObject: (object) => {
         set({
           nodes: object.nodes,
@@ -354,30 +296,42 @@ export const useDEMOModeler = create<DEMOModelerState>()(
   )
 );
 
-export const setSelectionOnDrag = (
-  isEnabledSetter: ReactStyleStateSetter<boolean>
-) => {
+export const setNodes = (newNodes: ReactStyleStateSetter<DEMONode[]>) => {
   useDEMOModeler.setState((state) => ({
-    selectionOnDrag:
-      typeof isEnabledSetter === "boolean"
-        ? isEnabledSetter
-        : isEnabledSetter(state.selectionOnDrag),
+    nodes: Array.isArray(newNodes) ? newNodes : newNodes(state.nodes),
   }));
 };
 
-export const setPanOnDrag = (
-  isEnabledSetter: ReactStyleStateSetter<boolean>
+export const setEdges = (newEdges: ReactStyleStateSetter<DEMOEdge[]>) => {
+  useDEMOModeler.setState((state) => ({
+    edges: Array.isArray(newEdges) ? newEdges : newEdges(state.edges),
+  }));
+};
+
+export const setSelectionOnDrag = (
+  isEnabled: ReactStyleStateSetter<boolean>
 ) => {
   useDEMOModeler.setState((state) => ({
+    selectionOnDrag:
+      typeof isEnabled === "boolean"
+        ? isEnabled
+        : isEnabled(state.selectionOnDrag),
+  }));
+};
+
+export const setPanOnDrag = (isEnabled: ReactStyleStateSetter<boolean>) => {
+  useDEMOModeler.setState((state) => ({
     panOnDrag:
-      typeof isEnabledSetter === "boolean"
-        ? isEnabledSetter
-        : isEnabledSetter(state.panOnDrag),
+      typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.panOnDrag),
   }));
 };
 
 export const getNode = (id: string) => {
   return useDEMOModeler.getState().nodes.filter((node) => node.id === id)[0];
+};
+
+export const getEdge = (id: string) => {
+  return useDEMOModeler.getState().nodes.filter((edge) => edge.id === id)[0];
 };
 
 export const updateNode = (
@@ -409,8 +363,104 @@ export const updateNodeConnectionHandlesVisibility = (
   }));
 };
 
+export const deleteNode = (id: string) => {
+  useDEMOModeler
+    .getState()
+    .setNodes((nodes) => nodes.filter((node) => node.id !== id));
+};
+
 export const deleteEdge = (id: string) => {
   useDEMOModeler
     .getState()
     .setEdges((edges) => edges.filter((edge) => edge.id !== id));
+};
+
+export const clearModel = () => {
+  useDEMOModeler.getState().setEdges([]);
+  useDEMOModeler.getState().setNodes([]);
+};
+
+export const onNodesChange: OnNodesChange<DEMONode> = (changes) => {
+  useDEMOModeler.setState((state) => ({
+    nodes: applyNodeChanges(changes, state.nodes),
+  }));
+};
+
+export const onEdgesChange: OnEdgesChange<DEMOEdge> = (changes) => {
+  useDEMOModeler.setState((state) => ({
+    edges: applyEdgeChanges(changes, state.edges),
+  }));
+};
+
+export const setDEMOInstance = (
+  DEMOInstance: ReactFlowInstance<DEMONode, DEMOEdge>
+) => {
+  useDEMOModeler.setState(() => ({ DEMOInstance }));
+};
+
+export const onReconnectEnd = (
+  event: MouseEvent | TouchEvent,
+  edge: DEMOEdge,
+  handleType: HandleType,
+  connectionState: FinalConnectionState
+) => {
+  if (handleType === "source") {
+    setNodes((nodes) => {
+      return nodes.filter((node) => {
+        const isGhost = node.type === "ghost";
+        const isTarget = node.id === edge.target;
+
+        return !(isGhost && isTarget);
+      });
+    });
+
+    setEdges((edges) => edges.filter((_edge) => _edge.id !== edge.id));
+  }
+};
+
+export const onEdgesDelete = (deletedEdges: DEMOEdge[]) => {
+  setNodes((nodes) => {
+    return deletedEdges.reduce(
+      (accNodes, edge) =>
+        accNodes.filter((node) => {
+          const isGhost = node.type === "ghost";
+          const isSourceOrTarget =
+            node.id === edge.source || node.id === edge.target;
+
+          return !(isGhost && isSourceOrTarget);
+        }),
+      nodes
+    );
+  });
+};
+
+export const addNode = (node: DEMONode) => {
+  useDEMOModeler.setState((state) => ({
+    nodes: [...state.nodes, node],
+  }));
+};
+
+export const addEdge = (edge: DEMOEdge) => {
+  useDEMOModeler.setState((state) => ({
+    edges: _addEdge(edge, state.edges),
+  }));
+};
+
+export const onConnect: OnConnect = (connection) => {
+  const sourceNode = getNode(connection.source);
+  const targetNode = getNode(connection.target);
+  const type = getEdgeType(sourceNode.type, targetNode.type);
+  const marker = getMarkerType(sourceNode.type, targetNode.type);
+  addEdge({
+    ...connection,
+    id: `${sourceNode.type}_${connection.sourceHandle}->${sourceNode.type}_${connection.targetHandle}`,
+    type,
+    ...marker,
+  });
+};
+
+export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
+  useDEMOModeler.setState((state) => ({
+    edges: reconnectEdge(oldEdge, newConnection, state.edges),
+  }));
 };

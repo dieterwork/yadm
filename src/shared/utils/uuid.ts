@@ -1,3 +1,3 @@
-import { nanoid as uuid } from "nanoid";
+import { v4 as uuid } from "uuid";
 
 export default uuid;

@@ -3,7 +3,7 @@ import {
   EditableEdgeComponent,
   type EditableEdge,
 } from "../editable/EditableEdge";
-import EdgeToolbar from "../EdgeToolbar";
+import EdgeToolbar from "../edge_toolbar/DEMOEdgeToolbar";
 
 const ProcessStructureDiagramEdge = ({
   id,
@@ -20,14 +20,6 @@ const ProcessStructureDiagramEdge = ({
         selected={selected}
         style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
       />
-      {selected && (
-        <EdgeToolbar
-          id={id}
-          data={data}
-          type="process_structure_diagram_edge"
-          selected={selected}
-        />
-      )}
     </>
   );
 };

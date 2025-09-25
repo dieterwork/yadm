@@ -3,7 +3,7 @@ import {
   EditableEdgeComponent,
   type EditableEdge,
 } from "../editable/EditableEdge";
-import EdgeToolbar from "../EdgeToolbar";
+import EdgeToolbar from "../edge_toolbar/DEMOEdgeToolbar";
 
 const ObjectFactDiagramEdge = ({
   id,
@@ -20,14 +20,6 @@ const ObjectFactDiagramEdge = ({
         selected={selected}
         style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
       />
-      {selected && (
-        <EdgeToolbar
-          id={id}
-          data={data}
-          type="object_fact_diagram_edge"
-          selected={selected}
-        />
-      )}
     </>
   );
 };

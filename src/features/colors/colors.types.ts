@@ -1,1 +1,1 @@
-export type ColorType = "default" | "blue" | "red" | "green" | "yellow";
+export type ColorType = "default" | "sky" | "red" | "green" | "yellow";

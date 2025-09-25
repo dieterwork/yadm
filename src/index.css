@@ -18,12 +18,12 @@ body,
   overflow: hidden;
 }
 
-.react-flow__resize-control.react-flow__resize-control {
+.react-flow .react-flow__resize-control {
   --_size: 6px;
   --_offset: calc(var(--_size) / 2);
   --_line-size: 1px;
   &.line {
-    border-color: var(--color-blue-500);
+    border-color: var(--color-sky-500);
     &.top {
       border-top-width: 0;
       border-bottom-width: var(--_line-size);
@@ -54,7 +54,7 @@ body,
     width: 6px;
     height: 6px;
     background-color: var(--color-white);
-    border: 1px solid var(--color-blue-500);
+    border: 1px solid var(--color-sky-500);
     border-radius: 0;
     &.top.left {
     }
@@ -67,31 +67,41 @@ body,
   }
 }
 
-.react-flow__handle.react-flow__handle {
-  --_size: 12px;
+.react-flow .react-flow__handle {
+  --_size: 10px;
   --_min-size: calc(var(--_size) - 1px);
-  --_circle-size: 8px;
-  border-radius: calc(9999px);
-  min-width: var(--_min-size);
-  min-height: var(--_min-size);
-  width: var(--_size);
-  height: var(--_size);
-  background-color: transparent;
-  border: none;
-  &::before {
-    content: "";
-    display: block;
-    aspect-ratio: 1;
-    width: var(--_circle-size);
-    background-color: var(--color-white);
-    border: 1px solid var(--color-slate-900);
-    border-radius: 9999px;
-    position: absolute;
-    inset: 0;
-    margin: auto;
-  }
+  border-radius: calc(9999px) !important;
+  min-width: var(--_min-size) !important;
+  min-height: var(--_min-size) !important;
+  width: var(--_size) !important;
+  height: var(--_size) !important;
+  background-color: var(--color-white) !important;
+  border: 1px solid var(--color-sky-500) !important;
   &.react-flow__handle-left {
-    left: calc(-10px);
+  }
+  &.react-flow__handle-right {
+  }
+  &.react-flow__handle-top {
+  }
+  &.react-flow__handle-bottom {
+  }
+}
+
+.react-flow .ghost-handle {
+  --_size: 1px;
+  --_min-size: 1px;
+  min-width: var(--_min-size) !important;
+  min-height: var(--_min-size) !important;
+  width: var(--_size) !important;
+  height: var(--_size) !important;
+  background-color: transparent !important;
+  border: transparent !important;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  &.react-flow__handle-left {
   }
   &.react-flow__handle-right {
   }

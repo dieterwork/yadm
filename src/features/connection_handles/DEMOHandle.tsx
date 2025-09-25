@@ -5,8 +5,9 @@ import {
   type HandleProps,
 } from "@xyflow/react";
 import { getNode, useDEMOModeler } from "../modeler/useDEMOModeler";
-import type { DEMONode } from "../nodes/nodes.types";
+import { useEffect } from "react";
 
+let didInit = false;
 const DEMOHandle = ({
   id,
   nodeId,
@@ -19,6 +20,12 @@ const DEMOHandle = ({
   const setEdges = useDEMOModeler((state) => state.setEdges);
   const setNodes = useDEMOModeler((state) => state.setNodes);
   const updateNodeInternals = useUpdateNodeInternals();
+
+  useEffect(() => {
+    if (!didInit) {
+      updateNodeInternals(nodeId);
+    }
+  }, []);
 
   return (
     <Handle

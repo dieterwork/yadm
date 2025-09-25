@@ -3,23 +3,31 @@ import {
   NodeToolbar as _NodeToolbar,
   EdgeLabelRenderer,
   Position,
+  type XYPosition,
 } from "@xyflow/react";
 import { Button, Menu, MenuTrigger, Popover } from "react-aria-components";
-import { deleteEdge } from "../modeler/useDEMOModeler";
-import type { DEMOEdge } from "./edges.types";
+import { deleteEdge } from "../../modeler/useDEMOModeler";
+import type { DEMOEdge } from "../edges.types";
+import EdgeToolbar from "./EdgeToolbar";
 
-interface EdgeToolbarProps {
+interface DEMOEdgeToolbarProps {
   id: string;
   type: DEMOEdge["type"];
   data: DEMOEdge["data"];
   selected?: boolean;
+  position?: XYPosition;
 }
 
-const EdgeToolbar = ({ id, data, type }: EdgeToolbarProps) => {
+const DEMOEdgeToolbar = ({
+  id,
+  data,
+  type,
+  position,
+}: DEMOEdgeToolbarProps) => {
   return (
-    <EdgeLabelRenderer>
-      <IconContext value={{ size: 24 }}>
-        <div className="edge-label-renderer__custom-edge nodrag nopan">
+    <EdgeToolbar xyPosition={position}>
+      <IconContext value={{ size: 20 }}>
+        <div className="nodrag nopan w-fit pointer-events-all">
           <div className="grid grid-cols-3 items-center gap-1">
             {type === "cooperation_model_edge" && (
               <MenuTrigger>
@@ -47,8 +55,8 @@ const EdgeToolbar = ({ id, data, type }: EdgeToolbarProps) => {
           </div>
         </div>
       </IconContext>
-    </EdgeLabelRenderer>
+    </EdgeToolbar>
   );
 };
 
-export default EdgeToolbar;
+export default DEMOEdgeToolbar;

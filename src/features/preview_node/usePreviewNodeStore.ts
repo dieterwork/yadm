@@ -3,7 +3,7 @@ import type { DEMONode } from "../nodes/nodes.types";
 
 interface PreviewNodeState {
   previewNode: {
-    type: string;
+    type: Omit<DEMONode["type"], "ghost">;
     width: number;
     height: number;
     isDisabled: boolean;
@@ -18,7 +18,7 @@ interface PreviewNodeState {
     position,
     content,
   }: {
-    type: DEMONode["type"];
+    type: Omit<DEMONode["type"], "ghost">;
     width: number;
     height: number;
     isDisabled?: boolean;

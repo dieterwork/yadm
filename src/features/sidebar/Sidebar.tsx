@@ -1,6 +1,6 @@
 import { usePreviewNodeStore } from "../preview_node/usePreviewNodeStore";
 import PreviewNode from "../preview_node/PreviewNode";
-import { Collection, Header } from "react-aria-components";
+import { Collection, Header, ListBox, Select } from "react-aria-components";
 import SidebarMenuButton from "./menu/SidebarMenuButton";
 import SidebarMenuSection from "./menu/SidebarMenuSection";
 import SidebarMenuSectionItem from "./menu/SidebarMenuSectionItem";
@@ -22,22 +22,23 @@ import tkExecutionIcon from "$assets/TK Execution.svg";
 import productionEventIcon from "$assets/Production Event.svg";
 import entityClassIcon from "$assets/Entity Class.svg";
 import derivedEntityIcon from "$assets/Derived Entity.svg";
+import SidebarSelect from "./menu/SidebarSelect";
 
-type SidebarMenuSectionItemType = {
+export type SidebarMenuSectionItemType = {
   id: string;
   name: string;
   label: string;
   type: DEMONode["type"];
   icon: string;
 };
-type SidebarMenuSectionType = {
+export type SidebarMenuSectionType = {
   id: string;
   name: string;
   label: string;
   items: SidebarMenuSectionItemType[];
 };
 
-type SidebarMenuItemType = {
+export type SidebarMenuItemType = {
   id: string;
   name: string;
   label: string;
@@ -206,63 +207,25 @@ const sidebarMenuItems = [
 ] satisfies SidebarMenuItemType[] as SidebarMenuItemType[];
 
 const Sidebar = () => {
-  const { createPreviewNode, previewNode } = usePreviewNodeStore(
+  const { previewNode } = usePreviewNodeStore(
     useShallow((state) => ({
       previewNode: state.previewNode,
       createPreviewNode: state.createNode,
-      updatePreviewNodeType: state.updateType,
-      updatePreviewNodeContent: state.updateContent,
-      updatePreviewNodePosition: state.updatePosition,
     }))
   );
+
   return (
     <>
       <div className="sidebar | [grid-area:sidebar] px-4 border-r border-gray-200 overflow-y-auto w-[300px]">
         <div className="sidebar-inner">
           <div className="flex flex-col mb-6">
             <Collection items={sidebarMenuItems}>
-              {(menuItem) => (
-                <SidebarMenuButton
-                  key={menuItem.id}
-                  label={menuItem.label}
-                  items={menuItem.sections}
-                >
-                  {(section) => (
-                    <SidebarMenuSection key={section.id}>
-                      <Header className="mb-4 text-xs text-slate-500">
-                        {section.label}
-                      </Header>
-                      <Collection items={section.items}>
-                        {(item) => (
-                          <>
-                            <SidebarMenuSectionItem
-                              onClick={(e) => {
-                                createPreviewNode({
-                                  type: item.type,
-                                  width:
-                                    DEFAULT_SIZE_MAP[item.type]?.width ?? 0,
-                                  height:
-                                    DEFAULT_SIZE_MAP[item.type]?.height ?? 0,
-                                  position: { x: e.clientX, y: e.clientY },
-                                  content: DEFAULT_CONTENT_MAP[item.type],
-                                });
-                              }}
-                              key={item.id}
-                              label={item.label}
-                              icon={item.icon}
-                            />
-                          </>
-                        )}
-                      </Collection>
-                    </SidebarMenuSection>
-                  )}
-                </SidebarMenuButton>
-              )}
+              {(item) => <SidebarSelect menuItem={item} key={item.id} />}
             </Collection>
           </div>
         </div>
       </div>
-      {previewNode && <PreviewNode type={previewNode.type} />}
+      {previewNode && <PreviewNode type={previewNode?.type} />}
     </>
   );
 };

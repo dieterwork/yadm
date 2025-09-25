@@ -1,13 +1,14 @@
 import { Handle, Position } from "@xyflow/react";
 
-export const GhostNode = () => (
-  <div style={{ width: 10, height: 10 }}>
+const GhostNode = ({ data }) => (
+  <div style={{ width: 1, height: 1 }}>
     <Handle
-      className="handle-ghost"
+      className="ghost-handle"
       type="target"
-      position={Position.Top}
+      position={data.position ?? Position.Top}
       isConnectable={false}
-      style={{ background: "transparent", border: "none" }}
     />
   </div>
 );
+
+export default GhostNode;

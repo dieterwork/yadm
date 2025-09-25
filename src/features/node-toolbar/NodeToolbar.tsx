@@ -31,6 +31,7 @@ import {
   Popover,
 } from "react-aria-components";
 import {
+  deleteNode,
   updateNodeConnectionHandlesVisibility,
   useDEMOModeler,
   type DEMOModelerState,
@@ -65,7 +66,6 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
   const updateNodeInternals = useUpdateNodeInternals();
   const {
     getNode,
-    deleteNode,
     updateNodeState,
     updateNodeScope,
     updateNodeColor,
@@ -77,7 +77,6 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
   } = useDEMOModeler(
     useShallow((state) => ({
       getNode: state.getNode,
-      deleteNode: state.deleteNode,
       updateNodeState: state.updateNodeState,
       updateNodeScope: state.updateNodeScope,
       updateNodeColor: state.updateNodeColor,
@@ -133,10 +132,7 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                         >
                           {fontSize.label}
                           {data.fontSize === fontSize.value && (
-                            <CheckIcon
-                              size={14}
-                              color="var(--color-blue-900)"
-                            />
+                            <CheckIcon size={14} color="var(--color-sky-900)" />
                           )}
                         </MenuItem>
                       )}
@@ -322,11 +318,11 @@ const NodeToolbar = ({ id, data, type, actions }: NodeToolbarProps) => {
                       }
                       isDisabled={data?.scope === "out"}
                       onAction={() => {
-                        updateNodeColor(id, "blue");
+                        updateNodeColor(id, "sky");
                         updateNodeInternals(id);
                       }}
                     >
-                      Blue
+                      sky
                     </MenuItem>
                     <MenuItem
                       className={

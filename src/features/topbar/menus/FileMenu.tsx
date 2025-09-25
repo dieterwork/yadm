@@ -1,4 +1,4 @@
-import { useDEMOModeler } from "../../modeler/useDEMOModeler";
+import { clearModel, useDEMOModeler } from "../../modeler/useDEMOModeler";
 import { useShallow } from "zustand/react/shallow";
 import type { DEMONode } from "../../nodes/nodes.types";
 import type {
@@ -79,11 +79,8 @@ const FileMenu = () => {
       <TopbarMenuButton label="File">
         <TopbarMenuItem
           onAction={() => {
-            setModelFromJSONObject({
-              edges: [],
-              nodes: [],
-              viewport: { x: 0, y: 0, zoom: 1 },
-            });
+            clearModel();
+            localStorage.removeItem("demo-model");
           }}
         >
           New

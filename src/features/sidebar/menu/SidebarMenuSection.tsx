@@ -1,19 +1,18 @@
 import {
-  Header,
-  MenuSection,
-  type MenuSectionProps,
+  ListBoxSection,
+  type ListBoxSectionProps,
 } from "react-aria-components";
 
-type SidebarMenuSectionProps<T> = MenuSectionProps<T>;
+export type SidebarMenuSectionProps<T> = ListBoxSectionProps<T>;
+
 const SidebarMenuSection = <T extends object>({
-  children,
-  label,
   ...restProps
-}: SidebarMenuSectionProps<T> & { label?: string }) => {
+}: SidebarMenuSectionProps<T>) => {
   return (
-    <MenuSection {...restProps} className="sidebar-menu-section">
-      {children}
-    </MenuSection>
+    <ListBoxSection
+      {...restProps}
+      className="sidebar-menu-section | outline-hidden"
+    />
   );
 };
 

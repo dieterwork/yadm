@@ -2,10 +2,8 @@ import {
   ReactFlow,
   Background,
   MiniMap,
-  useReactFlow,
   ConnectionMode,
   BackgroundVariant,
-  useUpdateNodeInternals,
   SelectionMode,
   type Connection,
 } from "@xyflow/react";
@@ -14,27 +12,26 @@ import "@xyflow/react/dist/style.css";
 import { edgeTypes, type DEMOEdge } from "../edges/edges.types";
 import { nodeTypes, type DEMONode } from "../nodes/nodes.types";
 
-import { useEffect, useRef, type MouseEvent } from "react";
+import { useRef } from "react";
 import {
+  onConnect,
+  onEdgesChange,
+  onEdgesDelete,
+  onNodesChange,
+  onReconnect,
+  onReconnectEnd,
+  setDEMOInstance,
   setPanOnDrag,
   setSelectionOnDrag,
   useDEMOModeler,
   type DEMOModelerState,
 } from "./useDEMOModeler";
-import { createNode } from "../nodes/utils/createNode";
 import { useShallow } from "zustand/react/shallow";
-import {
-  SMALL_NODE_SIZE,
-  TRANSACTION_TIME_SIZE,
-  X_SMALL_NODE_SIZE,
-} from "../nodes/utils/consts";
-import uuid from "../../shared/utils/uuid";
 import { saveDEMOInstance } from "../save/saveDEMOInstance";
 import { debounce } from "../../shared/utils/debounce";
 import ConnectionLine from "../connection_line/ConnectionLine";
 import useLocalJSONModel from "./useLocalJSONModel";
 import HelperLines from "../helper_lines/HelperLines";
-import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
 import { useHelperLinesStore } from "../helper_lines/useHelperLinesStore";
 import useDelete from "../keyboard/useDelete";
 import useCopyPaste from "../actions/copy_paste/useCopyPaste";
@@ -45,6 +42,7 @@ import { useAttachStore } from "../actions/attach/useAttachStore";
 import convertAbsoluteToRelativePosition from "../nodes/utils/convertAbsoluteToRelativePosition";
 import { usePreviewNodeStore } from "../preview_node/usePreviewNodeStore";
 import { usePreviewNode } from "../preview_node/usePreviewNode";
+import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -108,9 +106,14 @@ const allowedConnectionMap = {
   c_act: ["initiation_fact", "c_fact", "tk_execution", "ghost"],
   tk_execution: ["c_fact", "c_act", "ghost"],
   // ofd
-  production_event: ["entity_class", "derived_entity"],
-  entity_class: ["entity_class", "derived_entity", "production_event"],
-  derived_entity: ["entity_class", "derived_entity", "production_event"],
+  production_event: ["entity_class", "derived_entity", "ghost"],
+  entity_class: ["entity_class", "derived_entity", "production_event", "ghost"],
+  derived_entity: [
+    "entity_class",
+    "derived_entity",
+    "production_event",
+    "ghost",
+  ],
   ghost: [
     "actor",
     "c_act",
@@ -137,12 +140,7 @@ const DEMOModeler = () => {
     isEnabled,
     nodes,
     edges,
-    onConnect,
-    onEdgesChange,
-    onNodesChange,
-    setDEMOInstance,
     DEMOInstance,
-    onReconnect,
     grid,
     getNode,
     updateNode,
@@ -153,13 +151,8 @@ const DEMOModeler = () => {
       isEnabled: state.isEnabled,
       nodes: state.nodes,
       edges: state.edges,
-      onNodesChange: state.onNodesChange,
-      onEdgesChange: state.onEdgesChange,
-      onConnect: state.onConnect,
       addNode: state.addNode,
-      setDEMOInstance: state.setDEMOInstance,
       DEMOInstance: state.DEMOInstance,
-      onReconnect: state.onReconnect,
       addEdge: state.addEdge,
       setNodes: state.setNodes,
       setEdges: state.setEdges,
@@ -190,7 +183,7 @@ const DEMOModeler = () => {
     isEnabled: areHelperLinesEnabled,
   } = useHelperLinesStore();
 
-  const { onConnectEnd, onEdgesDelete, onReconnectEnd } = useIncompleteEdge();
+  const onConnectEnd = useIncompleteEdge();
 
   // const onNodeDragStart = (e: React.MouseEvent, node: DEMONode) => {
   //   const contentEditableElements = "";
@@ -267,20 +260,21 @@ const DEMOModeler = () => {
           onNodesChange={(changes) => {
             const updatedChanges = updateHelperLines(changes, nodes);
             onNodesChange(updatedChanges);
-            saveDEMOInstance(DEMOInstance);
+            debounce(() => {
+              saveDEMOInstance(DEMOInstance);
+            }, 1000);
           }}
           edges={edges}
           edgeTypes={edgeTypes}
           onEdgesChange={(changes) => {
             onEdgesChange(changes);
-            saveDEMOInstance(DEMOInstance);
+            debounce(() => {
+              saveDEMOInstance(DEMOInstance);
+            }, 1000);
           }}
           onEdgesDelete={onEdgesDelete}
           onConnect={onConnect}
           onConnectEnd={onConnectEnd}
-          onConnectStart={() => {
-            console.log("start");
-          }}
           isValidConnection={isValidConnection}
           onMove={() => {
             debounce(() => {
@@ -288,7 +282,9 @@ const DEMOModeler = () => {
             }, 1000);
           }}
           onBlur={() => {
-            saveDEMOInstance(DEMOInstance);
+            debounce(() => {
+              saveDEMOInstance(DEMOInstance);
+            }, 1000);
           }}
           onPaneClick={() => {
             resetAttachStore();

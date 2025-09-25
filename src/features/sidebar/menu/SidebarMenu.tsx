@@ -1,25 +1,24 @@
-import type { AriaMenuProps } from "react-aria";
-import { useTreeState } from "react-stately";
-import { useMenu } from "react-aria";
-import { useRef } from "react";
 import { cn } from "@sglara/cn";
-import { Menu, type MenuProps } from "react-aria-components";
+import { ListBox, type ListBoxProps } from "react-aria-components";
 
 const SidebarMenu = <T extends object>({
   isOpen,
   ...restProps
-}: MenuProps<T> & { isOpen?: boolean }) => {
+}: ListBoxProps<T> & { isOpen?: boolean }) => {
   return (
     <div
       data-state={isOpen ? "open" : isOpen === false ? "closed" : undefined}
       className={cn(
+        "sidebar-menu-wrapper",
         isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
-        "grid transition-all duration-300 ease-out"
+        "grid transition-all duration-300 ease-out h-full"
       )}
     >
-      <Menu
+      <ListBox
         {...restProps}
-        className={cn(restProps.className, "flex flex-col overflow-hidden ")}
+        className={cn(
+          "sidebar-menu | flex flex-col overflow-hidden flex-col gap-6 mt-2 mb-8"
+        )}
       />
     </div>
   );

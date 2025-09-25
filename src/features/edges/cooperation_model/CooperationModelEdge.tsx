@@ -1,34 +1,18 @@
-import { type EdgeProps } from "@xyflow/react";
+import { useInternalNode, type EdgeProps } from "@xyflow/react";
 import {
   EditableEdgeComponent,
   type EditableEdge,
 } from "../editable/EditableEdge";
-import EdgeToolbar from "../EdgeToolbar";
+import EdgeToolbar from "../edge_toolbar/DEMOEdgeToolbar";
+import type { DEMONode } from "$/features/nodes/nodes.types";
 
-const CooperationModelEdge = ({
-  id,
-  data,
-  selected,
-  ...restProps
-}: EdgeProps<EditableEdge>) => {
+const CooperationModelEdge = ({ ...restProps }: EdgeProps<EditableEdge>) => {
   return (
-    <>
-      <EditableEdgeComponent
-        {...restProps}
-        id={id}
-        data={data}
-        selected={selected}
-        style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
-      />
-      {selected && (
-        <EdgeToolbar
-          id={id}
-          data={data}
-          type="cooperation_model_edge"
-          selected={selected}
-        />
-      )}
-    </>
+    <EditableEdgeComponent
+      {...restProps}
+      type="cooperation_model_edge"
+      style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
+    />
   );
 };
 

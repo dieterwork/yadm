@@ -4,12 +4,17 @@ import { usePreviewNodeStore } from "./usePreviewNodeStore";
 import { useReactFlow, useStore } from "@xyflow/react";
 import uuid from "$/shared/utils/uuid";
 import { createNode } from "../nodes/utils/createNode";
-import { useDEMOModeler } from "../modeler/useDEMOModeler";
+import {
+  setPanOnDrag,
+  setSelectionOnDrag,
+  useDEMOModeler,
+} from "../modeler/useDEMOModeler";
 import {
   SMALL_NODE_SIZE,
   TRANSACTION_TIME_SIZE,
   X_SMALL_NODE_SIZE,
 } from "../nodes/utils/consts";
+import { useShallow } from "zustand/react/shallow";
 
 const ofdNodes = ["c_fact", "c_act", "tk_execution", "initiation_fact"];
 
@@ -23,7 +28,6 @@ export const usePreviewNode = ({
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
   const updatePosition = usePreviewNodeStore((state) => state.updatePosition);
   useShortcut("Escape", reset);
-  const node = useStore((state) => state.domNode);
   const addNode = useDEMOModeler((state) => state.addNode);
 
   const addNodeFromSidebar = (e: MouseEvent) => {
@@ -54,33 +58,33 @@ export const usePreviewNode = ({
       addNode(textNode);
     }
 
-    if (previewNode.type === "transaction_time") {
-      const ghostNode1Id = uuid();
-      const ghostNode2Id = uuid();
+    // if (previewNode.type === "transaction_time") {
+    //   const ghostNode1Id = uuid();
+    //   const ghostNode2Id = uuid();
 
-      // add ghosts
-      addNode({
-        id: `ghost-${ghostNode1Id}`,
-        type: "ghost",
-        position: {
-          x: 40 + TRANSACTION_TIME_SIZE,
-          y: SMALL_NODE_SIZE / 2 + 3,
-        },
-        data: {},
-        parentId: newNode[0].id,
-      });
+    //   // add ghosts
+    //   addNode({
+    //     id: `ghost_${ghostNode1Id}`,
+    //     type: "ghost",
+    //     position: {
+    //       x: 40 + TRANSACTION_TIME_SIZE,
+    //       y: SMALL_NODE_SIZE / 2 + 3,
+    //     },
+    //     data: {},
+    //     parentId: newNode[0].id,
+    //   });
 
-      addNode({
-        id: `ghost-${ghostNode2Id}`,
-        type: "ghost",
-        position: {
-          x: -40,
-          y: SMALL_NODE_SIZE / 2 + 3,
-        },
-        data: {},
-        parentId: newNode[0].id,
-      });
-    }
+    //   addNode({
+    //     id: `ghost_${ghostNode2Id}`,
+    //     type: "ghost",
+    //     position: {
+    //       x: -40,
+    //       y: SMALL_NODE_SIZE / 2 + 3,
+    //     },
+    //     data: {},
+    //     parentId: newNode[0].id,
+    //   });
+    // }
 
     reset();
   };
@@ -99,6 +103,8 @@ export const usePreviewNode = ({
       } else {
         reset();
       }
+      setPanOnDrag(true);
+      setSelectionOnDrag(false);
     };
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);

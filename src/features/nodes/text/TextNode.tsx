@@ -19,7 +19,8 @@ const TextNode = ({
     <>
       <div
         className={cn(
-          data.isBorderVisible ? "border-1 border-red-500" : "border-none"
+          "rounded",
+          data.isBorderVisible ? "border-1 border-slate-300" : "border-none"
         )}
         style={{ width, height }}
       >

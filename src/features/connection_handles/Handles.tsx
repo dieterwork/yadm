@@ -1,4 +1,4 @@
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useUpdateNodeInternals } from "@xyflow/react";
 import type { DEMOHandlesData } from "../nodes/nodes.types";
 import DEMOHandle from "./DEMOHandle";
 import { useNodeHandles } from "./useNodeHandles";
@@ -11,6 +11,7 @@ interface HandlesProps {
   nodeDimensions: { width?: number; height?: number };
   isVisible?: boolean;
 }
+
 const Handles = ({
   nodeId,
   handles,
@@ -18,7 +19,8 @@ const Handles = ({
   isVisible,
 }: HandlesProps) => {
   if (!nodeDimensions.width || !nodeDimensions.height) return null;
-  handles = useNodeHandles({
+
+  const handlesWithStyles = useNodeHandles({
     width: nodeDimensions.width,
     height: nodeDimensions.height,
     handles,
@@ -31,8 +33,8 @@ const Handles = ({
         height: nodeDimensions.height,
       }}
     >
-      {handles.top?.handles &&
-        handles.top.handles.map((handle) => (
+      {handlesWithStyles.top?.handles &&
+        handlesWithStyles.top.handles.map((handle) => (
           <DEMOHandle
             key={handle.id}
             id={handle.id}
@@ -42,8 +44,8 @@ const Handles = ({
             nodeId={nodeId}
           />
         ))}
-      {handles.bottom?.handles &&
-        handles.bottom.handles.map((handle) => (
+      {handlesWithStyles.bottom?.handles &&
+        handlesWithStyles.bottom.handles.map((handle) => (
           <DEMOHandle
             key={handle.id}
             id={handle.id}
@@ -53,8 +55,8 @@ const Handles = ({
             nodeId={nodeId}
           />
         ))}
-      {handles.left?.handles &&
-        handles.left.handles.map((handle) => (
+      {handlesWithStyles.left?.handles &&
+        handlesWithStyles.left.handles.map((handle) => (
           <DEMOHandle
             key={handle.id}
             id={handle.id}
@@ -64,8 +66,8 @@ const Handles = ({
             nodeId={nodeId}
           />
         ))}
-      {handles.right?.handles &&
-        handles.right.handles.map((handle) => (
+      {handlesWithStyles.right?.handles &&
+        handlesWithStyles.right.handles.map((handle) => (
           <DEMOHandle
             key={handle.id}
             id={handle.id}

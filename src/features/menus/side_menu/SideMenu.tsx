@@ -12,6 +12,7 @@ import {
 import { cn } from "@sglara/cn";
 import { useShallow } from "zustand/react/shallow";
 import {
+  getNode,
   setPanOnDrag,
   setSelectionOnDrag,
   useDEMOModeler,
@@ -19,14 +20,20 @@ import {
 import { usePreviewNodeStore } from "$/features/preview_node/usePreviewNodeStore";
 import { useHelperLinesStore } from "$/features/helper_lines/useHelperLinesStore";
 import { DEFAULT_CONTENT_MAP } from "$/features/nodes/utils/consts";
+import DEMOMenu from "../_components/DEMOMenu";
+import DEMOMenuItem from "../_components/DEMOMenuItem";
+import DEMOMenuSection from "../_components/DEMOMenuSection";
+import DEMOMenuSeparator from "../_components/DEMOMenuSeparator";
 
 const SideMenu = () => {
+  const previewNode = usePreviewNodeStore((state) => state.previewNode);
   const {
     setGridVisibility,
     grid,
     setGridSnapability,
     panOnDrag,
     selectionOnDrag,
+    updateNodeConnectionHandlesVisibility,
   } = useDEMOModeler(
     useShallow((state) => ({
       addNode: state.addNode,
@@ -35,6 +42,8 @@ const SideMenu = () => {
       grid: state.grid,
       panOnDrag: state.panOnDrag,
       selectionOnDrag: state.selectionOnDrag,
+      updateNodeConnectionHandlesVisibility:
+        state.updateNodeConnectionHandlesVisibility,
     }))
   );
 
@@ -51,27 +60,78 @@ const SideMenu = () => {
         toggleHelperLines: state.toggle,
       }))
     );
-
   return (
     <div className="sidemenu | absolute top-[50%] left-4 translate-y-[-50%] z-9999">
       <div className="sidemenu-inner">
-        <IconContext value={{ size: 32 }}>
-          <Menu className="bg-white">
-            <MenuItem
+        <DEMOMenu direction="vertical">
+          <DEMOMenuSection aria-label="Global modeler tools">
+            <DEMOMenuItem
               onAction={() => {
                 setSelectionOnDrag(false);
                 setPanOnDrag(true);
               }}
-              className="cursor-pointer select-none"
               aria-label="Activate hand tool"
             >
               <HandIcon
                 color={
-                  panOnDrag ? "var(--color-blue-500)" : "var(--color-slate-900)"
+                  panOnDrag ? "var(--color-sky-500)" : "var(--color-slate-900)"
                 }
               />
-            </MenuItem>
-            <MenuItem
+            </DEMOMenuItem>
+            <DEMOMenuItem
+              onAction={() => {
+                setSelectionOnDrag(true);
+                setPanOnDrag(false);
+              }}
+              aria-label="Activate selection tool"
+            >
+              <SelectionPlusIcon
+                color={
+                  selectionOnDrag
+                    ? "var(--color-sky-500)"
+                    : "var(--color-slate-900)"
+                }
+              />
+            </DEMOMenuItem>
+            <DEMOMenuItem
+              onAction={() => {
+                toggleHelperLines(!areHelperLinesEnabled);
+              }}
+            >
+              <ArrowsInLineHorizontalIcon
+                className={cn(!areHelperLinesEnabled && "opacity-[0.5]")}
+              />
+            </DEMOMenuItem>
+          </DEMOMenuSection>
+          <DEMOMenuSeparator />
+          <DEMOMenuSection aria-label="Grid options">
+            <DEMOMenuItem
+              onAction={() => {
+                setGridSnapability((isEnabled) => !isEnabled);
+              }}
+              aria-label={
+                grid.isSnapEnabled ? "Allow free movement" : "Snap to grid"
+              }
+            >
+              <CornersInIcon
+                className={cn(!grid.isSnapEnabled && "opacity-[0.3]")}
+              />
+            </DEMOMenuItem>
+            <DEMOMenuItem
+              onAction={() => {
+                setGridVisibility((visible) => !visible);
+              }}
+              aria-label={grid.isVisible ? "Hide grid" : "Show grid"}
+            >
+              <DotsNineIcon
+                className={cn(!grid.isVisible && "opacity-[0.3]")}
+              />
+            </DEMOMenuItem>
+          </DEMOMenuSection>
+          <DEMOMenuSeparator />
+          <DEMOMenuSection aria-label="Add nodes">
+            <DEMOMenuItem
+              aria-label="Add text node"
               onClick={(e) => {
                 createNode({
                   type: "text",
@@ -81,62 +141,21 @@ const SideMenu = () => {
                   content: DEFAULT_CONTENT_MAP["text"],
                 });
               }}
-              className="cursor-pointer select-none"
-            >
-              <FilePlusIcon />
-            </MenuItem>
-            <MenuItem
               onAction={() => {
-                toggleHelperLines(!areHelperLinesEnabled);
-              }}
-              className="cursor-pointer select-none"
-            >
-              <ArrowsInLineHorizontalIcon
-                className={cn(!areHelperLinesEnabled && "opacity-[0.5]")}
-              />
-            </MenuItem>
-            <MenuItem
-              onAction={() => {
-                setGridVisibility((visible) => !visible);
-              }}
-              className="cursor-pointer select-none"
-              aria-label={grid.isVisible ? "Hide grid" : "Show grid"}
-            >
-              <DotsNineIcon
-                className={cn(!grid.isVisible && "opacity-[0.5]")}
-              />
-            </MenuItem>
-            <MenuItem
-              onAction={() => {
-                setGridSnapability((isEnabled) => !isEnabled);
-              }}
-              className="cursor-pointer select-none"
-              aria-label={
-                grid.isSnapEnabled ? "Allow free movement" : "Snap to grid"
-              }
-            >
-              <CornersInIcon
-                className={cn(!grid.isSnapEnabled && "opacity-[0.5]")}
-              />
-            </MenuItem>
-            <MenuItem
-              onAction={() => {
-                setSelectionOnDrag(true);
                 setPanOnDrag(false);
+                setSelectionOnDrag(false);
               }}
-              className="cursor-pointer select-none"
-              aria-label="Activate selection tool"
             >
-              <SelectionPlusIcon
+              <FilePlusIcon
                 color={
-                  selectionOnDrag
-                    ? "var(--color-blue-500)"
+                  previewNode?.type === "text"
+                    ? "var(--color-sky-500)"
                     : "var(--color-slate-900)"
                 }
               />
-            </MenuItem>
-          </Menu>
-        </IconContext>
+            </DEMOMenuItem>
+          </DEMOMenuSection>
+        </DEMOMenu>
       </div>
     </div>
   );
