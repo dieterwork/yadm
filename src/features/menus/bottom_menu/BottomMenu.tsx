@@ -29,6 +29,7 @@ import DEMOMenuTooltip from "../_components/DEMOMenuTooltip";
 
 const BottomMenu = () => {
   const { zoomIn, zoomOut, fitView, zoomTo } = useReactFlow();
+  const { zoom } = useViewport();
   const { setEnabled, isEnabled } = useDEMOModeler(
     useShallow((state) => ({
       setEnabled: state.setEnabled,
