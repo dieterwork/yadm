@@ -112,7 +112,6 @@ const BottomMenu = () => {
               <ArrowClockwiseIcon />
             </DEMOMenuItem>
           </DEMOMenuSection>
-          <DEMOMenuSeparator />
         </DEMOMenu>
       </div>
     </div>
