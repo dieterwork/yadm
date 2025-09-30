@@ -33,6 +33,7 @@ const SelfActivationNode = ({
           "delete",
           "toggleHandlesVisibility",
           "changeState",
+          "editText",
         ]}
       >
         <EditableContent

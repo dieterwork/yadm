@@ -23,6 +23,14 @@ const ProductionEventNode = ({
         height={height}
         type="production_event"
         keepAspectRatio={true}
+        actions={[
+          "addHandle",
+          "changeColor",
+          "changeFontSize",
+          "delete",
+          "editText",
+          "toggleHandlesVisibility",
+        ]}
       >
         <EditableContent
           isSelected={selected}

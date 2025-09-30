@@ -43,6 +43,7 @@ const TransactionNode = ({
           "delete",
           "toggleHandlesVisibility",
           "changeScope",
+          "editText",
         ]}
       >
         <EditableContent

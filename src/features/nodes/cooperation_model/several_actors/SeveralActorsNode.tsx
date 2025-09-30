@@ -34,6 +34,7 @@ const SeveralActorsNode = ({
           "delete",
           "toggleHandlesVisibility",
           "changeState",
+          "editText",
         ]}
       >
         <EditableContent

@@ -22,6 +22,14 @@ const EntityClassNode = ({
         width={width}
         height={height}
         type="entity_class"
+        actions={[
+          "addHandle",
+          "changeColor",
+          "changeFontSize",
+          "delete",
+          "editText",
+          "toggleHandlesVisibility",
+        ]}
       >
         <EditableContent
           isSelected={selected}

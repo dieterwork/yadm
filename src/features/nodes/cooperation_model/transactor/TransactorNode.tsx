@@ -30,6 +30,7 @@ const TransactorNode = ({
           "delete",
           "toggleHandlesVisibility",
           "changeState",
+          "editText",
         ]}
       >
         <EditableContent

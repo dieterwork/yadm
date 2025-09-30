@@ -22,6 +22,14 @@ const DerivedEntityNode = ({
         width={width}
         height={height}
         type="derived_entity"
+        actions={[
+          "addHandle",
+          "changeColor",
+          "changeFontSize",
+          "delete",
+          "editText",
+          "toggleHandlesVisibility",
+        ]}
       >
         <EditableContent
           isSelected={selected}

@@ -32,6 +32,7 @@ const CompositeNode = ({
           "delete",
           "toggleHandlesVisibility",
           "changeState",
+          "editText",
         ]}
       >
         <EditableContent

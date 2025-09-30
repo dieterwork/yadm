@@ -36,6 +36,7 @@ const ActorNode = ({
           "toggleHandlesVisibility",
           "changeScope",
           "changeState",
+          "editText",
         ]}
       >
         <EditableContent

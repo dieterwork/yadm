@@ -33,6 +33,7 @@ const ElementaryActorNode = ({
           "delete",
           "toggleHandlesVisibility",
           "changeState",
+          "editText",
         ]}
       >
         <EditableContent
