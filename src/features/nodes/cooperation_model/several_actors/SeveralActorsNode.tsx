@@ -16,7 +16,7 @@ const SeveralActorsNode = ({
   width,
   height,
 }: NodeProps<SeveralActorsNodeType>) => {
-  const { content, fontSize } = data;
+  const { content, fontSize, isEditable } = data;
 
   return (
     <>
@@ -27,12 +27,21 @@ const SeveralActorsNode = ({
         width={width}
         height={height}
         type="several_actors"
+        actions={[
+          "addHandle",
+          "changeColor",
+          "changeFontSize",
+          "delete",
+          "toggleHandlesVisibility",
+          "changeState",
+        ]}
       >
         <EditableContent
+          isSelected={selected}
+          isEditable={isEditable}
           content={content}
           width={DEFAULT_SIZE_MAP["transaction"].width}
           height={DEFAULT_SIZE_MAP["transaction"].height}
-          editable={true}
           style={{ bottom: "auto", right: 100 / 8 }}
           fontSize={fontSize}
           maxLength={50}

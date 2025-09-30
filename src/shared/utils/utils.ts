@@ -1,6 +1,6 @@
-import type { Scope } from "../../features/nodes/cooperation_model/cooperationModel.types";
+import type { NodeScope } from "$/features/nodes/nodes.types";
 
-export const getScopeFill = (scope: Scope, color?: string) => {
+export const getScopeFill = (scope: NodeScope, color?: string) => {
   if (scope === "out") return "var(--color-slate-500)";
 
   if (color === "default" || !color) {

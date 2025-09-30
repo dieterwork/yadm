@@ -20,7 +20,7 @@ const TransactionNode = ({
   width,
   height,
 }: NodeProps<TransactionNodeType>) => {
-  const { content, fontSize } = data;
+  const { content, fontSize, isEditable } = data;
 
   if (data.state === "double" && height) {
     width = calculateDoubleDiamondInCircleDimensions(height).width + 4;
@@ -36,14 +36,23 @@ const TransactionNode = ({
         height={height}
         type="transaction"
         keepAspectRatio={true}
+        actions={[
+          "addHandle",
+          "changeColor",
+          "changeFontSize",
+          "delete",
+          "toggleHandlesVisibility",
+          "changeScope",
+        ]}
       >
         <EditableContent
+          isSelected={selected}
+          isEditable={isEditable && data.state !== "unclear"}
           content={content}
           width={data.state === "double" ? height : width}
           height={height}
           fontSize={fontSize}
           hide={data.state === "unclear"}
-          editable={data.state !== "unclear"}
           maxLength={50}
         />
       </DEMONodePrimitive>

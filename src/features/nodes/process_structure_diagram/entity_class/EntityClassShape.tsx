@@ -1,11 +1,10 @@
 import { useContext } from "react";
 import { ShapeContext } from "../../../shapes/ShapeContext";
-import type { ColorType } from "../../../colors/colors.types";
+import type { NodeColor } from "../../../../shared/components/ui/colors/colors.types";
 import Rectangle from "../../../shapes/Rectangle";
-import { DEFAULT_BORDER_RADIUS } from "../productionStructureDiagramConsts";
 
 type EntityClassShapeProps = {
-  color?: ColorType;
+  color?: NodeColor;
 };
 
 const EntityClassShape = ({ color }: EntityClassShapeProps) => {

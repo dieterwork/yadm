@@ -1,18 +1,20 @@
-import type { XYPosition } from "@xyflow/react";
+import type { Position } from "@xyflow/react";
 
 export const calcConnectionLineTargetXForTransactionTimeEdge = (
   toX: number,
   fromX: number,
-  nodeDimensions: { width?: number; height?: number },
-  nodePosition: XYPosition
+  nodeX: number,
+  fromPosition: Position,
+  nodeWidth?: number
 ) => {
-  if (!nodeDimensions.width || !nodeDimensions.height) return toX;
+  if (!nodeWidth) return toX;
+  console.log(toX, nodeX, nodeWidth);
   if (
-    toX < nodePosition.x - nodeDimensions.width / 2 ||
-    toX > nodePosition.x + nodeDimensions.width / 2
+    (toX < nodeX && fromPosition === "left") ||
+    (toX > nodeX + nodeWidth && fromPosition === "right")
   ) {
     return toX;
   } else {
-    return fromX;
+    return fromX + (fromPosition === "left" ? -20 : 20);
   }
 };

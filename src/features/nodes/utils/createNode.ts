@@ -418,6 +418,7 @@ export const createNode = ({
           },
           extent: "parent",
           selected: true,
+          zIndex: 1,
         },
         {
           id: uuid(),
@@ -444,7 +445,7 @@ export const createNode = ({
           extent: "parent",
           selected: false,
           connectable: false,
-          zIndex: 1,
+          zIndex: 2,
         },
       ];
     }

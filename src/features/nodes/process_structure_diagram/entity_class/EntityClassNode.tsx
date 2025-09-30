@@ -11,7 +11,7 @@ const EntityClassNode = ({
   width,
   height,
 }: NodeProps<EntityClassNodeType>) => {
-  const { content, fontSize } = data;
+  const { content, fontSize, isEditable } = data;
 
   return (
     <>
@@ -24,10 +24,11 @@ const EntityClassNode = ({
         type="entity_class"
       >
         <EditableContent
+          isSelected={selected}
+          isEditable={isEditable}
           content={content}
           width={width * 0.75}
           height={height * 0.75}
-          editable={true}
           fontSize={fontSize}
           alignContent="top"
           maxLength={60}

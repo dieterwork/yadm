@@ -2,6 +2,7 @@ import {
   getSmoothStepPath,
   getStraightPath,
   MarkerType,
+  useInternalNode,
   type ConnectionLineComponentProps,
   type XYPosition,
 } from "@xyflow/react";
@@ -16,39 +17,39 @@ const ConnectionLine = ({
   toPosition,
   connectionStatus,
   fromNode,
+  toNode,
 }: ConnectionLineComponentProps) => {
-  const [smoothStepPath] = getSmoothStepPath({
-    sourceX: fromX,
-    sourceY: fromY,
-    targetX: toX,
-    targetY: toY,
-    sourcePosition: fromPosition,
-    targetPosition: toPosition,
-  });
-
-  const [linearPath] = getStraightPath({
-    sourceX: fromX,
-    sourceY: fromY,
-    targetX:
-      fromNode.type === "transaction_time"
-        ? calcConnectionLineTargetXForTransactionTimeEdge(
+  const [path] =
+    fromNode.type !== "transaction_time"
+      ? getSmoothStepPath({
+          sourceX: fromX,
+          sourceY: fromY,
+          targetX: toX,
+          targetY: toY,
+          sourcePosition: fromPosition,
+          targetPosition: toPosition,
+        })
+      : getStraightPath({
+          sourceX: fromX,
+          sourceY: fromY,
+          targetX: calcConnectionLineTargetXForTransactionTimeEdge(
             toX,
             fromX,
-            { width: fromNode.width, height: fromNode.height },
-            fromNode.position
-          )
-        : toX,
-    targetY: fromNode.type === "transaction_time" ? fromY : toY,
-  });
+            fromNode.position.x,
+            fromPosition,
+            fromNode.measured.width
+          ),
+          targetY: fromY,
+        });
 
   return (
     <g>
       <path
         fill="none"
-        stroke="var(--color-rose-500)"
+        stroke="var(--color-slate-900)"
         strokeWidth={2}
         className={connectionStatus === "valid" ? "" : "animated"}
-        d={fromNode.type === "transaction_time" ? linearPath : smoothStepPath}
+        d={path}
         markerStart={MarkerType.ArrowClosed}
         markerWidth={20}
         markerEnd={MarkerType.ArrowClosed}

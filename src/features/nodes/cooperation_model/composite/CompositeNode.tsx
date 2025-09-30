@@ -14,7 +14,7 @@ const CompositeNode = ({
   width,
   height,
 }: NodeProps<CompositeNodeType>) => {
-  const { content, fontSize } = data;
+  const { content, fontSize, isEditable } = data;
 
   return (
     <>
@@ -25,12 +25,21 @@ const CompositeNode = ({
         width={width}
         height={height}
         type="composite"
+        actions={[
+          "addHandle",
+          "changeColor",
+          "changeFontSize",
+          "delete",
+          "toggleHandlesVisibility",
+          "changeState",
+        ]}
       >
         <EditableContent
+          isSelected={selected}
+          isEditable={isEditable}
           content={content}
           width={width}
           height={height}
-          editable={true}
           fontSize={fontSize}
           maxLength={50}
         />

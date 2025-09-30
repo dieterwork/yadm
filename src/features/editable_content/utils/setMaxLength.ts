@@ -1,16 +1,12 @@
-import type { KeyboardEvent } from "react";
+import isPrintableChar from "$/shared/utils/isPrintableChar";
+import type { InputEvent, KeyboardEvent } from "react";
 
 export const setMaxLength = (
-  e: KeyboardEvent<HTMLDivElement>,
+  e: InputEvent<HTMLDivElement>,
+  element: HTMLDivElement,
   maxLength: number
 ) => {
-  const target = e.currentTarget;
-  if (!(target instanceof Node)) throw new Error("Target is not a node");
-  if (
-    target.innerText.length >= maxLength &&
-    e.key !== "Backspace" &&
-    e.key !== "Delete"
-  ) {
+  if ((element.textContent?.length ?? 0) >= maxLength) {
     e.preventDefault();
     return;
   }

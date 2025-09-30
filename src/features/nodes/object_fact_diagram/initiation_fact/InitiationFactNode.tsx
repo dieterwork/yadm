@@ -24,7 +24,7 @@ const InitiationFactNode = ({
           "delete",
           "changeColor",
           "attachNode",
-          "toggleConnectionHandlesVisibility",
+          "toggleHandlesVisibility",
         ]}
       />
     </>

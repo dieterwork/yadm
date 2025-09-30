@@ -4,7 +4,13 @@ import {
   useUpdateNodeInternals,
   type HandleProps,
 } from "@xyflow/react";
-import { getNode, useDEMOModeler } from "../modeler/useDEMOModeler";
+import {
+  getNode,
+  setEdges,
+  setNodes,
+  updateNodeHandles,
+  useDEMOModelerStore,
+} from "../modeler/useDEMOModelerStore";
 import { useEffect } from "react";
 
 let didInit = false;
@@ -15,10 +21,7 @@ const DEMOHandle = ({
   ...restProps
 }: HandleProps & { nodeId: string }) => {
   const node = getNode(nodeId);
-  const updateNodeHandles = useDEMOModeler((state) => state.updateNodeHandles);
-  const edges = useDEMOModeler((state) => state.edges);
-  const setEdges = useDEMOModeler((state) => state.setEdges);
-  const setNodes = useDEMOModeler((state) => state.setNodes);
+  const edges = useDEMOModelerStore((state) => state.edges);
   const updateNodeInternals = useUpdateNodeInternals();
 
   useEffect(() => {
@@ -52,20 +55,14 @@ const DEMOHandle = ({
         if (targetNodes) {
           setNodes((nodes) =>
             nodes.filter(
-              (node) => !targetNodes.includes(node) && node.type !== "ghost"
+              (node) => !targetNodes.includes(node.id) && node.type !== "ghost"
             )
           );
         }
 
-        updateNodeHandles(nodeId, (handles) => ({
-          ...handles,
-          [position]: {
-            ...handles[position],
-            handles: handles[position]?.handles?.filter(
-              (handle) => handle.id !== id
-            ),
-          },
-        }));
+        updateNodeHandles(nodeId, position, (handles) =>
+          handles.filter((handle) => handle.id !== id)
+        );
         updateNodeInternals(nodeId);
       }}
     />

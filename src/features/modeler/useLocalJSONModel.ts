@@ -1,18 +1,22 @@
-import type { Edge, ReactFlowJsonObject } from "@xyflow/react";
+import type { ReactFlowJsonObject } from "@xyflow/react";
 import { useEffect } from "react";
 import type { DEMONode } from "../nodes/nodes.types";
-import { useDEMOModeler } from "./useDEMOModeler";
+import { setEdges, setNodes } from "./useDEMOModelerStore";
+import type { DEMOEdge } from "../edges/edges.types";
 
+let didInit = false;
 const useLocalJSONModel = () => {
-  const setModelFromJSONObject = useDEMOModeler(
-    (state) => state.setModelFromJSONObject
-  );
   useEffect(() => {
-    const localDEMOModelJSON = localStorage.getItem("demo-model");
-    if (!localDEMOModelJSON) return;
-    const localDEMOModel: ReactFlowJsonObject<DEMONode, Edge> =
-      JSON.parse(localDEMOModelJSON);
-    setModelFromJSONObject(localDEMOModel);
+    if (!didInit) {
+      didInit = true;
+      const localDEMOModelJSON = localStorage.getItem("demo-model");
+      if (!localDEMOModelJSON) return;
+
+      const localDEMOModel: ReactFlowJsonObject<DEMONode, DEMOEdge> =
+        JSON.parse(localDEMOModelJSON);
+      setNodes(localDEMOModel.nodes);
+      setEdges(localDEMOModel.edges);
+    }
   }, []);
 };
 

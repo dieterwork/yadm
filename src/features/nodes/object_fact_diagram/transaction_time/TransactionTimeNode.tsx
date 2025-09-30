@@ -20,7 +20,7 @@ const TransactionTimeNode = ({
         width={width}
         height={height}
         type="transaction_time"
-        actions={["changeColor", "delete", "toggleConnectionHandlesVisibility"]}
+        actions={["changeColor", "delete", "toggleHandlesVisibility"]}
         resizerProps={{ maxHeight: SMALL_NODE_SIZE }}
       />
     </>

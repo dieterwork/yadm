@@ -1,23 +1,26 @@
+import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
 import { create } from "zustand";
 
 interface AttachState {
-  isAttaching: boolean;
   childNodeId: string | null;
-  setAttaching: (isAttaching: boolean) => void;
-  setChildNodeId: (id: string) => void;
-  reset: () => void;
 }
 
-export const useAttachStore = create<AttachState>()((set, get) => ({
+export const useAttachStore = create<AttachState>()(() => ({
   childNodeId: null,
-  isAttaching: false,
-  setChildNodeId: (id) => {
-    set({ childNodeId: id });
-  },
-  setAttaching: (isAttaching) => {
-    set({ isAttaching });
-  },
-  reset: () => {
-    set(() => ({ childNodeId: null, isAttaching: false }));
-  },
 }));
+
+export const setAttachChildNodeId = (id: string) => {
+  useAttachStore.setState(() => ({ childNodeId: id }));
+  useDEMOModelerStore.setState(() => ({
+    state: "attach",
+  }));
+};
+
+export const resetAttach = () => {
+  useAttachStore.setState(() => ({
+    childNodeId: null,
+  }));
+  useDEMOModelerStore.setState(() => ({
+    state: useDEMOModelerStore.getInitialState().state,
+  }));
+};

@@ -7,9 +7,6 @@ import type { CompositeNode } from "./composite/composite.types";
 import type { ElementaryActorNode } from "./elementary_actor/elementaryActor.types";
 import type { SeveralActorsNode } from "./several_actors/severalActors.types";
 
-// Scope
-export type Scope = "in" | "out";
-
 export type CooperationModelShapeType =
   | "actor"
   | "transactor"

@@ -24,7 +24,7 @@ const TKExecutionNode = ({
           "delete",
           "changeColor",
           "attachNode",
-          "toggleConnectionHandlesVisibility",
+          "toggleHandlesVisibility",
         ]}
       />
     </>

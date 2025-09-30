@@ -4,7 +4,7 @@ import DEMONodePrimitive from "../DEMONodePrimitive";
 import { NodeResizer, type NodeProps } from "@xyflow/react";
 import type { TextNode as TextNodeType } from "./textNode.types";
 import { cn } from "@sglara/cn";
-import NodeToolbar from "../../node-toolbar/NodeToolbar";
+import NodeToolbar from "../../node-toolbar/DEMONodeToolbar";
 import { MIN_SIZE_MAP } from "../utils/consts";
 
 const TextNode = ({
@@ -14,7 +14,8 @@ const TextNode = ({
   data,
   id,
 }: NodeProps<TextNodeType>) => {
-  const { content, textAlign, alignContent, fontSize, color } = data;
+  const { content, textAlign, alignContent, fontSize, color, isEditable } =
+    data;
   return (
     <>
       <div
@@ -36,6 +37,8 @@ const TextNode = ({
           minWidth={MIN_SIZE_MAP["text"].width}
         />
         <EditableContent
+          isSelected={selected}
+          isEditable={isEditable}
           width={width}
           height={height}
           content={content}

@@ -1,34 +1,23 @@
-import { useEffect, type RefObject } from "react";
+import { useEffect } from "react";
 import useShortcut from "../keyboard/useShortcut";
-import { usePreviewNodeStore } from "./usePreviewNodeStore";
+import {
+  resetPreviewNode,
+  updatePreviewNodePosition,
+  usePreviewNodeStore,
+} from "./usePreviewNodeStore";
 import { useReactFlow, useStore } from "@xyflow/react";
 import uuid from "$/shared/utils/uuid";
 import { createNode } from "../nodes/utils/createNode";
-import {
-  setPanOnDrag,
-  setSelectionOnDrag,
-  useDEMOModeler,
-} from "../modeler/useDEMOModeler";
-import {
-  SMALL_NODE_SIZE,
-  TRANSACTION_TIME_SIZE,
-  X_SMALL_NODE_SIZE,
-} from "../nodes/utils/consts";
-import { useShallow } from "zustand/react/shallow";
+import { addNode, setAction, setNodes } from "../modeler/useDEMOModelerStore";
+import { X_SMALL_NODE_SIZE } from "../nodes/utils/consts";
+import { sortNodes } from "$/shared/utils/sortNodes";
 
 const ofdNodes = ["c_fact", "c_act", "tk_execution", "initiation_fact"];
 
-export const usePreviewNode = ({
-  reactFlowRef,
-}: {
-  reactFlowRef: RefObject<HTMLDivElement>;
-}) => {
-  const reset = usePreviewNodeStore((state) => state.reset);
+export const usePreviewNode = () => {
+  const rfDomNode = useStore((state) => state.domNode);
   const { screenToFlowPosition } = useReactFlow();
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
-  const updatePosition = usePreviewNodeStore((state) => state.updatePosition);
-  useShortcut("Escape", reset);
-  const addNode = useDEMOModeler((state) => state.addNode);
 
   const addNodeFromSidebar = (e: MouseEvent) => {
     const position = screenToFlowPosition({
@@ -38,55 +27,42 @@ export const usePreviewNode = ({
 
     const id = uuid();
 
-    const newNode = createNode({ id, type: previewNode.type, position });
+    const newNode = createNode({ id, type: previewNode?.type, position });
 
-    addNode(newNode);
+    if (Array.isArray(newNode)) {
+      for (const node of newNode) {
+        addNode(node);
+      }
+    } else {
+      addNode(newNode);
+    }
 
-    if (ofdNodes.includes(previewNode.type)) {
+    if (ofdNodes.includes(previewNode?.type)) {
       // create text node
       const textNode = createNode({
         type: "text",
         position: {
-          x: X_SMALL_NODE_SIZE / 2 - 50 / 2,
+          x: X_SMALL_NODE_SIZE / 2 - 30 / 2,
           y: -X_SMALL_NODE_SIZE,
         },
         parentId: id,
-        width: 50,
+        width: 30,
         height: 20,
         content: "",
+        textAlign: "center",
       });
-      addNode(textNode);
+      if (Array.isArray(textNode)) {
+        for (const node of textNode) {
+          addNode(node);
+        }
+      } else {
+        addNode(textNode);
+      }
     }
 
-    // if (previewNode.type === "transaction_time") {
-    //   const ghostNode1Id = uuid();
-    //   const ghostNode2Id = uuid();
+    setNodes((nodes) => nodes.sort(sortNodes));
 
-    //   // add ghosts
-    //   addNode({
-    //     id: `ghost_${ghostNode1Id}`,
-    //     type: "ghost",
-    //     position: {
-    //       x: 40 + TRANSACTION_TIME_SIZE,
-    //       y: SMALL_NODE_SIZE / 2 + 3,
-    //     },
-    //     data: {},
-    //     parentId: newNode[0].id,
-    //   });
-
-    //   addNode({
-    //     id: `ghost_${ghostNode2Id}`,
-    //     type: "ghost",
-    //     position: {
-    //       x: -40,
-    //       y: SMALL_NODE_SIZE / 2 + 3,
-    //     },
-    //     data: {},
-    //     parentId: newNode[0].id,
-    //   });
-    // }
-
-    reset();
+    resetPreviewNode();
   };
 
   useEffect(() => {
@@ -95,28 +71,27 @@ export const usePreviewNode = ({
       e.preventDefault();
       const target = e.target;
       if (
+        rfDomNode &&
         target instanceof Element &&
-        (reactFlowRef.current.contains(target) ||
-          reactFlowRef.current === target)
+        (rfDomNode.contains(target) || rfDomNode === target)
       ) {
         addNodeFromSidebar(e);
       } else {
-        reset();
+        resetPreviewNode();
       }
-      setPanOnDrag(true);
-      setSelectionOnDrag(false);
+      setAction("pan");
     };
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
-  }, [previewNode]);
+  }, [previewNode, rfDomNode]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      updatePosition({ x: e.clientX, y: e.clientY });
+      updatePreviewNodePosition({ x: e.clientX, y: e.clientY });
     };
     document.addEventListener("mousemove", handleMouseMove);
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [updatePosition]);
+  }, [updatePreviewNodePosition]);
 };

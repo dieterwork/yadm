@@ -1,18 +1,15 @@
-import { ReactFlowProvider } from "@xyflow/react";
-import Topbar from "./features/topbar/Topbar";
-import Sidebar from "./features/sidebar/Sidebar";
-
 import "@xyflow/react/dist/style.css";
 import "./index.css";
-import DEMOModeler from "./features/modeler/DEMOModeler";
+import AppLayout from "./shared/components/layout/AppLayout";
+import { ReactFlowProvider } from "@xyflow/react";
+import DiamondMarker from "./shared/components/ui/markers/DiamondMarker";
 
 const YADMApp = () => {
   return (
-    <div className="yadm-app | grid h-full [grid-template-areas:'topbar_topbar''sidebar_modeler'] grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
+    <div className="yadm-app | h-[100svh]">
       <ReactFlowProvider>
-        <Topbar />
-        <Sidebar />
-        <DEMOModeler />
+        <DiamondMarker />
+        <AppLayout />
       </ReactFlowProvider>
     </div>
   );

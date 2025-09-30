@@ -15,7 +15,7 @@ const ElementaryActorNode = ({
   width,
   height,
 }: NodeProps<ElementaryActorNodeType>) => {
-  const { content, fontSize } = data;
+  const { content, fontSize, isEditable } = data;
 
   return (
     <>
@@ -26,12 +26,21 @@ const ElementaryActorNode = ({
         width={width}
         height={height}
         type="elementary_actor"
+        actions={[
+          "addHandle",
+          "changeColor",
+          "changeFontSize",
+          "delete",
+          "toggleHandlesVisibility",
+          "changeState",
+        ]}
       >
         <EditableContent
+          isSelected={selected}
+          isEditable={isEditable}
           content={content}
           width={DEFAULT_SIZE_MAP["transaction"].width}
           height={DEFAULT_SIZE_MAP["transaction"].height}
-          editable={true}
           style={{ bottom: "auto" }}
           fontSize={fontSize}
           maxLength={50}

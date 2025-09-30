@@ -11,7 +11,7 @@ const TransactionKindNode = ({
   width,
   height,
 }: NodeProps<TransactionKindNodeType>) => {
-  const { content, fontSize } = data;
+  const { content, fontSize, isEditable } = data;
 
   return (
     <>
@@ -23,13 +23,14 @@ const TransactionKindNode = ({
         height={height}
         type="transaction_kind"
         resizable={false}
-        actions={null}
+        actions={["editText"]}
       >
         <EditableContent
+          isSelected={selected}
+          isEditable={isEditable}
           content={content}
           width={width}
           height={height}
-          editable={true}
           maxLines={1}
           maxLength={3}
           fontSize={fontSize}

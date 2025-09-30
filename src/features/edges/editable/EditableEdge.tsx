@@ -11,7 +11,9 @@ import {
 import type { ControlPointData, DEMOEdge } from "../edges.types";
 import { type DEMONode } from "../../nodes/nodes.types";
 import EdgeToolbar from "../edge_toolbar/EdgeToolbar";
-import DEMOEdgeToolbar from "../edge_toolbar/DEMOEdgeToolbar";
+import DEMOEdgeToolbar, {
+  type EdgeToolbarAction,
+} from "../edge_toolbar/DEMOEdgeToolbar";
 
 export type EditableEdge = Edge<{
   controlPoint: ControlPointData;
@@ -34,7 +36,12 @@ export function EditableEdgeComponent({
   markerMid,
   selected,
   type,
-}: EdgeProps<EditableEdge> & { markerMid?: string; type?: DEMOEdge["type"] }) {
+  actions,
+}: EdgeProps<EditableEdge> & {
+  markerMid?: string;
+  type?: DEMOEdge["type"];
+  actions?: EdgeToolbarAction[];
+}) {
   const sourceNode = useInternalNode<DEMONode>(source);
   const targetNode = useInternalNode<DEMONode>(target);
   if (!sourceNode || !targetNode) {
@@ -50,6 +57,13 @@ export function EditableEdgeComponent({
     targetPosition: targetPosition,
   });
 
+  if (Array.isArray(actions)) {
+    actions =
+      targetNode.type === "ghost"
+        ? actions.filter((action) => action !== "swapConnection")
+        : actions;
+  }
+
   return (
     <>
       <path
@@ -64,11 +78,11 @@ export function EditableEdgeComponent({
       />
       {selected && (
         <DEMOEdgeToolbar
-          id={id}
-          data={data}
-          type={type}
-          selected={selected}
+          edgeId={id}
           position={{ x: labelX, y: labelY }}
+          sourceNodeId={sourceNode.id}
+          targetNodeId={targetNode.id}
+          actions={actions}
         />
       )}
     </>

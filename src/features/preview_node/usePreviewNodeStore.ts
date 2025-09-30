@@ -1,83 +1,41 @@
 import { create } from "zustand";
 import type { DEMONode } from "../nodes/nodes.types";
+import type { XYPosition } from "@xyflow/react";
 
-interface PreviewNodeState {
-  previewNode: {
-    type: Omit<DEMONode["type"], "ghost">;
-    width: number;
-    height: number;
-    isDisabled: boolean;
-    position: { x: number; y: number };
-    content?: string;
-  } | null;
-  createNode: ({
-    type,
-    width,
-    height,
-    isDisabled,
-    position,
-    content,
-  }: {
-    type: Omit<DEMONode["type"], "ghost">;
-    width: number;
-    height: number;
-    isDisabled?: boolean;
-    position: { x: number; y: number };
-    content?: string;
-  }) => void;
-  updateDimensions: (dimensions: { width?: number; height?: number }) => void;
-  updateType: (type: string) => void;
-  updateContent: (content: string) => void;
-  updateDisabled: (isDisabled: boolean) => void;
-  updatePosition: (pos: { x: number; y: number }) => void;
-  reset: () => void;
+interface PreviewNode {
+  type: Omit<DEMONode["type"], "ghost">;
+  width: number;
+  height: number;
+  position: XYPosition;
+  content?: string;
 }
 
-export const usePreviewNodeStore = create<PreviewNodeState>()((set, get) => ({
+interface PreviewNodeState {
+  previewNode: PreviewNode | null;
+}
+
+export const usePreviewNodeStore = create<PreviewNodeState>()(() => ({
   previewNode: null,
-  createNode: ({ type, height, width, position, content, isDisabled }) =>
-    set(() => {
-      return {
-        previewNode: {
-          type,
-          width,
-          height,
-          position,
-          content,
-          isDisabled: isDisabled ? isDisabled : false,
-        },
-      };
-    }),
-  updateDimensions: (dimensions) =>
-    set((state) => {
-      if (!state.previewNode) return { previewNode: null };
-      return {
-        previewNode: {
-          ...state.previewNode,
-          width: dimensions?.width ?? state.previewNode?.width,
-          height: dimensions?.height ?? state.previewNode?.height,
-        },
-      };
-    }),
-  updateType: (type) =>
-    set((state) => {
-      if (!state.previewNode) return { previewNode: null };
-      return { previewNode: { ...state.previewNode, type } };
-    }),
-  updateDisabled: (isDisabled) =>
-    set((state) => {
-      if (!state.previewNode) return { previewNode: null };
-      return { previewNode: { ...state.previewNode, isDisabled } };
-    }),
-  updatePosition: (position) =>
-    set((state) => {
-      if (!state.previewNode) return { previewNode: null };
-      return { previewNode: { ...state.previewNode, position } };
-    }),
-  updateContent: (content) =>
-    set((state) => {
-      if (!state.previewNode) return { previewNode: null };
-      return { previewNode: { ...state.previewNode, content } };
-    }),
-  reset: () => set(() => ({ previewNode: null })),
 }));
+
+export const updatePreviewNodePosition = (position: XYPosition) => {
+  usePreviewNodeStore.setState((state) => ({
+    previewNode: state.previewNode && { ...state.previewNode, position },
+  }));
+};
+
+export const resetPreviewNode = () =>
+  usePreviewNodeStore.setState(() => ({ previewNode: null }));
+
+export const updatePreviewNode = (newPreviewNode: Partial<PreviewNode>) => {
+  usePreviewNodeStore.setState((state) => ({
+    previewNode: state.previewNode && {
+      ...state.previewNode,
+      ...newPreviewNode,
+    },
+  }));
+};
+
+export const setPreviewNode = (newPreviewNode: PreviewNode) => {
+  usePreviewNodeStore.setState(() => ({ previewNode: newPreviewNode }));
+};

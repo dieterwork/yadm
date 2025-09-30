@@ -11,7 +11,10 @@ import {
 import type { CSSProperties, HTMLAttributes } from "react";
 import EdgeToolbarPortal from "./EdgeToolbarPortal";
 import { cn } from "@sglara/cn";
-import { getEdge, useDEMOModeler } from "$/features/modeler/useDEMOModeler";
+import {
+  getEdge,
+  useDEMOModelerStore,
+} from "$/features/modeler/useDEMOModelerStore";
 import { getEdgeToolbarTransform } from "./utils/getEdgeToolbarTransform";
 
 /**
@@ -95,7 +98,7 @@ const EdgeToolbar = ({
   xyPosition = xyPosition ?? { x: 0, y: 0 };
 
   const { x, y, zoom } = useViewport();
-  const edges = useDEMOModeler((state) => {
+  const edges = useDEMOModelerStore((state) => {
     if (!edgeId) {
       return state.edges;
     }

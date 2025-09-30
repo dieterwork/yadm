@@ -12,7 +12,7 @@ const TransactorNode = ({
   width,
   height,
 }: NodeProps<TransactorNodeType>) => {
-  const { content, fontSize } = data;
+  const { content, fontSize, isEditable } = data;
 
   return (
     <>
@@ -23,8 +23,18 @@ const TransactorNode = ({
         width={width}
         height={height}
         type="transactor"
+        actions={[
+          "addHandle",
+          "changeColor",
+          "changeFontSize",
+          "delete",
+          "toggleHandlesVisibility",
+          "changeState",
+        ]}
       >
         <EditableContent
+          isSelected={selected}
+          isEditable={isEditable}
           width={width}
           height={MEDIUM_NODE_SIZE}
           style={{ top: 0, bottom: "auto" }}
@@ -33,6 +43,8 @@ const TransactorNode = ({
           maxLength={5}
         />
         <EditableContent
+          isSelected={selected}
+          isEditable={isEditable}
           width={width}
           height={height ? height - MEDIUM_NODE_SIZE / 2 : undefined}
           style={{ bottom: 0, top: "auto" }}

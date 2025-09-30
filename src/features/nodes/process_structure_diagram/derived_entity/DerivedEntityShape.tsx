@@ -1,16 +1,16 @@
 import { useContext } from "react";
 import { ShapeContext } from "../../../shapes/ShapeContext";
-import type { ColorType } from "../../../colors/colors.types";
+import type { NodeColor } from "../../../../shared/components/ui/colors/colors.types";
 import Rectangle from "../../../shapes/Rectangle";
 import { DEFAULT_BORDER_RADIUS } from "../productionStructureDiagramConsts";
 import { getScopeFill } from "../../../../shared/utils/utils";
-import type { Scope } from "../../cooperation_model/cooperationModel.types";
+import type { NodeScope } from "../../nodes.types";
 
 type DerivedEntityShapeProps = {
   width: number;
   height: number;
-  scope: Scope;
-  color?: ColorType;
+  scope: NodeScope;
+  color?: NodeColor;
 };
 
 const DerivedEntityShape = ({ scope, color }: DerivedEntityShapeProps) => {

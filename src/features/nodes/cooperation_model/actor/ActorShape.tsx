@@ -1,15 +1,15 @@
 import QuestionMark from "../../../shapes/QuestionMark";
 import Rectangle from "../../../shapes/Rectangle";
-import type { Scope } from "../cooperationModel.types";
 import { getScopeFill } from "../../../../shared/utils/utils";
 import type { ActorState } from "./actor.types";
 import { useContext } from "react";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
+import type { NodeScope } from "../../nodes.types";
 
 interface ActorShapeProps {
   state: ActorState;
-  scope: Scope;
+  scope: NodeScope;
   color?: string;
 }
 

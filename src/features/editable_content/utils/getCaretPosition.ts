@@ -3,7 +3,7 @@ import { walkThroughNodes } from "./walkThroughNodes";
 export const getCaretPosition = (elem: HTMLElement) => {
   const sel = window.getSelection();
   if (!sel) throw new Error("Selection not found");
-  var cum_length = [0, 0];
+  let cum_length = [0, 0];
 
   if (sel.anchorNode == elem) cum_length = [sel.anchorOffset, sel.focusOffset];
   else {
@@ -11,8 +11,8 @@ export const getCaretPosition = (elem: HTMLElement) => {
     if (!elem.contains(sel.anchorNode) || !elem.contains(sel.focusNode))
       return undefined;
     else {
-      var found: [number | boolean, number | boolean] = [0, 0];
-      var i;
+      const found: [number | boolean, number | boolean] = [0, 0];
+      let i;
       walkThroughNodes(elem, function (node) {
         for (i = 0; i < 2; i++) {
           if (node == nodes_to_find[i]) {

@@ -2,7 +2,7 @@ import { type NodeProps, type NodeResizerProps } from "@xyflow/react";
 import { shapeMap } from "../shapes/shapeMap";
 import Shape from "../shapes/Shape";
 import { useRef, type ReactNode } from "react";
-import NodeToolbar from "../node-toolbar/NodeToolbar";
+import NodeToolbar from "../node-toolbar/DEMONodeToolbar";
 import { MIN_SIZE_MAP } from "./utils/consts";
 import type { DEMONode } from "./nodes.types";
 import DEMONodeResizer from "../resize/NodeResizer";
@@ -13,17 +13,20 @@ interface DEMONodePrimitiveProps extends NodeProps<DEMONode> {
   resizable?: boolean;
   keepAspectRatio?: boolean;
   children: ReactNode;
-  actions?: Action[] | null;
+  actions?: NodeToolbarAction[] | null;
   resizerProps?: NodeResizerProps;
 }
 
-type Action =
+export type NodeToolbarAction =
   | "changeColor"
   | "delete"
   | "changeFontSize"
-  | "addConnectionHandle"
-  | "toggleConnectionHandlesVisibility"
-  | "attachNode";
+  | "addHandle"
+  | "toggleHandlesVisibility"
+  | "attachNode"
+  | "changeScope"
+  | "changeState"
+  | "editText";
 
 const DEMONodePrimitive = ({
   id,
@@ -39,8 +42,9 @@ const DEMONodePrimitive = ({
     "changeColor",
     "delete",
     "changeFontSize",
-    "addConnectionHandle",
-    "toggleConnectionHandlesVisibility",
+    "addHandle",
+    "toggleHandlesVisibility",
+    "editText",
   ],
   resizerProps,
 }: DEMONodePrimitiveProps) => {
@@ -56,17 +60,15 @@ const DEMONodePrimitive = ({
       style={{ width, height }}
     >
       {/* Controls */}
-      {actions && (
-        <NodeToolbar id={id} data={data} type={type} actions={actions} />
-      )}
+      {actions && <NodeToolbar nodeId={id} actions={actions} />}
       {resizable && (
         <DEMONodeResizer
           {...resizerProps}
           nodeId={id}
           keepAspectRatio={keepAspectRatio}
           isVisible={selected}
-          minHeight={MIN_SIZE_MAP[type].height}
-          minWidth={MIN_SIZE_MAP[type].width}
+          minHeight={MIN_SIZE_MAP[type]?.height}
+          minWidth={MIN_SIZE_MAP[type]?.width}
           lineClassName="node-resizer-line"
           handleClassName="node-resizer-handle"
           type={type}

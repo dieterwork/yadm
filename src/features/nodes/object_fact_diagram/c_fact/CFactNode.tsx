@@ -24,7 +24,7 @@ const CFactNode = ({
           "delete",
           "changeColor",
           "attachNode",
-          "toggleConnectionHandlesVisibility",
+          "toggleHandlesVisibility",
         ]}
       />
     </>

@@ -8,7 +8,7 @@ import {
 } from "@xyflow/react";
 import type { DEMOEdge } from "../edges.types";
 import { SMALL_NODE_SIZE } from "$/features/nodes/utils/consts";
-import { addEdge, addNode } from "$/features/modeler/useDEMOModeler";
+import { addEdge, addNode } from "$/features/modeler/useDEMOModelerStore";
 import type { GhostNode } from "$/features/nodes/ghost/ghost.types";
 import getEdgeType from "$/features/modeler/utils/getEdgeType";
 import type { DEMONode } from "$/features/nodes/nodes.types";
@@ -39,8 +39,8 @@ export const useIncompleteEdge = () => {
     ) {
       return;
     }
-    const fromNodeId = connectionState.fromNode?.id;
-    const fromNodeType = connectionState.fromNode?.type as DEMONode["type"];
+    const fromNode = connectionState.fromNode;
+    const fromPosition = connectionState.fromPosition;
     const ghostId = `ghost_${uuid()}`;
     const { clientX, clientY } =
       "changedTouches" in event ? event.changedTouches[0] : event;
@@ -52,28 +52,37 @@ export const useIncompleteEdge = () => {
 
     const relativeParentCoordinates = convertAbsoluteToParentRelativePosition({
       absolutePosition: position,
-      parentAbsolutePosition: connectionState.fromNode?.position,
+      parentAbsolutePosition: fromNode?.position,
     });
 
     const ghostNode = {
       id: ghostId,
       type: "ghost",
       position:
-        fromNodeType === "transaction_time"
+        fromNode?.type === "transaction_time"
           ? {
-              x: relativeParentCoordinates.x,
-              y: SMALL_NODE_SIZE / 2 + 2,
+              x:
+                fromPosition === "left"
+                  ? relativeParentCoordinates.x > 0
+                    ? -20
+                    : relativeParentCoordinates.x
+                  : fromNode.measured.width &&
+                    relativeParentCoordinates.x < fromNode.measured.width
+                  ? fromNode.measured.width + 20
+                  : relativeParentCoordinates.x,
+              y: SMALL_NODE_SIZE / 2,
             }
           : position,
-      data: { position: getPosition(connectionState.fromPosition) },
-      parentId: fromNodeType === "transaction_time" ? fromNodeId : undefined,
+      data: {},
+      parentId:
+        fromNode?.type === "transaction_time" ? fromNode?.id : undefined,
     } satisfies GhostNode;
 
-    const newEdgeType = getEdgeType(fromNodeType, "ghost");
-    const newEdgeMarker = getMarkerType(fromNodeType, "ghost");
+    const newEdgeType = getEdgeType(fromNode?.type, "ghost");
+    const newEdgeMarker = getMarkerType(fromNode?.type, "ghost");
     const newEdge = {
-      id: `${fromNodeId}->${ghostId}`,
-      source: fromNodeId,
+      id: `${fromNode?.id}->${ghostId}`,
+      source: fromNode?.id,
       target: ghostId,
       reconnectable: "target",
       type: newEdgeType,

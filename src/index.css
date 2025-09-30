@@ -6,7 +6,7 @@
 @custom-variant content-not-editable (&:is([contenteditable="true"]));
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-app);
   line-height: 1.5;
   font-weight: 400;
 }
@@ -109,4 +109,8 @@ body,
   }
   &.react-flow__handle-bottom {
   }
+}
+
+@theme {
+  --font-app: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }

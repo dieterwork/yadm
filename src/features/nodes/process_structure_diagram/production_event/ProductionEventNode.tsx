@@ -11,7 +11,7 @@ const ProductionEventNode = ({
   width,
   height,
 }: NodeProps<ProductionEventNodeType>) => {
-  const { content, fontSize } = data;
+  const { content, fontSize, isEditable } = data;
 
   return (
     <>
@@ -25,10 +25,11 @@ const ProductionEventNode = ({
         keepAspectRatio={true}
       >
         <EditableContent
+          isSelected={selected}
+          isEditable={isEditable}
           content={content}
           width={width}
           height={height}
-          editable={true}
           fontSize={fontSize}
           color={
             data.color === "default"

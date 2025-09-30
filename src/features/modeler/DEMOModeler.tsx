@@ -14,18 +14,19 @@ import { nodeTypes, type DEMONode } from "../nodes/nodes.types";
 
 import { useRef } from "react";
 import {
+  getNode,
   onConnect,
   onEdgesChange,
   onEdgesDelete,
   onNodesChange,
   onReconnect,
   onReconnectEnd,
+  setAction,
   setDEMOInstance,
-  setPanOnDrag,
-  setSelectionOnDrag,
-  useDEMOModeler,
+  updateNodeData,
+  useDEMOModelerStore,
   type DEMOModelerState,
-} from "./useDEMOModeler";
+} from "./useDEMOModelerStore";
 import { useShallow } from "zustand/react/shallow";
 import { saveDEMOInstance } from "../save/saveDEMOInstance";
 import { debounce } from "../../shared/utils/debounce";
@@ -33,16 +34,14 @@ import ConnectionLine from "../connection_line/ConnectionLine";
 import useLocalJSONModel from "./useLocalJSONModel";
 import HelperLines from "../helper_lines/HelperLines";
 import { useHelperLinesStore } from "../helper_lines/useHelperLinesStore";
-import useDelete from "../keyboard/useDelete";
-import useCopyPaste from "../actions/copy_paste/useCopyPaste";
 import { cn } from "@sglara/cn";
-import SideMenu from "../menus/side_menu/SideMenu";
-import BottomMenu from "../menus/bottom_menu/BottomMenu";
-import { useAttachStore } from "../actions/attach/useAttachStore";
+import SideMenu from "../../shared/components/ui/menus/side_menu/SideMenu";
+import BottomMenu from "../../shared/components/ui/menus/bottom_menu/BottomMenu";
+import { resetAttach, useAttachStore } from "../actions/attach/useAttachStore";
 import convertAbsoluteToRelativePosition from "../nodes/utils/convertAbsoluteToRelativePosition";
-import { usePreviewNodeStore } from "../preview_node/usePreviewNodeStore";
 import { usePreviewNode } from "../preview_node/usePreviewNode";
 import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
+import useKeyboardShortcuts from "../keyboard/useKeyboardShortcuts";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -140,41 +139,25 @@ const DEMOModeler = () => {
     isEnabled,
     nodes,
     edges,
+    action,
     DEMOInstance,
-    grid,
-    getNode,
-    updateNode,
-    selectionOnDrag,
-    panOnDrag,
-  } = useDEMOModeler(
+    isGridVisible,
+    isGridSnapEnabled,
+  } = useDEMOModelerStore(
     useShallow((state: DEMOModelerState) => ({
       isEnabled: state.isEnabled,
       nodes: state.nodes,
       edges: state.edges,
-      addNode: state.addNode,
+      action: state.action,
       DEMOInstance: state.DEMOInstance,
-      addEdge: state.addEdge,
-      setNodes: state.setNodes,
-      setEdges: state.setEdges,
-      grid: state.grid,
-      getNode: state.getNode,
-      updateNode: state.updateNode,
-      selectionOnDrag: state.selectionOnDrag,
-      panOnDrag: state.panOnDrag,
+      isGridVisible: state.isGridVisible,
+      isGridSnapEnabled: state.isGridSnapEnabled,
     }))
   );
 
   const ref = useRef<HTMLDivElement>(null!);
 
-  usePreviewNode({ reactFlowRef: ref });
-
-  const { childNodeIdAttach, resetAttachStore, isAttaching } = useAttachStore(
-    useShallow((state) => ({
-      childNodeIdAttach: state.childNodeId,
-      resetAttachStore: state.reset,
-      isAttaching: state.isAttaching,
-    }))
-  );
+  const attachChildNodeId = useAttachStore((state) => state.childNodeId);
 
   const {
     horizontal: horizontalHelperLine,
@@ -192,13 +175,13 @@ const DEMOModeler = () => {
   // const onNodeDragStop = (e: React.MouseEvent, node: DEMONode) => {};
 
   useLocalJSONModel();
-  useCopyPaste({
-    disabledNodeTypes: ["transaction_kind"],
-  });
-  useDelete();
+  useKeyboardShortcuts();
+  usePreviewNode();
+
+  const childNodeIdAttach = useAttachStore((state) => state.childNodeId);
 
   const handleNodeAttach = (node: DEMONode) => {
-    if (!isAttaching || !childNodeIdAttach) return;
+    if (action !== "attach" || !childNodeIdAttach) return;
     const childNode = getNode(childNodeIdAttach);
     if (!childNode) {
       return console.error("Could not find child node");
@@ -221,14 +204,12 @@ const DEMOModeler = () => {
       childNode,
       nodes
     );
-    updateNode(childNodeIdAttach, {
+    updateNodeData(childNodeIdAttach, {
       parentId: parentNode.id,
       position: { x: newPosition.x ?? 0, y: newPosition.y ?? 0 },
     });
-    resetAttachStore();
+    resetAttach();
   };
-
-  const previewNode = usePreviewNodeStore((state) => state.previewNode);
 
   const isValidConnection = (connection: DEMOEdge | Connection) => {
     const sourceNode = getNode(connection.source);
@@ -241,16 +222,14 @@ const DEMOModeler = () => {
     )
       return false;
     const allowedConnections = allowedConnectionMap[sourceNode?.type];
-    if (!allowedConnections.includes(targetNode.type)) return false;
+    if (!allowedConnections.includes(targetNode?.type)) return false;
     return true;
   };
 
   return (
     <div
       className="DEMO-modeler | [grid-area:modeler] h-full"
-      data-selecting={selectionOnDrag}
-      data-panning={panOnDrag}
-      data-dropping={!!previewNode}
+      data-action={action}
     >
       <div className="react-flow-wrapper | h-full">
         <ReactFlow
@@ -262,7 +241,7 @@ const DEMOModeler = () => {
             onNodesChange(updatedChanges);
             debounce(() => {
               saveDEMOInstance(DEMOInstance);
-            }, 1000);
+            }, 3000);
           }}
           edges={edges}
           edgeTypes={edgeTypes}
@@ -270,7 +249,7 @@ const DEMOModeler = () => {
             onEdgesChange(changes);
             debounce(() => {
               saveDEMOInstance(DEMOInstance);
-            }, 1000);
+            }, 3000);
           }}
           onEdgesDelete={onEdgesDelete}
           onConnect={onConnect}
@@ -279,15 +258,15 @@ const DEMOModeler = () => {
           onMove={() => {
             debounce(() => {
               saveDEMOInstance(DEMOInstance);
-            }, 1000);
+            }, 3000);
           }}
           onBlur={() => {
             debounce(() => {
               saveDEMOInstance(DEMOInstance);
-            }, 1000);
+            }, 3000);
           }}
           onPaneClick={() => {
-            resetAttachStore();
+            resetAttach();
           }}
           onReconnect={onReconnect}
           onReconnectEnd={onReconnectEnd}
@@ -301,27 +280,27 @@ const DEMOModeler = () => {
           onInit={(instance) => setDEMOInstance(instance)}
           connectionLineComponent={(props) => <ConnectionLine {...props} />}
           connectionMode={ConnectionMode.Loose}
-          snapToGrid={grid.isSnapEnabled}
+          snapToGrid={isGridSnapEnabled}
           snapGrid={[10, 10]}
           edgesReconnectable={isEnabled}
           nodesDraggable={isEnabled}
           nodesConnectable={isEnabled}
           elementsSelectable={isEnabled}
-          selectionOnDrag={selectionOnDrag}
+          selectionOnDrag={action === "select"}
           selectionKeyCode={["Shift", "Meta"]}
-          panOnDrag={panOnDrag}
+          panOnDrag={action === "pan"}
           selectionMode={SelectionMode.Partial}
           onSelectionEnd={() => {
             setTimeout(() => {
-              setPanOnDrag(true);
-              setSelectionOnDrag(false);
+              setAction("pan");
             }, 0);
           }}
         >
           <Background
-            color="var(--color-slate-400)"
+            bgColor="var(--color-white)"
+            color="var(--color-slate-500)"
             variant={BackgroundVariant.Dots}
-            className={cn(grid.isVisible ? "visible" : "invisible")}
+            className={cn(isGridVisible ? "visible" : "invisible")}
           />
           <MiniMap />
           <SideMenu />

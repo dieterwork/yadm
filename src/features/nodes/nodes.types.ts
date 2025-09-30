@@ -1,7 +1,6 @@
 import ActorNode from "./cooperation_model/actor/ActorNode";
 import TransactionNode from "./cooperation_model/transaction/TransactionNode";
 import TransactorNode from "./cooperation_model/transactor/TransactorNode";
-import type { CooperationModelNode } from "./cooperation_model/cooperationModel.types";
 import SelfActivationNode from "./cooperation_model/self_activation/SelfActivationNode";
 import CompositeNode from "./cooperation_model/composite/CompositeNode";
 import ElementaryActorNode from "./cooperation_model/elementary_actor/ElementaryActorNode";
@@ -23,6 +22,7 @@ import type { CSSProperties } from "react";
 import type { Position } from "@xyflow/react";
 import type { GhostNode as GhostNodeType } from "./ghost/ghost.types";
 import GhostNode from "./ghost/GhostNode";
+import type { CooperationModelNode } from "./cooperation_model/cooperationModel.types";
 
 export const nodeTypes = {
   // cooperation model
@@ -60,8 +60,6 @@ export type DEMONode =
   | TextNodeType
   | GhostNodeType;
 
-export type ColorType = "default" | string;
-
 export type DEMOHandle = { id: string; type?: string; style?: CSSProperties };
 
 export type DEMOHandlePosition = Position;
@@ -92,4 +90,9 @@ export type DEMONodeBaseData<T extends SubModel> = {
   fontSize?: string;
   color?: string;
   content?: string;
+  isEditable?: boolean;
 };
+
+// Scope
+export const ALL_NODE_SCOPE_OPTIONS = ["in", "out"] as const;
+export type NodeScope = (typeof ALL_NODE_SCOPE_OPTIONS)[number];

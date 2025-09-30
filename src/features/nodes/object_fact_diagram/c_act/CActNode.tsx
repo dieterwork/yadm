@@ -23,7 +23,7 @@ const CActNode = ({
           "delete",
           "changeColor",
           "attachNode",
-          "toggleConnectionHandlesVisibility",
+          "toggleHandlesVisibility",
         ]}
       />
     </>

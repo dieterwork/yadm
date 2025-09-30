@@ -17,7 +17,7 @@ const ActorNode = ({
   width,
   height,
 }: NodeProps<ActorNodeType>) => {
-  const { content, fontSize } = data;
+  const { content, fontSize, isEditable } = data;
 
   return (
     <>
@@ -28,12 +28,22 @@ const ActorNode = ({
         width={width}
         height={height}
         type="actor"
+        actions={[
+          "addHandle",
+          "changeColor",
+          "changeFontSize",
+          "delete",
+          "toggleHandlesVisibility",
+          "changeScope",
+          "changeState",
+        ]}
       >
         <EditableContent
+          isSelected={selected}
+          isEditable={isEditable}
           content={content}
           width={width}
           height={height}
-          editable={true}
           fontSize={fontSize}
           maxLength={60}
           hidden={data.state === "unclear"}

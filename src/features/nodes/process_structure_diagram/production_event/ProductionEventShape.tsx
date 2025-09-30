@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import Diamond from "../../../shapes/Diamond";
-import type { ColorType } from "../../../colors/colors.types";
+import type { NodeColor } from "$components/ui/colors/colors.types";
 
 type ProductionEventShapeProps = {
   width: number;
   height: number;
-  color?: ColorType;
+  color?: NodeColor;
 };
 
 const ProductionEventShape = ({ color }: ProductionEventShapeProps) => {

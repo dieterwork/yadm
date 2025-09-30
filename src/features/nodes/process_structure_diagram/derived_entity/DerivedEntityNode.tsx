@@ -11,7 +11,7 @@ const DerivedEntityNode = ({
   width,
   height,
 }: NodeProps<DerivedEntityNodeType>) => {
-  const { content, fontSize } = data;
+  const { content, fontSize, isEditable } = data;
 
   return (
     <>
@@ -24,10 +24,11 @@ const DerivedEntityNode = ({
         type="derived_entity"
       >
         <EditableContent
+          isSelected={selected}
+          isEditable={isEditable}
           content={content}
           width={width}
           height={height}
-          editable={true}
           alignContent="top"
           fontSize={fontSize}
           maxLength={60}

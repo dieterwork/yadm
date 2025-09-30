@@ -1,46 +1,43 @@
-import { useState, useEffect, useRef } from "react";
+import type { DEMOEdge } from "$/features/edges/edges.types";
 import {
-  useReactFlow,
+  setEdges,
+  setNodes,
+  useDEMOModelerStore,
+} from "$/features/modeler/useDEMOModelerStore";
+import type { DEMONode } from "$/features/nodes/nodes.types";
+import uuid from "$/shared/utils/uuid";
+import {
   getConnectedEdges,
-  type Edge,
-  type XYPosition,
+  useReactFlow,
   useStore,
+  type XYPosition,
 } from "@xyflow/react";
+import { useEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import {
-  getChildNodes,
-  getDisabledNodes,
-  showDisabledNodesError,
-} from "./utils";
-import type { DEMONode } from "../../nodes/nodes.types";
-import { useDEMOModeler } from "../../modeler/useDEMOModeler";
-import useShortcut from "../../keyboard/useShortcut";
-import uuid from "$/shared/utils/uuid";
+  setCopyPasteBufferedEdges,
+  setCopyPasteBufferedNodes,
+  useCopyPasteStore,
+} from "./useCopyPasteStore";
+import getChildNodes from "$/features/nodes/utils/getChildNodes";
 
-interface UseCopyPasteParams {
-  disabledNodeTypes: DEMONode["type"][];
-}
-const useCopyPaste = ({ disabledNodeTypes }: UseCopyPasteParams) => {
-  const mousePosition = useRef<XYPosition>({ x: 0, y: 0 });
+const useCopyPaste = () => {
   const rfDomNode = useStore((state) => state.domNode);
-
-  const { nodes, edges, setNodes, setEdges } = useDEMOModeler(
+  const mousePosition = useRef<XYPosition>({ x: 0, y: 0 });
+  const { screenToFlowPosition } = useReactFlow();
+  const { nodes, edges } = useDEMOModelerStore(
     useShallow((state) => ({
       nodes: state.nodes,
       edges: state.edges,
-      setNodes: state.setNodes,
-      setEdges: state.setEdges,
     }))
   );
-  const { screenToFlowPosition } = useReactFlow<DEMONode, Edge>();
+  const { bufferedNodes, bufferedEdges } = useCopyPasteStore(
+    useShallow((state) => ({
+      bufferedNodes: state.bufferedNodes,
+      bufferedEdges: state.bufferedEdges,
+    }))
+  );
 
-  // Set up the paste buffers to store the copied nodes and edges.
-  const [bufferedNodes, setBufferedNodes] = useState<DEMONode[] | []>([]);
-  const [bufferedEdges, setBufferedEdges] = useState<Edge[] | []>([]);
-
-  // initialize the copy/paste hook
-  // 1. remove native copy/paste/cut handlers
-  // 2. add mouse move handler to keep track of the current mouse position
   useEffect(() => {
     const events = ["cut", "copy", "paste"];
 
@@ -54,11 +51,11 @@ const useCopyPaste = ({ disabledNodeTypes }: UseCopyPasteParams) => {
         };
       };
 
+      rfDomNode.addEventListener("mousemove", onMouseMove);
+
       for (const event of events) {
         rfDomNode.addEventListener(event, preventDefault);
       }
-
-      rfDomNode.addEventListener("mousemove", onMouseMove);
 
       return () => {
         for (const event of events) {
@@ -70,26 +67,26 @@ const useCopyPaste = ({ disabledNodeTypes }: UseCopyPasteParams) => {
     }
   }, [rfDomNode]);
 
-  const _copy = () => {
+  const copyNodes = () => {
     const selectedNodes = nodes.filter((node) => node.selected);
+    const disabledNodes = nodes.filter(
+      (node) => node.type === "transaction_kind"
+    );
 
-    const disabledNodes = getDisabledNodes(selectedNodes, disabledNodeTypes);
+    const filteredNodes = selectedNodes.filter(
+      (node) => !disabledNodes?.includes(node)
+    );
 
-    if (disabledNodes.length > 0) {
-      showDisabledNodesError(disabledNodes);
-      return;
-    }
+    const childNodes = getChildNodes(filteredNodes, nodes);
 
-    const childNodes = getChildNodes(selectedNodes, nodes);
+    const combinedSelectedNodes = filteredNodes.concat(childNodes);
 
-    const combinedSelectedNodes = selectedNodes.concat(childNodes);
-
-    const selectedEdges = getConnectedEdges(selectedNodes, edges).filter(
+    const selectedEdges = getConnectedEdges(filteredNodes, edges).filter(
       (edge) => {
-        const isExternalSource = selectedNodes.every(
+        const isExternalSource = filteredNodes.every(
           (n) => n.id !== edge.source
         );
-        const isExternalTarget = selectedNodes.every(
+        const isExternalTarget = filteredNodes.every(
           (n) => n.id !== edge.target
         );
 
@@ -97,18 +94,18 @@ const useCopyPaste = ({ disabledNodeTypes }: UseCopyPasteParams) => {
       }
     );
 
-    setBufferedNodes(combinedSelectedNodes);
-    setBufferedEdges(selectedEdges);
+    setCopyPasteBufferedNodes(combinedSelectedNodes);
+    setCopyPasteBufferedEdges(selectedEdges);
 
     return { selectedNodes: combinedSelectedNodes, selectedEdges };
   };
 
   const copy = () => {
-    _copy();
+    copyNodes();
   };
 
   const cut = () => {
-    const selectedElements = _copy();
+    const selectedElements = copyNodes();
 
     if (!selectedElements) return;
 
@@ -120,10 +117,7 @@ const useCopyPaste = ({ disabledNodeTypes }: UseCopyPasteParams) => {
   };
 
   const paste = (
-    { x: pasteX, y: pasteY } = screenToFlowPosition({
-      x: mousePosition.current.x,
-      y: mousePosition.current.y,
-    })
+    { x: pasteX, y: pasteY } = screenToFlowPosition(mousePosition.current)
   ) => {
     const minX = Math.min(
       ...bufferedNodes
@@ -142,7 +136,7 @@ const useCopyPaste = ({ disabledNodeTypes }: UseCopyPasteParams) => {
       idMap.set(node.id, uuid());
     }
 
-    const newNodes: DEMONode[] = bufferedNodes.map((node) => {
+    const newNodes = bufferedNodes.map((node) => {
       // get new id
       const id = idMap.get(node.id)!;
 
@@ -154,9 +148,9 @@ const useCopyPaste = ({ disabledNodeTypes }: UseCopyPasteParams) => {
       const position = node.parentId ? node.position : { x, y };
 
       return { ...node, id, parentId, position };
-    });
+    }) satisfies DEMONode[];
 
-    const newEdges: Edge[] = bufferedEdges.map((edge) => {
+    const newEdges = bufferedEdges.map((edge) => {
       const id = uuid();
       const sourceId = uuid();
       const targetId = uuid();
@@ -164,7 +158,7 @@ const useCopyPaste = ({ disabledNodeTypes }: UseCopyPasteParams) => {
       const target = targetId;
 
       return { ...edge, id, source, target };
-    });
+    }) satisfies DEMOEdge[];
 
     setNodes((nodes) => [
       ...nodes.map((node) => ({ ...node, selected: false })),
@@ -175,12 +169,7 @@ const useCopyPaste = ({ disabledNodeTypes }: UseCopyPasteParams) => {
       ...newEdges,
     ]);
   };
-
-  useShortcut(["Meta+x", "Control+x"], cut);
-  useShortcut(["Meta+c", "Control+c"], copy);
-  useShortcut(["Meta+v", "Control+v"], paste);
-
-  return { cut, copy, paste, bufferedNodes, bufferedEdges };
+  return { cut, copy, paste };
 };
 
 export default useCopyPaste;
