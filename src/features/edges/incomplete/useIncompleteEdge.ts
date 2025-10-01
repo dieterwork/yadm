@@ -11,7 +11,6 @@ import { SMALL_NODE_SIZE } from "$/features/nodes/utils/consts";
 import { addEdge, addNode } from "$/features/modeler/useDEMOModelerStore";
 import type { GhostNode } from "$/features/nodes/ghost/ghost.types";
 import getEdgeType from "$/features/modeler/utils/getEdgeType";
-import type { DEMONode } from "$/features/nodes/nodes.types";
 import getMarkerType from "$/features/modeler/utils/getMarkerType";
 
 const getPosition = (fromPosition: Position | null) => {
@@ -73,7 +72,7 @@ export const useIncompleteEdge = () => {
               y: SMALL_NODE_SIZE / 2,
             }
           : position,
-      data: {},
+      data: { handlePosition: getPosition(fromPosition) },
       parentId:
         fromNode?.type === "transaction_time" ? fromNode?.id : undefined,
     } satisfies GhostNode;

@@ -1,4 +1,5 @@
 import {
+  getNode,
   setEdges,
   setNodes,
   useDEMOModelerStore,
@@ -41,7 +42,16 @@ const useDelete = () => {
   const deleteEdge = () => {
     const selectedEdges = edges.filter((edge) => edge.selected);
     if (!selectedEdges) return;
+
+    // find edge source and target
     setEdges((edges) => edges.filter((edge) => !selectedEdges.includes(edge)));
+    setNodes((nodes) => {
+      return nodes.filter((node) => {
+        const isGhost = node.type === "ghost";
+        const isTarget = selectedEdges.some((edge) => edge.target === node.id);
+        return !(isGhost && isTarget);
+      });
+    });
   };
 
   return { deleteNode, deleteEdge };

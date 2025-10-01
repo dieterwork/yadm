@@ -10,11 +10,13 @@ import ToolbarMenuSeparator from "$/shared/components/ui/toolbar/ToolbarMenuSepa
 import SwapConnectionMenuItem from "./actions/SwapConnectionMenuItem";
 import ToolbarMenuSection from "$/shared/components/ui/toolbar/ToolbarMenuSection";
 import ToggleProductionEventMenuItem from "./actions/ToggleProductionEventMenuItem";
+import ChangeLineTypeMenuItem from "./actions/ChangeLineTypeMenuItem";
 
 export type EdgeToolbarAction =
   | "toggleProductionEvent"
   | "delete"
-  | "swapConnection";
+  | "swapConnection"
+  | "changeLineType";
 interface DEMOEdgeToolbarProps {
   edgeId?: string;
   position?: XYPosition;
@@ -23,7 +25,7 @@ interface DEMOEdgeToolbarProps {
   targetNodeId?: string;
 }
 
-const DEMOEdgeToolbar = ({
+const DEMOEdgeToolbar = <T extends DEMOEdge>({
   edgeId,
   position,
   actions,
@@ -37,6 +39,9 @@ const DEMOEdgeToolbar = ({
     <EdgeToolbar xyPosition={position}>
       <ToolbarMenu>
         <ToolbarMenuSection aria-label="Edge actions">
+          {actions?.indexOf("changeLineType") !== -1 && (
+            <ChangeLineTypeMenuItem edgeId={edgeId} />
+          )}
           {actions?.indexOf("toggleProductionEvent") !== -1 && (
             <ToggleProductionEventMenuItem edgeId={edgeId} />
           )}

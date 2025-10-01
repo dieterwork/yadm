@@ -14,6 +14,8 @@ import {
   type FinalConnectionState,
   type HandleType,
   Position,
+  isEdge,
+  isNode,
 } from "@xyflow/react";
 
 import { initialNodes } from "../nodes/initialNodes";
@@ -25,6 +27,9 @@ import type { CSSProperties } from "react";
 import getEdgeType from "./utils/getEdgeType";
 import getMarkerType from "./utils/getMarkerType";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
+import getEdgeData from "./utils/getEdgeData";
+import { sortNodes } from "$/shared/utils/sortNodes";
+import throttle from "$/shared/utils/throttle";
 
 type ModelerAction = "attach" | "preview" | "select" | "pan" | "edit";
 export interface DEMOModelerState {
@@ -54,7 +59,14 @@ export const useDEMOModelerStore = create<DEMOModelerState>()(
       isEnabled: true,
     }),
     {
-      onSave: (state) => {},
+      handleSet: (handleSet) =>
+        throttle((state) => {
+          console.info("handleSet called");
+          handleSet(state);
+        }, 1000),
+      onSave: (state) => {
+        console.log("Saved");
+      },
       partialize: (state) => {
         const { nodes, edges } = state;
         const savedNodes = nodes.map((node) => {
@@ -98,41 +110,72 @@ export const getEdge = (id: string) => {
     .edges.filter((edge) => edge.id === id)[0];
 };
 
-export const updateNodeData = (
+export const updateNodeData = <T extends DEMONode>(
   id: string,
-  newData: ReactStyleStateSetter<DEMONode["data"]>
+  newData: ReactStyleStateSetter<Partial<T["data"]>>
 ) => {
   setNodes((nodes) =>
     nodes.map((node) => {
       if (node.id !== id) return node;
-      const data = typeof newData === "object" ? newData : newData(node.data);
+      const isTypedNode = isNode<T>(node);
+      if (!isTypedNode) return node;
+      const data =
+        typeof newData === "object"
+          ? newData
+          : node?.data
+          ? newData(node.data)
+          : undefined;
       return { ...node, data: { ...node.data, ...data } };
     })
   );
 };
 
-export const updateNode = (
+export const updateNode = <T extends DEMONode>(
   id: string,
-  newNode: ReactStyleStateSetter<Partial<DEMONode>>
+  newNode: ReactStyleStateSetter<Partial<T>>
 ) => {
   setNodes((nodes) =>
     nodes.map((node) => {
       if (node.id !== id) return node;
+      const isTypedNode = isNode<T>(node);
+      if (!isTypedNode) return node;
       const _newNode = typeof newNode === "object" ? newNode : newNode(node);
       return { ...node, ..._newNode };
     })
   );
 };
 
-export const updateEdge = (
+export const updateEdge = <T extends DEMOEdge>(
   id: string,
-  newEdge: ReactStyleStateSetter<Partial<DEMOEdge>>
+  newEdge: ReactStyleStateSetter<Partial<T>>
 ) => {
   setEdges((edges) =>
     edges.map((edge) => {
       if (edge.id !== id) return edge;
+      const isTypedEdge = isEdge<T>(edge);
+      if (!isTypedEdge) return edge;
       const _newEdge = typeof newEdge === "object" ? newEdge : newEdge(edge);
       return { ...edge, ..._newEdge };
+    })
+  );
+};
+
+export const updateEdgeData = <T extends DEMOEdge>(
+  id: string,
+  newEdgeData: ReactStyleStateSetter<Partial<T["data"]>>
+) => {
+  setEdges((edges) =>
+    edges.map((edge) => {
+      if (edge.id !== id) return edge;
+      const isTypedEdge = isEdge<T>(edge);
+      if (!isTypedEdge) return edge;
+      const data =
+        typeof newEdgeData === "object"
+          ? newEdgeData
+          : edge.data
+          ? newEdgeData(edge.data)
+          : undefined;
+      return { ...edge, data: { ...edge.data, ...data } };
     })
   );
 };
@@ -200,9 +243,11 @@ export const onEdgesDelete = (deletedEdges: DEMOEdge[]) => {
   });
 };
 
-export const addNode = (node: DEMONode) => {
+export const addNode = (node: DEMONode | DEMONode[]) => {
   useDEMOModelerStore.setState((state) => ({
-    nodes: [...state.nodes, node],
+    nodes: [...state.nodes]
+      .concat(Array.isArray(node) ? node : [node])
+      .sort(sortNodes),
   }));
 };
 
@@ -217,17 +262,39 @@ export const onConnect: OnConnect = (connection) => {
   const targetNode = getNode(connection.target);
   const type = getEdgeType(sourceNode.type, targetNode.type);
   const marker = getMarkerType(sourceNode.type, targetNode.type);
-  addEdge({
+  const data = getEdgeData(type);
+  const newEdge: DEMOEdge = {
     ...connection,
     id: `${sourceNode.type}_${connection.sourceHandle}->${sourceNode.type}_${connection.targetHandle}`,
     type,
+    data,
     ...marker,
-  });
+  };
+  addEdge(newEdge);
 };
 
 export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
-  useDEMOModelerStore.setState((state) => ({
-    edges: reconnectEdge(oldEdge, newConnection, state.edges),
+  const sourceNode = getNode(newConnection.source);
+  const targetNode = getNode(newConnection.target);
+  const reconnectedEdges = reconnectEdge<DEMOEdge>(
+    oldEdge,
+    newConnection,
+    useDEMOModelerStore.getState().edges
+  );
+  const newEdge = reconnectedEdges.find(
+    (edge) =>
+      edge.source === newConnection.source &&
+      edge.target === newConnection.target
+  );
+  const newEdges = reconnectedEdges.map((edge) => {
+    if (newEdge?.id !== edge.id) return edge;
+    const marker = getMarkerType(sourceNode.type, targetNode.type);
+    const type = getEdgeType(sourceNode.type, targetNode.type);
+    const _newEdge: DEMOEdge = { ...edge, type, ...marker };
+    return _newEdge;
+  });
+  useDEMOModelerStore.setState(() => ({
+    edges: newEdges,
   }));
 };
 

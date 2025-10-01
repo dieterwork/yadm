@@ -46,7 +46,7 @@ const ConnectionLine = ({
     <g>
       <path
         fill="none"
-        stroke="var(--color-slate-900)"
+        stroke="var(--color-sky-500)"
         strokeWidth={2}
         className={connectionStatus === "valid" ? "" : "animated"}
         d={path}

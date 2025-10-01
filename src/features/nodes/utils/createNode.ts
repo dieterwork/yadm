@@ -416,7 +416,6 @@ export const createNode = ({
             strokeWidth: 2,
             stroke: "black",
           },
-          extent: "parent",
           selected: true,
           zIndex: 1,
         },

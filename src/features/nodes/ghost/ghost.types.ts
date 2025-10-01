@@ -1,3 +1,3 @@
-import type { Node } from "@xyflow/react";
+import type { Node, Position } from "@xyflow/react";
 
-export type GhostNode = Node<{}, "ghost">;
+export type GhostNode = Node<{ handlePosition?: Position }, "ghost">;

@@ -26,7 +26,8 @@ export type NodeToolbarAction =
   | "attachNode"
   | "changeScope"
   | "changeState"
-  | "editText";
+  | "editText"
+  | "showBorder";
 
 const DEMONodePrimitive = ({
   id,

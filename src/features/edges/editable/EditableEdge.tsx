@@ -14,6 +14,7 @@ import EdgeToolbar from "../edge_toolbar/EdgeToolbar";
 import DEMOEdgeToolbar, {
   type EdgeToolbarAction,
 } from "../edge_toolbar/DEMOEdgeToolbar";
+import type { CSSProperties } from "react";
 
 export type EditableEdge = Edge<{
   controlPoint: ControlPointData;
@@ -29,7 +30,6 @@ export function EditableEdgeComponent({
   targetY,
   target,
   targetPosition,
-  style,
   data,
   markerEnd,
   markerStart,
@@ -37,10 +37,13 @@ export function EditableEdgeComponent({
   selected,
   type,
   actions,
+  style,
+  ...restProps
 }: EdgeProps<EditableEdge> & {
   markerMid?: string;
   type?: DEMOEdge["type"];
   actions?: EdgeToolbarAction[];
+  style?: CSSProperties;
 }) {
   const sourceNode = useInternalNode<DEMONode>(source);
   const targetNode = useInternalNode<DEMONode>(target);
@@ -67,14 +70,13 @@ export function EditableEdgeComponent({
   return (
     <>
       <path
+        style={{ ...style, strokeWidth: 2, stroke: "var(--color-slate-900)" }}
         id={id}
         className="react-flow__edge-path"
         d={path}
-        strokeWidth={5}
         markerEnd={markerEnd}
         markerStart={markerStart}
         markerMid={markerMid}
-        style={style}
       />
       {selected && (
         <DEMOEdgeToolbar

@@ -1,16 +1,22 @@
-import { useInternalNode, type EdgeProps } from "@xyflow/react";
-import {
-  EditableEdgeComponent,
-  type EditableEdge,
-} from "../editable/EditableEdge";
+import { type EdgeProps } from "@xyflow/react";
+import { EditableEdgeComponent } from "../editable/EditableEdge";
+import type { CooperationModelEdge as CooperationModelEdgeType } from "../edges.types";
 
-const CooperationModelEdge = ({ ...restProps }: EdgeProps<EditableEdge>) => {
+const CooperationModelEdge = ({
+  data,
+  ...restProps
+}: EdgeProps<CooperationModelEdgeType>) => {
   return (
     <EditableEdgeComponent
       {...restProps}
       type="cooperation_model_edge"
-      style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
-      actions={["delete", "swapConnection", "toggleProductionEvent"]}
+      actions={[
+        "delete",
+        "swapConnection",
+        "toggleProductionEvent",
+        "changeLineType",
+      ]}
+      style={{ strokeDasharray: data?.lineType === "solid" ? "0" : "5" }}
     />
   );
 };

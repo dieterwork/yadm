@@ -1,4 +1,4 @@
-export const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
+const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
   func: F,
   wait: number
 ) => {
@@ -11,3 +11,5 @@ export const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
 
   return debounced;
 };
+
+export default debounce;

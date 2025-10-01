@@ -29,7 +29,6 @@ import {
 } from "./useDEMOModelerStore";
 import { useShallow } from "zustand/react/shallow";
 import { saveDEMOInstance } from "../save/saveDEMOInstance";
-import { debounce } from "../../shared/utils/debounce";
 import ConnectionLine from "../connection_line/ConnectionLine";
 import useLocalJSONModel from "./useLocalJSONModel";
 import HelperLines from "../helper_lines/HelperLines";
@@ -42,6 +41,11 @@ import convertAbsoluteToRelativePosition from "../nodes/utils/convertAbsoluteToR
 import { usePreviewNode } from "../preview_node/usePreviewNode";
 import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
 import useKeyboardShortcuts from "../keyboard/useKeyboardShortcuts";
+import debounce from "$/shared/utils/debounce";
+
+const autoSave = debounce(() => {
+  saveDEMOInstance(useDEMOModelerStore.getState().DEMOInstance);
+}, 3000);
 
 const allowedConnectionMap = {
   // cooperation model
@@ -239,31 +243,23 @@ const DEMOModeler = () => {
           onNodesChange={(changes) => {
             const updatedChanges = updateHelperLines(changes, nodes);
             onNodesChange(updatedChanges);
-            debounce(() => {
-              saveDEMOInstance(DEMOInstance);
-            }, 3000);
+            autoSave();
           }}
           edges={edges}
           edgeTypes={edgeTypes}
           onEdgesChange={(changes) => {
             onEdgesChange(changes);
-            debounce(() => {
-              saveDEMOInstance(DEMOInstance);
-            }, 3000);
+            autoSave();
           }}
           onEdgesDelete={onEdgesDelete}
           onConnect={onConnect}
           onConnectEnd={onConnectEnd}
           isValidConnection={isValidConnection}
-          onMove={() => {
-            debounce(() => {
-              saveDEMOInstance(DEMOInstance);
-            }, 3000);
+          onMoveEnd={() => {
+            autoSave();
           }}
           onBlur={() => {
-            debounce(() => {
-              saveDEMOInstance(DEMOInstance);
-            }, 3000);
+            autoSave();
           }}
           onPaneClick={() => {
             resetAttach();
@@ -290,6 +286,9 @@ const DEMOModeler = () => {
           selectionKeyCode={["Shift", "Meta"]}
           panOnDrag={action === "pan"}
           selectionMode={SelectionMode.Partial}
+          onSelectionStart={() => {
+            setAction("select");
+          }}
           onSelectionEnd={() => {
             setTimeout(() => {
               setAction("pan");

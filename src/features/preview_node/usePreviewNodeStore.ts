@@ -3,7 +3,7 @@ import type { DEMONode } from "../nodes/nodes.types";
 import type { XYPosition } from "@xyflow/react";
 
 interface PreviewNode {
-  type: Omit<DEMONode["type"], "ghost">;
+  type: DEMONode["type"];
   width: number;
   height: number;
   position: XYPosition;

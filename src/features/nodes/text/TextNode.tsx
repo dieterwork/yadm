@@ -1,6 +1,4 @@
-import { TextField } from "react-aria-components";
 import EditableContent from "../../editable_content/EditableContent";
-import DEMONodePrimitive from "../DEMONodePrimitive";
 import { NodeResizer, type NodeProps } from "@xyflow/react";
 import type { TextNode as TextNodeType } from "./textNode.types";
 import { cn } from "@sglara/cn";
@@ -26,10 +24,14 @@ const TextNode = ({
         style={{ width, height }}
       >
         <NodeToolbar
-          id={id}
-          data={data}
-          type="text"
-          actions={["delete", "changeFontSize", "showBorder", "changeColor"]}
+          nodeId={id}
+          actions={[
+            "delete",
+            "changeFontSize",
+            "showBorder",
+            "changeColor",
+            "showBorder",
+          ]}
         />
         <NodeResizer
           isVisible={selected}

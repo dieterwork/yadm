@@ -1,16 +1,16 @@
 import type { Edge, EdgeTypes, XYPosition } from "@xyflow/react";
-import CooperationModelEdge from "./cooperation_model/CooperationModelEdge";
-import TransactionTimeEdge from "./transaction_time_edge/TransactionTimeEdge";
-import ObjectFactDiagramEdge from "./object_fact_diagram/ObjectFactDiagramEdge";
-import ProcessStructureDiagramEdge from "./process_structure_diagram/ProcessStructureDiagramEdge";
-import GhostEdge from "./ghost_edge/GhostEdge";
+import TransactionTimeEdgeComponent from "./transaction_time_edge/TransactionTimeEdge";
+import ObjectFactDiagramEdgeComponent from "./object_fact_diagram/ObjectFactDiagramEdge";
+import ProcessStructureDiagramEdgeComponent from "./process_structure_diagram/ProcessStructureDiagramEdge";
+import GhostEdgeComponent from "./ghost_edge/GhostEdge";
+import CooperationModelEdgeComponent from "./cooperation_model/CooperationModelEdge";
 
 export const edgeTypes = {
-  cooperation_model_edge: CooperationModelEdge,
-  object_fact_diagram_edge: ObjectFactDiagramEdge,
-  process_structure_diagram_edge: ProcessStructureDiagramEdge,
-  transaction_time_edge: TransactionTimeEdge,
-  ghost_edge: GhostEdge,
+  cooperation_model_edge: CooperationModelEdgeComponent,
+  object_fact_diagram_edge: ObjectFactDiagramEdgeComponent,
+  process_structure_diagram_edge: ProcessStructureDiagramEdgeComponent,
+  transaction_time_edge: TransactionTimeEdgeComponent,
+  ghost_edge: GhostEdgeComponent,
 } satisfies EdgeTypes;
 
 export type ControlPointData = XYPosition & {
@@ -18,7 +18,7 @@ export type ControlPointData = XYPosition & {
 };
 
 export type CooperationModelEdge = Edge<
-  { controlPoint: ControlPointData },
+  { controlPoint: ControlPointData; lineType: "solid" | "dashed" },
   "cooperation_model_edge"
 >;
 

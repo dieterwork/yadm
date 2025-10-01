@@ -29,13 +29,7 @@ export const usePreviewNode = () => {
 
     const newNode = createNode({ id, type: previewNode?.type, position });
 
-    if (Array.isArray(newNode)) {
-      for (const node of newNode) {
-        addNode(node);
-      }
-    } else {
-      addNode(newNode);
-    }
+    addNode(newNode);
 
     if (ofdNodes.includes(previewNode?.type)) {
       // create text node
@@ -51,16 +45,8 @@ export const usePreviewNode = () => {
         content: "",
         textAlign: "center",
       });
-      if (Array.isArray(textNode)) {
-        for (const node of textNode) {
-          addNode(node);
-        }
-      } else {
-        addNode(textNode);
-      }
+      addNode(textNode);
     }
-
-    setNodes((nodes) => nodes.sort(sortNodes));
 
     resetPreviewNode();
   };

@@ -4,7 +4,12 @@ import {
   updateEdge,
 } from "$/features/modeler/useDEMOModelerStore";
 import ToolbarMenuItem from "$/shared/components/ui/toolbar/ToolbarMenuItem";
-import { EyeClosedIcon, EyeIcon } from "@phosphor-icons/react";
+import {
+  EyeClosedIcon,
+  EyeIcon,
+  MinusIcon,
+  PlusIcon,
+} from "@phosphor-icons/react";
 
 const ToggleProductionEventMenuItem = ({ edgeId }: { edgeId: string }) => {
   const edge = getEdge(edgeId);
@@ -13,7 +18,7 @@ const ToggleProductionEventMenuItem = ({ edgeId }: { edgeId: string }) => {
   return (
     <ToolbarMenuItem
       icon={(iconProps) => {
-        const Icon = isProductionFactVisible ? EyeClosedIcon : EyeIcon;
+        const Icon = isProductionFactVisible ? MinusIcon : PlusIcon;
         return <Icon {...iconProps} />;
       }}
       label={

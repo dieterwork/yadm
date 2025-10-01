@@ -7,17 +7,19 @@ const DiamondMarker = () => {
           viewBox="-10 -10 20 20"
           markerHeight={12.5}
           markerWidth={12.5}
+          markerUnits="strokeWidth"
+          orient="auto-start-reverse"
           refX={0}
           refY={0}
         >
           <polyline
             style={{
-              stroke: "var(--color-slate-900",
-              fill: "var(--color-white",
+              stroke: "var(--color-slate-900)",
+              fill: "var(--color-white)",
               strokeWidth: 2,
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
             }}
-            stroke-linecap="round"
-            stroke-linejoin="round"
             points="-4,-4 0,0 -4,4 -8,0 -4,-4"
           ></polyline>
         </marker>

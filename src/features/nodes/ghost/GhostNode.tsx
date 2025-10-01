@@ -5,7 +5,7 @@ const GhostNode = ({ data }) => (
     <Handle
       className="ghost-handle"
       type="target"
-      position={data.position ?? Position.Top}
+      position={data.handlePosition ?? Position.Top}
       isConnectable={false}
     />
   </div>
