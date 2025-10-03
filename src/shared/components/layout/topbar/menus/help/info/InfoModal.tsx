@@ -3,7 +3,7 @@ import DEMOModal, {
 } from "$/shared/components/layout/topbar/_components/TopbarMenuModal";
 
 import ReactMarkdown from "react-markdown";
-import md from "./cheat_sheet.md";
+import md from "./info.md";
 
 const InfoModal = ({ ...restProps }: DEMOModalProps) => {
   return (
