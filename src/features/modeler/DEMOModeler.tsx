@@ -28,30 +28,26 @@ import {
   type DEMOModelerState,
 } from "./useDEMOModelerStore";
 import { useShallow } from "zustand/react/shallow";
-import { saveDEMOInstance } from "../save/saveDEMOInstance";
 import ConnectionLine from "../connection_line/ConnectionLine";
 import useLocalJSONModel from "./useLocalJSONModel";
 import HelperLines from "../helper_lines/HelperLines";
 import { useHelperLinesStore } from "../helper_lines/useHelperLinesStore";
 import { cn } from "@sglara/cn";
-import SideMenu from "../../shared/components/ui/menus/side_menu/SideMenu";
-import BottomMenu from "../../shared/components/ui/menus/bottom_menu/BottomMenu";
+import SideMenu from "../../shared/components/ui/toolbars/side_toolbar/SideToolbar";
+import BottomToolbar from "../../shared/components/ui/toolbars/bottom_toolbar/BottomToolbar";
 import { resetAttach, useAttachStore } from "../actions/attach/useAttachStore";
 import convertAbsoluteToRelativePosition from "../nodes/utils/convertAbsoluteToRelativePosition";
 import { usePreviewNode } from "../preview_node/usePreviewNode";
 import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
 import useKeyboardShortcuts from "../keyboard/useKeyboardShortcuts";
-import debounce from "$/shared/utils/debounce";
-
-const autoSave = debounce(() => {
-  saveDEMOInstance(useDEMOModelerStore.getState().DEMOInstance);
-}, 3000);
+import useSave from "../actions/save/useSave";
 
 const allowedConnectionMap = {
   // cooperation model
   actor: [
     "actor",
     "transaction",
+    "transactor",
     "self_activation",
     "composite",
     "elementary_actor",
@@ -139,44 +135,38 @@ const allowedConnectionMap = {
 >;
 
 const DEMOModeler = () => {
-  const {
-    isEnabled,
-    nodes,
-    edges,
-    action,
-    DEMOInstance,
-    isGridVisible,
-    isGridSnapEnabled,
-  } = useDEMOModelerStore(
-    useShallow((state: DEMOModelerState) => ({
-      isEnabled: state.isEnabled,
-      nodes: state.nodes,
-      edges: state.edges,
-      action: state.action,
-      DEMOInstance: state.DEMOInstance,
-      isGridVisible: state.isGridVisible,
-      isGridSnapEnabled: state.isGridSnapEnabled,
-    }))
-  );
+  const { isEnabled, nodes, edges, action, isGridVisible, isGridSnapEnabled } =
+    useDEMOModelerStore(
+      useShallow((state: DEMOModelerState) => ({
+        isEnabled: state.isEnabled,
+        nodes: state.nodes,
+        edges: state.edges,
+        action: state.action,
+        DEMOInstance: state.DEMOInstance,
+        isGridVisible: state.isGridVisible,
+        isGridSnapEnabled: state.isGridSnapEnabled,
+      }))
+    );
 
   const ref = useRef<HTMLDivElement>(null!);
 
   const attachChildNodeId = useAttachStore((state) => state.childNodeId);
 
+  const { autoSave } = useSave();
+
   const {
     horizontal: horizontalHelperLine,
     vertical: verticalHelperLine,
-    updateHelperLines,
     isEnabled: areHelperLinesEnabled,
-  } = useHelperLinesStore();
+  } = useHelperLinesStore(
+    useShallow((state) => ({
+      horizontal: state.horizontal,
+      vertical: state.vertical,
+      isEnabled: state.isEnabled,
+    }))
+  );
 
   const onConnectEnd = useIncompleteEdge();
-
-  // const onNodeDragStart = (e: React.MouseEvent, node: DEMONode) => {
-  //   const contentEditableElements = "";
-  // };
-
-  // const onNodeDragStop = (e: React.MouseEvent, node: DEMONode) => {};
 
   useLocalJSONModel();
   useKeyboardShortcuts();
@@ -241,8 +231,7 @@ const DEMOModeler = () => {
           nodes={nodes}
           nodeTypes={nodeTypes}
           onNodesChange={(changes) => {
-            const updatedChanges = updateHelperLines(changes, nodes);
-            onNodesChange(updatedChanges);
+            onNodesChange(changes);
             autoSave();
           }}
           edges={edges}
@@ -294,6 +283,7 @@ const DEMOModeler = () => {
               setAction("pan");
             }, 0);
           }}
+          proOptions={{ hideAttribution: true }}
         >
           <Background
             bgColor="var(--color-white)"
@@ -303,7 +293,7 @@ const DEMOModeler = () => {
           />
           <MiniMap />
           <SideMenu />
-          <BottomMenu />
+          <BottomToolbar />
           <HelperLines
             isDisabled={!areHelperLinesEnabled}
             horizontal={horizontalHelperLine}

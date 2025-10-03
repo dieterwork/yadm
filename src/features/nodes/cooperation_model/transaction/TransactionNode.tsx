@@ -1,7 +1,7 @@
 import { type NodeProps, Handle, Position } from "@xyflow/react";
 
 import type { TransactionNode as TransactionNodeType } from "./transaction.types";
-import DEMONodePrimitive from "../../DEMONodePrimitive";
+import DEMONodeBase from "../../DEMONodeBase";
 import uuid from "../../../../shared/utils/uuid";
 import EditableContent from "../../../editable_content/EditableContent";
 import { calculateDoubleDiamondInCircleDimensions } from "../../../shapes/utils/calculateDoubleDiamondInCircleDimensions";
@@ -28,7 +28,7 @@ const TransactionNode = ({
 
   return (
     <>
-      <DEMONodePrimitive
+      <DEMONodeBase
         id={id}
         data={data}
         selected={selected}
@@ -45,6 +45,7 @@ const TransactionNode = ({
           "changeScope",
           "editText",
         ]}
+        resizable={false}
       >
         <EditableContent
           isSelected={selected}
@@ -56,7 +57,7 @@ const TransactionNode = ({
           hide={data.state === "unclear"}
           maxLength={50}
         />
-      </DEMONodePrimitive>
+      </DEMONodeBase>
     </>
   );
 };

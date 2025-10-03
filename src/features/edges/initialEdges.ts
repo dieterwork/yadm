@@ -1,3 +1,3 @@
-import type { Edge } from "@xyflow/react";
+import type { DEMOEdge } from "./edges.types";
 
-export const initialEdges: Edge[] = [];
+export const initialEdges: DEMOEdge[] = [];

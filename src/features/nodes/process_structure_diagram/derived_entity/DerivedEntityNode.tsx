@@ -1,6 +1,6 @@
 import { type NodeProps } from "@xyflow/react";
 
-import DEMONodePrimitive from "../../DEMONodePrimitive";
+import DEMONodeBase from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
 import type { DerivedEntityNode as DerivedEntityNodeType } from "./derivedEntity.types";
 
@@ -15,7 +15,7 @@ const DerivedEntityNode = ({
 
   return (
     <>
-      <DEMONodePrimitive
+      <DEMONodeBase
         id={id}
         data={data}
         selected={selected}
@@ -37,11 +37,11 @@ const DerivedEntityNode = ({
           content={content}
           width={width}
           height={height}
-          alignContent="top"
+          alignContent="center"
           fontSize={fontSize}
           maxLength={60}
         />
-      </DEMONodePrimitive>
+      </DEMONodeBase>
     </>
   );
 };

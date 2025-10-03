@@ -6,7 +6,7 @@ import {
 } from "@xyflow/react";
 
 import type { ActorNode as ActorNodeType } from "./actor.types";
-import DEMONodePrimitive from "../../DEMONodePrimitive";
+import DEMONodeBase from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
 import { useResizerHandles } from "../../../resize/useResizer";
 
@@ -21,7 +21,7 @@ const ActorNode = ({
 
   return (
     <>
-      <DEMONodePrimitive
+      <DEMONodeBase
         id={id}
         data={data}
         selected={selected}
@@ -49,7 +49,7 @@ const ActorNode = ({
           maxLength={60}
           hidden={data.state === "unclear"}
         />
-      </DEMONodePrimitive>
+      </DEMONodeBase>
     </>
   );
 };

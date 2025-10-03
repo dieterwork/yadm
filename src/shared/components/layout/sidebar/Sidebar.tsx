@@ -207,12 +207,10 @@ const Sidebar = () => {
   return (
     <>
       <div className="sidebar | [grid-area:sidebar] px-4 border-r border-gray-200 overflow-y-auto w-[300px]">
-        <div className="sidebar-inner">
-          <div className="flex flex-col mb-6">
-            <Collection items={sidebarMenuItems}>
-              {(item) => <SidebarSelect menuItem={item} key={item.id} />}
-            </Collection>
-          </div>
+        <div className="sidebar-inner | flex flex-col mb-6 outline-hidden">
+          <Collection items={sidebarMenuItems}>
+            {(item) => <SidebarSelect menuItem={item} key={item.id} />}
+          </Collection>
         </div>
       </div>
       {previewNode && <PreviewNode type={previewNode?.type} />}

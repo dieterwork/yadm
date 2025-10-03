@@ -8,8 +8,6 @@ import { useState } from "react";
 import { setFileName } from "$/features/modeler/useDEMOModelerStore";
 
 const Topbar = () => {
-  const [areMenusActive, setMenusActive] = useState(false);
-
   return (
     <div className="topbar | [grid-area:topbar]  border-b border-gray-200 h-12 content-center">
       <div className="topbar-inner | grid items-center grid-cols-[auto_1fr] content-center px-4">

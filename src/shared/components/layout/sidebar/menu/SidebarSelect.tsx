@@ -30,6 +30,7 @@ const SidebarSelect = ({ menuItem }: { menuItem: SidebarMenuItemType }) => {
   return (
     <div className="select-wrapper">
       <Select
+        className="outline-hidden"
         aria-labelledby={buttonId}
         selectedKey={selected}
         onSelectionChange={(selected) => {

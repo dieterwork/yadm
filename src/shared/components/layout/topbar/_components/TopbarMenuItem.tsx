@@ -7,8 +7,6 @@ const TopbarMenuItem = ({
   children,
   ...restProps
 }: Omit<MenuItemProps, "children"> & { children?: React.ReactNode }) => {
-  const _textValue =
-    textValue || (typeof children === "string" ? children : undefined);
   return (
     <MenuItem
       {...restProps}

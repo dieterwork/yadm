@@ -14,8 +14,8 @@ const DiamondMarker = () => {
         >
           <polyline
             style={{
-              stroke: "var(--color-slate-900)",
-              fill: "var(--color-white)",
+              stroke: "var(--color-rose-500)",
+              fill: "var(--color-rose-500)",
               strokeWidth: 2,
               strokeLinecap: "round",
               strokeLinejoin: "round",

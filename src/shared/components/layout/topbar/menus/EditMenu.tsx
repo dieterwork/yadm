@@ -12,6 +12,7 @@ const EditMenu = () => {
       <TopbarMenuItem onAction={() => undo()}>Undo</TopbarMenuItem>
       <TopbarMenuItem onAction={() => redo()}>Redo</TopbarMenuItem>
       <TopbarMenuItem onAction={() => clearModel()}>Clear</TopbarMenuItem>
+      <TopbarMenuItem>Exit</TopbarMenuItem>
     </TopbarMenuButton>
   );
 };

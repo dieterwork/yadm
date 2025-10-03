@@ -1,0 +1,182 @@
+import {
+  getNode,
+  updateNodeState,
+} from "$/features/modeler/useDEMOModelerStore";
+import {
+  CopySimpleIcon,
+  QuestionMarkIcon,
+  RectangleDashedIcon,
+  RectangleIcon,
+  SelectionBackgroundIcon,
+  SelectionForegroundIcon,
+  SlidersIcon,
+} from "@phosphor-icons/react";
+import { useState } from "react";
+import { MenuTrigger, Popover, type Selection } from "react-aria-components";
+import type { ActorState } from "$/features/nodes/cooperation_model/actor/actor.types";
+import type { TransactionState } from "$/features/nodes/cooperation_model/transaction/transaction.types";
+import type { TransactorState } from "$/features/nodes/cooperation_model/transactor/transactor.types";
+import type { SelfActivationState } from "$/features/nodes/cooperation_model/self_activation/selfActivation.types";
+import type { CompositeState } from "$/features/nodes/cooperation_model/composite/composite.types";
+import type { ElementaryActorState } from "$/features/nodes/cooperation_model/elementary_actor/elementaryActor.types";
+import type { SeveralActorsState } from "$/features/nodes/cooperation_model/several_actors/severalActors.types";
+import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
+import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
+import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
+import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
+
+const NODES_WITH_STATE = [
+  "actor",
+  "composite",
+  "elementary_actor",
+  "self_activation",
+  "transaction",
+  "transactor",
+  "several_actors",
+] as const;
+
+type NodeWithState = (typeof NODES_WITH_STATE)[number];
+
+const stateOptions = {
+  actor: [
+    { id: "default", label: "Default" },
+    { id: "unclear", label: "Unclear" },
+    { id: "missing", label: "Missing" },
+  ],
+  composite: [
+    { id: "internal", label: "Internal" },
+    { id: "external", label: "External" },
+  ],
+  elementary_actor: [
+    { id: "internal", label: "Internal" },
+    { id: "external", label: "External" },
+  ],
+  self_activation: [
+    { id: "internal", label: "Internal" },
+    { id: "external", label: "External" },
+  ],
+  transaction: [
+    { id: "default", label: "Default" },
+    { id: "unclear", label: "Unclear" },
+    { id: "missing", label: "Missing" },
+    { id: "double", label: "Double" },
+  ],
+  transactor: [
+    { id: "internal", label: "Internal" },
+    { id: "external", label: "External" },
+  ],
+  several_actors: [
+    { id: "internal", label: "Internal" },
+    { id: "external", label: "External" },
+  ],
+} satisfies {
+  actor: {
+    id: ActorState;
+    label: string;
+  }[];
+  composite: {
+    id: CompositeState;
+    label: string;
+  }[];
+  elementary_actor: {
+    id: ElementaryActorState;
+    label: string;
+  }[];
+  self_activation: {
+    id: SelfActivationState;
+    label: string;
+  }[];
+  transaction: {
+    id: TransactionState;
+    label: string;
+  }[];
+  transactor: {
+    id: TransactorState;
+    label: string;
+  }[];
+  several_actors: {
+    id: SeveralActorsState;
+    label: string;
+  }[];
+};
+
+const getIcon = (
+  state:
+    | ActorState
+    | CompositeState
+    | ElementaryActorState
+    | SelfActivationState
+    | TransactionState
+    | TransactorState
+    | SeveralActorsState
+) => {
+  switch (state) {
+    case "default":
+      return RectangleIcon;
+    case "double":
+      return CopySimpleIcon;
+    case "external":
+      return SelectionBackgroundIcon;
+    case "internal":
+      return SelectionForegroundIcon;
+    case "missing":
+      return RectangleDashedIcon;
+    case "unclear":
+      return QuestionMarkIcon;
+  }
+};
+
+const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
+  const node = getNode(nodeId);
+  if (!node) return null;
+  if (!NODES_WITH_STATE.includes(node.type as NodeWithState)) return null;
+  const [selected, setSelected] = useState<Selection>(
+    new Set([node.data?.state ?? "default"])
+  );
+  const options = stateOptions[node.type as NodeWithState];
+  return (
+    <MenuTrigger>
+      <DEMOElementToolbarButton
+        label="State"
+        icon={(iconProps) => <SlidersIcon {...iconProps} />}
+        menuTrigger
+        id="change_state"
+      />
+      <Popover
+        placement="right top"
+        shouldFlip={false}
+        className="outline-hidden"
+      >
+        <DEMOElementToolbarListBox
+          aria-labelledby="change_state"
+          items={options}
+          selectedKeys={selected}
+          selectionMode="single"
+          onSelectionChange={(selection) => {
+            setSelected(selection);
+            if (!(selection instanceof Set)) return;
+            for (const entry of selection) {
+              if (typeof entry !== "string") return;
+              updateNodeState(nodeId, entry);
+            }
+          }}
+        >
+          {(item) => (
+            <DEMOElementToolbarListBoxItem
+              key={item.id}
+              label={item.label}
+              textValue={item.label}
+              id={item.id}
+              icon={(iconProps) => {
+                const Icon = getIcon(item.id);
+                return <Icon {...iconProps} />;
+              }}
+            />
+          )}
+        </DEMOElementToolbarListBox>
+      </Popover>
+    </MenuTrigger>
+  );
+};
+
+export default ChangeStateControl;

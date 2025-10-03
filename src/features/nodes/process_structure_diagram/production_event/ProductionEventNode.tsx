@@ -1,6 +1,6 @@
 import { type NodeProps } from "@xyflow/react";
 
-import DEMONodePrimitive from "../../DEMONodePrimitive";
+import DEMONodeBase from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
 import type { ProductionEventNode as ProductionEventNodeType } from "./productionEvent.types";
 
@@ -15,7 +15,7 @@ const ProductionEventNode = ({
 
   return (
     <>
-      <DEMONodePrimitive
+      <DEMONodeBase
         id={id}
         data={data}
         selected={selected}
@@ -45,7 +45,7 @@ const ProductionEventNode = ({
               : "var(--color-slate-900)"
           }
         />
-      </DEMONodePrimitive>
+      </DEMONodeBase>
     </>
   );
 };

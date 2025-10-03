@@ -1,6 +1,6 @@
 import { type NodeProps } from "@xyflow/react";
 
-import DEMONodePrimitive from "../../DEMONodePrimitive";
+import DEMONodeBase from "../../DEMONodeBase";
 import type { SeveralActorsNode as SeveralActorsNodeType } from "./severalActors.types";
 import uuid from "../../../../shared/utils/uuid";
 import { calculateDoubleDiamondInCircleDimensions } from "../../../shapes/utils/calculateDoubleDiamondInCircleDimensions";
@@ -20,7 +20,7 @@ const SeveralActorsNode = ({
 
   return (
     <>
-      <DEMONodePrimitive
+      <DEMONodeBase
         id={id}
         data={data}
         selected={selected}
@@ -47,7 +47,7 @@ const SeveralActorsNode = ({
           fontSize={fontSize}
           maxLength={50}
         />
-      </DEMONodePrimitive>
+      </DEMONodeBase>
     </>
   );
 };

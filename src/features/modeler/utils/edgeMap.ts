@@ -9,6 +9,7 @@ const edgeMap: Partial<
   actor: [
     { id: "actor", type: "cooperation_model_edge" },
     { id: "transaction", type: "cooperation_model_edge" },
+    { id: "transactor", type: "cooperation_model_edge" },
     { id: "self_activation", type: "cooperation_model_edge" },
     { id: "composite", type: "cooperation_model_edge" },
     { id: "elementary_actor", type: "cooperation_model_edge" },
@@ -23,6 +24,7 @@ const edgeMap: Partial<
     { id: "ghost", type: "ghost_edge" },
   ],
   transactor: [
+    { id: "actor", type: "cooperation_model_edge" },
     { id: "transaction", type: "cooperation_model_edge" },
     { id: "self_activation", type: "cooperation_model_edge" },
     { id: "composite", type: "cooperation_model_edge" },

@@ -1,6 +1,6 @@
 import { type NodeProps } from "@xyflow/react";
 
-import DEMONodePrimitive from "../../DEMONodePrimitive";
+import DEMONodeBase from "../../DEMONodeBase";
 import type { TransactionKindNode as TransactionKindNodeType } from "./transactionKind.types";
 import EditableContent from "../../../editable_content/EditableContent";
 
@@ -15,7 +15,7 @@ const TransactionKindNode = ({
 
   return (
     <>
-      <DEMONodePrimitive
+      <DEMONodeBase
         id={id}
         data={data}
         selected={selected}
@@ -23,7 +23,7 @@ const TransactionKindNode = ({
         height={height}
         type="transaction_kind"
         resizable={false}
-        actions={["editText"]}
+        actions={["editText", "changeColor"]}
       >
         <EditableContent
           isSelected={selected}
@@ -35,7 +35,7 @@ const TransactionKindNode = ({
           maxLength={3}
           fontSize={fontSize}
         />
-      </DEMONodePrimitive>
+      </DEMONodeBase>
     </>
   );
 };

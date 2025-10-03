@@ -1,5 +1,3 @@
-import type { DEMOEdge } from "$/features/edges/edges.types";
-import type { DEMONode } from "$/features/nodes/nodes.types";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
 import type { XYPosition } from "@xyflow/react";
 import { create } from "zustand";

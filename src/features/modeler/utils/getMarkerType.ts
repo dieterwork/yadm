@@ -11,6 +11,7 @@ const getMarkerType = (
   return {
     markerEnd: markerType?.markerEnd,
     markerStart: markerType?.markerStart,
+    markerMid: markerType?.markerMid,
   };
 };
 

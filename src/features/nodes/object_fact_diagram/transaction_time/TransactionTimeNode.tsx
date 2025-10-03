@@ -1,6 +1,6 @@
 import { type NodeProps } from "@xyflow/react";
 
-import DEMONodePrimitive from "../../DEMONodePrimitive";
+import DEMONodeBase from "../../DEMONodeBase";
 import type { TransactionTimeNode as TransactionTimeNodeType } from "./transactionTime.types";
 import { SMALL_NODE_SIZE } from "../../utils/consts";
 
@@ -13,7 +13,7 @@ const TransactionTimeNode = ({
 }: NodeProps<TransactionTimeNodeType>) => {
   return (
     <>
-      <DEMONodePrimitive
+      <DEMONodeBase
         id={id}
         data={data}
         selected={selected}

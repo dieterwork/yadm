@@ -5,7 +5,7 @@ import {
 } from "$/features/modeler/useDEMOModelerStore";
 import type { DEMONode } from "$/features/nodes/nodes.types";
 import { reconnectEdge, useInternalNode } from "@xyflow/react";
-import { DEMOEdge } from "../edges.types";
+import type { DEMOEdge } from "../edges.types";
 
 const useSwapConnection = ({
   edgeId,

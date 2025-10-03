@@ -9,7 +9,6 @@ const TransactionTimeEdge = ({
   targetY,
   selected,
   id,
-  data,
 }: EdgeProps<DEMOEdge>) => {
   const [path, labelX, labelY] = getStraightPath({
     sourceX,
@@ -25,11 +24,9 @@ const TransactionTimeEdge = ({
       />
       {selected && (
         <DEMOEdgeToolbar
-          id={id}
-          data={data}
-          type="transaction_time_edge"
-          selected={selected}
+          edgeId={id}
           position={{ x: labelX, y: labelY }}
+          actions={["delete"]}
         />
       )}
     </>

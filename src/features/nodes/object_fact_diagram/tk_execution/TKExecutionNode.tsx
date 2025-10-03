@@ -1,6 +1,6 @@
 import { type NodeProps } from "@xyflow/react";
 
-import DEMONodePrimitive from "../../DEMONodePrimitive.tsx";
+import DEMONodeBase from "../../DEMONodeBase.tsx";
 import type { TKExecutionNode as TKExecutionNodeType } from "./tkExecution.types.ts";
 
 const TKExecutionNode = ({
@@ -12,7 +12,7 @@ const TKExecutionNode = ({
 }: NodeProps<TKExecutionNodeType>) => {
   return (
     <>
-      <DEMONodePrimitive
+      <DEMONodeBase
         id={id}
         data={data}
         selected={selected}

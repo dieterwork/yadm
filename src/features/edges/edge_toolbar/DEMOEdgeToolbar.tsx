@@ -1,16 +1,13 @@
-import { IconContext, TextAaIcon, TrashIcon } from "@phosphor-icons/react";
 import { type XYPosition } from "@xyflow/react";
-import { Button, Menu, MenuTrigger, Popover } from "react-aria-components";
-import { deleteEdge, getEdge } from "../../modeler/useDEMOModelerStore";
+import { getEdge } from "../../modeler/useDEMOModelerStore";
 import EdgeToolbar from "./EdgeToolbar";
-import ToolbarMenu from "$/shared/components/ui/toolbar/ToolbarMenu";
-import ToolbarMenuItem from "$/shared/components/ui/toolbar/ToolbarMenuItem";
-import DeleteMenuItem from "./actions/DeleteMenuItem";
-import ToolbarMenuSeparator from "$/shared/components/ui/toolbar/ToolbarMenuSeparator";
-import SwapConnectionMenuItem from "./actions/SwapConnectionMenuItem";
-import ToolbarMenuSection from "$/shared/components/ui/toolbar/ToolbarMenuSection";
-import ToggleProductionEventMenuItem from "./actions/ToggleProductionEventMenuItem";
-import ChangeLineTypeMenuItem from "./actions/ChangeLineTypeMenuItem";
+import DeleteMenuItem from "./actions/DeleteEdgeControl";
+import DEMOElementToolbar from "$/shared/components/ui/element_toolbar/DEMOElementToolbar";
+import DEMOElementToolbarGroup from "$/shared/components/ui/element_toolbar/DEMOElementToolbarGroup";
+import DEMOElementToolbarSeparator from "$/shared/components/ui/element_toolbar/DEMOElementToolbarSeparator";
+import ChangeLineTypeControl from "./actions/ChangeLineTypeControl";
+import ToggleProductionEventMenuItem from "./actions/ToggleProductionEventControl";
+import SwapConnectionControl from "./actions/SwapConnectionControl";
 
 export type EdgeToolbarAction =
   | "toggleProductionEvent"
@@ -25,43 +22,35 @@ interface DEMOEdgeToolbarProps {
   targetNodeId?: string;
 }
 
-const DEMOEdgeToolbar = <T extends DEMOEdge>({
+const DEMOEdgeToolbar = ({
   edgeId,
   position,
   actions,
-  sourceNodeId,
-  targetNodeId,
 }: DEMOEdgeToolbarProps) => {
   if (!edgeId) return null;
   const edge = getEdge(edgeId);
   if (!edge) return null;
   return (
     <EdgeToolbar xyPosition={position}>
-      <ToolbarMenu>
-        <ToolbarMenuSection aria-label="Edge actions">
+      <DEMOElementToolbar>
+        <DEMOElementToolbarGroup aria-label="Edge actions">
           {actions?.indexOf("changeLineType") !== -1 && (
-            <ChangeLineTypeMenuItem edgeId={edgeId} />
+            <ChangeLineTypeControl edgeId={edgeId} />
           )}
           {actions?.indexOf("toggleProductionEvent") !== -1 && (
             <ToggleProductionEventMenuItem edgeId={edgeId} />
           )}
-          {actions?.indexOf("swapConnection") !== -1 &&
-            sourceNodeId &&
-            targetNodeId && (
-              <SwapConnectionMenuItem
-                edgeId={edgeId}
-                sourceNodeId={sourceNodeId}
-                targetNodeId={targetNodeId}
-              />
-            )}
-        </ToolbarMenuSection>
+          {actions?.indexOf("swapConnection") !== -1 && (
+            <SwapConnectionControl edgeId={edgeId} />
+          )}
+        </DEMOElementToolbarGroup>
         {actions?.indexOf("delete") !== -1 && (
-          <ToolbarMenuSection aria-label="Danger zone">
-            <ToolbarMenuSeparator />
+          <DEMOElementToolbarGroup aria-label="Danger zone">
+            <DEMOElementToolbarSeparator />
             <DeleteMenuItem edgeId={edgeId} />
-          </ToolbarMenuSection>
+          </DEMOElementToolbarGroup>
         )}
-      </ToolbarMenu>
+      </DEMOElementToolbar>
     </EdgeToolbar>
   );
 };

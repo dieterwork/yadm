@@ -1,19 +1,14 @@
 import { cn } from "@sglara/cn";
 import {
-  Button,
   Menu,
-  MenuTrigger,
   Popover,
   SubmenuTrigger,
-  type ButtonProps,
   type MenuProps,
-  type MenuTriggerProps,
-  type SubmenuTriggerProps,
 } from "react-aria-components";
 import TopbarMenuItem from "./TopbarMenuItem";
 
 type TopbarSubMenuButtonProps<T> = MenuProps<T> &
-  Omit<SubmenuTriggerProps, "children"> & {
+  Omit<menuTriggerProps, "children"> & {
     label?: string;
   };
 

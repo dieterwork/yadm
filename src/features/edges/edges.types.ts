@@ -1,4 +1,4 @@
-import type { Edge, EdgeTypes, XYPosition } from "@xyflow/react";
+import type { Edge, EdgeTypes, MarkerType, XYPosition } from "@xyflow/react";
 import TransactionTimeEdgeComponent from "./transaction_time_edge/TransactionTimeEdge";
 import ObjectFactDiagramEdgeComponent from "./object_fact_diagram/ObjectFactDiagramEdge";
 import ProcessStructureDiagramEdgeComponent from "./process_structure_diagram/ProcessStructureDiagramEdge";
@@ -23,7 +23,7 @@ export type CooperationModelEdge = Edge<
 >;
 
 export type ObjectFactDiagramEdge = Edge<
-  { controlPoint: ControlPointData },
+  { controlPoint: ControlPointData; markerMid?: MarkerType },
   "object_fact_diagram_edge"
 >;
 

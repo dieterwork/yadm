@@ -1,6 +1,6 @@
 import { type NodeProps } from "@xyflow/react";
 
-import DEMONodePrimitive from "../../DEMONodePrimitive";
+import DEMONodeBase from "../../DEMONodeBase";
 import type { TransactorNode as TransactorNodeType } from "./transactor.types";
 import EditableContent from "../../../editable_content/EditableContent";
 import { MEDIUM_NODE_SIZE } from "../../utils/consts";
@@ -16,7 +16,7 @@ const TransactorNode = ({
 
   return (
     <>
-      <DEMONodePrimitive
+      <DEMONodeBase
         id={id}
         data={data}
         selected={selected}
@@ -53,7 +53,7 @@ const TransactorNode = ({
           fontSize={fontSize}
           maxLength={60}
         />
-      </DEMONodePrimitive>
+      </DEMONodeBase>
     </>
   );
 };

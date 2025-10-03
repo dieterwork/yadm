@@ -1,36 +1,36 @@
-import { Handle, Position, useUpdateNodeInternals } from "@xyflow/react";
-import type { DEMOHandlesData } from "../nodes/nodes.types";
+import {
+  Handle,
+  Position,
+  useInternalNode,
+  useUpdateNodeInternals,
+} from "@xyflow/react";
+import type { DEMOHandlesData, DEMONode } from "../nodes/nodes.types";
 import DEMOHandle from "./DEMOHandle";
 import { useNodeHandles } from "./useNodeHandles";
 import { cn } from "@sglara/cn";
-import { useEffect } from "react";
+import { getNode } from "../modeler/useDEMOModelerStore";
 
 interface HandlesProps {
   nodeId: string;
   handles: DEMOHandlesData;
-  nodeDimensions: { width?: number; height?: number };
+  width?: number;
+  height?: number;
   isVisible?: boolean;
 }
 
-const Handles = ({
-  nodeId,
-  handles,
-  nodeDimensions,
-  isVisible,
-}: HandlesProps) => {
-  if (!nodeDimensions.width || !nodeDimensions.height) return null;
-
-  const handlesWithStyles = useNodeHandles({
-    width: nodeDimensions.width,
-    height: nodeDimensions.height,
-    handles,
-  });
+const Handles = ({ nodeId, width, height }: HandlesProps) => {
+  const node = getNode(nodeId);
+  if (!node || !width || !height) return null;
+  const handlesWithStyles = useNodeHandles(node.data?.handles, width, height);
   return (
     <div
-      className={cn("handles | absolute", isVisible ? "invisible" : "visible")}
+      className={cn(
+        "handles | absolute",
+        node.data?.handles.isVisible ? "visible" : "invisible"
+      )}
       style={{
-        width: nodeDimensions.width,
-        height: nodeDimensions.height,
+        width: width,
+        height: height,
       }}
     >
       {handlesWithStyles.top?.handles &&

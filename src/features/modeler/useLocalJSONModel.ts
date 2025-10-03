@@ -11,7 +11,6 @@ const useLocalJSONModel = () => {
       didInit = true;
       const localDEMOModelJSON = localStorage.getItem("demo-model");
       if (!localDEMOModelJSON) return;
-
       const localDEMOModel: ReactFlowJsonObject<DEMONode, DEMOEdge> =
         JSON.parse(localDEMOModelJSON);
       setNodes(localDEMOModel.nodes);

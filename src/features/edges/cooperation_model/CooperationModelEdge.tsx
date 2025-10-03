@@ -10,6 +10,7 @@ const CooperationModelEdge = ({
     <EditableEdgeComponent
       {...restProps}
       type="cooperation_model_edge"
+      data={data}
       actions={[
         "delete",
         "swapConnection",

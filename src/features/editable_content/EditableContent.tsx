@@ -52,10 +52,10 @@ interface EditableContentProps
 const getPadding = (fontSize: number) => {
   switch (fontSize) {
     case 10: {
-      return "p-2";
+      return "p-1";
     }
     case 12: {
-      return "p-2";
+      return "p-1";
     }
     case 14: {
       return "p-2";
@@ -166,7 +166,7 @@ const EditableContent = ({
         className={cn(
           "editable-content-wrapper | absolute inset-0 m-auto overflow-hidden",
           { "w-full": !width, "h-full": !height },
-          // getPadding(fontSize),
+          getPadding(fontSize),
           hide && "hidden",
           restProps.className
         )}

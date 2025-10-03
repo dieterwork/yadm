@@ -1,6 +1,6 @@
 import { type NodeProps } from "@xyflow/react";
 
-import DEMONodePrimitive from "../../DEMONodePrimitive.tsx";
+import DEMONodeBase from "../../DEMONodeBase.tsx";
 import type { InitiationFactNode as InitiationFactNodeType } from "./initiationFact.types.ts";
 
 const InitiationFactNode = ({
@@ -12,7 +12,7 @@ const InitiationFactNode = ({
 }: NodeProps<InitiationFactNodeType>) => {
   return (
     <>
-      <DEMONodePrimitive
+      <DEMONodeBase
         id={id}
         data={data}
         selected={selected}

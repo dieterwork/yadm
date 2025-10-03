@@ -1,5 +1,4 @@
-import type { DEMOEdge } from "$/features/edges/edges.types";
-import type { DEMONode, SubModel } from "$/features/nodes/nodes.types";
+import type { DEMONode } from "$/features/nodes/nodes.types";
 import { MarkerType, type EdgeMarkerType } from "@xyflow/react";
 
 const closedMarker: EdgeMarkerType = {
@@ -14,6 +13,7 @@ const markerMap: Partial<
       id: DEMONode["type"];
       markerStart?: EdgeMarkerType;
       markerEnd?: EdgeMarkerType;
+      markerMid?: EdgeMarkerType;
     }[]
   >
 > = {
@@ -48,6 +48,23 @@ const markerMap: Partial<
   tk_execution: [
     { id: "c_fact", markerEnd: closedMarker },
     { id: "c_act", markerEnd: closedMarker },
+    { id: "ghost", markerEnd: closedMarker },
+  ],
+  production_event: [
+    { id: "entity_class", markerMid: "url(#diamond)" },
+    { id: "derived_entity", markerMid: "url(#diamond)" },
+    { id: "ghost", markerEnd: closedMarker },
+  ],
+  entity_class: [
+    { id: "entity_class", markerMid: "url(#diamond)" },
+    { id: "derived_entity", markerMid: "url(#diamond)" },
+    { id: "production_event", markerMid: "url(#diamond)" },
+    { id: "ghost", markerEnd: closedMarker },
+  ],
+  derived_entity: [
+    { id: "entity_class", markerMid: "url(#diamond)" },
+    { id: "derived_entity", markerMid: "url(#diamond)" },
+    { id: "production_event", markerMid: "url(#diamond)" },
     { id: "ghost", markerEnd: closedMarker },
   ],
 };

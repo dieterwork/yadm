@@ -2,9 +2,7 @@ import {
   getSmoothStepPath,
   getStraightPath,
   MarkerType,
-  useInternalNode,
   type ConnectionLineComponentProps,
-  type XYPosition,
 } from "@xyflow/react";
 import { calcConnectionLineTargetXForTransactionTimeEdge } from "./utils/calcConnectionLineTargetXForTransactionTimeEdge";
 
@@ -17,7 +15,6 @@ const ConnectionLine = ({
   toPosition,
   connectionStatus,
   fromNode,
-  toNode,
 }: ConnectionLineComponentProps) => {
   const [path] =
     fromNode.type !== "transaction_time"

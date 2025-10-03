@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 const useShortcut = (keyCode: KeyCode, callback: Function) => {
   const [didRun, setDidRun] = useState(false);
-  const shouldRun = useKeyPress(keyCode);
+  const shouldRun = useKeyPress(keyCode, { preventDefault: true });
 
   useEffect(() => {
     if (shouldRun && !didRun) {

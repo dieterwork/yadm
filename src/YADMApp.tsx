@@ -3,6 +3,7 @@ import "./index.css";
 import AppLayout from "./shared/components/layout/AppLayout";
 import { ReactFlowProvider } from "@xyflow/react";
 import DiamondMarker from "./shared/components/ui/markers/DiamondMarker";
+import "$features/i18n/config";
 
 const YADMApp = () => {
   return (

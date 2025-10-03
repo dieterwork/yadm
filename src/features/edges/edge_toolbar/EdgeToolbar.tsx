@@ -1,20 +1,13 @@
 import {
   Position,
-  useNodeId,
-  useStore,
   useViewport,
   type Align,
-  type Edge,
-  type ReactFlowState,
   type XYPosition,
 } from "@xyflow/react";
 import type { CSSProperties, HTMLAttributes } from "react";
 import EdgeToolbarPortal from "./EdgeToolbarPortal";
 import { cn } from "@sglara/cn";
-import {
-  getEdge,
-  useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
 import { getEdgeToolbarTransform } from "./utils/getEdgeToolbarTransform";
 
 /**

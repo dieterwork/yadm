@@ -1,20 +1,22 @@
 import {
-  BaseEdge,
   getEdgeCenter,
   getSmoothStepPath,
   MarkerType,
+  Position,
   useInternalNode,
+  useReactFlow,
   type Edge,
   type EdgeProps,
+  type InternalNode,
 } from "@xyflow/react";
 
 import type { ControlPointData, DEMOEdge } from "../edges.types";
 import { type DEMONode } from "../../nodes/nodes.types";
-import EdgeToolbar from "../edge_toolbar/EdgeToolbar";
 import DEMOEdgeToolbar, {
   type EdgeToolbarAction,
 } from "../edge_toolbar/DEMOEdgeToolbar";
 import type { CSSProperties } from "react";
+import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 
 export type EditableEdge = Edge<{
   controlPoint: ControlPointData;
@@ -30,21 +32,21 @@ export function EditableEdgeComponent({
   targetY,
   target,
   targetPosition,
-  data,
   markerEnd,
   markerStart,
   markerMid,
   selected,
-  type,
   actions,
   style,
-  ...restProps
+  sourceHandleId,
+  targetHandleId,
 }: EdgeProps<EditableEdge> & {
-  markerMid?: string;
+  markerMid?: MarkerType;
   type?: DEMOEdge["type"];
   actions?: EdgeToolbarAction[];
   style?: CSSProperties;
 }) {
+  console.log(markerMid);
   const sourceNode = useInternalNode<DEMONode>(source);
   const targetNode = useInternalNode<DEMONode>(target);
   if (!sourceNode || !targetNode) {
@@ -60,12 +62,21 @@ export function EditableEdgeComponent({
     targetPosition: targetPosition,
   });
 
+  const [centerX, centerY] = getEdgeCenter({
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+  });
+
   if (Array.isArray(actions)) {
     actions =
       targetNode.type === "ghost"
         ? actions.filter((action) => action !== "swapConnection")
         : actions;
   }
+
+  const markerMidDirection = getMarkerMidDirection(sourceNode, targetNode);
 
   return (
     <>
@@ -76,17 +87,15 @@ export function EditableEdgeComponent({
         d={path}
         markerEnd={markerEnd}
         markerStart={markerStart}
-        markerMid={markerMid}
       />
       {selected && (
         <DEMOEdgeToolbar
           edgeId={id}
           position={{ x: labelX, y: labelY }}
-          sourceNodeId={sourceNode.id}
-          targetNodeId={targetNode.id}
           actions={actions}
         />
       )}
+      {markerMid && <DoubleArrowMarker labelX={labelX} labelY={labelY} />}
     </>
   );
 }

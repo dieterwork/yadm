@@ -1,6 +1,6 @@
 import { type NodeProps } from "@xyflow/react";
 
-import DEMONodePrimitive from "../../DEMONodePrimitive";
+import DEMONodeBase from "../../DEMONodeBase";
 import type { ElementaryActorNode as ElementaryActorNodeType } from "./elementaryActor.types";
 import uuid from "../../../../shared/utils/uuid";
 import EditableContent from "../../../editable_content/EditableContent";
@@ -19,7 +19,7 @@ const ElementaryActorNode = ({
 
   return (
     <>
-      <DEMONodePrimitive
+      <DEMONodeBase
         id={id}
         data={data}
         selected={selected}
@@ -46,7 +46,7 @@ const ElementaryActorNode = ({
           fontSize={fontSize}
           maxLength={50}
         />
-      </DEMONodePrimitive>
+      </DEMONodeBase>
     </>
   );
 };

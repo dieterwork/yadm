@@ -13,5 +13,17 @@ export default defineConfig({
       $assets: path.resolve(__dirname, "./src/assets"),
     },
   },
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    {
+      name: "markdown-loader",
+      transform(code, id) {
+        if (id.slice(-3) === ".md") {
+          // For .md files, get the raw content
+          return `export default ${JSON.stringify(code)};`;
+        }
+      },
+    },
+  ],
 });

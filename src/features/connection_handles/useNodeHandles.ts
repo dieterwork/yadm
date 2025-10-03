@@ -1,4 +1,6 @@
-import type { DEMOHandlesData } from "../nodes/nodes.types";
+import { useInternalNode } from "@xyflow/react";
+import type { DEMOHandlesData, DEMONode } from "../nodes/nodes.types";
+import { getNode } from "../modeler/useDEMOModelerStore";
 
 interface UpdateNodeHandlesParams {
   width: number;
@@ -21,12 +23,12 @@ const calcDefaultHandlePosition = (
   return position;
 };
 
-export const useNodeHandles = ({
-  width,
-  height,
-  handles,
-}: UpdateNodeHandlesParams): DEMOHandlesData => {
-  return {
+export const useNodeHandles = (
+  handles: DEMOHandlesData,
+  width: number,
+  height: number
+) => {
+  const newHandlesWithStyles = {
     ...handles,
     top: {
       ...handles.top,
@@ -96,5 +98,6 @@ export const useNodeHandles = ({
           },
         })),
     },
-  };
+  } satisfies DEMOHandlesData;
+  return newHandlesWithStyles;
 };

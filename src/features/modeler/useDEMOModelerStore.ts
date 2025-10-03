@@ -30,14 +30,15 @@ import type { ReactStyleStateSetter } from "$/shared/types/react.types";
 import getEdgeData from "./utils/getEdgeData";
 import { sortNodes } from "$/shared/utils/sortNodes";
 import throttle from "$/shared/utils/throttle";
+import { updateHelperLines } from "../helper_lines/useHelperLinesStore";
+import type { CooperationModelNode } from "../nodes/cooperation_model/cooperationModel.types";
 
-type ModelerAction = "attach" | "preview" | "select" | "pan" | "edit";
+type ModelerAction = "attach" | "preview" | "select" | "pan" | "edit" | null;
 export interface DEMOModelerState {
   id: string;
   fileName: string;
   nodes: DEMONode[];
   edges: DEMOEdge[];
-  viewport: Viewport;
   action: ModelerAction;
   isEnabled: boolean;
   isGridVisible: boolean;
@@ -61,7 +62,6 @@ export const useDEMOModelerStore = create<DEMOModelerState>()(
     {
       handleSet: (handleSet) =>
         throttle((state) => {
-          console.info("handleSet called");
           handleSet(state);
         }, 1000),
       onSave: (state) => {
@@ -190,9 +190,12 @@ export const clearModel = () => {
 };
 
 export const onNodesChange: OnNodesChange<DEMONode> = (changes) => {
-  useDEMOModelerStore.setState((state) => ({
-    nodes: applyNodeChanges(changes, state.nodes),
-  }));
+  useDEMOModelerStore.setState((state) => {
+    const updatedChanges = updateHelperLines(changes, state.nodes);
+    return {
+      nodes: applyNodeChanges(updatedChanges, state.nodes),
+    };
+  });
 };
 
 export const onEdgesChange: OnEdgesChange<DEMOEdge> = (changes) => {
@@ -244,11 +247,15 @@ export const onEdgesDelete = (deletedEdges: DEMOEdge[]) => {
 };
 
 export const addNode = (node: DEMONode | DEMONode[]) => {
-  useDEMOModelerStore.setState((state) => ({
-    nodes: [...state.nodes]
+  useDEMOModelerStore.setState((state) => {
+    // create copy of nodes
+    const newNodes = [...state.nodes]
+      // add either node or array of nodes
       .concat(Array.isArray(node) ? node : [node])
-      .sort(sortNodes),
-  }));
+      // sort nodes
+      .sort(sortNodes);
+    return { nodes: newNodes };
+  });
 };
 
 export const addEdge = (edge: DEMOEdge) => {
@@ -267,8 +274,12 @@ export const onConnect: OnConnect = (connection) => {
     ...connection,
     id: `${sourceNode.type}_${connection.sourceHandle}->${sourceNode.type}_${connection.targetHandle}`,
     type,
-    data,
-    ...marker,
+    data: {
+      ...data,
+      markerMid: marker.markerMid,
+    },
+    markerStart: marker.markerStart,
+    markerEnd: marker.markerEnd,
   };
   addEdge(newEdge);
 };
@@ -290,7 +301,16 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
     if (newEdge?.id !== edge.id) return edge;
     const marker = getMarkerType(sourceNode.type, targetNode.type);
     const type = getEdgeType(sourceNode.type, targetNode.type);
-    const _newEdge: DEMOEdge = { ...edge, type, ...marker };
+    const _newEdge: DEMOEdge = {
+      ...edge,
+      data: {
+        ...edge.data,
+        markerMid: marker.markerMid,
+      },
+      type,
+      markerStart: marker.markerStart,
+      markerEnd: marker.markerEnd,
+    };
     return _newEdge;
   });
   useDEMOModelerStore.setState(() => ({
@@ -302,7 +322,10 @@ export const updateNodeColor = (id: string, color: string) => {
   updateNodeData(id, { color });
 };
 
-export const updateNodeState = (id: string, state: string) => {
+export const updateNodeState = (
+  id: string,
+  state: CooperationModelNode["data"]["state"]
+) => {
   updateNodeData(id, { state });
 };
 
