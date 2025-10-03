@@ -62,6 +62,7 @@ const allowedConnectionMap = {
     "ghost",
   ],
   transactor: [
+    "actor",
     "transaction",
     "self_activation",
     "composite",

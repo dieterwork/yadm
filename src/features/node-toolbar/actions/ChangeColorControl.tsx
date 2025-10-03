@@ -2,7 +2,6 @@ import {
   getNode,
   updateNodeColor,
 } from "$/features/modeler/useDEMOModelerStore";
-import type { NodeScope } from "$/features/nodes/nodes.types";
 import type { NodeColor } from "$/shared/components/ui/colors/colors.types";
 import { isNodeColor } from "$/shared/components/ui/colors/colors.utils";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
@@ -12,12 +11,7 @@ import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolba
 import { PaintBrushHouseholdIcon } from "@phosphor-icons/react";
 import { useUpdateNodeInternals } from "@xyflow/react";
 import { useState } from "react";
-import {
-  MenuTrigger,
-  Popover,
-  menuTrigger,
-  type Selection,
-} from "react-aria-components";
+import { MenuTrigger, Popover, type Selection } from "react-aria-components";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
 
 const colorOptions = [

@@ -1,9 +1,5 @@
 import type { DEMONode } from "$/features/nodes/nodes.types";
-import {
-  getNodesBounds,
-  getNodesBounds,
-  getViewportForBounds,
-} from "@xyflow/react";
+import { getViewportForBounds } from "@xyflow/react";
 import { toPng } from "html-to-image";
 import type { Rect } from "react-aria-components";
 
