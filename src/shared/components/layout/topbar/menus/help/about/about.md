@@ -1,3 +1,3 @@
-## Info
+## About
 
-Info about modeler
+About modeler
