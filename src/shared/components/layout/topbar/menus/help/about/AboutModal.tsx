@@ -7,10 +7,7 @@ import md from "./about.md";
 const AboutModal = ({ ...restProps }: DEMOModalProps) => {
   return (
     <DEMOModal {...restProps}>
-      <ReactMarkdown
-        // Pass it as children
-        children={md}
-      />
+      <ReactMarkdown children={md} />
     </DEMOModal>
   );
 };
