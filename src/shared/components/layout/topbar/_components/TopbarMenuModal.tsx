@@ -26,22 +26,24 @@ const DEMOModal = ({
     <ModalOverlay
       isOpen={isOpen}
       onOpenChange={onOpenChange}
-      className={({ isEntering, isExiting }) => `
-    absolute top-0 left-0 w-full h-(--page-height) z-10 bg-black/25 backdrop-blur isolate
-    ${isEntering ? "animate-in fade-in duration-300 ease-out" : ""}
-    ${isExiting ? "animate-out fade-out duration-200 ease-in" : ""}
-  `}
+      className={({ isEntering, isExiting }) =>
+        cn(
+          "absolute inset-0 w-full h-(--page-height) z-10 bg-black/25 backdrop-blur isolate",
+          isEntering && "animate-in fade-in duration-300 ease-out",
+          isExiting && "animate-out fade-out duration-200 ease-in"
+        )
+      }
     >
       <Modal
         className={({ isEntering, isExiting }) =>
           cn(
-            "sticky top-0 left-0 w-full h-(--visual-viewport-height) flex items-center justify-center p-4 box-border text-center",
+            "sticky inset-0 w-full h-(--visual-viewport-height) flex items-center justify-center p-4 box-border text-center",
             isEntering && "animate-in zoom-in-95 ease-out duration-300",
             isExiting && "animate-out zoom-out-95 ease-in duration-200"
           )
         }
       >
-        <Dialog className="w-[600px] max-h-full overflow-hidden rounded-2xl bg-white p-6 box-border text-left align-middle shadow-xl outline-hidden relative">
+        <Dialog className="w-[calc(100%-2rem)] max-w-2xl max-h-full overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl outline-hidden relative">
           {({ close }) => (
             <>
               <Heading
@@ -51,7 +53,7 @@ const DEMOModal = ({
                 {title}
               </Heading>
               <div className="w-6 h-6 absolute right-6 top-6 stroke-2">
-                <Button onPress={close}>
+                <Button onPress={close} className="select-none cursor-pointer">
                   <XIcon />
                 </Button>
               </div>

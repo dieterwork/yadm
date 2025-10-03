@@ -2,15 +2,18 @@ import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
 import jsPDF from "jspdf";
 import { downloadFile, generatePNG } from "./utils";
 import "svg2pdf.js";
+import { useReactFlow } from "@xyflow/react";
 
 const useExport = () => {
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const fileName = useDEMOModelerStore((state) => state.fileName);
   const DEMOInstance = useDEMOModelerStore((state) => state.DEMOInstance);
+  const { getNodesBounds } = useReactFlow();
+  const nodesBounds = getNodesBounds(nodes);
 
   const exportAsPNG = async (scaleFactor: number) => {
     try {
-      const { url } = await generatePNG(nodes, scaleFactor);
+      const { url } = await generatePNG(nodesBounds, scaleFactor);
       downloadFile(url, fileName + `_x${scaleFactor}.png`);
     } catch (err) {
       console.error("Could not generate PNG.", err);
@@ -20,7 +23,7 @@ const useExport = () => {
   const exportAsPDF = async (scaleFactor: number) => {
     try {
       const { url, width, height } = await generatePNG(
-        nodes,
+        nodesBounds,
         scaleFactor * (4 / 3)
       );
       // downloadFile(url, fileName + `_x${scaleFactor}.png`);

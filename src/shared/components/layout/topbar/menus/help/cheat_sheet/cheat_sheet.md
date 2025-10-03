@@ -1,3 +1,3 @@
-## Cheat sheet
+## Notes
 
 Cheat sheet.

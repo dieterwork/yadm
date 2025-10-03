@@ -1,5 +1,4 @@
 import {
-  getNode,
   setEdges,
   setNodes,
   useDEMOModelerStore,
@@ -13,8 +12,10 @@ const useDelete = () => {
     useShallow((state) => ({ nodes: state.nodes, edges: state.edges }))
   );
 
-  const deleteNode = () => {
-    const selectedNodes = nodes.filter((node) => node.selected);
+  const deleteNode = (nodeId?: string) => {
+    const selectedNodes = nodes.filter((node) =>
+      nodeId ? node.id === nodeId : node.selected
+    );
 
     const childNodes = getChildNodes(selectedNodes, nodes);
 
@@ -35,12 +36,16 @@ const useDelete = () => {
 
     if (!combinedSelectedNodes && !selectedEdges) return;
 
-    setNodes((nodes) => nodes.filter((node) => !selectedNodes.includes(node)));
+    setNodes((nodes) =>
+      nodes.filter((node) => !combinedSelectedNodes.includes(node))
+    );
     setEdges((edges) => edges.filter((edge) => !selectedEdges.includes(edge)));
   };
 
-  const deleteEdge = () => {
-    const selectedEdges = edges.filter((edge) => edge.selected);
+  const deleteEdge = (edgeId?: string) => {
+    const selectedEdges = edges.filter((edge) =>
+      edgeId ? edge.id === edgeId : edge.selected
+    );
     if (!selectedEdges) return;
 
     // find edge source and target

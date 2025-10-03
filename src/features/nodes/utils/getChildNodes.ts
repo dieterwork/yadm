@@ -1,11 +1,7 @@
 import type { DEMONode } from "../nodes.types";
 import collectChildNodes from "./collectChildNodes";
 
-const getChildNodes = (
-  selectedNodes: DEMONode[],
-  nodes: DEMONode[],
-  immediateChildren: boolean
-) => {
+const getChildNodes = (selectedNodes: DEMONode[], nodes: DEMONode[]) => {
   const collectedChildNodes: DEMONode[] = [];
   collectChildNodes(selectedNodes, collectedChildNodes, nodes);
 

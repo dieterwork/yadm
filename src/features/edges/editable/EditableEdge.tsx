@@ -76,8 +76,6 @@ export function EditableEdgeComponent({
         : actions;
   }
 
-  const markerMidDirection = getMarkerMidDirection(sourceNode, targetNode);
-
   return (
     <>
       <path

@@ -1,6 +1,11 @@
 import type { DEMONode } from "$/features/nodes/nodes.types";
-import { getNodesBounds, getViewportForBounds } from "@xyflow/react";
+import {
+  getNodesBounds,
+  getNodesBounds,
+  getViewportForBounds,
+} from "@xyflow/react";
 import { toPng } from "html-to-image";
+import type { Rect } from "react-aria-components";
 
 export const downloadFile = (dataUrl: string, fileName: string) => {
   const a = document.createElement("a");
@@ -11,10 +16,9 @@ export const downloadFile = (dataUrl: string, fileName: string) => {
 };
 
 export const generatePNG = async (
-  nodes: DEMONode[],
+  nodesBounds: Rect,
   scaleFactor: number = 1
 ) => {
-  const nodesBounds = getNodesBounds(nodes);
   const padding = scaleFactor * 10;
   const imageWidth = nodesBounds.width * scaleFactor + padding;
   const imageHeight = nodesBounds.height * scaleFactor + padding;

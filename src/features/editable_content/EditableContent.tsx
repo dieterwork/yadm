@@ -14,9 +14,11 @@ import {
   useDEMOModelerStore,
 } from "../modeler/useDEMOModelerStore";
 import {
+  getNodesBounds,
   Position,
   useInternalNode,
   useNodeId,
+  useReactFlow,
   useStore,
   useViewport,
   type InternalNode,
@@ -30,6 +32,7 @@ import { getEditButtonTransform } from "./utils/getEditButtonTransform";
 import EditButtonPortal from "./EditButtonPortal";
 import nodeToBox from "../nodes/utils/nodeToBox";
 import { boxToRect } from "../nodes/utils/boxToRect";
+import { DEMONode } from "../nodes/nodes.types";
 
 interface EditableContentProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "content"> {
@@ -75,11 +78,6 @@ const getPadding = (fontSize: number) => {
   }
 };
 
-const getInternalNodesBounds = (node: InternalNode) => {
-  const box = nodeToBox(node);
-  return boxToRect(box);
-};
-
 const EditableContent = ({
   width,
   height,
@@ -99,12 +97,12 @@ const EditableContent = ({
 }: EditableContentProps) => {
   const nodeId = useNodeId();
   if (!nodeId) throw new Error("No node id found");
-  const internalNode = useInternalNode(nodeId);
-  if (!internalNode) throw new Error("No internal node found");
   if (!ref) ref = useRef<HTMLDivElement>(null!);
   const { x, y, zoom } = useViewport();
   const domNode = useStore((state) => state.domNode);
   const nodes = useDEMOModelerStore((state) => state.nodes);
+
+  const { getNodesBounds } = useReactFlow();
 
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const props = useEditableContent({
@@ -123,7 +121,7 @@ const EditableContent = ({
 
   const zIndex = Math.max(...nodes.map((node) => (node?.zIndex ?? 0) + 1));
 
-  const nodeRect = getInternalNodesBounds(internalNode);
+  const nodeRect = getNodesBounds([nodeId]);
 
   const wrapperStyle: CSSProperties = {
     position: "absolute",
@@ -139,28 +137,6 @@ const EditableContent = ({
 
   return (
     <>
-      {/* {isEnabled && isSelected && !isEditable && (
-        <EditButtonPortal>
-          <div className="button-wrapper" style={wrapperStyle}>
-            <Button
-              aria-label="Edit node"
-              className="edit-button | select-none cursor-pointer bg-white size-7 grid place-items-center rounded-md border-1 border-sky-500 shadow-xs"
-              onPress={() => {
-                updateNodeEditable(nodeId, true);
-                updateNode(nodeId, { draggable: false });
-                setAction("edit");
-                setEndOfContentEditable(ref.current);
-              }}
-            >
-              <PencilIcon
-                size={18}
-                color="var(--color-sky-500)"
-                weight="fill"
-              />
-            </Button>
-          </div>
-        </EditButtonPortal>
-      )} */}
       <div
         {...restProps}
         className={cn(
@@ -177,13 +153,13 @@ const EditableContent = ({
           container: "editable-content / size",
         }}
       >
-        <div
+        <span
           {...props}
           ref={ref}
           contentEditable={isEditable && isEnabled}
           spellCheck={false}
           suppressContentEditableWarning={true}
-          className="block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
+          className="inline-block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
           style={{
             alignContent,
             color,
@@ -191,7 +167,7 @@ const EditableContent = ({
             textAlign,
             lineHeight: leading,
           }}
-        ></div>
+        ></span>
       </div>
     </>
   );

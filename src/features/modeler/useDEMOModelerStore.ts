@@ -180,10 +180,6 @@ export const updateEdgeData = <T extends DEMOEdge>(
   );
 };
 
-export const deleteEdge = (id: string) => {
-  setEdges((edges) => edges.filter((edge) => edge.id !== id));
-};
-
 export const clearModel = () => {
   setEdges([]);
   setNodes([]);

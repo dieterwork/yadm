@@ -10,7 +10,7 @@ const DeleteMenuItem = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
       icon={(iconProps) => <TrashIcon {...iconProps} />}
       label="Delete"
       onPress={() => {
-        deleteEdge();
+        deleteEdge(edgeId);
       }}
       state="danger"
     />

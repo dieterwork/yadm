@@ -10,7 +10,7 @@ const DeleteControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
       icon={(iconProps) => <TrashIcon {...iconProps} />}
       label="Delete"
       onPress={() => {
-        deleteNode();
+        deleteNode(nodeId);
       }}
       state="danger"
     />
