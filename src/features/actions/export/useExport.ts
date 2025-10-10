@@ -1,4 +1,5 @@
 import {
+  setExportEnabled,
   setNodesHandlesVisibility,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
@@ -17,10 +18,10 @@ const useExport = () => {
 
   const exportAsPNG = async (scaleFactor: number) => {
     try {
-      setNodesHandlesVisibility(false);
+      setExportEnabled(true);
       const { url } = await generatePNG(nodesBounds, scaleFactor);
       downloadFile(url, fileName + ` x${scaleFactor}.png`);
-      setNodesHandlesVisibility(true);
+      setExportEnabled(false);
     } catch (err) {
       console.error("Could not generate PNG.", err);
     }
@@ -28,7 +29,7 @@ const useExport = () => {
 
   const exportAsPDF = async (scaleFactor: number) => {
     try {
-      setNodesHandlesVisibility(false);
+      setExportEnabled(true);
       const { url, width, height } = await generatePNG(
         nodesBounds,
         scaleFactor * (4 / 3)
@@ -38,7 +39,7 @@ const useExport = () => {
       doc.output("dataurlnewwindow", {
         filename: fileName + ` x${scaleFactor}.pdf`,
       });
-      setNodesHandlesVisibility(true);
+      setExportEnabled(false);
     } catch (err) {
       console.error("Could not generate PDF.", err);
     }

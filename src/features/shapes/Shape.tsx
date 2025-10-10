@@ -7,14 +7,14 @@ import { cn } from "@sglara/cn";
 interface ShapeWrapperProps extends Partial<ShapeProps> {
   ref?: RefObject<SVGSVGElement>;
   children: React.ReactElement<ShapeProps>;
-  selected?: boolean;
+  isHighlighted?: boolean;
 }
 const Shape = ({
   ref,
   width,
   height,
   children,
-  selected,
+  isHighlighted,
   ...svgAttributes
 }: ShapeWrapperProps) => {
   if (!width || !height) return null;
@@ -37,7 +37,7 @@ const Shape = ({
         height={height}
         className={cn(
           "demo-shape-svg",
-          selected && "outline-1 outline-sky-500"
+          isHighlighted && "outline-1 outline-sky-500"
         )}
         ref={ref}
       >

@@ -42,6 +42,7 @@ export interface DEMOModelerState {
   edges: DEMOEdge[];
   action: ModelerAction;
   isEnabled: boolean;
+  isExportEnabled: boolean;
   isGridVisible: boolean;
   isGridSnapEnabled: boolean;
   DEMOInstance: null | ReactFlowInstance<DEMONode, DEMOEdge>;
@@ -59,6 +60,7 @@ export const useDEMOModelerStore = create<DEMOModelerState>()(
       isGridVisible: true,
       isGridSnapEnabled: true,
       isEnabled: true,
+      isExportEnabled: false,
     }),
     {
       handleSet: (handleSet) =>
@@ -490,4 +492,15 @@ export const setNodesHandlesVisibility = (
       return newNode;
     })
   );
+};
+
+export const setExportEnabled = (
+  isExportEnabled: ReactStyleStateSetter<boolean>
+) => {
+  useDEMOModelerStore.setState((state) => ({
+    isExportEnabled:
+      typeof isExportEnabled === "boolean"
+        ? isExportEnabled
+        : isExportEnabled(state.isExportEnabled),
+  }));
 };

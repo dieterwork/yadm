@@ -62,14 +62,15 @@ const DEMONodeBase = ({
 
   const { inProgress: isConnectionInProgress } = useConnection();
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
+  const isExportEnabled = useDEMOModelerStore((state) => state.isExportEnabled);
 
   return (
     <div className={cn(`${type}_node | `, "isolate")} style={{ width, height }}>
       {/* Controls */}
-      {actions && !isConnectionInProgress && isEnabled && (
+      {actions && !isConnectionInProgress && isEnabled && !isExportEnabled && (
         <NodeToolbar nodeId={id} actions={actions} />
       )}
-      {resizable && isEnabled && (
+      {resizable && isEnabled && !isExportEnabled && (
         <DEMONodeResizer
           {...resizerProps}
           nodeId={id}
@@ -82,7 +83,7 @@ const DEMONodeBase = ({
           type={type}
         />
       )}
-      {data?.handles && isEnabled && (
+      {data?.handles && isEnabled && !isExportEnabled && (
         <Handles
           nodeId={id}
           handles={data?.handles}
@@ -97,7 +98,9 @@ const DEMONodeBase = ({
           width={width}
           height={height}
           strokeWidth={2}
-          selected={selected && !resizable}
+          isHighlighted={
+            selected && !resizable && isEnabled && !isExportEnabled
+          }
         >
           <DEMOShape
             state={data?.state}
