@@ -39,6 +39,7 @@ const TextNode = ({
             "changeColor",
             "showBorder",
             "editText",
+            "attachNode",
           ]}
           isVisible={isEnabled && !isExportEnabled}
         />

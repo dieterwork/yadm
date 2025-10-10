@@ -1,4 +1,7 @@
-import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
+import {
+  setAction,
+  useDEMOModelerStore,
+} from "$/features/modeler/useDEMOModelerStore";
 import { create } from "zustand";
 
 interface AttachState {
@@ -11,16 +14,12 @@ export const useAttachStore = create<AttachState>()(() => ({
 
 export const setAttachChildNodeId = (id: string) => {
   useAttachStore.setState(() => ({ childNodeId: id }));
-  useDEMOModelerStore.setState(() => ({
-    state: "attach",
-  }));
+  setAction("attach");
 };
 
 export const resetAttach = () => {
   useAttachStore.setState(() => ({
     childNodeId: null,
   }));
-  useDEMOModelerStore.setState(() => ({
-    state: useDEMOModelerStore.getInitialState().state,
-  }));
+  setAction("pan");
 };

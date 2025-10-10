@@ -1,63 +1,66 @@
 import {
+  getNode,
   setNodes,
   useDEMOModelerStore,
 } from "../../modeler/useDEMOModelerStore";
 import { sortNodes } from "../../../shared/utils/sortNodes";
-import { useReactFlow } from "@xyflow/react";
+import convertAbsoluteToRelativePosition from "$/features/nodes/utils/convertAbsoluteToRelativePosition";
+import convertRelativeToAbsolutePosition from "$/features/nodes/utils/convertRelativeToAbsolutePosition";
 
 /** Attach node as a child to another node */
 
 export const useAttachNode = () => {
-  const { getInternalNode } = useReactFlow();
-
   const attachNode = (
-    childNodeIds: string[],
+    nodeIds: string[],
     parentNodeId: string,
-    extant: "parent" | [[number, number], [number, number]]
+    extant?: "parent" | [[number, number], [number, number]]
   ) => {
     setNodes((nodes) => {
       const nextNodes = nodes
         .map((node) => {
-          if (!childNodeIds.includes(node.id)) return node;
+          if (!nodeIds.includes(node.id)) return node;
+
+          const parentNode = getNode(parentNodeId);
+          const newPosition = convertAbsoluteToRelativePosition(
+            node.position,
+            parentNode,
+            nodes,
+            true
+          );
 
           return {
             ...node,
             parentId: parentNodeId,
             extant,
+            position: { x: newPosition.x ?? 0, y: newPosition.y ?? 0 },
           };
         })
-        .sort(sortNodes);
+        .sort((a, b) => sortNodes(a, b, nodes));
       return nextNodes;
     });
   };
 
   const detachNode = (ids: string[], removeParentId?: string) => {
     setNodes((nodes) => {
-      const nextNodes = nodes.map((node) => {
-        if (ids.includes(node.id) && node.parentId) {
-          const parentNode = getInternalNode(node.parentId);
-
+      const nextNodes = nodes
+        .map((node) => {
+          if (!ids.includes(node.id) || !node.parentId) return node;
+          const newPosition = convertRelativeToAbsolutePosition(
+            node.position,
+            node,
+            nodes
+          );
           return {
             ...node,
-            position: {
-              x:
-                node.position.x +
-                (parentNode?.internals.positionAbsolute.x ?? 0),
-              y:
-                node.position.y +
-                (parentNode?.internals.positionAbsolute.y ?? 0),
-            },
+            position: { x: newPosition.x ?? 0, y: newPosition.y ?? 0 },
             expandParent: undefined,
             parentId: undefined,
             extent: undefined,
           };
-        }
-        return node;
-      });
-
-      return nextNodes.filter(
-        (node) => !removeParentId || node.id !== removeParentId
-      );
+        })
+        .filter((node) => node.id !== removeParentId)
+        .sort((a, b) => sortNodes(a, b, nodes));
+      return nextNodes;
     });
   };
 

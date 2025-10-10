@@ -12,7 +12,7 @@ import "@xyflow/react/dist/style.css";
 import { edgeTypes, type DEMOEdge } from "../edges/edges.types";
 import { nodeTypes, type DEMONode } from "../nodes/nodes.types";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   getNode,
   onConnect,
@@ -21,9 +21,7 @@ import {
   onNodesChange,
   onReconnect,
   onReconnectEnd,
-  setAction,
   setDEMOInstance,
-  updateNodeData,
   useDEMOModelerStore,
   type DEMOModelerState,
 } from "./useDEMOModelerStore";
@@ -36,11 +34,11 @@ import { cn } from "@sglara/cn";
 import SideMenu from "../../shared/components/ui/toolbars/side_toolbar/SideToolbar";
 import BottomToolbar from "../../shared/components/ui/toolbars/bottom_toolbar/BottomToolbar";
 import { resetAttach, useAttachStore } from "../actions/attach/useAttachStore";
-import convertAbsoluteToRelativePosition from "../nodes/utils/convertAbsoluteToRelativePosition";
 import { usePreviewNode } from "../preview_node/usePreviewNode";
 import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
 import useKeyboardShortcuts from "../keyboard/useKeyboardShortcuts";
 import useSave from "../actions/save/useSave";
+import useAttachNode from "../actions/attach/useAttachNode";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -175,34 +173,27 @@ const DEMOModeler = () => {
 
   const childNodeIdAttach = useAttachStore((state) => state.childNodeId);
 
+  const { attachNode } = useAttachNode();
+
   const handleNodeAttach = (node: DEMONode) => {
     if (action !== "attach" || !childNodeIdAttach) return;
-    const childNode = getNode(childNodeIdAttach);
-    if (!childNode) {
+    if (!childNodeIdAttach) {
       return console.error("Could not find child node");
     }
     if (node.parentId && node.type !== "transaction_kind") {
       return console.warn("Cannot attach to a node with an existing parent");
     }
-    let parentNode;
+    let parentNodeId = node.id;
     if (node.type === "transaction_kind" && node.parentId) {
       // get parent node
       const transactionTimeNode = getNode(node.parentId);
       if (!transactionTimeNode)
         throw new Error("Transaction kind does not have parent");
-      parentNode = transactionTimeNode;
-    } else {
-      parentNode = node;
+      parentNodeId = transactionTimeNode.id;
     }
-    const newPosition = convertAbsoluteToRelativePosition(
-      parentNode.position,
-      childNode,
-      nodes
-    );
-    updateNodeData(childNodeIdAttach, {
-      parentId: parentNode.id,
-      position: { x: newPosition.x ?? 0, y: newPosition.y ?? 0 },
-    });
+
+    attachNode([childNodeIdAttach], parentNodeId);
+
     resetAttach();
   };
 

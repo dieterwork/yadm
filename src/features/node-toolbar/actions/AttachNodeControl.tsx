@@ -26,14 +26,12 @@ const AttachNodeControl = ({ nodeId }: { nodeId: string }) => {
       label={parentId ? "Detach node" : "Attach node"}
       onPress={() => {
         const node = getNode(nodeId);
-        const childNodeIds = getChildNodes([node], nodes, true).map(
-          (node) => node.id
-        );
-        if (childNodeIds.length === 0) {
+        if (parentId) {
+          detachNode([node.id]);
+          setAction("pan");
+        } else {
           setAttachChildNodeId(nodeId);
           setAction("attach");
-        } else {
-          detachNode(childNodeIds, nodeId);
         }
       }}
     />

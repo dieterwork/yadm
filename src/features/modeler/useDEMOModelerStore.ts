@@ -252,7 +252,7 @@ export const addNode = (node: DEMONode | DEMONode[]) => {
       // add either node or array of nodes
       .concat(Array.isArray(node) ? node : [node])
       // sort nodes
-      .sort(sortNodes);
+      .sort((a, b) => sortNodes(a, b, state.nodes));
     return { nodes: newNodes };
   });
 };

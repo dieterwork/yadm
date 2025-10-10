@@ -10,7 +10,6 @@ import uuid from "$/shared/utils/uuid";
 import { createNode } from "../nodes/utils/createNode";
 import { addNode, setAction, setNodes } from "../modeler/useDEMOModelerStore";
 import { X_SMALL_NODE_SIZE } from "../nodes/utils/consts";
-import { sortNodes } from "$/shared/utils/sortNodes";
 
 const ofdNodes = ["c_fact", "c_act", "tk_execution", "initiation_fact"];
 
@@ -57,7 +56,6 @@ export const usePreviewNode = () => {
       e.preventDefault();
       const target = e.target;
       const pane = rfDomNode?.querySelector(".react-flow__pane");
-      console.log(target);
       if (
         pane &&
         target instanceof Element &&

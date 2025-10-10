@@ -34,7 +34,7 @@ export const updateHelperLines = (
   nodes: DEMONode[]
 ) => {
   // reset the helper lines (clear existing lines, if any)
-  useHelperLinesStore.setState((state) => ({
+  useHelperLinesStore.setState(() => ({
     horizontal: undefined,
     vertical: undefined,
   }));
@@ -57,22 +57,25 @@ export const updateHelperLines = (
       nodes,
     });
 
-    const helperLinesRelativePosition = changedNode
-      ? convertAbsoluteToRelativePosition(
-          helperLines.snapPosition,
-          changedNode,
-          nodes
-        )
-      : undefined;
+    const helperLinesPosition =
+      changedNode &&
+      convertAbsoluteToRelativePosition(
+        helperLines.snapPosition,
+        changedNode,
+        nodes
+      );
+    // console.log(helperLinesRelativePosition);
+    // // if we have a helper line, we snap the node to the helper line position
+    // // this is being done by manipulating the node position inside the change object
+    // change.position.x = helperLinesRelativePosition
+    //   ? helperLinesRelativePosition.x ?? 0
+    //   : change.position.x;
+    // change.position.y = helperLinesRelativePosition
+    //   ? helperLinesRelativePosition?.y ?? 0
+    //   : change.position.y;
 
-    // if we have a helper line, we snap the node to the helper line position
-    // this is being done by manipulating the node position inside the change object
-    change.position.x = helperLinesRelativePosition?.x
-      ? helperLinesRelativePosition.x
-      : change.position.x;
-    change.position.y = helperLinesRelativePosition?.y
-      ? helperLinesRelativePosition.y
-      : change.position.y;
+    change.position.x = helperLinesPosition?.x ?? change.position.x;
+    change.position.y = helperLinesPosition?.y ?? change.position.y;
 
     // if helper lines are returned, we set them so that they can be displayed
     useHelperLinesStore.setState(() => ({

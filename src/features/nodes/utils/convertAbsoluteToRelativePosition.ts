@@ -4,10 +4,15 @@ import type { DEMONode } from "../nodes.types";
 const convertAbsoluteToRelativePosition = (
   absolutePosition: Partial<XYPosition>,
   node: DEMONode,
-  nodes: DEMONode[]
+  nodes: DEMONode[],
+  isNodeParentNode?: boolean
 ): Partial<XYPosition> => {
-  let x = absolutePosition.x;
-  let y = absolutePosition.y;
+  let x =
+    absolutePosition.x &&
+    absolutePosition.x - (isNodeParentNode ? node.position.x ?? 0 : 0);
+  let y =
+    absolutePosition.y &&
+    absolutePosition.y - (isNodeParentNode ? node?.position.y : 0);
   let hostNode: DEMONode | undefined = node;
 
   while (hostNode) {

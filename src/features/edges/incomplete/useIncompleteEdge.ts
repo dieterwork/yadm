@@ -8,10 +8,16 @@ import {
 } from "@xyflow/react";
 import type { DEMOEdge } from "../edges.types";
 import { SMALL_NODE_SIZE } from "$/features/nodes/utils/consts";
-import { addEdge, addNode } from "$/features/modeler/useDEMOModelerStore";
+import {
+  addEdge,
+  addNode,
+  getNode,
+  useDEMOModelerStore,
+} from "$/features/modeler/useDEMOModelerStore";
 import type { GhostNode } from "$/features/nodes/ghost/ghost.types";
 import getEdgeType from "$/features/modeler/utils/getEdgeType";
 import getMarkerType from "$/features/modeler/utils/getMarkerType";
+import convertAbsoluteToRelativePosition from "$/features/nodes/utils/convertAbsoluteToRelativePosition";
 
 const getPosition = (fromPosition: Position | null) => {
   switch (fromPosition) {
@@ -30,6 +36,7 @@ const getPosition = (fromPosition: Position | null) => {
 
 export const useIncompleteEdge = () => {
   const { screenToFlowPosition } = useReactFlow();
+  const nodes = useDEMOModelerStore((state) => state.nodes);
   const onConnectEnd: OnConnectEnd = (event, connectionState) => {
     if (
       connectionState.isValid ||
@@ -49,10 +56,13 @@ export const useIncompleteEdge = () => {
       y: clientY,
     });
 
-    const relativeParentCoordinates = convertAbsoluteToParentRelativePosition({
-      absolutePosition: position,
-      parentAbsolutePosition: fromNode?.position,
-    });
+    const parentNode = getNode(fromNode.id);
+
+    const relativeParentCoordinates = convertAbsoluteToRelativePosition(
+      position,
+      parentNode,
+      nodes
+    );
 
     const ghostNode = {
       id: ghostId,
@@ -62,13 +72,13 @@ export const useIncompleteEdge = () => {
           ? {
               x:
                 fromPosition === "left"
-                  ? relativeParentCoordinates.x > 0
+                  ? (relativeParentCoordinates.x ?? 0) > 0
                     ? -20
-                    : relativeParentCoordinates.x
+                    : relativeParentCoordinates.x ?? 0
                   : fromNode.measured.width &&
-                    relativeParentCoordinates.x < fromNode.measured.width
+                    (relativeParentCoordinates.x ?? 0) < fromNode.measured.width
                   ? fromNode.measured.width + 20
-                  : relativeParentCoordinates.x,
+                  : relativeParentCoordinates.x ?? 0,
               y: SMALL_NODE_SIZE / 2,
             }
           : position,
