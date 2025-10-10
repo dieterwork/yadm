@@ -5,7 +5,7 @@ const throttle = <T extends []>(
   let queuedToRun: NodeJS.Timeout | undefined;
   let previouslyRun: number;
   return function invokeFn(...args: T) {
-    const now = Date.now();
+    const now = performance.now();
     queuedToRun = clearTimeout(queuedToRun) as undefined;
     if (!previouslyRun || now - previouslyRun >= wait) {
       callback(...args);

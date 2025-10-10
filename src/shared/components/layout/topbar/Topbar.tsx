@@ -6,6 +6,7 @@ import HelpMenu from "./menus/HelpMenu";
 import { VisuallyHidden } from "react-aria";
 import { useState } from "react";
 import { setFileName } from "$/features/modeler/useDEMOModelerStore";
+import formatDate from "$/shared/utils/formatDate";
 
 const Topbar = () => {
   return (
@@ -39,10 +40,10 @@ const Topbar = () => {
                 <div className="file-name-editor-wrapper | grid grid-cols-[1fr_auto] items-center gap-2">
                   <TextField
                     onChange={(e) => {
-                      const date = new Date().toISOString();
-                      setFileName(`${e}_` + date);
+                      const date = formatDate();
+                      setFileName(`${e} ` + date);
                       if (e === "") {
-                        setFileName("demo-model_" + date);
+                        setFileName("Demo Model" + date);
                       }
                     }}
                     className="border-1 border-slate-200 rounded-sm text-sm h-[2rem] content-center px-2 focus-within:ring-2 focus-within:ring-sky-500"

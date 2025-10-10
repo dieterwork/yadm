@@ -32,6 +32,7 @@ import { sortNodes } from "$/shared/utils/sortNodes";
 import throttle from "$/shared/utils/throttle";
 import { updateHelperLines } from "../helper_lines/useHelperLinesStore";
 import type { CooperationModelNode } from "../nodes/cooperation_model/cooperationModel.types";
+import formatDate from "$/shared/utils/formatDate";
 
 type ModelerAction = "attach" | "preview" | "select" | "pan" | "edit" | null;
 export interface DEMOModelerState {
@@ -50,7 +51,7 @@ export const useDEMOModelerStore = create<DEMOModelerState>()(
   temporal(
     (set, get) => ({
       id: uuid(),
-      fileName: `DEMO Model_${new Date().toISOString()}`,
+      fileName: `DEMO Model ${formatDate()}`,
       nodes: initialNodes,
       edges: initialEdges,
       DEMOInstance: null,
@@ -64,8 +65,8 @@ export const useDEMOModelerStore = create<DEMOModelerState>()(
         throttle((state) => {
           handleSet(state);
         }, 1000),
-      onSave: (state) => {
-        console.log("Saved");
+      onSave: () => {
+        console.log("Saved DEMO Modeler Store");
       },
       partialize: (state) => {
         const { nodes, edges } = state;
@@ -368,6 +369,24 @@ export const setEnabled = (isEnabled: ReactStyleStateSetter<boolean>) => {
   }));
 };
 
+export const toggleLock = (isEnabled: ReactStyleStateSetter<boolean>) => {
+  useDEMOModelerStore.setState((state) => ({
+    isEnabled:
+      typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
+    nodes: state.nodes.map((node) => ({
+      ...node,
+      draggable:
+        typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
+    })),
+    edges: state.edges.map((edge) => ({
+      ...edge,
+      draggable:
+        typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
+    })),
+  }));
+  if (useDEMOModelerStore.getState().action !== "pan") setAction("pan");
+};
+
 export const updateNodeHandlesVisibility = (
   id: string,
   isVisible: ReactStyleStateSetter<boolean>
@@ -447,4 +466,28 @@ export const updateNodeDraggable = (
         ? isDraggable
         : isDraggable(node.draggable)),
   }));
+};
+
+export const setNodesHandlesVisibility = (
+  isVisible: ReactStyleStateSetter<boolean>
+) => {
+  setNodes((nodes) =>
+    nodes.map((node) => {
+      if (!node.data?.handles) return node;
+      const newNode: DEMONode = {
+        ...node,
+        data: {
+          ...node.data,
+          handles: {
+            ...node.data.handles,
+            isVisible:
+              typeof isVisible === "boolean"
+                ? isVisible
+                : isVisible(node.data.handles.isVisible),
+          },
+        },
+      };
+      return newNode;
+    })
+  );
 };

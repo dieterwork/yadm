@@ -19,7 +19,6 @@ const HelpMenu = () => {
         <TopbarMenuItem onAction={() => setAboutOpen(true)}>
           About
         </TopbarMenuItem>
-        <TopbarMenuItem>Exit</TopbarMenuItem>
       </TopbarMenuButton>
       <CheatSheetModal
         title="Cheat sheet"

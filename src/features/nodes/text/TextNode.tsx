@@ -31,6 +31,7 @@ const TextNode = ({
             "showBorder",
             "changeColor",
             "showBorder",
+            "editText",
           ]}
         />
         <NodeResizer

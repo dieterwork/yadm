@@ -1,9 +1,9 @@
 import useShortcut from "$/features/keyboard/useShortcut";
-import { setEnabled } from "$/features/modeler/useDEMOModelerStore";
+import { toggleLock } from "$/features/modeler/useDEMOModelerStore";
 
 const useLockShortcut = () => {
   useShortcut(["Meta+l", "Control+l"], () =>
-    setEnabled((isEnabled) => !isEnabled)
+    toggleLock((isEnabled) => !isEnabled)
   );
 };
 

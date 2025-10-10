@@ -1,21 +1,7 @@
-import { useShallow } from "zustand/react/shallow";
-import type {
-  Edge,
-  ReactFlowInstance,
-  ReactFlowJsonObject,
-} from "@xyflow/react";
-import { useRef, type RefObject } from "react";
 import TopbarMenuButton from "../_components/TopbarMenuButton";
 import TopbarMenuItem from "../_components/TopbarMenuItem";
 import TopbarSubMenuButton from "../_components/TopbarSubMenuButton";
-import type { DEMOEdge } from "$/features/edges/edges.types";
-import {
-  clearModel,
-  setEdges,
-  setNodes,
-  useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
-import type { DEMONode } from "$/features/nodes/nodes.types";
+import { clearModel } from "$/features/modeler/useDEMOModelerStore";
 import useSave from "$/features/actions/save/useSave";
 import useExport from "$/features/actions/export/useExport";
 import useImport from "$/features/actions/import/useImport";
@@ -120,7 +106,6 @@ const FileMenu = () => {
           </TopbarMenuItem>
         </TopbarSubMenuButton>
       </TopbarSubMenuButton>
-      <TopbarMenuItem>Exit</TopbarMenuItem>
     </TopbarMenuButton>
   );
 };

@@ -131,3 +131,13 @@ body,
 @theme {
   --font-app: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
+
+.hide-handles {
+  .react-flow__handle {
+    display: none !important;
+  }
+}
+
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}

@@ -44,17 +44,16 @@ export const useEditableContent = ({
   leading: number;
   textAlign: CSSProperties["textAlign"];
 }) => {
-  const onChange: OnSelectionChangeFunc<DEMONode, DEMOEdge> = ({ nodes }) => {
-    const hasSelectedNode = nodes.some((node) => nodeId === node.id);
-    if (!hasSelectedNode) {
-      updateNodeEditable(nodeId, false);
-      setAction("pan");
-      updateNode(nodeId, { draggable: true });
-    }
-  };
-  useOnSelectionChange({
-    onChange,
-  });
+  // const onChange: OnSelectionChangeFunc<DEMONode, DEMOEdge> = ({ nodes }) => {
+  //   const hasSelectedNode = nodes.some((node) => nodeId === node.id);
+  //   if (!hasSelectedNode) {
+  //     updateNodeEditable(nodeId, false);
+  //     updateNode(nodeId, { draggable: true });
+  //   }
+  // };
+  // useOnSelectionChange({
+  //   onChange,
+  // });
 
   useEffect(() => {
     if (!didInit) {

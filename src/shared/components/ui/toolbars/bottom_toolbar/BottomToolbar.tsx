@@ -10,7 +10,7 @@ import {
 } from "@phosphor-icons/react";
 import { useKeyPress, useReactFlow, useViewport } from "@xyflow/react";
 import {
-  setEnabled,
+  toggleLock,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
 import DEMOModelerToolbar from "../_components/DEMOModelerToolbar";
@@ -19,6 +19,11 @@ import DEMOModelerToolbarToggleButton from "../_components/DEMOModelerToolbarTog
 import DEMOModelerToolbarSeparator from "../_components/DEMOModelerToolbarSeparator";
 import DEMOModelerToolbarButton from "../_components/DEMOModelerToolbarButton";
 import DEMOModelerToolbarTooltip from "../_components/DEMOModelerToolbarTooltip";
+import {
+  resetPreviewNode,
+  setPreviewNode,
+  usePreviewNodeStore,
+} from "$/features/preview_node/usePreviewNodeStore";
 
 const BottomToolbar = () => {
   const { zoomIn, zoomOut, fitView, zoomTo } = useReactFlow();
@@ -27,6 +32,7 @@ const BottomToolbar = () => {
   const { undo, redo } = useDEMOModelerStore.temporal.getState();
   const orientation = "horizontal";
   const isCtrlYPressed = useKeyPress(["Control+y", "Meta+y"]);
+  const previewNode = usePreviewNodeStore((state) => state.previewNode);
 
   return (
     <div className="bottom-toolbar-wrapper | absolute bottom-4 left-[50%] translate-x-[-50%] z-9999">
@@ -45,10 +51,15 @@ const BottomToolbar = () => {
               aria-label={isEnabled ? "Lock modeler" : "Unlock modeler"}
               isSelected={isEnabled}
               onChange={(isEnabled) => {
-                setEnabled(isEnabled);
+                if (previewNode) return resetPreviewNode();
+                toggleLock(isEnabled);
               }}
             >
-              {isEnabled ? <LockSimpleIcon /> : <LockSimpleOpenIcon />}
+              <LockSimpleIcon
+                color={
+                  !isEnabled ? "var(--color-sky-500)" : "var(--color-slate-900)"
+                }
+              />
             </DEMOModelerToolbarToggleButton>
           </TooltipTrigger>
         </DEMOModelerToolbarGroup>
@@ -65,6 +76,7 @@ const BottomToolbar = () => {
             <DEMOModelerToolbarButton
               aria-label="Show all nodes"
               onPress={() => {
+                if (previewNode) return resetPreviewNode();
                 fitView({ duration: 500 });
               }}
             >
@@ -86,6 +98,7 @@ const BottomToolbar = () => {
             <DEMOModelerToolbarButton
               aria-label="Zoom out"
               onPress={() => {
+                if (previewNode) return resetPreviewNode();
                 zoomOut({ duration: 500 });
               }}
             >
@@ -101,6 +114,7 @@ const BottomToolbar = () => {
               aria-label="Zoom level"
               width="3.5rem"
               onPress={() => {
+                if (previewNode) return resetPreviewNode();
                 zoomTo(1, { duration: 500 });
               }}
             >
@@ -117,6 +131,7 @@ const BottomToolbar = () => {
             <DEMOModelerToolbarButton
               aria-label="Zoom in"
               onPress={() => {
+                if (previewNode) return resetPreviewNode();
                 zoomIn({ duration: 500 });
               }}
             >
@@ -137,7 +152,9 @@ const BottomToolbar = () => {
             />
             <DEMOModelerToolbarButton
               aria-label="Undo"
+              isDisabled={!isEnabled}
               onPress={() => {
+                if (previewNode) return resetPreviewNode();
                 undo();
               }}
             >
@@ -154,7 +171,9 @@ const BottomToolbar = () => {
             <DEMOModelerToolbarButton
               aria-label="Redo"
               isActive={isCtrlYPressed}
+              isDisabled={!isEnabled}
               onPress={() => {
+                if (previewNode) return resetPreviewNode();
                 redo();
               }}
             >

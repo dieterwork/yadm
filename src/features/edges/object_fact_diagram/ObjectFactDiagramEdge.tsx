@@ -7,7 +7,6 @@ const ObjectFactDiagramEdge = ({
   data,
   ...restProps
 }: EdgeProps<ObjectFactDiagramEdge>) => {
-  console.log(data);
   return (
     <EditableEdgeComponent
       {...restProps}

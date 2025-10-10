@@ -46,6 +46,7 @@ export const createNode = ({
           content: DEFAULT_CONTENT_MAP[type],
           scope: "in",
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
             },
@@ -79,6 +80,7 @@ export const createNode = ({
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
               max: 1,
@@ -116,6 +118,7 @@ export const createNode = ({
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
               max: 1,
@@ -152,6 +155,7 @@ export const createNode = ({
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
             },
@@ -185,6 +189,7 @@ export const createNode = ({
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
             },
@@ -219,6 +224,7 @@ export const createNode = ({
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
               max: 1,
@@ -256,6 +262,7 @@ export const createNode = ({
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
             },
@@ -291,6 +298,7 @@ export const createNode = ({
         data: {
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
               max: 1,
@@ -333,6 +341,7 @@ export const createNode = ({
         data: {
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
             },
@@ -367,6 +376,7 @@ export const createNode = ({
           scope: "in",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
             },
@@ -401,6 +411,7 @@ export const createNode = ({
           position,
           data: {
             handles: {
+              isVisible: true,
               left: {
                 handles: [{ id: uuid(), type: "source" }],
               },
@@ -458,6 +469,7 @@ export const createNode = ({
         data: {
           color: "default",
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
               max: 1,
@@ -497,6 +509,7 @@ export const createNode = ({
         data: {
           color: "default",
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
               max: 1,
@@ -536,6 +549,7 @@ export const createNode = ({
         data: {
           color: "default",
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
               max: 1,
@@ -574,6 +588,7 @@ export const createNode = ({
         data: {
           color: "default",
           handles: {
+            isVisible: true,
             top: {
               handles: [{ id: uuid(), type: "source" }],
               max: 1,

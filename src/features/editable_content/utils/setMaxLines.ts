@@ -33,7 +33,6 @@ export const setMaxLines = (
     childrenHeightEl.getBoundingClientRect().height
   );
   document.body.removeChild(childrenHeightEl);
-  console.log(childrenHeight, maxLinesHeight);
   if (childrenHeight > maxLinesHeight) {
     e.preventDefault();
     return;

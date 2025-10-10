@@ -1,5 +1,8 @@
 import { type XYPosition } from "@xyflow/react";
-import { getEdge } from "../../modeler/useDEMOModelerStore";
+import {
+  getEdge,
+  useDEMOModelerStore,
+} from "../../modeler/useDEMOModelerStore";
 import EdgeToolbar from "./EdgeToolbar";
 import DeleteMenuItem from "./actions/DeleteEdgeControl";
 import DEMOElementToolbar from "$/shared/components/ui/element_toolbar/DEMOElementToolbar";
@@ -30,8 +33,18 @@ const DEMOEdgeToolbar = ({
   if (!edgeId) return null;
   const edge = getEdge(edgeId);
   if (!edge) return null;
+
+  const edges = useDEMOModelerStore((state) => state.edges);
+  const nodes = useDEMOModelerStore((state) => state.nodes);
+  const hasTwoOrMoreEdgesSelected =
+    edges.filter((edge) => edge.selected).length > 1;
+  const hasNodeSelected = nodes.some((node) => node.selected);
+
   return (
-    <EdgeToolbar xyPosition={position}>
+    <EdgeToolbar
+      xyPosition={position}
+      isVisible={!hasNodeSelected && !hasTwoOrMoreEdgesSelected}
+    >
       <DEMOElementToolbar>
         <DEMOElementToolbarGroup aria-label="Edge actions">
           {actions?.indexOf("changeLineType") !== -1 && (

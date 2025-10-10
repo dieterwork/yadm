@@ -8,7 +8,6 @@ export const calcConnectionLineTargetXForTransactionTimeEdge = (
   nodeWidth?: number
 ) => {
   if (!nodeWidth) return toX;
-  console.log(toX, nodeX, nodeWidth);
   if (
     (toX < nodeX && fromPosition === "left") ||
     (toX > nodeX + nodeWidth && fromPosition === "right")

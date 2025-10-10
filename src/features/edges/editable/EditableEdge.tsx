@@ -46,7 +46,6 @@ export function EditableEdgeComponent({
   actions?: EdgeToolbarAction[];
   style?: CSSProperties;
 }) {
-  console.log(markerMid);
   const sourceNode = useInternalNode<DEMONode>(source);
   const targetNode = useInternalNode<DEMONode>(target);
   if (!sourceNode || !targetNode) {
@@ -79,7 +78,12 @@ export function EditableEdgeComponent({
   return (
     <>
       <path
-        style={{ ...style, strokeWidth: 2, stroke: "var(--color-slate-900)" }}
+        style={{
+          ...style,
+          strokeWidth: 2,
+          stroke: "var(--color-slate-900)",
+          fill: "transparent",
+        }}
         id={id}
         className="react-flow__edge-path"
         d={path}

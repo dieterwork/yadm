@@ -12,6 +12,7 @@ import type { DEMONode } from "./nodes.types";
 import DEMONodeResizer from "../resize/NodeResizer";
 import Handles from "../connection_handles/Handles";
 import { cn } from "@sglara/cn";
+import { useDEMOModelerStore } from "../modeler/useDEMOModelerStore";
 
 interface DEMONodeBaseProps extends NodeProps<DEMONode> {
   resizable?: boolean;
@@ -60,17 +61,15 @@ const DEMONodeBase = ({
   const shapeRef = useRef<SVGSVGElement>(null!);
 
   const { inProgress: isConnectionInProgress } = useConnection();
+  const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
 
   return (
-    <div
-      className={cn(`demo-node-${type} | `, "isolate")}
-      style={{ width, height }}
-    >
+    <div className={cn(`${type}_node | `, "isolate")} style={{ width, height }}>
       {/* Controls */}
-      {actions && !isConnectionInProgress && (
+      {actions && !isConnectionInProgress && isEnabled && (
         <NodeToolbar nodeId={id} actions={actions} />
       )}
-      {resizable && (
+      {resizable && isEnabled && (
         <DEMONodeResizer
           {...resizerProps}
           nodeId={id}
@@ -83,7 +82,7 @@ const DEMONodeBase = ({
           type={type}
         />
       )}
-      {data?.handles && (
+      {data?.handles && isEnabled && (
         <Handles
           nodeId={id}
           handles={data?.handles}
@@ -93,7 +92,13 @@ const DEMONodeBase = ({
       )}
       {/* Shape */}
       {DEMOShape && (
-        <Shape ref={shapeRef} width={width} height={height} strokeWidth={2}>
+        <Shape
+          ref={shapeRef}
+          width={width}
+          height={height}
+          strokeWidth={2}
+          selected={selected && !resizable}
+        >
           <DEMOShape
             state={data?.state}
             scope={data?.scope}

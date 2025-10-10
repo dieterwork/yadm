@@ -6,22 +6,15 @@ import {
   type RefObject,
 } from "react";
 import {
-  getNode,
-  setAction,
-  updateNode,
   updateNodeContent,
-  updateNodeEditable,
   useDEMOModelerStore,
 } from "../modeler/useDEMOModelerStore";
 import {
-  getNodesBounds,
   Position,
-  useInternalNode,
   useNodeId,
   useReactFlow,
   useStore,
   useViewport,
-  type InternalNode,
 } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
 import { Button } from "react-aria-components";

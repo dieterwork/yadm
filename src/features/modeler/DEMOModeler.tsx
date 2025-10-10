@@ -276,14 +276,6 @@ const DEMOModeler = () => {
           selectionKeyCode={["Shift", "Meta"]}
           panOnDrag={action === "pan"}
           selectionMode={SelectionMode.Partial}
-          onSelectionStart={() => {
-            setAction("select");
-          }}
-          onSelectionEnd={() => {
-            setTimeout(() => {
-              setAction("pan");
-            }, 0);
-          }}
           proOptions={{ hideAttribution: true }}
         >
           <Background
@@ -292,7 +284,20 @@ const DEMOModeler = () => {
             variant={BackgroundVariant.Dots}
             className={cn(isGridVisible ? "visible" : "invisible")}
           />
-          <MiniMap />
+          <MiniMap
+            pannable={true}
+            nodeColor="var(--color-slate-200)"
+            draggable={!isEnabled}
+            aria-expanded={isEnabled}
+            className={cn(
+              "transition-opacity",
+              isEnabled
+                ? "opacity-100 pointer-events-auto"
+                : "opacity-0 pointer-events-none"
+            )}
+            bgColor="var(--color-white)"
+            maskColor="var(--color-slate-100)"
+          />
           <SideMenu />
           <BottomToolbar />
           <HelperLines

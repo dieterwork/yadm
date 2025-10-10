@@ -1,12 +1,18 @@
+import {
+  NODE_BACKGROUND_COLOR_MAP,
+  NODE_BORDER_COLOR_MAP,
+  NODE_COLOR_MAP,
+} from "../colors/colors.consts";
+
 const DiamondMarker = () => {
   return (
     <svg className="sr-only">
       <defs>
         <marker
           id="diamond"
-          viewBox="-10 -10 20 20"
-          markerHeight={12.5}
-          markerWidth={12.5}
+          viewBox="-11 -11 20 20"
+          markerHeight={20}
+          markerWidth={20}
           markerUnits="strokeWidth"
           orient="auto-start-reverse"
           refX={0}
@@ -14,13 +20,13 @@ const DiamondMarker = () => {
         >
           <polyline
             style={{
-              stroke: "var(--color-rose-500)",
-              fill: "var(--color-rose-500)",
+              stroke: NODE_COLOR_MAP["red"],
+              fill: NODE_COLOR_MAP["red"],
               strokeWidth: 2,
               strokeLinecap: "round",
               strokeLinejoin: "round",
             }}
-            points="-4,-4 0,0 -4,4 -8,0 -4,-4"
+            points="-5,-4 -1,0 -5,4 -9,0 -5,-4"
           ></polyline>
         </marker>
       </defs>

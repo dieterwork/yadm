@@ -20,7 +20,7 @@ const ToggleProductionEventMenuItem = ({ edgeId }: { edgeId: string }) => {
       isSelected={isProductionFactVisible}
       onChange={(isProductionFactVisible) => {
         updateEdge(edgeId, {
-          markerStart: isProductionFactVisible ? undefined : "diamond",
+          markerStart: isProductionFactVisible ? "diamond" : undefined,
         });
       }}
     />

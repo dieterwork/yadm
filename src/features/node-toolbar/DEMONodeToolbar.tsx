@@ -4,7 +4,7 @@ import {
   Position,
   type NodeToolbarProps,
 } from "@xyflow/react";
-import { getNode } from "../modeler/useDEMOModelerStore";
+import { getNode, useDEMOModelerStore } from "../modeler/useDEMOModelerStore";
 import ChangeFontSizeControl from "./actions/ChangeFontSizeControl";
 import AddHandleControl from "./actions/AddHandleControl";
 import ChangeStateControl from "./actions/ChangeStateControl";
@@ -31,10 +31,21 @@ const DEMONodeToolbar = ({
   const node = getNode(nodeId);
   if (!node) return null;
 
+  const edges = useDEMOModelerStore((state) => state.edges);
+  const nodes = useDEMOModelerStore((state) => state.nodes);
+  const hasTwoOrMoreNodesSelected =
+    nodes.filter((node) => node.selected).length > 1;
+  const hasEdgeSelected = edges.some((edge) => edge.selected);
+
   return (
     <NodeToolbar
       position={Position.Right}
-      isVisible={!node?.data?.isEditable && node?.selected}
+      isVisible={
+        !node?.data?.isEditable &&
+        node?.selected &&
+        !hasTwoOrMoreNodesSelected &&
+        !hasEdgeSelected
+      }
     >
       <DEMOElementToolbar>
         {actions?.indexOf("changeFontSize") !== -1 && (

@@ -20,7 +20,7 @@ export const NODE_COLOR_MAP = {
 
 export const NODE_BACKGROUND_COLOR_MAP = {
   default: "var(--color-white)",
-  red: "var(--color-red-300)",
+  red: "var(--color-red-200)",
   blue: "var(--color-sky-300)",
   green: "var(--color-emerald-300)",
   yellow: "var(--color-yellow-300)",

@@ -26,9 +26,11 @@ import {
   setGridSnapEnabled,
   setGridVisible,
   setNodes,
+  setNodesHandlesVisibility,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
 import {
+  resetPreviewNode,
   setPreviewNode,
   usePreviewNodeStore,
 } from "$/features/preview_node/usePreviewNodeStore";
@@ -42,17 +44,17 @@ import DEMOModelerToolbarGroup from "../_components/DEMOModelerToolbarGroup";
 import DEMOModelerToolbarButton from "../_components/DEMOModelerToolbarButton";
 import DEMOModelerToolbarToggleButton from "../_components/DEMOModelerToolbarToggleButton";
 import DEMOModelerToolbarSeparator from "../_components/DEMOModelerToolbarSeparator";
-import type { DEMONode } from "$/features/nodes/nodes.types";
 import DEMOModelerToolbarTooltip from "../_components/DEMOModelerToolbarTooltip";
 
 const SideToolbar = () => {
-  const { isGridSnapEnabled, isGridVisible, action, nodes } =
+  const { isGridSnapEnabled, isGridVisible, action, nodes, isEnabled } =
     useDEMOModelerStore(
       useShallow((state) => ({
         nodes: state.nodes,
         action: state.action,
         isGridSnapEnabled: state.isGridSnapEnabled,
         isGridVisible: state.isGridVisible,
+        isEnabled: state.isEnabled,
       }))
     );
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
@@ -67,7 +69,14 @@ const SideToolbar = () => {
   });
 
   return (
-    <div className="side-toolbar-wrapper | absolute top-[50%] left-4 translate-y-[-50%] z-9999">
+    <div
+      className={cn(
+        "side-toolbar-wrapper | absolute top-[50%] left-4 translate-y-[-50%] z-9999 transition-opacity",
+        isEnabled
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
+      )}
+    >
       <DEMOModelerToolbar
         orientation={orientation}
         aria-label="Modeler options"
@@ -81,10 +90,10 @@ const SideToolbar = () => {
               orientation="vertical"
               label="Activate hand tool"
             />
-            <DEMOModelerToolbarToggleButton
-              isSelected={action === "pan"}
-              onChange={(e) => {
-                setAction(e ? "pan" : null);
+            <DEMOModelerToolbarButton
+              onPress={() => {
+                if (previewNode) return resetPreviewNode();
+                setAction("pan");
               }}
               aria-label="Activate hand tool"
             >
@@ -95,19 +104,20 @@ const SideToolbar = () => {
                     : "var(--color-slate-900)"
                 }
               />
-            </DEMOModelerToolbarToggleButton>
+            </DEMOModelerToolbarButton>
           </TooltipTrigger>
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="vertical"
               label="Activate selection tool"
             />
-            <DEMOModelerToolbarToggleButton
-              isSelected={action === "select"}
-              onChange={(e) => {
-                setAction(e ? "select" : null);
+            <DEMOModelerToolbarButton
+              onPress={() => {
+                if (previewNode) return resetPreviewNode();
+                setAction("select");
               }}
               aria-label="Activate selection tool"
+              isDisabled={!isEnabled}
             >
               <SelectionPlusIcon
                 color={
@@ -116,7 +126,7 @@ const SideToolbar = () => {
                     : "var(--color-slate-900)"
                 }
               />
-            </DEMOModelerToolbarToggleButton>
+            </DEMOModelerToolbarButton>
           </TooltipTrigger>
         </DEMOModelerToolbarGroup>
         <DEMOModelerToolbarSeparator orientation={orientation} />
@@ -136,6 +146,7 @@ const SideToolbar = () => {
             <DEMOModelerToolbarToggleButton
               isSelected={areHelperLinesEnabled}
               onChange={(isEnabled) => {
+                if (previewNode) return resetPreviewNode();
                 toggleHelperLines(isEnabled);
               }}
               aria-label={
@@ -143,6 +154,7 @@ const SideToolbar = () => {
                   ? "Disable helper lines"
                   : "Enable helper lines"
               }
+              isDisabled={!isEnabled}
             >
               <AlignLeftIcon
                 className={cn(!areHelperLinesEnabled && "opacity-30")}
@@ -157,9 +169,11 @@ const SideToolbar = () => {
             <DEMOModelerToolbarToggleButton
               isSelected={isGridSnapEnabled}
               onChange={(isEnabled) => {
+                if (previewNode) return resetPreviewNode();
                 setGridSnapEnabled(isEnabled);
               }}
               aria-label={isGridSnapEnabled ? "Snap to grid" : "Free movement"}
+              isDisabled={!isEnabled}
             >
               {isGridSnapEnabled ? (
                 <ArrowsInLineHorizontalIcon />
@@ -176,9 +190,11 @@ const SideToolbar = () => {
             <DEMOModelerToolbarToggleButton
               isSelected={isGridVisible}
               onChange={(isVisible) => {
+                if (previewNode) return resetPreviewNode();
                 setGridVisible(isVisible);
               }}
               aria-label={isGridVisible ? "Hide grid" : "Show grid"}
+              isDisabled={!isEnabled}
             >
               <GridFourIcon className={cn(!isGridVisible && "opacity-30")} />
             </DEMOModelerToolbarToggleButton>
@@ -192,21 +208,10 @@ const SideToolbar = () => {
             />
             <DEMOModelerToolbarToggleButton
               isSelected={areHandlesVisible}
-              isDisabled={nodes.length === 0}
+              isDisabled={nodes.length === 0 || !isEnabled}
               onChange={(isVisible) => {
-                setNodes((nodes) =>
-                  nodes.map((node) => {
-                    if (!node.data?.handles) return node;
-                    const newNode: DEMONode = {
-                      ...node,
-                      data: {
-                        ...node.data,
-                        handles: { ...node.data.handles, isVisible },
-                      },
-                    };
-                    return newNode;
-                  })
-                );
+                if (previewNode) return resetPreviewNode();
+                setNodesHandlesVisibility(isVisible);
               }}
               aria-label={
                 areHandlesVisible ? "Hide node handles" : "Show node handles"
@@ -242,6 +247,7 @@ const SideToolbar = () => {
               onPress={() => {
                 setAction("preview");
               }}
+              isDisabled={!isEnabled}
             >
               <FilePlusIcon
                 color={

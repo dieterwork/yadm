@@ -18,6 +18,10 @@ import SidebarSelect from "./menu/SidebarSelect";
 import { usePreviewNodeStore } from "$/features/preview_node/usePreviewNodeStore";
 import PreviewNode from "$/features/preview_node/PreviewNode";
 import type { DEMONode } from "$/features/nodes/nodes.types";
+import { useId, useState } from "react";
+import SidebarToggleButton from "./SidebarToggleButton";
+import { cn } from "@sglara/cn";
+import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
 
 export type SidebarMenuSectionItemType = {
   id: string;
@@ -203,14 +207,38 @@ const sidebarMenuItems = [
 
 const Sidebar = () => {
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
+  const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
+  const [isOpen, setOpen] = useState(true);
+  const id = useId();
 
   return (
     <>
-      <div className="sidebar | [grid-area:sidebar] px-4 border-r border-gray-200 overflow-y-auto w-[300px]">
-        <div className="sidebar-inner | flex flex-col mb-6 outline-hidden">
-          <Collection items={sidebarMenuItems}>
-            {(item) => <SidebarSelect menuItem={item} key={item.id} />}
-          </Collection>
+      <div
+        className={cn(
+          "sidebar | [grid-area:sidebar] transition-all border-r border-gray-200 overflow-hidden relative h-[calc(100svh-3rem)]",
+          isEnabled && isOpen ? "w-[300px]" : "w-[calc(34px)]"
+        )}
+        style={{ container: "sidebar / size" }}
+      >
+        <div
+          className={cn(
+            "w-[300px] px-4 h-[100cqh] transition-opacity overflow-y-auto no-scrollbar",
+            isEnabled && isOpen ? "opacity-100" : "opacity-0"
+          )}
+        >
+          <div className="flex flex-col mb-6 outline-hidden">
+            <Collection items={sidebarMenuItems}>
+              {(item) => <SidebarSelect menuItem={item} key={item.id} />}
+            </Collection>
+          </div>
+        </div>
+        <div className="absolute m-auto right-1 bottom-2 grid place-items-center">
+          <SidebarToggleButton
+            aria-controls={id}
+            aria-expanded={isEnabled ? isOpen : false}
+            isOpen={isEnabled ? isOpen : false}
+            onOpenChange={(isOpen) => isEnabled && setOpen(isOpen)}
+          />
         </div>
       </div>
       {previewNode && <PreviewNode type={previewNode?.type} />}

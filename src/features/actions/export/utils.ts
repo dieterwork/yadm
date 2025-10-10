@@ -1,7 +1,5 @@
-import type { DEMONode } from "$/features/nodes/nodes.types";
-import { getViewportForBounds } from "@xyflow/react";
+import { getViewportForBounds, type Rect } from "@xyflow/react";
 import { toPng } from "html-to-image";
-import type { Rect } from "react-aria-components";
 
 export const downloadFile = (dataUrl: string, fileName: string) => {
   const a = document.createElement("a");

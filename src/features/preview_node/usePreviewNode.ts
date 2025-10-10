@@ -56,10 +56,12 @@ export const usePreviewNode = () => {
       if (!previewNode) return;
       e.preventDefault();
       const target = e.target;
+      const pane = rfDomNode?.querySelector(".react-flow__pane");
+      console.log(target);
       if (
-        rfDomNode &&
+        pane &&
         target instanceof Element &&
-        (rfDomNode.contains(target) || rfDomNode === target)
+        (pane.contains(target) || pane === target)
       ) {
         addNodeFromSidebar(e);
       } else {

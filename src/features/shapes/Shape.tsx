@@ -2,16 +2,19 @@ import type { RefObject } from "react";
 import { type ShapeProps } from "./shapes.types";
 import { ShapeContext } from "./ShapeContext";
 import type React from "react";
+import { cn } from "@sglara/cn";
 
 interface ShapeWrapperProps extends Partial<ShapeProps> {
   ref?: RefObject<SVGSVGElement>;
   children: React.ReactElement<ShapeProps>;
+  selected?: boolean;
 }
 const Shape = ({
   ref,
   width,
   height,
   children,
+  selected,
   ...svgAttributes
 }: ShapeWrapperProps) => {
   if (!width || !height) return null;
@@ -29,7 +32,15 @@ const Shape = ({
     <ShapeContext
       value={{ width: innerWidth, height: innerHeight, ...svgAttributes }}
     >
-      <svg width={width} height={height} className="demo-shape-svg" ref={ref}>
+      <svg
+        width={width}
+        height={height}
+        className={cn(
+          "demo-shape-svg",
+          selected && "outline-1 outline-sky-500"
+        )}
+        ref={ref}
+      >
         {/* this offsets the shape by the strokeWidth so that we have enough space for the stroke */}
         <g
           transform={`translate(${svgAttributes.strokeWidth ?? 0}, ${

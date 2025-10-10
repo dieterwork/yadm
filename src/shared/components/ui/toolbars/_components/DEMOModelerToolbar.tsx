@@ -9,7 +9,7 @@ const DEMOModelerToolbar = ({ orientation, ...restProps }: ToolbarProps) => {
         "demo-modeler-toolbar-wrapper | bg-slate-50 rounded-md shadow-sm"
       )}
     >
-      <IconContext value={{ size: 20, color: "var(--color-black)" }}>
+      <IconContext value={{ size: 20, color: "var(--color-slate-900)" }}>
         <Toolbar
           {...restProps}
           className={cn(

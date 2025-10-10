@@ -1,7 +1,5 @@
-import type { DEMOEdge } from "$/features/edges/edges.types";
 import { setEdges, setNodes } from "$/features/modeler/useDEMOModelerStore";
-import type { DEMONode } from "$/features/nodes/nodes.types";
-import type { ReactFlowJsonObject } from "@xyflow/react";
+import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import { useEffect, useRef, type ChangeEvent, type RefObject } from "react";
 
 const useImport = () => {
@@ -19,11 +17,9 @@ const useImport = () => {
       const reader = new FileReader();
       reader.onload = () => {
         if (!reader.result || reader.result instanceof ArrayBuffer) return;
-        const demoModel: ReactFlowJsonObject<DEMONode, DEMOEdge> = JSON.parse(
-          reader.result
-        );
-        if (!demoModel.nodes || !demoModel.edges)
-          throw new Error("Invalid JSON file");
+        const demoModel: DEMOModelJSON = JSON.parse(reader.result);
+        if (!demoModel.nodes || !demoModel.edges || !demoModel.version)
+          throw new Error("Invalid DEMO Model file");
         setNodes(demoModel.nodes);
         setEdges(demoModel.edges);
       };

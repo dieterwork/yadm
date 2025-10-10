@@ -1,8 +1,12 @@
-import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
+import {
+  setNodesHandlesVisibility,
+  useDEMOModelerStore,
+} from "$/features/modeler/useDEMOModelerStore";
 import jsPDF from "jspdf";
 import { downloadFile, generatePNG } from "./utils";
 import "svg2pdf.js";
 import { useReactFlow } from "@xyflow/react";
+import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 
 const useExport = () => {
   const nodes = useDEMOModelerStore((state) => state.nodes);
@@ -13,8 +17,10 @@ const useExport = () => {
 
   const exportAsPNG = async (scaleFactor: number) => {
     try {
+      setNodesHandlesVisibility(false);
       const { url } = await generatePNG(nodesBounds, scaleFactor);
-      downloadFile(url, fileName + `_x${scaleFactor}.png`);
+      downloadFile(url, fileName + ` x${scaleFactor}.png`);
+      setNodesHandlesVisibility(true);
     } catch (err) {
       console.error("Could not generate PNG.", err);
     }
@@ -22,16 +28,17 @@ const useExport = () => {
 
   const exportAsPDF = async (scaleFactor: number) => {
     try {
+      setNodesHandlesVisibility(false);
       const { url, width, height } = await generatePNG(
         nodesBounds,
         scaleFactor * (4 / 3)
       );
-      // downloadFile(url, fileName + `_x${scaleFactor}.png`);
       const doc = new jsPDF("landscape", "px", [width, height]);
       doc.addImage(url, "png", width / 4, height / 4, width / 2, height / 2);
       doc.output("dataurlnewwindow", {
-        filename: fileName + ".pdf",
+        filename: fileName + ` x${scaleFactor}.pdf`,
       });
+      setNodesHandlesVisibility(true);
     } catch (err) {
       console.error("Could not generate PDF.", err);
     }
@@ -39,7 +46,11 @@ const useExport = () => {
 
   const exportAsJSON = () => {
     if (!DEMOInstance) return;
-    const jsonModel = JSON.stringify(DEMOInstance.toObject());
+    const jsModel: DEMOModelJSON = {
+      ...DEMOInstance.toObject(),
+      version: "1.0.0",
+    };
+    const jsonModel = JSON.stringify(jsModel);
     const file = new Blob([jsonModel], { type: "application/json" });
     const url = URL.createObjectURL(file);
     downloadFile(url, fileName + ".json");
