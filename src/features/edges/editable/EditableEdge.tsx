@@ -144,13 +144,6 @@ export function EditableEdgeComponent({
         }}
         onDrag={({ xy, event }) => {
           event.stopPropagation();
-          console.log(
-            getArrowDirection({
-              source: { x: sourceX, y: sourceY },
-              sourcePosition,
-              target: { x: targetX, y: targetY },
-            })
-          );
           const position = screenToFlowPosition({
             x: xy[0],
             y: xy[1],
