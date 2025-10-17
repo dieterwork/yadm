@@ -2,31 +2,28 @@ import {
   getEdgeCenter,
   getSmoothStepPath,
   MarkerType,
-  Position,
   useInternalNode,
   useReactFlow,
   type Edge,
   type EdgeProps,
-  type InternalNode,
-  type XYPosition,
 } from "@xyflow/react";
 
-import type { ControlPointData, DEMOEdge } from "../edges.types";
+import type { CenterData, DEMOEdge } from "../edges.types";
 import { type DEMONode } from "../../nodes/nodes.types";
 import DEMOEdgeToolbar, {
   type EdgeToolbarAction,
 } from "../edge_toolbar/DEMOEdgeToolbar";
-import { useState, type CSSProperties } from "react";
+import { type CSSProperties } from "react";
 import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
-  updateEdge,
+  getEdge,
   updateEdgeData,
 } from "$/features/modeler/useDEMOModelerStore";
 import { getArrowDirection, getCenterEdgePoints } from "../utils/smoothStep";
 
 export type EditableEdge = Edge<{
-  controlPoint: ControlPointData;
+  center: CenterData;
 }>;
 
 export function EditableEdgeComponent({
@@ -137,9 +134,13 @@ export function EditableEdgeComponent({
         active={isDraggable}
         onDragStart={({ event }) => {
           event.stopPropagation();
+          const edge = getEdge(id);
           updateEdgeData(id, (data) => ({
             ...data,
-            center: { ...data.center, active: true },
+            center:
+              data && "center" in data
+                ? { ...data.center, active: true }
+                : undefined,
           }));
         }}
         onDrag={({ xy, event }) => {
@@ -150,14 +151,20 @@ export function EditableEdgeComponent({
           });
           updateEdgeData(id, (data) => ({
             ...data,
-            center: { ...data.center, ...position },
+            center:
+              data && "center" in data
+                ? { ...data.center, ...position }
+                : undefined,
           }));
         }}
         onDragEnd={({ event }) => {
           event.stopPropagation();
           updateEdgeData(id, (data) => ({
             ...data,
-            center: { ...data.center, active: false },
+            center:
+              data && "center" in data
+                ? { ...data.center, active: true }
+                : undefined,
           }));
         }}
       />

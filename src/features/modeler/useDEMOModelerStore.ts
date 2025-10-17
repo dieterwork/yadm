@@ -8,7 +8,6 @@ import {
   type OnEdgesChange,
   type OnConnect,
   type ReactFlowInstance,
-  type Viewport,
   reconnectEdge,
   type OnReconnect,
   type FinalConnectionState,
@@ -23,7 +22,6 @@ import { initialEdges } from "../edges/initialEdges";
 import type { DEMONode, DEMOHandle, NodeScope } from "../nodes/nodes.types";
 import uuid from "../../shared/utils/uuid";
 import type { DEMOEdge } from "../edges/edges.types";
-import type { CSSProperties } from "react";
 import getEdgeType from "./utils/getEdgeType";
 import getMarkerType from "./utils/getMarkerType";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
@@ -287,7 +285,7 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
   const sourceNode = getNode(newConnection.source);
   const targetNode = getNode(newConnection.target);
   const reconnectedEdges = reconnectEdge<DEMOEdge>(
-    oldEdge,
+    oldEdge as DEMOEdge,
     newConnection,
     useDEMOModelerStore.getState().edges
   );
@@ -309,13 +307,6 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
       type,
       markerStart: marker.markerStart,
       markerEnd: marker.markerEnd,
-      center: edge.data?.center
-        ? {
-            x: undefined,
-            y: undefined,
-            active: undefined,
-          }
-        : undefined,
     };
     return _newEdge;
   });
@@ -353,10 +344,7 @@ export const updateNodeTextAlign = (
   updateNodeData(id, { textAlign });
 };
 
-export const updateNodeFontSize = (
-  id: string,
-  fontSize: CSSProperties["fontSize"]
-) => {
+export const updateNodeFontSize = (id: string, fontSize: number) => {
   updateNodeData(id, { fontSize });
 };
 export const updateNodeContent = (id: string, content: string) => {
@@ -482,7 +470,7 @@ export const setNodesHandlesVisibility = (
 ) => {
   setNodes((nodes) =>
     nodes.map((node) => {
-      if (!node.data?.handles) return node;
+      if (!("handles" in node.data)) return node;
       const newNode: DEMONode = {
         ...node,
         data: {

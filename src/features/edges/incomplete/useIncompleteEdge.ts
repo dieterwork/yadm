@@ -1,6 +1,7 @@
 import { convertAbsoluteToParentRelativePosition } from "$/features/nodes/utils/convertAbsoluteToParentRelativePosition";
 import uuid from "$/shared/utils/uuid";
 import {
+  isNode,
   MarkerType,
   Position,
   useReactFlow,
@@ -18,6 +19,7 @@ import type { GhostNode } from "$/features/nodes/ghost/ghost.types";
 import getEdgeType from "$/features/modeler/utils/getEdgeType";
 import getMarkerType from "$/features/modeler/utils/getMarkerType";
 import convertAbsoluteToRelativePosition from "$/features/nodes/utils/convertAbsoluteToRelativePosition";
+import type { DEMONode } from "$/features/nodes/nodes.types";
 
 const getPosition = (fromPosition: Position | null) => {
   switch (fromPosition) {
@@ -88,8 +90,14 @@ export const useIncompleteEdge = () => {
         fromNode?.type === "transaction_time" ? fromNode?.id : undefined,
     } satisfies GhostNode;
 
-    const newEdgeType = getEdgeType(fromNode?.type, "ghost");
-    const newEdgeMarker = getMarkerType(fromNode?.type, "ghost");
+    const newEdgeType = getEdgeType(
+      fromNode?.type as DEMONode["type"],
+      "ghost"
+    );
+    const newEdgeMarker = getMarkerType(
+      fromNode?.type as DEMONode["type"],
+      "ghost"
+    );
     const newEdge = {
       id: `${fromNode?.id}->${ghostId}`,
       source: fromNode?.id,

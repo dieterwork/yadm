@@ -1,4 +1,4 @@
-import { getEdgeCenter, Position, type XYPosition } from "@xyflow/react";
+import { Position, type XYPosition } from "@xyflow/react";
 
 export interface GetSmoothStepPathParams {
   /** The `x` position of the source handle. */
@@ -249,81 +249,4 @@ function getBend(
   const xDir = a.x < c.x ? 1 : -1;
   const yDir = a.y < c.y ? -1 : 1;
   return `L ${x},${y + bendSize * yDir}Q ${x},${y} ${x + bendSize * xDir},${y}`;
-}
-
-/**
- * The `getSmoothStepPath` util returns everything you need to render a stepped path
- * between two nodes. The `borderRadius` property can be used to choose how rounded
- * the corners of those steps are.
- * @public
- * @returns A path string you can use in an SVG, the `labelX` and `labelY` position (center of path)
- * and `offsetX`, `offsetY` between source handle and label.
- *
- * - `path`: the path to use in an SVG `<path>` element.
- * - `labelX`: the `x` position you can use to render a label for this edge.
- * - `labelY`: the `y` position you can use to render a label for this edge.
- * - `offsetX`: the absolute difference between the source `x` position and the `x` position of the
- * middle of this path.
- * - `offsetY`: the absolute difference between the source `y` position and the `y` position of the
- * middle of this path.
- * @example
- * ```js
- *  const source = { x: 0, y: 20 };
- *  const target = { x: 150, y: 100 };
- *
- *  const [path, labelX, labelY, offsetX, offsetY] = getSmoothStepPath({
- *    sourceX: source.x,
- *    sourceY: source.y,
- *    sourcePosition: Position.Right,
- *    targetX: target.x,
- *    targetY: target.y,
- *    targetPosition: Position.Left,
- *  });
- * ```
- * @remarks This function returns a tuple (aka a fixed-size array) to make it easier to work with multiple edge paths at once.
- */
-export function getSmoothStepPath({
-  sourceX,
-  sourceY,
-  sourcePosition = Position.Bottom,
-  targetX,
-  targetY,
-  targetPosition = Position.Top,
-  borderRadius = 5,
-  centerX,
-  centerY,
-  offset = 20,
-  stepPosition = 0.5,
-}: GetSmoothStepPathParams): [
-  path: string,
-  labelX: number,
-  labelY: number,
-  offsetX: number,
-  offsetY: number
-] {
-  const [points, labelX, labelY, offsetX, offsetY] = getPoints({
-    source: { x: sourceX, y: sourceY },
-    sourcePosition,
-    target: { x: targetX, y: targetY },
-    targetPosition,
-    center: { x: centerX, y: centerY },
-    offset,
-    stepPosition,
-  });
-
-  const path = points.reduce<string>((res, p, i) => {
-    let segment = "";
-
-    if (i > 0 && i < points.length - 1) {
-      segment = getBend(points[i - 1], p, points[i + 1], borderRadius);
-    } else {
-      segment = `${i === 0 ? "M" : "L"}${p.x} ${p.y}`;
-    }
-
-    res += segment;
-
-    return res;
-  }, "");
-
-  return [path, labelX, labelY, offsetX, offsetY];
 }
