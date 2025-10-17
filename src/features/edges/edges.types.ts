@@ -13,26 +13,26 @@ export const edgeTypes = {
   ghost_edge: GhostEdgeComponent,
 } satisfies EdgeTypes;
 
-export type ControlPointData = XYPosition & {
+export type CenterData = XYPosition & {
   active?: boolean;
 };
 
 export type CooperationModelEdge = Edge<
-  { controlPoint: ControlPointData; lineType: "solid" | "dashed" },
+  { center: CenterData; lineType: "solid" | "dashed" },
   "cooperation_model_edge"
 >;
 
 export type ObjectFactDiagramEdge = Edge<
-  { controlPoint: ControlPointData; markerMid?: MarkerType },
+  { center: CenterData; markerMid?: MarkerType },
   "object_fact_diagram_edge"
 >;
 
 export type ProcessStructureDiagramEdge = Edge<
-  { controlPoint: ControlPointData },
+  { center: CenterData },
   "process_structure_diagram_edge"
 >;
 
-export type GhostEdge = Edge<{ controlPoint: ControlPointData }, "ghost_edge">;
+export type GhostEdge = Edge<{ center: CenterData }, "ghost_edge">;
 
 export type TransactionTimeEdge = Edge<{}, "transaction_time_edge">;
 

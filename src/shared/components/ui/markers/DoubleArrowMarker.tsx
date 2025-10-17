@@ -3,16 +3,16 @@ import type { CSSProperties } from "react";
 
 const getRotation = (direction: Position): CSSProperties["rotate"] => {
   switch (direction) {
-    case "left": {
+    case Position.Left: {
       return "180deg";
     }
-    case "right": {
+    case Position.Right: {
       return "0deg";
     }
-    case "bottom": {
+    case Position.Bottom: {
       return "90deg";
     }
-    case "top": {
+    case Position.Top: {
       return "270deg";
     }
     default: {
@@ -38,8 +38,9 @@ const DoubleArrowMarker = ({
         viewBox="0 0 12.5 12.5"
         className="absolute"
         style={{
-          transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-          rotate: getRotation(direction),
+          transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px) rotate(${getRotation(
+            direction
+          )})`,
         }}
       >
         <polyline

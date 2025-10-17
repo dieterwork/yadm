@@ -309,6 +309,13 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
       type,
       markerStart: marker.markerStart,
       markerEnd: marker.markerEnd,
+      center: edge.data?.center
+        ? {
+            x: undefined,
+            y: undefined,
+            active: undefined,
+          }
+        : undefined,
     };
     return _newEdge;
   });

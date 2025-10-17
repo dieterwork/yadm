@@ -1,16 +1,18 @@
 import { type EdgeProps } from "@xyflow/react";
 import { EditableEdgeComponent } from "../editable/EditableEdge";
-import type { ProcessStructureDiagramEdge } from "../edges.types";
+import type { ProcessStructureDiagramEdge as ProcessStructureDiagramEdgeType } from "../edges.types";
 
 const ProcessStructureDiagramEdge = ({
-  id,
+  data,
   ...restProps
-}: EdgeProps<ProcessStructureDiagramEdge>) => {
+}: EdgeProps<ProcessStructureDiagramEdgeType>) => {
   return (
     <>
       <EditableEdgeComponent
         {...restProps}
-        id={id}
+        centerX={data?.center?.x}
+        centerY={data?.center?.y}
+        isDraggable={data?.center?.active}
         style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
         actions={["delete", "swapConnection"]}
       />

@@ -10,7 +10,9 @@ const CooperationModelEdge = ({
     <EditableEdgeComponent
       {...restProps}
       type="cooperation_model_edge"
-      data={data}
+      centerX={data?.center?.x}
+      centerY={data?.center?.y}
+      isDraggable={data?.center?.active}
       actions={[
         "delete",
         "swapConnection",
