@@ -1,6 +1,4 @@
-import { changeLanguage, t } from "i18next";
 import { useTranslation } from "react-i18next";
-import { useI18NStore } from "$/features/i18n/i18n";
 import TopbarListboxButton from "../_components/TopbarListboxButton";
 import TopbarListboxItem from "../_components/TopbarListBoxItem";
 import i18n from "$/features/i18n/config";
@@ -19,24 +17,26 @@ const items = [
 ] satisfies Record<string, string>[];
 
 const ChangeLanguageMenu = () => {
-  const { t } = useTranslation();
-  const lang = useI18NStore((state) => state.lang);
+  const { t, i18n } = useTranslation();
 
-  const [selected, setSelected] = useState<Selection>(new Set([lang]));
+  const [selected, setSelected] = useState<Selection>(new Set([i18n.language]));
+
+  const label =
+    items?.find((item) => item.id === i18n.language)?.label ?? "English";
 
   return (
     <TopbarListboxButton
-      label={t(($) => $[items.find((item) => item.id === lang)])}
+      label={label}
       items={items}
       selectedKeys={selected}
       selectionMode="single"
       onSelectionChange={(selection) => {
         setSelected(selection);
-        console.log(selection);
         if (!(selection instanceof Set)) return;
         for (const entry of selection) {
           if (typeof entry !== "string") return;
-          changeLanguage(entry);
+          i18n.changeLanguage(entry);
+          localStorage.setItem("lang", entry);
         }
       }}
     >

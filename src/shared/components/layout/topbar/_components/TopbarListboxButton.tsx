@@ -19,7 +19,6 @@ type TopbarButtonProps<T> = ListBoxProps<T> & {
 
 const TopbarListboxButton = <T extends object>({
   label,
-  children,
   ...restProps
 }: TopbarButtonProps<T>) => {
   return (
@@ -36,7 +35,11 @@ const TopbarListboxButton = <T extends object>({
           "outline-hidden p-1 w-45 overflow-auto rounded-md bg-white shadow-xs border-1 border-slate-200 entering:animate-in entering:fade-in entering:zoom-in-95 exiting:animate-out exiting:fade-out exiting:zoom-out-95 fill-mode-forwards origin-top-left"
         )}
       >
-        <ListBox {...restProps} className="flex flex-col outline-hidden" />
+        <ListBox
+          {...restProps}
+          className="flex flex-col outline-hidden"
+          aria-label={label}
+        />
       </Popover>
     </MenuTrigger>
   );
