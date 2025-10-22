@@ -11,6 +11,7 @@ import DEMOElementToolbarSeparator from "$/shared/components/ui/element_toolbar/
 import ChangeLineTypeControl from "./actions/ChangeLineTypeControl";
 import ToggleProductionEventMenuItem from "./actions/ToggleProductionEventControl";
 import SwapConnectionControl from "./actions/SwapConnectionControl";
+import { useTranslation } from "react-i18next";
 
 export type EdgeToolbarAction =
   | "toggleProductionEvent"
@@ -40,13 +41,15 @@ const DEMOEdgeToolbar = ({
     edges.filter((edge) => edge.selected).length > 1;
   const hasNodeSelected = nodes.some((node) => node.selected);
 
+  const { t } = useTranslation();
+
   return (
     <EdgeToolbar
       xyPosition={position}
       isVisible={!hasNodeSelected && !hasTwoOrMoreEdgesSelected}
     >
       <DEMOElementToolbar>
-        <DEMOElementToolbarGroup aria-label="Edge actions">
+        <DEMOElementToolbarGroup aria-label={t(($) => $["Edge options"])}>
           {actions?.indexOf("changeLineType") !== -1 && (
             <ChangeLineTypeControl edgeId={edgeId} />
           )}
@@ -58,7 +61,7 @@ const DEMOEdgeToolbar = ({
           )}
         </DEMOElementToolbarGroup>
         {actions?.indexOf("delete") !== -1 && (
-          <DEMOElementToolbarGroup aria-label="Danger zone">
+          <DEMOElementToolbarGroup aria-label={t(($) => $["Danger zone"])}>
             <DEMOElementToolbarSeparator />
             <DeleteMenuItem edgeId={edgeId} />
           </DEMOElementToolbarGroup>

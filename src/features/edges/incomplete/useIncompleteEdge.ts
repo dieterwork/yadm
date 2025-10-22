@@ -40,7 +40,6 @@ export const useIncompleteEdge = () => {
   const { screenToFlowPosition } = useReactFlow();
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const onConnectEnd: OnConnectEnd = (event, connectionState) => {
-    console.log(connectionState);
     if (
       connectionState.isValid ||
       connectionState.fromHandle?.type === "target" ||

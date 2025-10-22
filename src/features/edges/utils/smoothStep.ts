@@ -33,29 +33,14 @@ export interface GetSmoothStepPathParams {
   stepPosition?: number;
 }
 
-const handleDirections = {
+export const handleDirections = {
   [Position.Left]: { x: -1, y: 0 },
   [Position.Right]: { x: 1, y: 0 },
   [Position.Top]: { x: 0, y: -1 },
   [Position.Bottom]: { x: 0, y: 1 },
 };
 
-export const getArrowDirection = ({
-  source,
-  sourcePosition = Position.Bottom,
-  target,
-}: {
-  source: XYPosition;
-  sourcePosition: Position;
-  target: XYPosition;
-}): Position => {
-  if (sourcePosition === Position.Left || sourcePosition === Position.Right) {
-    return source.x < target.x ? Position.Right : Position.Left;
-  }
-  return source.y < target.y ? Position.Top : Position.Bottom;
-};
-
-const getDirection = ({
+export const getDirection = ({
   source,
   sourcePosition = Position.Bottom,
   target,
@@ -213,13 +198,7 @@ export function getCenterEdgePoints({
       }
     }
 
-    return [
-      ...points,
-      {
-        x: targetGapped.x + targetGapOffset.x,
-        y: targetGapped.y + targetGapOffset.y,
-      },
-    ];
+    return [];
   }
 }
 

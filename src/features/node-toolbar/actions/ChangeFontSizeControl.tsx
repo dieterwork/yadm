@@ -3,11 +3,10 @@ import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEM
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
 import { TextAaIcon } from "@phosphor-icons/react";
-import { useUpdateNodeInternals } from "@xyflow/react";
 import { useState } from "react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const fontSizeOptions = [10, 12, 14, 16, 20, 24].map((num) => ({
   id: num,
@@ -18,6 +17,7 @@ const ChangeFontSizeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const [selected, setSelected] = useState<Selection>(
     new Set([fontSizeOptions[3].id])
   );
+  const { t } = useTranslation();
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton

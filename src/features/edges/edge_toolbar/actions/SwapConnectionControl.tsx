@@ -3,10 +3,13 @@ import useSwapConnection from "../../hooks/useSwapConnection";
 import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import { getEdge } from "$/features/modeler/useDEMOModelerStore";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const SwapConnectionControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const edge = getEdge(edgeId);
   if (!edge) return null;
+  const { t } = useTranslation();
   const swapConnection = useSwapConnection({
     sourceNodeId: edge.source,
     targetNodeId: edge.target,
@@ -15,7 +18,7 @@ const SwapConnectionControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   return (
     <DEMOElementToolbarButton
       icon={(iconProps) => <ArrowsLeftRightIcon {...iconProps} />}
-      label="Swap connection"
+      label={t(($) => $["Swap connection"])}
       onPress={() => {
         swapConnection();
       }}

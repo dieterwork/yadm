@@ -24,6 +24,7 @@ import {
   setPreviewNode,
   usePreviewNodeStore,
 } from "$/features/preview_node/usePreviewNodeStore";
+import { useTranslation } from "react-i18next";
 
 const BottomToolbar = () => {
   const { zoomIn, zoomOut, fitView, zoomTo } = useReactFlow();
@@ -34,21 +35,30 @@ const BottomToolbar = () => {
   const isCtrlYPressed = useKeyPress(["Control+y", "Meta+y"]);
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
 
+  const { t } = useTranslation();
+
   return (
     <div className="bottom-toolbar-wrapper | absolute bottom-4 left-[50%] translate-x-[-50%] z-9999">
-      <DEMOModelerToolbar orientation={orientation} aria-label="View controls">
+      <DEMOModelerToolbar
+        orientation={orientation}
+        aria-label={t(($) => $["View controls"])}
+      >
         <DEMOModelerToolbarGroup
-          aria-label="Lock controls"
+          aria-label={t(($) => $["Lock controls"])}
           aria-orientation={orientation}
         >
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="horizontal"
-              label={isEnabled ? "Lock" : "Unlock"}
+              label={isEnabled ? t(($) => $["Lock"]) : t(($) => $["Unlock"])}
               keyboardControlLabel="⌘L"
             />
             <DEMOModelerToolbarToggleButton
-              aria-label={isEnabled ? "Lock modeler" : "Unlock modeler"}
+              aria-label={
+                isEnabled
+                  ? t(($) => $["Lock modeler"])
+                  : t(($) => $["Unlock modeler"])
+              }
               isSelected={isEnabled}
               onChange={(isEnabled) => {
                 if (previewNode) return resetPreviewNode();
@@ -65,16 +75,16 @@ const BottomToolbar = () => {
         </DEMOModelerToolbarGroup>
         <DEMOModelerToolbarSeparator orientation={orientation} />
         <DEMOModelerToolbarGroup
-          aria-label="Fit to view controls"
+          aria-label={t(($) => $["Fit to view controls"])}
           aria-orientation={orientation}
         >
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="horizontal"
-              label="Show all nodes"
+              label={t(($) => $["Show all nodes"])}
             />
             <DEMOModelerToolbarButton
-              aria-label="Show all nodes"
+              aria-label={t(($) => $["Show all nodes"])}
               onPress={() => {
                 if (previewNode) return resetPreviewNode();
                 fitView({ duration: 500 });
@@ -86,17 +96,17 @@ const BottomToolbar = () => {
         </DEMOModelerToolbarGroup>
         <DEMOModelerToolbarSeparator orientation={orientation} />
         <DEMOModelerToolbarGroup
-          aria-label="Zoom in or out"
+          aria-label={t(($) => $["Zoom in or out"])}
           aria-orientation={orientation}
         >
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="horizontal"
-              label="Zoom out"
+              label={t(($) => $["Zoom out"])}
               keyboardControlLabel="⌘-"
             />
             <DEMOModelerToolbarButton
-              aria-label="Zoom out"
+              aria-label={t(($) => $["Zoom out"])}
               onPress={() => {
                 if (previewNode) return resetPreviewNode();
                 zoomOut({ duration: 500 });
@@ -108,10 +118,10 @@ const BottomToolbar = () => {
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="horizontal"
-              label="Zoom level"
+              label={t(($) => $["Zoom level"])}
             />
             <DEMOModelerToolbarButton
-              aria-label="Zoom level"
+              aria-label={t(($) => $["Zoom level"])}
               width="3.5rem"
               onPress={() => {
                 if (previewNode) return resetPreviewNode();
@@ -125,11 +135,11 @@ const BottomToolbar = () => {
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="horizontal"
-              label="Zoom in"
+              label={t(($) => $["Zoom in"])}
               keyboardControlLabel="⌘+"
             />
             <DEMOModelerToolbarButton
-              aria-label="Zoom in"
+              aria-label={t(($) => $["Zoom in"])}
               onPress={() => {
                 if (previewNode) return resetPreviewNode();
                 zoomIn({ duration: 500 });
@@ -141,17 +151,17 @@ const BottomToolbar = () => {
         </DEMOModelerToolbarGroup>
         <DEMOModelerToolbarSeparator orientation={orientation} />
         <DEMOModelerToolbarGroup
-          aria-label="Undo and redo controls"
+          aria-label={t(($) => $["Undo and redo controls"])}
           aria-orientation={orientation}
         >
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="horizontal"
-              label="Undo"
+              label={t(($) => $["Undo"])}
               keyboardControlLabel="⌘Z"
             />
             <DEMOModelerToolbarButton
-              aria-label="Undo"
+              aria-label={t(($) => $["Undo"])}
               isDisabled={!isEnabled}
               onPress={() => {
                 if (previewNode) return resetPreviewNode();
@@ -165,11 +175,11 @@ const BottomToolbar = () => {
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="horizontal"
-              label="Redo"
+              label={t(($) => $["Redo"])}
               keyboardControlLabel="⌘Y"
             />
             <DEMOModelerToolbarButton
-              aria-label="Redo"
+              aria-label={t(($) => $["Redo"])}
               isActive={isCtrlYPressed}
               isDisabled={!isEnabled}
               onPress={() => {

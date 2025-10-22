@@ -45,6 +45,7 @@ import DEMOModelerToolbarButton from "../_components/DEMOModelerToolbarButton";
 import DEMOModelerToolbarToggleButton from "../_components/DEMOModelerToolbarToggleButton";
 import DEMOModelerToolbarSeparator from "../_components/DEMOModelerToolbarSeparator";
 import DEMOModelerToolbarTooltip from "../_components/DEMOModelerToolbarTooltip";
+import { useTranslation } from "react-i18next";
 
 const SideToolbar = () => {
   const { isGridSnapEnabled, isGridVisible, action, nodes, isEnabled } =
@@ -63,10 +64,13 @@ const SideToolbar = () => {
   const orientation = "vertical";
 
   const areHandlesVisible = nodes.some((node) => {
-    if (!node.data?.handles) return false;
+    if (!("handles" in node.data) || !("isVisible" in node.data.handles))
+      return false;
     if (!node.data.handles.isVisible) return false;
     return true;
   });
+
+  const { t } = useTranslation();
 
   return (
     <div
@@ -79,23 +83,23 @@ const SideToolbar = () => {
     >
       <DEMOModelerToolbar
         orientation={orientation}
-        aria-label="Modeler options"
+        aria-label={t(($) => $["Modeler options"])}
       >
         <DEMOModelerToolbarGroup
-          aria-label="Global modeler tools"
+          aria-label={t(($) => $["Global modeler tools"])}
           aria-orientation={orientation}
         >
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="vertical"
-              label="Activate hand tool"
+              label={t(($) => $["Activate hand tool"])}
             />
             <DEMOModelerToolbarButton
               onPress={() => {
                 if (previewNode) return resetPreviewNode();
                 setAction("pan");
               }}
-              aria-label="Activate hand tool"
+              aria-label={t(($) => $["Activate hand tool"])}
             >
               <HandIcon
                 color={
@@ -109,14 +113,14 @@ const SideToolbar = () => {
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="vertical"
-              label="Activate selection tool"
+              label={t(($) => $["Activate selection tool"])}
             />
             <DEMOModelerToolbarButton
               onPress={() => {
                 if (previewNode) return resetPreviewNode();
                 setAction("select");
               }}
-              aria-label="Activate selection tool"
+              aria-label={t(($) => $["Activate selection tool"])}
               isDisabled={!isEnabled}
             >
               <SelectionPlusIcon
@@ -131,7 +135,7 @@ const SideToolbar = () => {
         </DEMOModelerToolbarGroup>
         <DEMOModelerToolbarSeparator orientation={orientation} />
         <DEMOModelerToolbarGroup
-          aria-label="Enable/disable options"
+          aria-label={t(($) => $["Enable/disable options"])}
           aria-orientation={orientation}
         >
           <TooltipTrigger>
@@ -139,8 +143,8 @@ const SideToolbar = () => {
               orientation="vertical"
               label={
                 areHelperLinesEnabled
-                  ? "Disable helper lines"
-                  : "Enable helper lines"
+                  ? t(($) => $["Disable helper lines"])
+                  : t(($) => $["Enable helper lines"])
               }
             />
             <DEMOModelerToolbarToggleButton
@@ -151,8 +155,8 @@ const SideToolbar = () => {
               }}
               aria-label={
                 areHelperLinesEnabled
-                  ? "Disable helper lines"
-                  : "Enable helper lines"
+                  ? t(($) => $["Disable helper lines"])
+                  : t(($) => $["Enable helper lines"])
               }
               isDisabled={!isEnabled}
             >
@@ -164,7 +168,11 @@ const SideToolbar = () => {
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="vertical"
-              label={isGridSnapEnabled ? "Snap to grid" : "Free movement"}
+              label={
+                isGridSnapEnabled
+                  ? t(($) => $["Snap to grid"])
+                  : t(($) => $["Free movement"])
+              }
             />
             <DEMOModelerToolbarToggleButton
               isSelected={isGridSnapEnabled}
@@ -172,7 +180,11 @@ const SideToolbar = () => {
                 if (previewNode) return resetPreviewNode();
                 setGridSnapEnabled(isEnabled);
               }}
-              aria-label={isGridSnapEnabled ? "Snap to grid" : "Free movement"}
+              aria-label={
+                isGridSnapEnabled
+                  ? t(($) => $["Snap to grid"])
+                  : t(($) => $["Free movement"])
+              }
               isDisabled={!isEnabled}
             >
               {isGridSnapEnabled ? (
@@ -185,7 +197,11 @@ const SideToolbar = () => {
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="vertical"
-              label={isGridVisible ? "Hide grid" : "Show grid"}
+              label={
+                isGridVisible
+                  ? t(($) => $["Hide grid"])
+                  : t(($) => $["Show grid"])
+              }
             />
             <DEMOModelerToolbarToggleButton
               isSelected={isGridVisible}
@@ -193,7 +209,11 @@ const SideToolbar = () => {
                 if (previewNode) return resetPreviewNode();
                 setGridVisible(isVisible);
               }}
-              aria-label={isGridVisible ? "Hide grid" : "Show grid"}
+              aria-label={
+                isGridVisible
+                  ? t(($) => $["Hide grid"])
+                  : t(($) => $["Show grid"])
+              }
               isDisabled={!isEnabled}
             >
               <GridFourIcon className={cn(!isGridVisible && "opacity-30")} />
@@ -203,7 +223,9 @@ const SideToolbar = () => {
             <DEMOModelerToolbarTooltip
               orientation="vertical"
               label={
-                areHandlesVisible ? "Hide node handles" : "Show node handles"
+                areHandlesVisible
+                  ? t(($) => $["Hide node handles"])
+                  : t(($) => $["Show node handles"])
               }
             />
             <DEMOModelerToolbarToggleButton
@@ -214,7 +236,9 @@ const SideToolbar = () => {
                 setNodesHandlesVisibility(isVisible);
               }}
               aria-label={
-                areHandlesVisible ? "Hide node handles" : "Show node handles"
+                areHandlesVisible
+                  ? t(($) => $["Hide node handles"])
+                  : t(($) => $["Show node handles"])
               }
             >
               <FlowArrowIcon
@@ -225,16 +249,16 @@ const SideToolbar = () => {
         </DEMOModelerToolbarGroup>
         <DEMOModelerToolbarSeparator orientation={orientation} />
         <DEMOModelerToolbarGroup
-          aria-label="Add nodes"
+          aria-label={t(($) => $["Add nodes"])}
           aria-orientation={orientation}
         >
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="vertical"
-              label="Add text node"
+              label={t(($) => $["Add text node"])}
             />
             <DEMOModelerToolbarButton
-              aria-label="Add text node"
+              aria-label={t(($) => $["Add text node"])}
               onClick={(e) => {
                 setPreviewNode({
                   type: "text",

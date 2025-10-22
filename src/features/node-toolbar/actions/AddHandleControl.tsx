@@ -17,34 +17,38 @@ import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarMenu from "$/shared/components/ui/element_toolbar/DEMOElementToolbarMenu";
 import DEMOElementToolbarMenuItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarMenuItem";
+import i18n from "$/features/i18n/config";
+import { useTranslation } from "react-i18next";
 
 const handleOptions = [
   {
     id: Position.Top,
-    label: "Top",
+    label: i18n.t(($) => $["Top"]),
   },
   {
     id: Position.Right,
-    label: "Right",
+    label: i18n.t(($) => $["Right"]),
   },
   {
     id: Position.Bottom,
-    label: "Bottom",
+    label: i18n.t(($) => $["Bottom"]),
   },
   {
     id: Position.Left,
-    label: "Left",
+    label: i18n.t(($) => $["Left"]),
   },
 ] satisfies { id: Position; label: string }[];
 const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const node = getNode(nodeId);
   if (!node) return null;
+  if (!("handles" in node.data)) return;
   const handles = node.data?.handles;
   const updateNodeInternals = useUpdateNodeInternals();
+  const { t } = useTranslation();
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton
-        label="Add handle"
+        label={t(($) => $["Add handle"])}
         icon={({ size, color }) => <PlusIcon size={size} color={color} />}
         menuTrigger
         id="add_handle"

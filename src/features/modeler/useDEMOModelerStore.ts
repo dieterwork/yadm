@@ -303,6 +303,7 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
       data: {
         ...edge.data,
         markerMid: marker.markerMid,
+        center: undefined,
       },
       type,
       markerStart: marker.markerStart,

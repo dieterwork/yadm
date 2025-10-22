@@ -1,21 +1,17 @@
 import useAttachNode from "$/features/actions/attach/useAttachNode";
 import { setAttachChildNodeId } from "$/features/actions/attach/useAttachStore";
-import {
-  getNode,
-  setAction,
-  useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
-import getChildNodes from "$/features/nodes/utils/getChildNodes";
+import { getNode, setAction } from "$/features/modeler/useDEMOModelerStore";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import { LinkBreakIcon, LinkIcon } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 const AttachNodeControl = ({ nodeId }: { nodeId: string }) => {
   const node = getNode(nodeId);
   if (!node) return null;
 
-  const nodes = useDEMOModelerStore((state) => state.nodes);
   const parentId = node?.parentId;
   const { detachNode } = useAttachNode();
+  const { t } = useTranslation();
 
   return (
     <DEMOElementToolbarButton
@@ -23,7 +19,7 @@ const AttachNodeControl = ({ nodeId }: { nodeId: string }) => {
         const Icon = parentId ? LinkBreakIcon : LinkIcon;
         return <Icon {...iconProps} />;
       }}
-      label={parentId ? "Detach node" : "Attach node"}
+      label={parentId ? t(($) => $["Detach node"]) : t(($) => $["Attach node"])}
       onPress={() => {
         const node = getNode(nodeId);
         if (parentId) {

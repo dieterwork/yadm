@@ -1,5 +1,8 @@
+import i18n from "$/features/i18n/config";
 import { updateNodeTextAlign } from "$/features/modeler/useDEMOModelerStore";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
+import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
+import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
 import {
   isNodeTextAlign,
   type NodeTextAlign,
@@ -13,19 +16,20 @@ import {
 import { useUpdateNodeInternals } from "@xyflow/react";
 import { useState } from "react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
+import { useTranslation } from "react-i18next";
 
 const textAlignOptions = [
   {
     id: "start",
-    label: "Start",
+    label: i18n.t(($) => $["Start"]) as string,
   },
   {
     id: "center",
-    label: "Center",
+    label: i18n.t(($) => $["Center"]) as string,
   },
   {
     id: "end",
-    label: "End",
+    label: i18n.t(($) => $["End"]) as string,
   },
 ] satisfies { id: NodeTextAlign; label: string }[];
 
@@ -50,16 +54,17 @@ const ChangeTextAlignMenuItem = ({ nodeId }: { nodeId: string }) => {
     new Set([textAlignOptions[0].id])
   );
   const updateNodeInternals = useUpdateNodeInternals();
+  const { t } = useTranslation();
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton
-        label="Align"
+        label={t(($) => $["Align"]) as string}
         icon={({ size, color }) => <TextAaIcon size={size} color={color} />}
         menuTrigger
         id="change_textAlign"
       />
       <Popover placement="right top" shouldFlip={false}>
-        <ToolbarListBox
+        <DEMOElementToolbarListBox
           aria-labelledby="change_textAlign"
           items={textAlignOptions}
           selectedKeys={selected}
@@ -75,7 +80,7 @@ const ChangeTextAlignMenuItem = ({ nodeId }: { nodeId: string }) => {
           }}
         >
           {(item) => (
-            <ToolbarListBoxItem
+            <DEMOElementToolbarListBoxItem
               key={item.id}
               label={item.label}
               textValue={item.label}
@@ -83,7 +88,7 @@ const ChangeTextAlignMenuItem = ({ nodeId }: { nodeId: string }) => {
               icon={(iconProps) => getIcon(item.id, iconProps)}
             />
           )}
-        </ToolbarListBox>
+        </DEMOElementToolbarListBox>
       </Popover>
     </MenuTrigger>
   );

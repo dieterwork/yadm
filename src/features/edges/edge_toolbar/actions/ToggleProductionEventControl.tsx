@@ -1,11 +1,13 @@
 import { getEdge, updateEdge } from "$/features/modeler/useDEMOModelerStore";
 import DEMOElementToolbarToggleButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarToggleButton";
 import { MinusIcon, PlusIcon } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 const ToggleProductionEventMenuItem = ({ edgeId }: { edgeId: string }) => {
   const edge = getEdge(edgeId);
   if (!edge) return null;
   const isProductionFactVisible = !!edge?.markerStart;
+  const { t } = useTranslation();
   return (
     <DEMOElementToolbarToggleButton
       icon={(iconProps) => {
@@ -14,8 +16,8 @@ const ToggleProductionEventMenuItem = ({ edgeId }: { edgeId: string }) => {
       }}
       label={
         isProductionFactVisible
-          ? "Remove production fact"
-          : "Add production fact"
+          ? t(($) => $["Remove production fact"])
+          : t(($) => $["Add production fact"])
       }
       isSelected={isProductionFactVisible}
       onChange={(isProductionFactVisible) => {

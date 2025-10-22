@@ -6,6 +6,7 @@ import {
   useReactFlow,
   type Edge,
   type EdgeProps,
+  type XYPosition,
 } from "@xyflow/react";
 
 import type { CenterData, DEMOEdge } from "../edges.types";
@@ -13,14 +14,18 @@ import { type DEMONode } from "../../nodes/nodes.types";
 import DEMOEdgeToolbar, {
   type EdgeToolbarAction,
 } from "../edge_toolbar/DEMOEdgeToolbar";
-import { type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
   getEdge,
+  updateEdge,
   updateEdgeData,
 } from "$/features/modeler/useDEMOModelerStore";
-import { getArrowDirection, getCenterEdgePoints } from "../utils/smoothStep";
+import { getCenterEdgePoints, handleDirections } from "../utils/smoothStep";
+import getInteractiveCenterEdgeDirection from "../utils/getInteractiveCenterEdgeDirection";
+import clamp from "$/shared/utils/clamp";
+import getArrowDirection from "../utils/getArrowDirection";
 
 export type EditableEdge = Edge<{
   center: CenterData;
@@ -65,16 +70,6 @@ export function EditableEdgeComponent({
   const offset = 20;
   const stepPosition = 0.5;
 
-  const [centerEdgeX, centerEdgeY] =
-    !centerX || !centerY
-      ? getEdgeCenter({
-          sourceX,
-          sourceY,
-          targetX,
-          targetY,
-        })
-      : [centerX, centerY];
-
   const [sourceCenterPosition, targetCenterPosition] = getCenterEdgePoints({
     source: {
       x: sourceX,
@@ -86,7 +81,7 @@ export function EditableEdgeComponent({
       y: targetY,
     },
     targetPosition,
-    center: { x: centerEdgeX, y: centerEdgeY },
+    center: { x: centerX, y: centerY },
     offset,
     stepPosition,
   });
@@ -97,6 +92,17 @@ export function EditableEdgeComponent({
         ? actions.filter((action) => action !== "swapConnection")
         : actions;
   }
+
+  const sourceDir = handleDirections[sourcePosition];
+  const targetDir = handleDirections[targetPosition];
+  const sourceGapped: XYPosition = {
+    x: sourceX + sourceDir.x * offset,
+    y: sourceY + sourceDir.y * offset,
+  };
+  const targetGapped: XYPosition = {
+    x: targetX + targetDir.x * offset,
+    y: targetY + targetDir.y * offset,
+  };
 
   const [path, labelX, labelY] = getSmoothStepPath({
     sourceX: sourceX,
@@ -110,6 +116,38 @@ export function EditableEdgeComponent({
     offset,
     stepPosition,
   });
+
+  const interactiveEdgeDirection = getInteractiveCenterEdgeDirection({
+    source: {
+      x: sourceX,
+      y: sourceY,
+    },
+    sourcePosition,
+    target: {
+      x: targetX,
+      y: targetY,
+    },
+    targetPosition,
+    offset,
+  });
+
+  const arrowDirection = getArrowDirection({
+    source: {
+      x: sourceX,
+      y: sourceY,
+    },
+    sourcePosition,
+    target: {
+      x: targetX,
+      y: targetY,
+    },
+    targetPosition,
+    offset,
+  });
+
+  // useEffect(() => {
+  //   console.log(arrowDirection);
+  // }, [arrowDirection]);
 
   return (
     <>
@@ -132,15 +170,20 @@ export function EditableEdgeComponent({
         sourceY={sourceCenterPosition?.y ?? 0}
         targetY={targetCenterPosition?.y ?? 0}
         active={isDraggable}
+        direction={interactiveEdgeDirection}
         onDragStart={({ event }) => {
           event.stopPropagation();
-          const edge = getEdge(id);
           updateEdgeData(id, (data) => ({
             ...data,
             center:
               data && "center" in data
                 ? { ...data.center, active: true }
                 : undefined,
+          }));
+          updateEdge(id, (edge) => ({
+            ...edge,
+            selectable: false,
+            selected: false,
           }));
         }}
         onDrag={({ xy, event }) => {
@@ -153,7 +196,17 @@ export function EditableEdgeComponent({
             ...data,
             center:
               data && "center" in data
-                ? { ...data.center, ...position }
+                ? {
+                    ...data.center,
+                    x:
+                      interactiveEdgeDirection === "horizontal"
+                        ? position.x
+                        : data.center?.x,
+                    y:
+                      interactiveEdgeDirection === "vertical"
+                        ? position.y
+                        : data.center?.y,
+                  }
                 : undefined,
           }));
         }}
@@ -166,6 +219,10 @@ export function EditableEdgeComponent({
                 ? { ...data.center, active: true }
                 : undefined,
           }));
+          updateEdge(id, (edge) => ({
+            ...edge,
+            selectable: true,
+          }));
         }}
       />
       {selected && (
@@ -175,7 +232,7 @@ export function EditableEdgeComponent({
           actions={actions}
         />
       )}
-      {markerMid && (
+      {/* {markerMid && (
         <DoubleArrowMarker
           labelX={labelX}
           labelY={labelY}
@@ -185,7 +242,7 @@ export function EditableEdgeComponent({
             target: { x: targetX, y: targetY },
           })}
         />
-      )}
+      )} */}
     </>
   );
 }

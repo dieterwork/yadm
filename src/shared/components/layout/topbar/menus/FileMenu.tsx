@@ -5,6 +5,7 @@ import { clearModel } from "$/features/modeler/useDEMOModelerStore";
 import useSave from "$/features/actions/save/useSave";
 import useExport from "$/features/actions/export/useExport";
 import useImport from "$/features/actions/import/useImport";
+import { useTranslation } from "react-i18next";
 
 const FileMenu = () => {
   const { save } = useSave();
@@ -12,22 +13,25 @@ const FileMenu = () => {
 
   const { importJSON } = useImport();
 
+  const { t } = useTranslation();
+
   return (
-    <TopbarMenuButton label="File">
+    <TopbarMenuButton label={t(($) => $["File"])}>
       <TopbarMenuItem
         onAction={() => {
           clearModel();
           localStorage.removeItem("demo-model");
+          localStorage.removeItem("demo-options");
         }}
       >
-        New
+        {t(($) => $["New"])}
       </TopbarMenuItem>
       <TopbarMenuItem
         onAction={() => {
           save();
         }}
       >
-        Save
+        {t(($) => $["Save"])}
       </TopbarMenuItem>
 
       <TopbarMenuItem
@@ -35,9 +39,9 @@ const FileMenu = () => {
           importJSON();
         }}
       >
-        Import JSON
+        {t(($) => $["Import JSON"])}
       </TopbarMenuItem>
-      <TopbarSubMenuButton label="Export as">
+      <TopbarSubMenuButton label={t(($) => $["Export as"])}>
         <TopbarMenuItem
           onAction={() => {
             exportAsJSON();
@@ -45,7 +49,7 @@ const FileMenu = () => {
         >
           JSON
         </TopbarMenuItem>
-        <TopbarSubMenuButton label="PNG">
+        <TopbarSubMenuButton label={t(($) => $["PNG"])}>
           <TopbarMenuItem
             onAction={() => {
               exportAsPNG(1);
@@ -75,7 +79,7 @@ const FileMenu = () => {
             4x
           </TopbarMenuItem>
         </TopbarSubMenuButton>
-        <TopbarSubMenuButton label="PDF">
+        <TopbarSubMenuButton label={t(($) => $["PDF"])}>
           <TopbarMenuItem
             onAction={() => {
               exportAsPDF(1);

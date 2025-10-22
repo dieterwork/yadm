@@ -19,6 +19,7 @@ import DEMOElementToolbarSeparator from "$/shared/components/ui/element_toolbar/
 import DEMOElementToolbarGroup from "$/shared/components/ui/element_toolbar/DEMOElementToolbarGroup";
 import DeleteControl from "./actions/DeleteControl";
 import DEMOElementToolbar from "$/shared/components/ui/element_toolbar/DEMOElementToolbar";
+import { useTranslation } from "react-i18next";
 
 const DEMONodeToolbar = ({
   nodeId,
@@ -37,14 +38,14 @@ const DEMONodeToolbar = ({
     nodes.filter((node) => node.selected).length > 1;
   const hasEdgeSelected = edges.some((edge) => edge.selected);
 
+  const { t } = useTranslation();
+
   return (
     <NodeToolbar
       position={Position.Right}
       isVisible={
-        !node?.data?.isEditable &&
-        node?.selected &&
-        !hasTwoOrMoreNodesSelected &&
-        !hasEdgeSelected
+        ("isEditable" in node.data && !node?.data?.isEditable) ||
+        (node?.selected && !hasTwoOrMoreNodesSelected && !hasEdgeSelected)
       }
     >
       <DEMOElementToolbar>
@@ -79,7 +80,9 @@ const DEMONodeToolbar = ({
         {actions?.indexOf("delete") !== -1 && (
           <>
             <DEMOElementToolbarSeparator />
-            <DEMOElementToolbarGroup aria-label="Danger zone actions">
+            <DEMOElementToolbarGroup
+              aria-label={t(($) => $["Danger zone actions"])}
+            >
               <DeleteControl nodeId={nodeId} />
             </DEMOElementToolbarGroup>
           </>

@@ -1,10 +1,6 @@
+import { cn } from "@sglara/cn";
 import { useGesture, type Handler } from "@use-gesture/react";
-import {
-  EdgeLabelRenderer,
-  getStraightPath,
-  type BaseEdgeProps,
-} from "@xyflow/react";
-import { useId, type CSSProperties } from "react";
+import { getStraightPath } from "@xyflow/react";
 
 interface InteractiveCenterEdgeProps {
   sourceX: number;
@@ -24,6 +20,7 @@ interface InteractiveCenterEdgeProps {
     "drag",
     PointerEvent | MouseEvent | TouchEvent | KeyboardEvent
   >;
+  direction?: "horizontal" | "vertical";
 }
 
 const InteractiveCenterEdge = ({
@@ -35,6 +32,7 @@ const InteractiveCenterEdge = ({
   onDragStart,
   onDrag,
   onDragEnd,
+  direction,
 }: InteractiveCenterEdgeProps) => {
   const bind = useGesture({
     onDragStart: (params) => {
@@ -53,10 +51,14 @@ const InteractiveCenterEdge = ({
       {...bind()}
       d={path}
       fill="none"
-      stroke={"red"}
       strokeOpacity={1}
       strokeWidth={20}
-      className="react-flow__edge-interaction nopan nodrag"
+      className={cn(
+        "react-flow__edge-interaction nopan nodrag",
+        direction === "horizontal" && "cursor-col-resize",
+        direction === "vertical" && "cursor-row-resize",
+        !direction && "cursor-auto"
+      )}
       tabIndex={0}
       style={{ pointerEvents: "all", touchAction: "none" }}
     />

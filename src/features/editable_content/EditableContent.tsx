@@ -17,15 +17,7 @@ import {
   useViewport,
 } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
-import { Button } from "react-aria-components";
-import { PencilIcon } from "@phosphor-icons/react";
-import setEndOfContentEditable from "./utils/setEndOfContentEditable";
-import { createPortal } from "react-dom";
 import { getEditButtonTransform } from "./utils/getEditButtonTransform";
-import EditButtonPortal from "./EditButtonPortal";
-import nodeToBox from "../nodes/utils/nodeToBox";
-import { boxToRect } from "../nodes/utils/boxToRect";
-import { DEMONode } from "../nodes/nodes.types";
 
 interface EditableContentProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "content"> {
@@ -152,7 +144,7 @@ const EditableContent = ({
           contentEditable={isEditable && isEnabled}
           spellCheck={false}
           suppressContentEditableWarning={true}
-          className="inline-block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
+          className="editable-content | inline-block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
           style={{
             alignContent,
             color,

@@ -7,18 +7,16 @@ import { VisuallyHidden } from "react-aria";
 import { useState } from "react";
 import { setFileName } from "$/features/modeler/useDEMOModelerStore";
 import formatDate from "$/shared/utils/formatDate";
+import { useTranslation } from "react-i18next";
+import ChangeLanguageMenu from "./menus/ChangeLanguageMenu";
 
 const Topbar = () => {
+  const { t } = useTranslation();
   return (
     <div className="topbar | [grid-area:topbar]  border-b border-gray-200 h-12 content-center">
       <div className="topbar-inner | grid items-center grid-cols-[auto_1fr] content-center px-4">
-        <h1 className="content-center">
-          <a
-            href="/"
-            className="text-md font-semibold text-slate-900 leading-none"
-          >
-            YADM
-          </a>
+        <h1 className="text-md font-semibold text-slate-900 leading-none">
+          YADM
         </h1>
         <div className="nav-wrapper | ml-4">
           <nav className="nav">
@@ -49,14 +47,16 @@ const Topbar = () => {
                     className="border-1 border-slate-200 rounded-sm text-sm h-[2rem] content-center px-2 focus-within:ring-2 focus-within:ring-sky-500"
                   >
                     <VisuallyHidden>
-                      <Label>Change file name</Label>
+                      <Label>{t(($) => $["Change file name"])}</Label>
                     </VisuallyHidden>
                     <Input className="outline-hidden" />
                   </TextField>
                   <PencilIcon size={20} color="var(--color-slate-700)" />
                 </div>
               </li>
-              <li></li>
+              <li>
+                <ChangeLanguageMenu />
+              </li>
             </ul>
           </nav>
         </div>
