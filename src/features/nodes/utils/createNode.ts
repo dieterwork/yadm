@@ -636,7 +636,7 @@ export const createNode = ({
           height: height ?? DEFAULT_SIZE_MAP["text"].height,
         },
         selected: selected ?? true,
-        zIndex,
+        zIndex: 3000,
       };
     }
     default:
