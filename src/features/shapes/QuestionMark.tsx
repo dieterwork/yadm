@@ -7,7 +7,7 @@ const QuestionMark = ({ width, height, ...svgAttributes }: ShapeProps) => {
     <text
       x={width / 2}
       y={height / 2}
-      fontSize={width * 0.4}
+      fontSize={40}
       fill="black"
       textAnchor="middle"
       dominantBaseline="central"
