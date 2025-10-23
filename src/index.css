@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @plugin "tailwindcss-react-aria-components";
 @plugin "tailwindcss-animate";
+@plugin "@tailwindcss/typography";
 
 @custom-variant content-editable (&:is([contenteditable="true"]));
 @custom-variant content-not-editable (&:is([contenteditable="true"]));

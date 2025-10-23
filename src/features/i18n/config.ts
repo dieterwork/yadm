@@ -24,7 +24,6 @@ i18n
   .init({
     lng: localStorage.getItem("lang") || "en",
     resources,
-    debug: true,
     defaultNS,
     ns: ["translation"],
     keySeparator: false,

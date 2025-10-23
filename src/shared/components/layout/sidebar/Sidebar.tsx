@@ -15,7 +15,11 @@ import productionEventIcon from "$assets/Production Event.svg";
 import entityClassIcon from "$assets/Entity Class.svg";
 import derivedEntityIcon from "$assets/Derived Entity.svg";
 import SidebarSelect from "./menu/SidebarSelect";
-import { usePreviewNodeStore } from "$/features/preview_node/usePreviewNodeStore";
+import {
+  resetPreviewNode,
+  setPreviewNode,
+  usePreviewNodeStore,
+} from "$/features/preview_node/usePreviewNodeStore";
 import PreviewNode from "$/features/preview_node/PreviewNode";
 import type { DEMONode } from "$/features/nodes/nodes.types";
 import { useId, useState } from "react";
@@ -232,7 +236,13 @@ const Sidebar = () => {
         >
           <div className="flex flex-col mb-6 outline-hidden">
             <Collection items={sidebarMenuItems}>
-              {(item) => <SidebarSelect menuItem={item} key={item.id} />}
+              {(item) => (
+                <SidebarSelect
+                  menuItem={item}
+                  key={item.id}
+                  isDisabled={!isOpen}
+                />
+              )}
             </Collection>
           </div>
         </div>
@@ -241,7 +251,12 @@ const Sidebar = () => {
             aria-controls={id}
             aria-expanded={isEnabled ? isOpen : false}
             isOpen={isEnabled ? isOpen : false}
-            onOpenChange={(isOpen) => isEnabled && setOpen(isOpen)}
+            onOpenChange={(isOpen) => {
+              if (isEnabled) {
+                setOpen(isOpen);
+              }
+              resetPreviewNode();
+            }}
           />
         </div>
       </div>

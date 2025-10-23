@@ -25,6 +25,7 @@ import {
   usePreviewNodeStore,
 } from "$/features/preview_node/usePreviewNodeStore";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast/headless";
 
 const BottomToolbar = () => {
   const { zoomIn, zoomOut, fitView, zoomTo } = useReactFlow();

@@ -9,17 +9,13 @@ import {
 import { setMaxLength } from "./utils/setMaxLength";
 import { toggleBoldText } from "./utils/toggleBoldText";
 import {
-  useOnSelectionChange,
-  type OnSelectionChangeFunc,
-} from "@xyflow/react";
-import {
   setAction,
   updateNode,
   updateNodeEditable,
+  useDEMOModelerStore,
 } from "../modeler/useDEMOModelerStore";
-import type { DEMONode } from "../nodes/nodes.types";
-import type { DEMOEdge } from "../edges/edges.types";
 import { setMaxLines } from "./utils/setMaxLines";
+import useClickOutside from "$/shared/hooks/useClickOutside";
 
 let didInit = false;
 
@@ -44,6 +40,7 @@ export const useEditableContent = ({
   leading: number;
   textAlign: CSSProperties["textAlign"];
 }) => {
+  const action = useDEMOModelerStore((state) => state.action);
   useEffect(() => {
     if (!didInit) {
       didInit = true;
@@ -57,6 +54,19 @@ export const useEditableContent = ({
       }
     }
   }, []);
+
+  useClickOutside(
+    ref,
+    () => {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+      updateNodeEditable(nodeId, false);
+      updateNode(nodeId, { draggable: true, selected: true });
+      setAction("pan");
+    },
+    action !== "edit"
+  );
 
   const onInput = (e: FormEvent<HTMLDivElement>) => {
     const target = e.currentTarget;

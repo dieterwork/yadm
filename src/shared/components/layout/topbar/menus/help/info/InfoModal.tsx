@@ -8,7 +8,9 @@ import md from "./info.md";
 const InfoModal = ({ ...restProps }: DEMOModalProps) => {
   return (
     <DEMOModal {...restProps}>
-      <ReactMarkdown children={md} />
+      <div className="md-container | prose prose-slate">
+        <ReactMarkdown children={md} />
+      </div>
     </DEMOModal>
   );
 };

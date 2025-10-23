@@ -32,13 +32,19 @@ import { updateHelperLines } from "../helper_lines/useHelperLinesStore";
 import type { CooperationModelNode } from "../nodes/cooperation_model/cooperationModel.types";
 import formatDate from "$/shared/utils/formatDate";
 
-type ModelerAction = "attach" | "preview" | "select" | "pan" | "edit" | null;
+export type ModelerAction =
+  | "attach"
+  | "preview"
+  | "select"
+  | "pan"
+  | "edit"
+  | null;
 export interface DEMOModelerState {
   id: string;
   fileName: string;
   nodes: DEMONode[];
   edges: DEMOEdge[];
-  action: ModelerAction;
+  action: ModelerAction | null;
   isEnabled: boolean;
   isExportEnabled: boolean;
   isGridVisible: boolean;
@@ -54,7 +60,7 @@ export const useDEMOModelerStore = create<DEMOModelerState>()(
       nodes: initialNodes,
       edges: initialEdges,
       DEMOInstance: null,
-      action: "edit",
+      action: null,
       isGridVisible: true,
       isGridSnapEnabled: true,
       isEnabled: true,

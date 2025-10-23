@@ -1,15 +1,20 @@
 import TopbarMenuButton from "../_components/TopbarMenuButton";
 import TopbarMenuItem from "../_components/TopbarMenuItem";
 import TopbarSubMenuButton from "../_components/TopbarSubMenuButton";
-import { clearModel } from "$/features/modeler/useDEMOModelerStore";
+import {
+  clearModel,
+  useDEMOModelerStore,
+} from "$/features/modeler/useDEMOModelerStore";
 import useSave from "$/features/actions/save/useSave";
 import useExport from "$/features/actions/export/useExport";
 import useImport from "$/features/actions/import/useImport";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast/headless";
 
 const FileMenu = () => {
   const { save } = useSave();
   const { exportAsPNG, exportAsPDF, exportAsJSON } = useExport();
+  const fileName = useDEMOModelerStore((state) => state.fileName);
 
   const { importJSON } = useImport();
 
@@ -29,6 +34,7 @@ const FileMenu = () => {
       <TopbarMenuItem
         onAction={() => {
           save();
+          toast.success(`Saved "${fileName}"`);
         }}
       >
         {t(($) => $["Save"])}

@@ -15,7 +15,13 @@ import {
 import { useEffect, useId, useState } from "react";
 import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
 
-const SidebarSelect = ({ menuItem }: { menuItem: SidebarMenuItemType }) => {
+const SidebarSelect = ({
+  menuItem,
+  isDisabled,
+}: {
+  menuItem: SidebarMenuItemType;
+  isDisabled?: boolean;
+}) => {
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
   const [isOpen, setOpen] = useState(false);
   const buttonId = useId();
@@ -38,6 +44,7 @@ const SidebarSelect = ({ menuItem }: { menuItem: SidebarMenuItemType }) => {
         onSelectionChange={(selected) => {
           setSelected(selected);
         }}
+        isDisabled={isDisabled}
       >
         <SidebarMenuButton
           label={menuItem.label}

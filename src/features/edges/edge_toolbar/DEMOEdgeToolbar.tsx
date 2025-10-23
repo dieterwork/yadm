@@ -12,12 +12,14 @@ import ChangeLineTypeControl from "./actions/ChangeLineTypeControl";
 import ToggleProductionEventMenuItem from "./actions/ToggleProductionEventControl";
 import SwapConnectionControl from "./actions/SwapConnectionControl";
 import { useTranslation } from "react-i18next";
+import ResetEdgeCenter from "./actions/ResetEdgeCenter";
 
 export type EdgeToolbarAction =
   | "toggleProductionEvent"
   | "delete"
   | "swapConnection"
-  | "changeLineType";
+  | "changeLineType"
+  | "resetEdgeCenter";
 interface DEMOEdgeToolbarProps {
   edgeId?: string;
   position?: XYPosition;
@@ -58,6 +60,9 @@ const DEMOEdgeToolbar = ({
           )}
           {actions?.indexOf("swapConnection") !== -1 && (
             <SwapConnectionControl edgeId={edgeId} />
+          )}
+          {actions?.indexOf("resetEdgeCenter") !== -1 && (
+            <ResetEdgeCenter edgeId={edgeId} />
           )}
         </DEMOElementToolbarGroup>
         {actions?.indexOf("delete") !== -1 && (

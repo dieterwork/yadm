@@ -14,7 +14,7 @@ const ObjectFactDiagramEdge = ({
       isDraggable={data?.center?.active}
       markerMid={data?.markerMid}
       style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
-      actions={["delete", "swapConnection"]}
+      actions={["delete", "swapConnection", "resetEdgeCenter"]}
     />
   );
 };

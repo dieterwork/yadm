@@ -26,6 +26,8 @@ import { getCenterEdgePoints, handleDirections } from "../utils/smoothStep";
 import getInteractiveCenterEdgeDirection from "../utils/getInteractiveCenterEdgeDirection";
 import clamp from "$/shared/utils/clamp";
 import getArrowDirection from "../utils/getArrowDirection";
+import { calcEdgeMidpoint } from "../utils/calcEdgeMidpoint";
+import getArrowRotation from "../utils/getArrowRotation";
 
 export type EditableEdge = Edge<{
   center: CenterData;
@@ -93,17 +95,6 @@ export function EditableEdgeComponent({
         : actions;
   }
 
-  const sourceDir = handleDirections[sourcePosition];
-  const targetDir = handleDirections[targetPosition];
-  const sourceGapped: XYPosition = {
-    x: sourceX + sourceDir.x * offset,
-    y: sourceY + sourceDir.y * offset,
-  };
-  const targetGapped: XYPosition = {
-    x: targetX + targetDir.x * offset,
-    y: targetY + targetDir.y * offset,
-  };
-
   const [path, labelX, labelY] = getSmoothStepPath({
     sourceX: sourceX,
     sourceY: sourceY,
@@ -145,9 +136,22 @@ export function EditableEdgeComponent({
     offset,
   });
 
-  // useEffect(() => {
-  //   console.log(arrowDirection);
-  // }, [arrowDirection]);
+  const interactiveEdgeMidpoint = calcEdgeMidpoint(
+    sourceCenterPosition ?? { x: labelX ?? centerX, y: labelY ?? centerY },
+    targetCenterPosition ?? { x: labelX ?? centerX, y: labelY ?? centerY }
+  );
+
+  const arrowRotation = getArrowRotation({
+    source: {
+      x: sourceX,
+      y: sourceY,
+    },
+    target: {
+      x: targetX,
+      y: targetY,
+    },
+    interactiveEdgeDirection,
+  });
 
   return (
     <>
@@ -228,21 +232,26 @@ export function EditableEdgeComponent({
       {selected && (
         <DEMOEdgeToolbar
           edgeId={id}
-          position={{ x: labelX, y: labelY }}
+          position={{
+            x: interactiveEdgeMidpoint?.x ?? centerX,
+            y: interactiveEdgeMidpoint?.y ?? centerY,
+          }}
           actions={actions}
         />
       )}
-      {/* {markerMid && (
+      {markerMid && (
         <DoubleArrowMarker
-          labelX={labelX}
-          labelY={labelY}
-          direction={getArrowDirection({
-            source: { x: sourceX, y: sourceY },
-            sourcePosition,
-            target: { x: targetX, y: targetY },
-          })}
+          labelX={interactiveEdgeMidpoint.x ?? centerX}
+          labelY={interactiveEdgeMidpoint.y ?? centerY}
+          rotation={arrowRotation}
+          direction={arrowDirection}
+          // direction={getArrowDirection({
+          //   source: { x: sourceX, y: sourceY },
+          //   sourcePosition,
+          //   target: { x: targetX, y: targetY },
+          // })}
         />
-      )} */}
+      )}
     </>
   );
 }

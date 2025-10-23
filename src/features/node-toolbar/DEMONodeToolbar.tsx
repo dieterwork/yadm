@@ -44,8 +44,7 @@ const DEMONodeToolbar = ({
     <NodeToolbar
       position={Position.Right}
       isVisible={
-        ("isEditable" in node.data && !node?.data?.isEditable) ||
-        (node?.selected && !hasTwoOrMoreNodesSelected && !hasEdgeSelected)
+        node?.selected && !hasTwoOrMoreNodesSelected && !hasEdgeSelected
       }
     >
       <DEMOElementToolbar>

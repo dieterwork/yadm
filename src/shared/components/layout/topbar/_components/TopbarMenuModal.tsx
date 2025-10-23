@@ -43,21 +43,21 @@ const DEMOModal = ({
           )
         }
       >
-        <Dialog className="w-[calc(100%-2rem)] max-w-2xl max-h-full overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl outline-hidden relative">
+        <Dialog className="w-[calc(100%-2rem)] max-w-2xl max-h-full overflow-hidden rounded-xl bg-white p-8 text-left align-middle shadow-xl outline-hidden relative">
           {({ close }) => (
             <>
               <Heading
                 slot="title"
-                className="text-xxl font-semibold leading-6 my-0 text-slate-700"
+                className="text-2xl font-semibold leading-none text-slate-900"
               >
                 {title}
               </Heading>
-              <div className="w-6 h-6 absolute right-6 top-6 stroke-2">
+              <div className="grid place-items-center w-6 h-6 absolute right-8 top-8">
                 <Button onPress={close} className="select-none cursor-pointer">
-                  <XIcon />
+                  <XIcon color="var(--color-slate-700)" />
                 </Button>
               </div>
-              <div>{children}</div>
+              <div className="mt-5">{children}</div>
             </>
           )}
         </Dialog>

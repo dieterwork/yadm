@@ -15,11 +15,13 @@ const HelpMenu = () => {
     <>
       <TopbarMenuButton label={t(($) => $["Help"])}>
         <TopbarMenuItem onAction={() => setCheatSheetOpen(true)}>
-          Cheat sheet
+          {t(($) => $["Cheat sheet"])}
         </TopbarMenuItem>
-        <TopbarMenuItem onAction={() => setInfoOpen(true)}>Info</TopbarMenuItem>
+        <TopbarMenuItem onAction={() => setInfoOpen(true)}>
+          {t(($) => $["Info"])}
+        </TopbarMenuItem>
         <TopbarMenuItem onAction={() => setAboutOpen(true)}>
-          About
+          {t(($) => $["About"])}
         </TopbarMenuItem>
       </TopbarMenuButton>
       <CheatSheetModal

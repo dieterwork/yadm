@@ -84,7 +84,6 @@ const EditableContent = ({
   if (!nodeId) throw new Error("No node id found");
   if (!ref) ref = useRef<HTMLDivElement>(null!);
   const { x, y, zoom } = useViewport();
-  const domNode = useStore((state) => state.domNode);
   const nodes = useDEMOModelerStore((state) => state.nodes);
 
   const { getNodesBounds } = useReactFlow();
@@ -107,18 +106,6 @@ const EditableContent = ({
   const zIndex = Math.max(...nodes.map((node) => (node?.zIndex ?? 0) + 1));
 
   const nodeRect = getNodesBounds([nodeId]);
-
-  const wrapperStyle: CSSProperties = {
-    position: "absolute",
-    transform: getEditButtonTransform(
-      nodeRect,
-      { x, y, zoom },
-      Position.Left,
-      10,
-      "center"
-    ),
-    zIndex,
-  };
 
   return (
     <>

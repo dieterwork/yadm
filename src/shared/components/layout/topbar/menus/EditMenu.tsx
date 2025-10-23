@@ -12,9 +12,15 @@ const EditMenu = () => {
   const { t } = useTranslation();
   return (
     <TopbarMenuButton label={t(($) => $["Edit"])}>
-      <TopbarMenuItem onAction={() => undo()}>Undo</TopbarMenuItem>
-      <TopbarMenuItem onAction={() => redo()}>Redo</TopbarMenuItem>
-      <TopbarMenuItem onAction={() => clearModel()}>Clear</TopbarMenuItem>
+      <TopbarMenuItem onAction={() => undo()}>
+        {t(($) => $["Undo"])}
+      </TopbarMenuItem>
+      <TopbarMenuItem onAction={() => redo()}>
+        {t(($) => $["Redo"])}
+      </TopbarMenuItem>
+      <TopbarMenuItem onAction={() => clearModel()}>
+        {t(($) => $["Clear"])}
+      </TopbarMenuItem>
     </TopbarMenuButton>
   );
 };

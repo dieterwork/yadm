@@ -3,15 +3,25 @@ import {
   updateNodeEditable,
   useDEMOModelerStore,
 } from "../modeler/useDEMOModelerStore";
-import useShortcut from "../keyboard/useShortcut";
+import { useEffect } from "react";
 
 const useEditableContentShortcut = () => {
   const nodes = useDEMOModelerStore((state) => state.nodes);
-  const [editableNode] = nodes.filter((node) => node.data.isEditable);
-  useShortcut("Escape", () => {
-    if (!editableNode) return;
-    updateNodeEditable(editableNode.id, false);
-    updateNode(editableNode.id, { selected: false });
-  });
+  const editableNodes = nodes.filter(
+    (node) => "isEditable" in node.data && node.data.isEditable
+  );
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      if (editableNodes.length === 0) return;
+      for (const node of editableNodes) {
+        updateNodeEditable(node.id, false);
+        updateNode(node.id, { draggable: true, selected: true });
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [editableNodes, updateNodeEditable, updateNode]);
 };
 export default useEditableContentShortcut;
