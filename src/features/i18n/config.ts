@@ -1,7 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import enTranslation from "./en/translation.json";
-import nlBeTranslation from "./en/translation.json";
+import nlBeTranslation from "./nl/translation.json";
 import frTranslation from "./fr/translation.json";
 
 export const defaultNS = "translation";
@@ -9,7 +9,7 @@ export const resources = {
   en: {
     translation: enTranslation,
   },
-  "nl-be": {
+  nl: {
     translation: nlBeTranslation,
   },
   fr: {

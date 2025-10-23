@@ -5,19 +5,17 @@ import i18n from "$/features/i18n/config";
 import { useState } from "react";
 import type { Key, Selection } from "react-aria-components";
 
-const items = [
-  { id: "en", label: i18n.t(($) => $["English"]) as string },
-  {
-    id: "nl-be",
-    label: `${i18n.t(($) => $["Dutch"])} - ${i18n.t(
-      ($) => $["Belgium"]
-    )}` as string,
-  },
-  { id: "fr", label: i18n.t(($) => $["French"]) as string },
-] satisfies Record<string, string>[];
-
 const ChangeLanguageMenu = () => {
   const { t, i18n } = useTranslation();
+
+  const items = [
+    { id: "en", label: t(($) => $["English"]) as string },
+    {
+      id: "nl",
+      label: `${t(($) => $["Dutch"])} - ${t(($) => $["Belgium"])}` as string,
+    },
+    { id: "fr", label: t(($) => $["French"]) as string },
+  ] satisfies Record<string, string>[];
 
   const [selected, setSelected] = useState<Key | null>(i18n.language);
 
@@ -30,6 +28,7 @@ const ChangeLanguageMenu = () => {
         setSelected(selection);
         if (!selection) return;
         localStorage.setItem("lang", selection as string);
+        console.log(selection);
         await i18n.changeLanguage(selection as string);
       }}
     >

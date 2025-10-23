@@ -23,6 +23,7 @@ import SidebarToggleButton from "./SidebarToggleButton";
 import { cn } from "@sglara/cn";
 import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
 import i18n from "$/features/i18n/config";
+import { useTranslation } from "react-i18next";
 
 export type SidebarMenuSectionItemType = {
   id: string;
@@ -46,171 +47,173 @@ export type SidebarMenuItemType = {
   sections: SidebarMenuSectionType[];
 };
 
-const sidebarMenuItems = [
-  {
-    id: "cooperation_model",
-    name: "cooperation_model",
-    label: i18n.t(($) => $["Cooperation Model"]),
-    icon: "Hii",
-    sections: [
-      {
-        id: "actor_type",
-        label: i18n.t(($) => $["Choose Actor Type"]),
-        name: "actor_type",
-        items: [
-          {
-            id: "actor",
-            name: "actor",
-            label: i18n.t(($) => $["Actor"]),
-            icon: actorIcon,
-            type: "actor",
-          },
-          {
-            id: "transaction",
-            name: "transaction",
-            label: i18n.t(($) => $["Transaction"]),
-            icon: transactionIcon,
-            type: "transaction",
-          },
-          {
-            id: "transactor",
-            name: "transactor",
-            label: i18n.t(($) => $["Transactor"]),
-            icon: transactorIcon,
-            type: "transactor",
-          },
-          {
-            id: "self_activation",
-            name: "self_activation",
-            label: i18n.t(($) => $["Self Activation"]),
-            icon: selfActivationIcon,
-            type: "self_activation",
-          },
-        ],
-      },
-      {
-        id: "composite_transactor_role",
-        name: "composite_transactor_role",
-        label: i18n.t(($) => $["Composite Transactor Role (CTAR)"]),
-        items: [
-          {
-            id: "composite",
-            name: "composite",
-            label: i18n.t(($) => $["Composite"]),
-            icon: compositeIcon,
-            type: "composite",
-          },
-          {
-            id: "elementary_actor",
-            name: "elementary_actor",
-            label: i18n.t(($) => $["Elementary Actor"]),
-            icon: elementaryActorIcon,
-            type: "elementary_actor",
-          },
-          {
-            id: "several_actors",
-            name: "several_actors",
-            label: i18n.t(($) => $["Several Actors"]),
-            icon: severalActorsIcon,
-            type: "several_actors",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "process_structure_diagram",
-    name: "process_structure_diagram",
-    label: i18n.t(($) => $["Process Structure Diagram"]),
-    icon: "Hii",
-    sections: [
-      {
-        id: "psd_elements",
-        label: i18n.t(($) => $["Choose PSD Elements"]),
-        name: "psd_elements",
-        items: [
-          {
-            id: "transaction_time",
-            name: "transaction_time",
-            label: i18n.t(($) => $["Transaction Time"]),
-            icon: transactionTimeIcon,
-            type: "transaction_time",
-          },
-          {
-            id: "initiation_fact",
-            name: "initiation_fact",
-            label: i18n.t(($) => $["Initiation Fact"]),
-            icon: initiationFactIcon,
-            type: "initiation_fact",
-          },
-          {
-            id: "c_fact",
-            name: "c_fact",
-            label: i18n.t(($) => $["C-Fact"]),
-            icon: cFactIcon,
-            type: "c_fact",
-          },
-          {
-            id: "c_act",
-            name: "c_act",
-            label: i18n.t(($) => $["C-Act"]),
-            icon: cActIcon,
-            type: "c_act",
-          },
-          {
-            id: "tk_execution",
-            name: "tk_execution",
-            label: i18n.t(($) => $["TK / Execution"]),
-            icon: tkExecutionIcon,
-            type: "tk_execution",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "object_fact_diagram",
-    name: "object_fact_diagram",
-    label: i18n.t(($) => $["Object Fact Diagram"]),
-    icon: "Hii",
-    sections: [
-      {
-        id: "ofd_elements",
-        label: i18n.t(($) => $["Choose OFD Elements"]),
-        name: "ofd_elements",
-        items: [
-          {
-            id: "production_event",
-            name: "production_event",
-            label: i18n.t(($) => $["Production Event"]),
-            icon: productionEventIcon,
-            type: "production_event",
-          },
-          {
-            id: "entity_class",
-            name: "entity_class",
-            label: i18n.t(($) => $["Entity Class"]),
-            icon: entityClassIcon,
-            type: "entity_class",
-          },
-          {
-            id: "derived_entity",
-            name: "derived_entity",
-            label: i18n.t(($) => $["Derived Entity"]),
-            icon: derivedEntityIcon,
-            type: "derived_entity",
-          },
-        ],
-      },
-    ],
-  },
-] satisfies SidebarMenuItemType[] as SidebarMenuItemType[];
-
 const Sidebar = () => {
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const [isOpen, setOpen] = useState(true);
   const id = useId();
+
+  const { t } = useTranslation();
+
+  const sidebarMenuItems = [
+    {
+      id: "cooperation_model",
+      name: "cooperation_model",
+      label: t(($) => $["Cooperation Model"]),
+      icon: "Hii",
+      sections: [
+        {
+          id: "actor_type",
+          label: t(($) => $["Choose Actor Type"]),
+          name: "actor_type",
+          items: [
+            {
+              id: "actor",
+              name: "actor",
+              label: t(($) => $["Actor"]),
+              icon: actorIcon,
+              type: "actor",
+            },
+            {
+              id: "transaction",
+              name: "transaction",
+              label: t(($) => $["Transaction"]),
+              icon: transactionIcon,
+              type: "transaction",
+            },
+            {
+              id: "transactor",
+              name: "transactor",
+              label: t(($) => $["Transactor"]),
+              icon: transactorIcon,
+              type: "transactor",
+            },
+            {
+              id: "self_activation",
+              name: "self_activation",
+              label: t(($) => $["Self Activation"]),
+              icon: selfActivationIcon,
+              type: "self_activation",
+            },
+          ],
+        },
+        {
+          id: "composite_transactor_role",
+          name: "composite_transactor_role",
+          label: t(($) => $["Composite Transactor Role (CTAR)"]),
+          items: [
+            {
+              id: "composite",
+              name: "composite",
+              label: t(($) => $["Composite"]),
+              icon: compositeIcon,
+              type: "composite",
+            },
+            {
+              id: "elementary_actor",
+              name: "elementary_actor",
+              label: t(($) => $["Elementary Actor"]),
+              icon: elementaryActorIcon,
+              type: "elementary_actor",
+            },
+            {
+              id: "several_actors",
+              name: "several_actors",
+              label: t(($) => $["Several Actors"]),
+              icon: severalActorsIcon,
+              type: "several_actors",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "process_structure_diagram",
+      name: "process_structure_diagram",
+      label: t(($) => $["Process Structure Diagram"]),
+      icon: "Hii",
+      sections: [
+        {
+          id: "psd_elements",
+          label: t(($) => $["Choose PSD Elements"]),
+          name: "psd_elements",
+          items: [
+            {
+              id: "transaction_time",
+              name: "transaction_time",
+              label: t(($) => $["Transaction Time"]),
+              icon: transactionTimeIcon,
+              type: "transaction_time",
+            },
+            {
+              id: "initiation_fact",
+              name: "initiation_fact",
+              label: t(($) => $["Initiation Fact"]),
+              icon: initiationFactIcon,
+              type: "initiation_fact",
+            },
+            {
+              id: "c_fact",
+              name: "c_fact",
+              label: t(($) => $["C-Fact"]),
+              icon: cFactIcon,
+              type: "c_fact",
+            },
+            {
+              id: "c_act",
+              name: "c_act",
+              label: t(($) => $["C-Act"]),
+              icon: cActIcon,
+              type: "c_act",
+            },
+            {
+              id: "tk_execution",
+              name: "tk_execution",
+              label: t(($) => $["TK / Execution"]),
+              icon: tkExecutionIcon,
+              type: "tk_execution",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "object_fact_diagram",
+      name: "object_fact_diagram",
+      label: t(($) => $["Object Fact Diagram"]),
+      icon: "Hii",
+      sections: [
+        {
+          id: "ofd_elements",
+          label: t(($) => $["Choose OFD Elements"]),
+          name: "ofd_elements",
+          items: [
+            {
+              id: "production_event",
+              name: "production_event",
+              label: t(($) => $["Production Event"]),
+              icon: productionEventIcon,
+              type: "production_event",
+            },
+            {
+              id: "entity_class",
+              name: "entity_class",
+              label: t(($) => $["Entity Class"]),
+              icon: entityClassIcon,
+              type: "entity_class",
+            },
+            {
+              id: "derived_entity",
+              name: "derived_entity",
+              label: t(($) => $["Derived Entity"]),
+              icon: derivedEntityIcon,
+              type: "derived_entity",
+            },
+          ],
+        },
+      ],
+    },
+  ] satisfies SidebarMenuItemType[] as SidebarMenuItemType[];
 
   return (
     <>
