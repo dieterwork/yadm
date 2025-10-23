@@ -1,4 +1,5 @@
 import {
+  setAction,
   updateNode,
   updateNodeEditable,
   useDEMOModelerStore,
@@ -18,6 +19,7 @@ const useEditableContentShortcut = () => {
       for (const node of editableNodes) {
         updateNodeEditable(node.id, false);
         updateNode(node.id, { draggable: true, selected: true });
+        setAction("pan");
       }
     };
     document.addEventListener("keydown", handleKeyDown);

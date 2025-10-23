@@ -17,27 +17,8 @@ import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarMenu from "$/shared/components/ui/element_toolbar/DEMOElementToolbarMenu";
 import DEMOElementToolbarMenuItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarMenuItem";
-import i18n from "$/features/i18n/config";
 import { useTranslation } from "react-i18next";
 
-const handleOptions = [
-  {
-    id: Position.Top,
-    label: i18n.t(($) => $["Top"]),
-  },
-  {
-    id: Position.Right,
-    label: i18n.t(($) => $["Right"]),
-  },
-  {
-    id: Position.Bottom,
-    label: i18n.t(($) => $["Bottom"]),
-  },
-  {
-    id: Position.Left,
-    label: i18n.t(($) => $["Left"]),
-  },
-] satisfies { id: Position; label: string }[];
 const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const node = getNode(nodeId);
   if (!node) return null;
@@ -45,6 +26,24 @@ const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const handles = node.data?.handles;
   const updateNodeInternals = useUpdateNodeInternals();
   const { t } = useTranslation();
+  const handleOptions = [
+    {
+      id: Position.Top,
+      label: t(($) => $["Top"]),
+    },
+    {
+      id: Position.Right,
+      label: t(($) => $["Right"]),
+    },
+    {
+      id: Position.Bottom,
+      label: t(($) => $["Bottom"]),
+    },
+    {
+      id: Position.Left,
+      label: t(($) => $["Left"]),
+    },
+  ] satisfies { id: Position; label: string }[];
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton

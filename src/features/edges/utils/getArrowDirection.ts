@@ -10,9 +10,9 @@ const getArrowDirection = ({
 }: {
   sourcePosition: Position;
   targetPosition: Position;
+  offset: number;
   source: XYPosition;
   target: XYPosition;
-  offset: number;
 }) => {
   const sourceDir = handleDirections[sourcePosition];
   const targetDir = handleDirections[targetPosition];

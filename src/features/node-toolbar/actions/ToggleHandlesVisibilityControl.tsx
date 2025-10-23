@@ -11,7 +11,7 @@ const ToggleHandlesVisibilityControl = ({
   nodeId,
 }: DEMONodeToolbarControlProps) => {
   const node = getNode(nodeId);
-  if (!node) return null;
+  if (!node || !("handles" in node.data)) return null;
   const isVisible = node.data?.handles.isVisible;
   const { t } = useTranslation();
   return (

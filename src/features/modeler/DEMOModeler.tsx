@@ -39,6 +39,7 @@ import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
 import useKeyboardShortcuts from "../keyboard/useKeyboardShortcuts";
 import useSave from "../actions/save/useSave";
 import useAttachNode from "../actions/attach/useAttachNode";
+import useTitleTranslate from "$/shared/hooks/useTitleTranslate";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -147,9 +148,9 @@ const DEMOModeler = () => {
       }))
     );
 
-  const ref = useRef<HTMLDivElement>(null!);
+  useTitleTranslate();
 
-  const attachChildNodeId = useAttachStore((state) => state.childNodeId);
+  const ref = useRef<HTMLDivElement>(null!);
 
   const { autoSave } = useSave();
 

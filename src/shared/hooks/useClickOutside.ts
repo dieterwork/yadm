@@ -10,7 +10,6 @@ const useClickOutside = (
 ) => {
   useEffect(() => {
     function handlePointerOutside(e: MouseEvent) {
-      if (isDisabled) return;
       if (
         e.target &&
         e.target instanceof Node &&

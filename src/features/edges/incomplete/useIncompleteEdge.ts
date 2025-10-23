@@ -5,7 +5,9 @@ import {
   MarkerType,
   Position,
   useReactFlow,
+  type InternalNode,
   type OnConnectEnd,
+  type XYPosition,
 } from "@xyflow/react";
 import type { DEMOEdge } from "../edges.types";
 import { SMALL_NODE_SIZE } from "$/features/nodes/utils/consts";
@@ -36,6 +38,25 @@ const getPosition = (fromPosition: Position | null) => {
   }
 };
 
+const getTransactionTimeGhostNodePositionX = (
+  position: Position | null,
+  relativeParentCoordinates: Partial<XYPosition>,
+  fromNodeWidth: number | undefined
+) => {
+  console.log(relativeParentCoordinates);
+  if (position === Position.Right) {
+    if (relativeParentCoordinates.x ?? 0 > (fromNodeWidth ?? 0)) {
+      return relativeParentCoordinates.x ?? 0;
+    }
+    return (fromNodeWidth ?? 0) + 20;
+  } else {
+    if (relativeParentCoordinates.x ?? 0 < 0) {
+      return relativeParentCoordinates.x ?? 0;
+    }
+    return -20;
+  }
+};
+
 export const useIncompleteEdge = () => {
   const { screenToFlowPosition } = useReactFlow();
   const nodes = useDEMOModelerStore((state) => state.nodes);
@@ -63,8 +84,16 @@ export const useIncompleteEdge = () => {
     const relativeParentCoordinates = convertAbsoluteToRelativePosition(
       position,
       parentNode,
-      nodes
+      nodes,
+      true
     );
+
+    const transactionTimeGhostNodePositionX =
+      getTransactionTimeGhostNodePositionX(
+        fromPosition,
+        relativeParentCoordinates,
+        fromNode.measured.width
+      );
 
     const ghostNode = {
       id: ghostId,
@@ -72,16 +101,8 @@ export const useIncompleteEdge = () => {
       position:
         fromNode?.type === "transaction_time"
           ? {
-              x:
-                fromPosition === "left"
-                  ? (relativeParentCoordinates.x ?? 0) > 0
-                    ? -20
-                    : relativeParentCoordinates.x ?? 0
-                  : fromNode.measured.width &&
-                    (relativeParentCoordinates.x ?? 0) < fromNode.measured.width
-                  ? fromNode.measured.width + 20
-                  : relativeParentCoordinates.x ?? 0,
-              y: SMALL_NODE_SIZE / 2,
+              x: transactionTimeGhostNodePositionX,
+              y: SMALL_NODE_SIZE / 2 - 0.5,
             }
           : position,
       data: { handlePosition: getPosition(fromPosition) },

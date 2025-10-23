@@ -26,6 +26,7 @@ import {
 } from "$/features/preview_node/usePreviewNodeStore";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast/headless";
+import useSave from "$/features/actions/save/useSave";
 
 const BottomToolbar = () => {
   const { zoomIn, zoomOut, fitView, zoomTo } = useReactFlow();
@@ -37,6 +38,8 @@ const BottomToolbar = () => {
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
 
   const { t } = useTranslation();
+
+  const { save } = useSave();
 
   return (
     <div className="bottom-toolbar-wrapper | absolute bottom-4 left-[50%] translate-x-[-50%] z-9999">
@@ -64,6 +67,7 @@ const BottomToolbar = () => {
               onChange={(isEnabled) => {
                 if (previewNode) return resetPreviewNode();
                 toggleLock(isEnabled);
+                save();
               }}
             >
               <LockSimpleIcon

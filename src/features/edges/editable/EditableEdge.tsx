@@ -127,11 +127,11 @@ export function EditableEdgeComponent({
       x: sourceX,
       y: sourceY,
     },
-    sourcePosition,
     target: {
       x: targetX,
       y: targetY,
     },
+    sourcePosition,
     targetPosition,
     offset,
   });
@@ -150,6 +150,9 @@ export function EditableEdgeComponent({
       x: targetX,
       y: targetY,
     },
+    sourcePosition,
+    targetPosition,
+    offset,
     interactiveEdgeDirection,
   });
 

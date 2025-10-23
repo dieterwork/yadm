@@ -16,7 +16,7 @@ const Topbar = () => {
     <div className="topbar | [grid-area:topbar]  border-b border-gray-200 h-12 content-center">
       <div className="topbar-inner | grid items-center grid-cols-[auto_1fr] content-center px-4">
         <h1 className="text-md font-semibold text-slate-900 leading-none">
-          YADM
+          {t(($) => $["YADM"])}
         </h1>
         <div className="nav-wrapper | ml-4">
           <nav className="nav">

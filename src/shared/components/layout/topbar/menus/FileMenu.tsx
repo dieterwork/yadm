@@ -26,7 +26,6 @@ const FileMenu = () => {
         onAction={() => {
           clearModel();
           localStorage.removeItem("demo-model");
-          localStorage.removeItem("demo-options");
         }}
       >
         {t(($) => $["New"])}

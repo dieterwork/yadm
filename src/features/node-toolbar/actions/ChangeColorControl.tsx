@@ -14,25 +14,25 @@ import { useState } from "react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
 import { useTranslation } from "react-i18next";
-import i18n from "$/features/i18n/config";
-
-const colorOptions = [
-  { id: "default", label: i18n.t(($) => $["Default"]) },
-  { id: "blue", label: i18n.t(($) => $["Blue"]) },
-  { id: "green", label: i18n.t(($) => $["Green"]) },
-  { id: "red", label: i18n.t(($) => $["Red"]) },
-  { id: "yellow", label: i18n.t(($) => $["Yellow"]) },
-] satisfies { id: NodeColor; label: string }[];
 
 const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const node = getNode(nodeId);
   if (!node) return null;
+
+  const { t } = useTranslation();
+  const colorOptions = [
+    { id: "default", label: t(($) => $["Default"]) },
+    { id: "blue", label: t(($) => $["Blue"]) },
+    { id: "green", label: t(($) => $["Green"]) },
+    { id: "red", label: t(($) => $["Red"]) },
+    { id: "yellow", label: t(($) => $["Yellow"]) },
+  ] satisfies { id: NodeColor; label: string }[];
+
   const [colorSelected, setColorSelected] = useState<Selection>(
     new Set([colorOptions[0].id])
   );
   const updateNodeInternals = useUpdateNodeInternals();
 
-  const { t } = useTranslation();
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton

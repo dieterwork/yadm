@@ -15,6 +15,7 @@ const useExport = () => {
   const DEMOInstance = useDEMOModelerStore((state) => state.DEMOInstance);
   const { getNodesBounds } = useReactFlow();
   const nodesBounds = getNodesBounds(nodes);
+  const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
 
   const exportAsPNG = async (scaleFactor: number) => {
     try {
@@ -49,6 +50,7 @@ const useExport = () => {
     if (!DEMOInstance) return;
     const jsModel: DEMOModelJSON = {
       ...DEMOInstance.toObject(),
+      isEnabled,
       version: "1.0.0",
     };
     const jsonModel = JSON.stringify(jsModel);

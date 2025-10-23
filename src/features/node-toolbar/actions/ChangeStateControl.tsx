@@ -24,7 +24,6 @@ import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEM
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
-import i18n from "$/features/i18n/config";
 import { useTranslation } from "react-i18next";
 
 const NODES_WITH_STATE = [
@@ -38,77 +37,6 @@ const NODES_WITH_STATE = [
 ] as const;
 
 type NodeWithState = (typeof NODES_WITH_STATE)[number];
-
-const defaultT = i18n.t(($) => $["Default"]);
-const unclearT = i18n.t(($) => $["Unclear"]);
-const missingT = i18n.t(($) => $["Missing"]);
-const doubleT = i18n.t(($) => $["Double"]);
-
-const internalT = i18n.t(($) => $["Internal"]);
-const externalT = i18n.t(($) => $["External"]);
-
-const stateOptions = {
-  actor: [
-    { id: "default", label: defaultT as string },
-    { id: "unclear", label: unclearT as string },
-    { id: "missing", label: missingT as string },
-  ],
-  composite: [
-    { id: "internal", label: internalT as string },
-    { id: "external", label: externalT as string },
-  ],
-  elementary_actor: [
-    { id: "internal", label: internalT as string },
-    { id: "external", label: externalT as string },
-  ],
-  self_activation: [
-    { id: "internal", label: internalT as string },
-    { id: "external", label: externalT as string },
-  ],
-  transaction: [
-    { id: "default", label: defaultT as string },
-    { id: "unclear", label: unclearT as string },
-    { id: "missing", label: missingT as string },
-    { id: "double", label: doubleT as string },
-  ],
-  transactor: [
-    { id: "internal", label: internalT as string },
-    { id: "external", label: externalT as string },
-  ],
-  several_actors: [
-    { id: "internal", label: internalT as string },
-    { id: "external", label: externalT as string },
-  ],
-} satisfies {
-  actor: {
-    id: ActorState;
-    label: string;
-  }[];
-  composite: {
-    id: CompositeState;
-    label: string;
-  }[];
-  elementary_actor: {
-    id: ElementaryActorState;
-    label: string;
-  }[];
-  self_activation: {
-    id: SelfActivationState;
-    label: string;
-  }[];
-  transaction: {
-    id: TransactionState;
-    label: string;
-  }[];
-  transactor: {
-    id: TransactorState;
-    label: string;
-  }[];
-  several_actors: {
-    id: SeveralActorsState;
-    label: string;
-  }[];
-};
 
 const getIcon = (
   state:
@@ -139,12 +67,84 @@ const getIcon = (
 const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const node = getNode(nodeId);
   if (!node) return null;
-  if (!NODES_WITH_STATE.includes(node.type as NodeWithState)) return null;
+  if (!("state" in node.data)) return null;
+
+  const { t } = useTranslation();
+  const defaultT = t(($) => $["Default"]);
+  const unclearT = t(($) => $["Unclear"]);
+  const missingT = t(($) => $["Missing"]);
+  const doubleT = t(($) => $["Double"]);
+
+  const internalT = t(($) => $["Internal"]);
+  const externalT = t(($) => $["External"]);
+
+  const stateOptions = {
+    actor: [
+      { id: "default", label: defaultT as string },
+      { id: "unclear", label: unclearT as string },
+      { id: "missing", label: missingT as string },
+    ],
+    composite: [
+      { id: "internal", label: internalT as string },
+      { id: "external", label: externalT as string },
+    ],
+    elementary_actor: [
+      { id: "internal", label: internalT as string },
+      { id: "external", label: externalT as string },
+    ],
+    self_activation: [
+      { id: "internal", label: internalT as string },
+      { id: "external", label: externalT as string },
+    ],
+    transaction: [
+      { id: "default", label: defaultT as string },
+      { id: "unclear", label: unclearT as string },
+      { id: "missing", label: missingT as string },
+      { id: "double", label: doubleT as string },
+    ],
+    transactor: [
+      { id: "internal", label: internalT as string },
+      { id: "external", label: externalT as string },
+    ],
+    several_actors: [
+      { id: "internal", label: internalT as string },
+      { id: "external", label: externalT as string },
+    ],
+  } satisfies {
+    actor: {
+      id: ActorState;
+      label: string;
+    }[];
+    composite: {
+      id: CompositeState;
+      label: string;
+    }[];
+    elementary_actor: {
+      id: ElementaryActorState;
+      label: string;
+    }[];
+    self_activation: {
+      id: SelfActivationState;
+      label: string;
+    }[];
+    transaction: {
+      id: TransactionState;
+      label: string;
+    }[];
+    transactor: {
+      id: TransactorState;
+      label: string;
+    }[];
+    several_actors: {
+      id: SeveralActorsState;
+      label: string;
+    }[];
+  };
+
   const [selected, setSelected] = useState<Selection>(
-    new Set([node.data?.state ?? "default"])
+    new Set([node.data.state])
   );
   const options = stateOptions[node.type as NodeWithState];
-  const { t } = useTranslation();
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton

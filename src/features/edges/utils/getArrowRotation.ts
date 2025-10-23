@@ -1,15 +1,36 @@
-import type { XYPosition } from "@xyflow/react";
+import type { Position, XYPosition } from "@xyflow/react";
+import { handleDirections } from "./smoothStep";
 
 const getArrowRotation = ({
   source,
   target,
+  offset,
+  sourcePosition,
+  targetPosition,
   interactiveEdgeDirection,
 }: {
   source: XYPosition;
   target: XYPosition;
   interactiveEdgeDirection: "horizontal" | "vertical" | undefined;
+  sourcePosition: Position;
+  targetPosition: Position;
+  offset: number;
 }) => {
-  const angle = Math.atan2(source.y - target.y, source.x - target.x) + Math.PI;
+  const sourceDir = handleDirections[sourcePosition];
+  const targetDir = handleDirections[targetPosition];
+  const sourceGapped: XYPosition = {
+    x: source.x + sourceDir.x * offset,
+    y: source.y + sourceDir.y * offset,
+  };
+  const targetGapped: XYPosition = {
+    x: target.x + targetDir.x * offset,
+    y: target.y + targetDir.y * offset,
+  };
+  const angle =
+    Math.atan2(
+      sourceGapped.y - targetGapped.y,
+      sourceGapped.x - targetGapped.x
+    ) + Math.PI;
 
   if (interactiveEdgeDirection) {
     const modulo = angle % Math.PI;

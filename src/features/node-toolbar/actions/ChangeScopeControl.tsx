@@ -16,23 +16,24 @@ import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolba
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
-import i18n from "$/features/i18n/config";
 import { useTranslation } from "react-i18next";
-
-const scopeOptions = [
-  { id: "in", label: i18n.t(($) => $["In"]) },
-  { id: "out", label: i18n.t(($) => $["Out"]) },
-] satisfies { id: NodeScope; label: string }[];
 
 const ChangeScopeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const node = getNode(nodeId);
   if (!nodeId) return null;
   if (!("scope" in node.data)) return null;
+
+  const { t } = useTranslation();
+
+  const scopeOptions = [
+    { id: "in", label: t(($) => $["In"]) },
+    { id: "out", label: t(($) => $["Out"]) },
+  ] satisfies { id: NodeScope; label: string }[];
+
   const [scopeSelected, setScopeSelected] = useState<Selection>(
     new Set([node.data?.scope ?? "in"])
   );
   const updateNodeInternals = useUpdateNodeInternals();
-  const { t } = useTranslation();
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton

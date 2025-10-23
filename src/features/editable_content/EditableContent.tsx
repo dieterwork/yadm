@@ -9,15 +9,8 @@ import {
   updateNodeContent,
   useDEMOModelerStore,
 } from "../modeler/useDEMOModelerStore";
-import {
-  Position,
-  useNodeId,
-  useReactFlow,
-  useStore,
-  useViewport,
-} from "@xyflow/react";
+import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
-import { getEditButtonTransform } from "./utils/getEditButtonTransform";
 
 interface EditableContentProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "content"> {
@@ -83,10 +76,6 @@ const EditableContent = ({
   const nodeId = useNodeId();
   if (!nodeId) throw new Error("No node id found");
   if (!ref) ref = useRef<HTMLDivElement>(null!);
-  const { x, y, zoom } = useViewport();
-  const nodes = useDEMOModelerStore((state) => state.nodes);
-
-  const { getNodesBounds } = useReactFlow();
 
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const props = useEditableContent({
@@ -103,9 +92,7 @@ const EditableContent = ({
     textAlign,
   });
 
-  const zIndex = Math.max(...nodes.map((node) => (node?.zIndex ?? 0) + 1));
-
-  const nodeRect = getNodesBounds([nodeId]);
+  const isContentEditable = !!isEditable && isEnabled;
 
   return (
     <>
@@ -128,7 +115,7 @@ const EditableContent = ({
         <span
           {...props}
           ref={ref}
-          contentEditable={isEditable && isEnabled}
+          contentEditable={isContentEditable}
           spellCheck={false}
           suppressContentEditableWarning={true}
           className="editable-content | inline-block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"

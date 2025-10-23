@@ -496,7 +496,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 2,
+        zIndex: 2000,
       };
     }
 
@@ -536,7 +536,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 2,
+        zIndex: 2000,
       };
     }
 
@@ -576,7 +576,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 2,
+        zIndex: 2000,
       };
     }
     case "tk_execution": {
@@ -615,7 +615,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 2,
+        zIndex: 2000,
       };
     }
     case "text": {

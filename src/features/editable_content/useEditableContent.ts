@@ -55,18 +55,15 @@ export const useEditableContent = ({
     }
   }, []);
 
-  useClickOutside(
-    ref,
-    () => {
-      if (document.activeElement instanceof HTMLElement) {
-        document.activeElement.blur();
-      }
-      updateNodeEditable(nodeId, false);
-      updateNode(nodeId, { draggable: true, selected: true });
-      setAction("pan");
-    },
-    action !== "edit"
-  );
+  useClickOutside(ref, () => {
+    if (action !== "edit") return;
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    updateNodeEditable(nodeId, false);
+    updateNode(nodeId, { draggable: true, selected: true });
+    setAction("pan");
+  });
 
   const onInput = (e: FormEvent<HTMLDivElement>) => {
     const target = e.currentTarget;

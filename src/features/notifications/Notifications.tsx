@@ -36,8 +36,10 @@ const Notifications = () => {
             key={toast.id}
             ref={ref}
             className={cn(
-              "toast | flex justify-center absolute w-[20rem] transition-all duration-500 ease-out",
-              toast.visible ? "opacity-100" : "opacity-0"
+              "toast | flex justify-center absolute w-[18rem] transition-all duration-500 ease-out left-0 right-0 mx-auto",
+              toast?.visible
+                ? "animate-in fade-in"
+                : "animate-out fade-out opacity-0"
             )}
             style={{
               transform: `translateY(${offset}px)`,
@@ -50,23 +52,32 @@ const Notifications = () => {
             >
               <div>
                 {toast.type === "error" && (
-                  <XCircleIcon size={24} color="var(--color-emerald-500)" />
+                  <XCircleIcon
+                    size={24}
+                    color="var(--color-emerald-500)"
+                    weight="fill"
+                  />
                 )}
                 {toast.type === "success" && (
-                  <CheckCircleIcon size={24} color="var(--color-emerald-500)" />
+                  <CheckCircleIcon
+                    size={24}
+                    color="var(--color-emerald-500)"
+                    weight="fill"
+                  />
                 )}
               </div>
               {/* @ts-ignore */}
-              <div>{toast.message}</div>
-              <div>
+              <div className="leading-[1.3]">{toast.message}</div>
+              <div className="grid place-items-center">
                 <Button
+                  className="cursor-pointer"
                   onPress={() => {
                     toastFn.dismiss(toast.id);
                   }}
                 >
                   <XIcon
                     aria-label="Close toast"
-                    size={20}
+                    size={14}
                     color="var(--color-slate-900)"
                   />
                 </Button>

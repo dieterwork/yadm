@@ -67,7 +67,7 @@ const DEMOEdgeToolbar = ({
         </DEMOElementToolbarGroup>
         {actions?.indexOf("delete") !== -1 && (
           <DEMOElementToolbarGroup aria-label={t(($) => $["Danger zone"])}>
-            <DEMOElementToolbarSeparator />
+            {actions?.length !== 1 && <DEMOElementToolbarSeparator />}
             <DeleteMenuItem edgeId={edgeId} />
           </DEMOElementToolbarGroup>
         )}

@@ -16,22 +16,22 @@ import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types
 import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
-import i18next from "$features/i18n/config";
-
-const options = [
-  { id: "solid", label: i18next.t(($) => $["Solid"]) },
-  { id: "dashed", label: i18next.t(($) => $["Dashed"]) },
-];
 
 const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const edge = getEdge(edgeId);
   if (!edge || edge.type !== "cooperation_model_edge" || !edge.data?.lineType)
     return null;
+
+  const { t } = useTranslation();
+
+  const options = [
+    { id: "solid", label: t(($) => $["Solid"]) },
+    { id: "dashed", label: t(($) => $["Dashed"]) },
+  ];
+
   const [selected, setSelected] = useState<Selection>(
     new Set([edge.data?.lineType ?? "solid"])
   );
-
-  const { t } = useTranslation();
 
   return (
     <MenuTrigger>

@@ -4,4 +4,5 @@ import type { ReactFlowJsonObject } from "@xyflow/react";
 
 export type DEMOModelJSON = ReactFlowJsonObject<DEMONode, DEMOEdge> & {
   version: string;
+  isEnabled: boolean;
 };
