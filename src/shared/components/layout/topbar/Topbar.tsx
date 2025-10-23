@@ -20,7 +20,7 @@ const Topbar = () => {
         </h1>
         <div className="nav-wrapper | ml-4">
           <nav className="nav">
-            <ul className="flex justify-between items-center">
+            <ul className="flex justify-between items-center relative">
               <li>
                 <ul className="flex items-center gap-1">
                   <li>
@@ -34,7 +34,7 @@ const Topbar = () => {
                   </li>
                 </ul>
               </li>
-              <li>
+              <li className="absolute inset-0 m-auto w-[10rem]">
                 <div className="file-name-editor-wrapper | grid grid-cols-[1fr_auto] items-center gap-2">
                   <TextField
                     onChange={(e) => {

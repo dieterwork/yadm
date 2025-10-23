@@ -148,7 +148,7 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton
-        label={t(($) => $["State"] as string)}
+        label={t(($) => $["State"]) as string}
         icon={(iconProps) => <SlidersIcon {...iconProps} />}
         menuTrigger
         id="change_state"

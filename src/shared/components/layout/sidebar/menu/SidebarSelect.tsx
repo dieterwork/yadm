@@ -13,11 +13,13 @@ import {
   DEFAULT_SIZE_MAP,
 } from "$/features/nodes/utils/consts";
 import { useEffect, useId, useState } from "react";
+import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
 
 const SidebarSelect = ({ menuItem }: { menuItem: SidebarMenuItemType }) => {
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
   const [isOpen, setOpen] = useState(false);
   const buttonId = useId();
+  const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
 
   const [selected, setSelected] = useState<Key | null>(
     menuItem.sections[0].items[0].id
@@ -52,6 +54,7 @@ const SidebarSelect = ({ menuItem }: { menuItem: SidebarMenuItemType }) => {
               <Collection items={section.items}>
                 {(item) => (
                   <SidebarMenuSectionItem
+                    isDisabled={!isEnabled}
                     id={item.id}
                     onClick={(e) => {
                       setPreviewNode({
