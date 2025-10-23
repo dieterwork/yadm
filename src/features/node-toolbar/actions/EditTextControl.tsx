@@ -22,12 +22,10 @@ const EditTextControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
         );
         if (!element) return;
         updateNodeEditable(nodeId, true);
-        updateNode(nodeId, { draggable: false });
+        updateNode(nodeId, { selected: false });
         setAction("edit");
         setTimeout(() => {
           element?.focus();
-          updateNodeEditable(nodeId, true);
-          updateNode(nodeId, { selected: false });
           setEndOfContentEditable(element);
         }, 0);
       }}

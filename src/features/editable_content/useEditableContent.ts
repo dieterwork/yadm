@@ -31,7 +31,7 @@ export const useEditableContent = ({
   textAlign,
 }: {
   content?: string;
-  ref: RefObject<HTMLDivElement>;
+  ref: RefObject<HTMLSpanElement>;
   onContentUpdate: (e: string) => void;
   maxLines?: number;
   maxLength?: number;
@@ -56,10 +56,9 @@ export const useEditableContent = ({
   }, []);
 
   useClickOutside(ref, () => {
-    if (action !== "edit") return;
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
+    if (document.activeElement !== ref.current) return;
+    if (!(document.activeElement instanceof HTMLSpanElement)) return;
+    document.activeElement.blur();
     updateNodeEditable(nodeId, false);
     updateNode(nodeId, { draggable: true, selected: true });
     setAction("pan");

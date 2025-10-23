@@ -13,7 +13,7 @@ import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
 
 interface EditableContentProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, "content"> {
+  extends Omit<HTMLAttributes<HTMLSpanElement>, "content"> {
   width?: number;
   height?: number;
   content?: string;
@@ -21,7 +21,7 @@ interface EditableContentProps
   fontSize?: number;
   color?: string;
   maxLines?: number;
-  ref?: RefObject<HTMLDivElement>;
+  ref?: RefObject<HTMLSpanElement>;
   hide?: boolean;
   textAlign?: CSSProperties["textAlign"];
   alignContent?: string;

@@ -28,7 +28,6 @@ const ChangeLanguageMenu = () => {
         setSelected(selection);
         if (!selection) return;
         localStorage.setItem("lang", selection as string);
-        console.log(selection);
         await i18n.changeLanguage(selection as string);
       }}
     >

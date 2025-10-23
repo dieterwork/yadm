@@ -43,7 +43,6 @@ const getTransactionTimeGhostNodePositionX = (
   relativeParentCoordinates: Partial<XYPosition>,
   fromNodeWidth: number | undefined
 ) => {
-  console.log(relativeParentCoordinates);
   if (position === Position.Right) {
     if (relativeParentCoordinates.x ?? 0 > (fromNodeWidth ?? 0)) {
       return relativeParentCoordinates.x ?? 0;

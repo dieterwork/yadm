@@ -65,7 +65,6 @@ export const usePreviewNode = () => {
       } else {
         resetPreviewNode();
       }
-      setAction("pan");
     };
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);

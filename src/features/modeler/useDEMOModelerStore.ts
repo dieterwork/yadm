@@ -71,9 +71,7 @@ export const useDEMOModelerStore = create<DEMOModelerState>()(
         throttle((state) => {
           handleSet(state);
         }, 1000),
-      onSave: () => {
-        console.log("Saved DEMO Modeler Store");
-      },
+      onSave: () => {},
       partialize: (state) => {
         const { nodes, edges } = state;
         const savedNodes = nodes.map((node) => {
