@@ -5,8 +5,6 @@ import type { DEMONode } from "../nodes/nodes.types";
 const DEMONodeResizer = ({
   nodeId,
   type,
-  maxHeight,
-  maxWidth,
   ...restProps
 }: NodeResizerProps & { type: DEMONode["type"] }) => {
   if (!nodeId) throw new Error("Could not find nodeId");
