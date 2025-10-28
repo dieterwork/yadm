@@ -1,20 +1,15 @@
-import { useInternalNode, type NodeProps, type OnResize } from "@xyflow/react";
+import { type NodeProps, type OnResize } from "@xyflow/react";
 
 import DEMONodeBase from "../../DEMONodeBase";
 import type { SeveralActorsNode as SeveralActorsNodeType } from "./severalActors.types";
-import uuid from "../../../../shared/utils/uuid";
 import { calculateDoubleDiamondInCircleDimensions } from "../../../shapes/utils/calculateDoubleDiamondInCircleDimensions";
-import EditableContent from "../../../editable_content/EditableContent";
-import { DEFAULT_SIZE_MAP, MEDIUM_NODE_SIZE } from "../../utils/consts";
-import { useEffect } from "react";
+
 import {
   getNode,
   updateNode,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
 import getChildNodes from "../../utils/getChildNodes";
-
-const padding = 4;
 
 const SeveralActorsNode = ({
   id,
@@ -30,7 +25,6 @@ const SeveralActorsNode = ({
     const childNodes = getChildNodes([node], nodes);
     const transaction = childNodes.find((node) => node.type === "transaction");
     const actor = childNodes.find((node) => node.type === "actor");
-    console.log(transaction);
     if (
       !transaction ||
       !transaction.style?.width ||
