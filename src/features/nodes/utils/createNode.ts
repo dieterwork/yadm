@@ -336,7 +336,7 @@ export const createNode = ({
           id: transactionId,
           type: "transaction",
           position: {
-            x: 0 + DEFAULT_SIZE_MAP[type].width / 2 - transactionSize.width / 2,
+            x: DEFAULT_SIZE_MAP[type].width / 2 - transactionSize.width / 2,
             y: 0,
           },
           data: {
@@ -366,7 +366,13 @@ export const createNode = ({
           },
           selected: false,
           parentId: id,
-          extent: "parent",
+          extent: [
+            [DEFAULT_SIZE_MAP[type].width / 2 - transactionSize.width / 2, 0],
+            [
+              DEFAULT_SIZE_MAP[type].width / 2 + transactionSize.width / 2,
+              transactionSize.height,
+            ],
+          ],
           zIndex: 3000,
           draggable: false,
         },

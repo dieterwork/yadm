@@ -21,7 +21,7 @@ const SeveralActorsNode = ({
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const node = getNode(id);
 
-  const onResize: OnResize = (e, { width, height }) => {
+  const onResize: OnResize = (_, { width, height }) => {
     const childNodes = getChildNodes([node], nodes);
     const transaction = childNodes.find((node) => node.type === "transaction");
     const actor = childNodes.find((node) => node.type === "actor");
@@ -37,8 +37,12 @@ const SeveralActorsNode = ({
     );
     const transactionHeight = +transaction.style.height;
     updateNode(transaction.id, {
+      extent: [
+        [width / 2 - transactionSize.width / 2, 0],
+        [width / 2 + transactionSize.width / 2, transactionHeight],
+      ],
       position: {
-        x: width / 2 - transactionSize.width / 2,
+        x: 0,
         y: 0,
       },
     });
