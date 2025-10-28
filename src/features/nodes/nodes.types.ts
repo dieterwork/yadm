@@ -23,6 +23,7 @@ import type { Position } from "@xyflow/react";
 import type { GhostNode as GhostNodeType } from "./ghost/ghost.types";
 import GhostNode from "./ghost/GhostNode";
 import type { CooperationModelNode } from "./cooperation_model/cooperationModel.types";
+import type { NodeToolbarAction } from "./DEMONodeBase";
 
 export const nodeTypes = {
   // cooperation model
@@ -91,6 +92,7 @@ export type DEMONodeBaseData<T extends SubModel> = {
   color?: string;
   content?: string;
   isEditable?: boolean;
+  actions?: NodeToolbarAction[];
 };
 
 // Scope

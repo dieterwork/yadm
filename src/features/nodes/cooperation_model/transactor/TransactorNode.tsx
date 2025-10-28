@@ -15,46 +15,34 @@ const TransactorNode = ({
   const { content, fontSize, isEditable } = data;
 
   return (
-    <>
-      <DEMONodeBase
-        id={id}
-        data={data}
-        selected={selected}
+    <DEMONodeBase
+      id={id}
+      data={data}
+      selected={selected}
+      width={width}
+      height={height}
+      type="transactor"
+      actions={[
+        "addHandle",
+        "changeColor",
+        "changeFontSize",
+        "delete",
+        "toggleHandlesVisibility",
+        "changeState",
+        "editText",
+      ]}
+    >
+      <EditableContent
+        isSelected={selected}
+        isEditable={isEditable}
         width={width}
-        height={height}
-        type="transactor"
-        actions={[
-          "addHandle",
-          "changeColor",
-          "changeFontSize",
-          "delete",
-          "toggleHandlesVisibility",
-          "changeState",
-          "editText",
-        ]}
-      >
-        <EditableContent
-          isSelected={selected}
-          isEditable={isEditable}
-          width={width}
-          height={MEDIUM_NODE_SIZE}
-          style={{ top: 0, bottom: "auto" }}
-          content={content}
-          fontSize={fontSize}
-          maxLength={5}
-        />
-        <EditableContent
-          isSelected={selected}
-          isEditable={isEditable}
-          width={width}
-          height={height ? height - MEDIUM_NODE_SIZE / 2 : undefined}
-          style={{ bottom: 0, top: "auto" }}
-          content={content}
-          fontSize={fontSize}
-          maxLength={60}
-        />
-      </DEMONodeBase>
-    </>
+        height={MEDIUM_NODE_SIZE}
+        style={{ top: 0, bottom: "auto" }}
+        content={content}
+        fontSize={fontSize}
+        maxLength={50}
+      />
+    </DEMONodeBase>
   );
 };
 

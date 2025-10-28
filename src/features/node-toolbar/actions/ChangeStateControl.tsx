@@ -1,5 +1,6 @@
 import {
   getNode,
+  updateNode,
   updateNodeState,
 } from "$/features/modeler/useDEMOModelerStore";
 import {
@@ -25,6 +26,7 @@ import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DE
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
 import { useTranslation } from "react-i18next";
+import { calculateDoubleDiamondInCircleDimensions } from "$/features/shapes/utils/calculateDoubleDiamondInCircleDimensions";
 
 const NODES_WITH_STATE = [
   "actor",
@@ -169,6 +171,27 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
             for (const entry of selection) {
               if (typeof entry !== "string") return;
               updateNodeState(nodeId, entry);
+              if (entry === "double") {
+                if (!node.measured?.height) return;
+                const newNodeWidth =
+                  calculateDoubleDiamondInCircleDimensions(node.measured.height)
+                    .width + 4;
+                updateNode(nodeId, (node) => ({
+                  ...node,
+                  style: {
+                    ...node.style,
+                    width: newNodeWidth,
+                  },
+                }));
+              } else {
+                updateNode(nodeId, (node) => ({
+                  ...node,
+                  style: {
+                    ...node.style,
+                    width: node.style.height ?? node.measured.height ?? 0,
+                  },
+                }));
+              }
             }
           }}
         >

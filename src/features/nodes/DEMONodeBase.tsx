@@ -83,7 +83,7 @@ const DEMONodeBase = ({
           type={type}
         />
       )}
-      {data?.handles && isEnabled && !isExportEnabled && (
+      {"handles" in data && isEnabled && !isExportEnabled && (
         <Handles
           nodeId={id}
           handles={data?.handles}
@@ -92,7 +92,7 @@ const DEMONodeBase = ({
         />
       )}
       {/* Shape */}
-      {DEMOShape && (
+      {DEMOShape && type !== "several_actors" && (
         <Shape
           ref={shapeRef}
           width={width}
@@ -103,9 +103,9 @@ const DEMONodeBase = ({
           }
         >
           <DEMOShape
-            state={data?.state}
-            scope={data?.scope}
-            color={data?.color}
+            state={"state" in data ? data.state : undefined}
+            scope={"scope" in data ? data.scope : undefined}
+            color={"color" in data ? data.color : undefined}
           />
         </Shape>
       )}

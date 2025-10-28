@@ -12,18 +12,16 @@ const TransactionTimeNode = ({
   height,
 }: NodeProps<TransactionTimeNodeType>) => {
   return (
-    <>
-      <DEMONodeBase
-        id={id}
-        data={data}
-        selected={selected}
-        width={width}
-        height={height}
-        type="transaction_time"
-        actions={["changeColor", "delete", "toggleHandlesVisibility"]}
-        resizerProps={{ maxHeight: SMALL_NODE_SIZE }}
-      />
-    </>
+    <DEMONodeBase
+      id={id}
+      data={data}
+      selected={selected}
+      width={width}
+      height={height}
+      type="transaction_time"
+      actions={["changeColor", "delete", "toggleHandlesVisibility"]}
+      resizerProps={{ maxHeight: SMALL_NODE_SIZE }}
+    />
   );
 };
 

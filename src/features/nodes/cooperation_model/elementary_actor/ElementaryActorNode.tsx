@@ -15,7 +15,7 @@ const ElementaryActorNode = ({
   width,
   height,
 }: NodeProps<ElementaryActorNodeType>) => {
-  const { content, fontSize, isEditable } = data;
+  const { content, fontSize, isEditable, actions } = data;
 
   return (
     <>

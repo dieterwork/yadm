@@ -30,11 +30,11 @@ export const DEFAULT_SIZE_MAP = {
   },
   elementary_actor: {
     width: 200,
-    height: 225,
+    height: 300,
   },
   several_actors: {
     width: 200,
-    height: 225,
+    height: 300,
   },
 
   // transaction pattern diagram

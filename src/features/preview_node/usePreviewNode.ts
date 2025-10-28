@@ -8,7 +8,7 @@ import {
 import { useReactFlow, useStore } from "@xyflow/react";
 import uuid from "$/shared/utils/uuid";
 import { createNode } from "../nodes/utils/createNode";
-import { addNode, setAction, setNodes } from "../modeler/useDEMOModelerStore";
+import { addNode } from "../modeler/useDEMOModelerStore";
 import { X_SMALL_NODE_SIZE } from "../nodes/utils/consts";
 
 const ofdNodes = ["c_fact", "c_act", "tk_execution", "initiation_fact"];

@@ -22,6 +22,10 @@ const getActionLabel = (action: ModelerAction) => {
 const ActionStatus = () => {
   const action = useDEMOModelerStore((state) => state.action);
   const actionLabel = getActionLabel(action);
+
+  return <div className="action-status">
+    
+  </div>
 };
 
 export default ActionStatus;

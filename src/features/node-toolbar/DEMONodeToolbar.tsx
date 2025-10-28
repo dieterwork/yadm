@@ -78,7 +78,7 @@ const DEMONodeToolbar = ({
 
         {actions?.indexOf("delete") !== -1 && (
           <>
-            <DEMOElementToolbarSeparator />
+            {actions.length > 1 && <DEMOElementToolbarSeparator />}
             <DEMOElementToolbarGroup
               aria-label={t(($) => $["Danger zone actions"])}
             >

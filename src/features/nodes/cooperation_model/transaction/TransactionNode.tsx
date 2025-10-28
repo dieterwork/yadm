@@ -1,10 +1,16 @@
-import { type NodeProps, Handle, Position } from "@xyflow/react";
+import {
+  type NodeProps,
+  Handle,
+  Position,
+  useUpdateNodeInternals,
+} from "@xyflow/react";
 
 import type { TransactionNode as TransactionNodeType } from "./transaction.types";
 import DEMONodeBase from "../../DEMONodeBase";
 import uuid from "../../../../shared/utils/uuid";
 import EditableContent from "../../../editable_content/EditableContent";
 import { calculateDoubleDiamondInCircleDimensions } from "../../../shapes/utils/calculateDoubleDiamondInCircleDimensions";
+import { useEffect } from "react";
 
 const handlePositions = [
   Position.Top,
@@ -20,11 +26,7 @@ const TransactionNode = ({
   width,
   height,
 }: NodeProps<TransactionNodeType>) => {
-  const { content, fontSize, isEditable } = data;
-
-  if (data.state === "double" && height) {
-    width = calculateDoubleDiamondInCircleDimensions(height).width + 4;
-  }
+  const { content, fontSize, isEditable, actions } = data;
 
   return (
     <>
@@ -36,15 +38,18 @@ const TransactionNode = ({
         height={height}
         type="transaction"
         keepAspectRatio={true}
-        actions={[
-          "addHandle",
-          "changeColor",
-          "changeFontSize",
-          "delete",
-          "toggleHandlesVisibility",
-          "changeScope",
-          "editText",
-        ]}
+        actions={
+          actions ?? [
+            "addHandle",
+            "changeColor",
+            "changeFontSize",
+            "delete",
+            "toggleHandlesVisibility",
+            "changeScope",
+            "editText",
+            "changeState",
+          ]
+        }
         resizable={false}
       >
         <EditableContent
