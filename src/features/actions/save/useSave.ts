@@ -16,16 +16,21 @@ const useSave = () => {
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const fileName = useDEMOModelerStore((state) => state.fileName);
 
+  const saveDEMOModel = () => {
+    if (!DEMOInstance) return;
+    const jsonModel = JSON.stringify({
+      ...DEMOInstance.toObject(),
+      isEnabled,
+      version: "1.0.0",
+    } satisfies DEMOModelJSON);
+    localStorage.setItem("demo-model", jsonModel);
+  };
+
   const save = () => {
     try {
       if (!DEMOInstance) return;
       fileNameSchema.parse(fileName);
-      const jsonModel = JSON.stringify({
-        ...DEMOInstance.toObject(),
-        isEnabled,
-        version: "1.0.0",
-      } satisfies DEMOModelJSON);
-      localStorage.setItem("demo-model", jsonModel);
+      saveDEMOModel();
       return { success: true };
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -35,7 +40,7 @@ const useSave = () => {
   };
 
   const autoSave = debounce(() => {
-    save();
+    saveDEMOModel();
   }, 3000);
 
   return { save, autoSave };
