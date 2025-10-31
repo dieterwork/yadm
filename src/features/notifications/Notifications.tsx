@@ -1,5 +1,8 @@
 import {
   CheckCircleIcon,
+  InfoIcon,
+  LinkBreakIcon,
+  LinkIcon,
   WarningIcon,
   XCircleIcon,
   XIcon,
@@ -54,7 +57,7 @@ const Notifications = () => {
                 {toast.type === "error" && (
                   <XCircleIcon
                     size={24}
-                    color="var(--color-emerald-500)"
+                    color="var(--color-rose-500)"
                     weight="fill"
                   />
                 )}
@@ -65,23 +68,31 @@ const Notifications = () => {
                     weight="fill"
                   />
                 )}
+                {toast.icon === "link" && (
+                  <LinkIcon size={24} color="var(--color-sky-900)" />
+                )}
+                {toast.icon === "linkBreak" && (
+                  <LinkBreakIcon size={24} color="var(--color-slate-900)" />
+                )}
               </div>
               {/* @ts-ignore */}
               <div className="leading-[1.3]">{toast.message}</div>
-              <div className="grid place-items-center">
-                <Button
-                  className="cursor-pointer"
-                  onPress={() => {
-                    toastFn.dismiss(toast.id);
-                  }}
-                >
-                  <XIcon
-                    aria-label="Close toast"
-                    size={14}
-                    color="var(--color-slate-900)"
-                  />
-                </Button>
-              </div>
+              {toast.duration !== 0 && (
+                <div className="grid place-items-center">
+                  <Button
+                    className="cursor-pointer"
+                    onPress={() => {
+                      toastFn.dismiss(toast.id);
+                    }}
+                  >
+                    <XIcon
+                      aria-label="Close toast"
+                      size={14}
+                      color="var(--color-slate-900)"
+                    />
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         );

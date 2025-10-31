@@ -13,13 +13,15 @@ import DEMONodeResizer from "../resize/NodeResizer";
 import Handles from "../connection_handles/Handles";
 import { cn } from "@sglara/cn";
 import { useDEMOModelerStore } from "../modeler/useDEMOModelerStore";
+import { NotchesIcon } from "@phosphor-icons/react";
 
-interface DEMONodeBaseProps extends NodeProps<DEMONode> {
+interface DEMONodeBaseProps extends Omit<NodeProps<DEMONode>, "dragHandle"> {
   resizable?: boolean;
   keepAspectRatio?: boolean;
   children: ReactNode;
   actions?: NodeToolbarAction[] | null;
   resizerProps?: NodeResizerProps;
+  dragHandle?: boolean;
 }
 
 export type NodeToolbarAction =
@@ -53,6 +55,7 @@ const DEMONodeBase = ({
     "editText",
   ],
   resizerProps,
+  dragHandle,
 }: DEMONodeBaseProps) => {
   if (type === "text")
     throw new Error("Cannot render node primitive with text node");
@@ -92,22 +95,30 @@ const DEMONodeBase = ({
         />
       )}
       {/* Shape */}
-      {DEMOShape && type !== "several_actors" && (
-        <Shape
-          ref={shapeRef}
-          width={width}
-          height={height}
-          strokeWidth={2}
-          isHighlighted={
-            selected && !resizable && isEnabled && !isExportEnabled
-          }
-        >
-          <DEMOShape
-            state={"state" in data ? data.state : undefined}
-            scope={"scope" in data ? data.scope : undefined}
-            color={"color" in data ? data.color : undefined}
-          />
-        </Shape>
+      {DEMOShape &&
+        type !== "several_actors" &&
+        type !== "transactor" &&
+        type !== "elementary_actor" && (
+          <Shape
+            ref={shapeRef}
+            width={width}
+            height={height}
+            strokeWidth={2}
+            isHighlighted={
+              selected && !resizable && isEnabled && !isExportEnabled
+            }
+          >
+            <DEMOShape
+              state={"state" in data ? data.state : undefined}
+              scope={"scope" in data ? data.scope : undefined}
+              color={"color" in data ? data.color : undefined}
+            />
+          </Shape>
+        )}
+      {dragHandle && (
+        <div className="drag-handle | absolute bottom-2 right-2">
+          <NotchesIcon color="var(--clr-slate-900" size={32} />
+        </div>
       )}
       {children}
     </div>

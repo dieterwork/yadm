@@ -142,3 +142,14 @@ body,
 @utility no-scrollbar {
   @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
 }
+
+.react-flow {
+  &[data-action="attach"] {
+    .react-flow__pane {
+      cursor: crosshair;
+      .react-flow__node.draggable {
+        cursor: crosshair;
+      }
+    }
+  }
+}

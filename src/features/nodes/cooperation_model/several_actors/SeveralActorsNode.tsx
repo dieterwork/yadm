@@ -17,6 +17,7 @@ const SeveralActorsNode = ({
   selected,
   width,
   height,
+  dragHandle,
 }: NodeProps<SeveralActorsNodeType>) => {
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const node = getNode(id);
@@ -74,6 +75,7 @@ const SeveralActorsNode = ({
       type="several_actors"
       actions={["delete"]}
       resizerProps={{ onResize }}
+      dragHandle={!!dragHandle}
     />
   );
 };

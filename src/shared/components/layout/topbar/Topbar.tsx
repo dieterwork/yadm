@@ -4,7 +4,6 @@ import FileMenu from "./menus/FileMenu";
 import { PencilIcon } from "@phosphor-icons/react";
 import HelpMenu from "./menus/HelpMenu";
 import { VisuallyHidden } from "react-aria";
-import { useState } from "react";
 import { setFileName } from "$/features/modeler/useDEMOModelerStore";
 import formatDate from "$/shared/utils/formatDate";
 import { useTranslation } from "react-i18next";
@@ -39,10 +38,11 @@ const Topbar = () => {
                   <TextField
                     onChange={(e) => {
                       const date = formatDate();
-                      setFileName(`${e} ` + date);
                       if (e === "") {
-                        setFileName("Demo Model" + date);
+                        return setFileName("Demo Model" + date);
                       }
+                      const fileName = `${e} ` + date;
+                      setFileName(fileName);
                     }}
                     className="border-1 border-slate-200 rounded-sm text-sm h-[2rem] content-center px-2 focus-within:ring-2 focus-within:ring-sky-500"
                   >

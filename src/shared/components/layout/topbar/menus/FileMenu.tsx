@@ -32,8 +32,14 @@ const FileMenu = () => {
       </TopbarMenuItem>
       <TopbarMenuItem
         onAction={() => {
-          save();
-          toast.success(`Saved "${fileName}"`);
+          const result = save();
+          if (result?.success) {
+            toast.success(`Saved "${fileName}"`);
+          } else if (result?.error) {
+            for (const error of result?.error.issues) {
+              toast.error(error.message);
+            }
+          }
         }}
       >
         {t(($) => $["Save"])}

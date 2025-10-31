@@ -9,10 +9,15 @@ export const downloadFile = (dataUrl: string, fileName: string) => {
   a.remove();
 };
 
-export const generatePNG = async (
-  nodesBounds: Rect,
-  scaleFactor: number = 1
-) => {
+export const generatePNG = async ({
+  nodesBounds,
+  backgroundColor = "transparent",
+  scaleFactor = 1,
+}: {
+  nodesBounds: Rect;
+  backgroundColor?: string;
+  scaleFactor?: number;
+}) => {
   const padding = scaleFactor * 10;
   const imageWidth = nodesBounds.width * scaleFactor + padding;
   const imageHeight = nodesBounds.height * scaleFactor + padding;
@@ -30,7 +35,7 @@ export const generatePNG = async (
   ) as HTMLDivElement;
 
   return await toPng(viewportDomEl, {
-    backgroundColor: "#ffffff",
+    backgroundColor: backgroundColor,
     width: imageWidth,
     height: imageHeight,
     style: {

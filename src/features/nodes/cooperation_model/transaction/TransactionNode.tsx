@@ -29,41 +29,40 @@ const TransactionNode = ({
   const { content, fontSize, isEditable, actions } = data;
 
   return (
-    <>
-      <DEMONodeBase
-        id={id}
-        data={data}
-        selected={selected}
-        width={width}
+    <DEMONodeBase
+      id={id}
+      data={data}
+      selected={selected}
+      width={width}
+      height={height}
+      type="transaction"
+      keepAspectRatio={true}
+      actions={
+        actions ?? [
+          "addHandle",
+          "changeColor",
+          "changeFontSize",
+          "delete",
+          "toggleHandlesVisibility",
+          "changeScope",
+          "editText",
+          "changeState",
+        ]
+      }
+      resizable={false}
+    >
+      <EditableContent
+        isSelected={selected}
+        isEditable={isEditable && data.state !== "unclear"}
+        content={content}
+        width={data.state === "double" ? height : width}
         height={height}
-        type="transaction"
-        keepAspectRatio={true}
-        actions={
-          actions ?? [
-            "addHandle",
-            "changeColor",
-            "changeFontSize",
-            "delete",
-            "toggleHandlesVisibility",
-            "changeScope",
-            "editText",
-            "changeState",
-          ]
-        }
-        resizable={false}
-      >
-        <EditableContent
-          isSelected={selected}
-          isEditable={isEditable && data.state !== "unclear"}
-          content={content}
-          width={data.state === "double" ? height : width}
-          height={height}
-          fontSize={fontSize}
-          hide={data.state === "unclear"}
-          maxLength={50}
-        />
-      </DEMONodeBase>
-    </>
+        fontSize={fontSize}
+        hide={data.state === "unclear"}
+        maxLength={50}
+        style={{ right: data.state === "double" ? "auto" : 0 }}
+      />
+    </DEMONodeBase>
   );
 };
 

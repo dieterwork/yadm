@@ -16,7 +16,7 @@ const calcDefaultHandlePosition = (
   offset?: number
 ) => {
   const handleNum = handleIndex + 1;
-  const sizeWithOffset = size - Math.abs(offset ?? 0);
+  const sizeWithOffset = size - (offset ?? 0);
   const handlePercentage =
     handleNum / Math.floor(Math.min(numOfHandles, max ?? 999) + 1);
   const position = handlePercentage * sizeWithOffset + (offset ?? 0);

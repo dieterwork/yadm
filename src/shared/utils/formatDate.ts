@@ -6,7 +6,7 @@ const formatDate = (date: Date = new Date()) => {
   const hours = date.getUTCHours();
   const minutes = date.getUTCMinutes();
   const seconds = date.getUTCSeconds();
-  return `(${day}-${month}-${year} ${hours}hr ${minutes}min ${seconds}sec UTC)`;
+  return `(${day}_${month}_${year} ${hours}hr ${minutes}min ${seconds}sec UTC)`;
 };
 
 export default formatDate;

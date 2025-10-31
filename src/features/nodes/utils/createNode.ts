@@ -40,6 +40,7 @@ export const createNode = ({
     case "actor": {
       return {
         id: `actor_${id}`,
+        ariaLabel: "Actor",
         type: type,
         position,
         data: {
@@ -75,6 +76,7 @@ export const createNode = ({
     case "transaction": {
       return {
         id: `transaction_${id}`,
+        ariaLabel: "Transaction",
         type: type,
         position,
         data: {
@@ -111,150 +113,6 @@ export const createNode = ({
     }
 
     case "transactor": {
-      return {
-        id: id,
-        type: type,
-        position,
-        data: {
-          state: "default",
-          content: DEFAULT_CONTENT_MAP[type],
-          handles: {
-            isVisible: true,
-            top: {
-              handles: [{ id: uuid(), type: "source" }],
-              max: 1,
-            },
-            bottom: {
-              handles: [{ id: uuid(), type: "source" }],
-            },
-            left: {
-              handles: [{ id: uuid(), type: "source" }],
-              offset: MEDIUM_NODE_SIZE / 2,
-            },
-            right: {
-              handles: [{ id: uuid(), type: "source" }],
-              offset: MEDIUM_NODE_SIZE / 2,
-            },
-          },
-        },
-        style: {
-          width: DEFAULT_SIZE_MAP[type].width,
-          height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
-          stroke: "black",
-        },
-        selected: true,
-      };
-    }
-
-    case "self_activation": {
-      return {
-        id: id,
-        type: type,
-        position,
-        data: {
-          state: "default",
-          content: DEFAULT_CONTENT_MAP[type],
-          handles: {
-            isVisible: true,
-            top: {
-              handles: [{ id: uuid(), type: "source" }],
-            },
-            bottom: {
-              handles: [{ id: uuid(), type: "source" }],
-            },
-            left: {
-              handles: [{ id: uuid(), type: "source" }],
-            },
-            right: {
-              handles: [{ id: uuid(), type: "source" }],
-            },
-          },
-        },
-        style: {
-          width: DEFAULT_SIZE_MAP[type].width,
-          height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
-          stroke: "black",
-        },
-        selected: true,
-      };
-    }
-
-    case "composite": {
-      return {
-        id: id,
-        type: type,
-        position,
-        data: {
-          state: "default",
-          content: DEFAULT_CONTENT_MAP[type],
-          handles: {
-            isVisible: true,
-            top: {
-              handles: [{ id: uuid(), type: "source" }],
-            },
-            bottom: {
-              handles: [{ id: uuid(), type: "source" }],
-            },
-            left: {
-              handles: [{ id: uuid(), type: "source" }],
-            },
-            right: {
-              handles: [{ id: uuid(), type: "source" }],
-            },
-          },
-        },
-        style: {
-          width: DEFAULT_SIZE_MAP[type].width,
-          height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
-          stroke: "var(--color-slate-500)",
-          strokeWidth: 16,
-        },
-        selected: true,
-      };
-    }
-
-    case "elementary_actor": {
-      return {
-        id: id,
-        type: type,
-        position,
-        data: {
-          state: "default",
-          content: DEFAULT_CONTENT_MAP[type],
-          handles: {
-            isVisible: true,
-            top: {
-              handles: [{ id: uuid(), type: "source" }],
-              max: 1,
-            },
-            bottom: {
-              handles: [{ id: uuid(), type: "source" }],
-            },
-            left: {
-              handles: [{ id: uuid(), type: "source" }],
-              offset: MEDIUM_NODE_SIZE / 2,
-            },
-            right: {
-              handles: [{ id: uuid(), type: "source" }],
-              offset: MEDIUM_NODE_SIZE / 2,
-            },
-          },
-        },
-        style: {
-          width: DEFAULT_SIZE_MAP[type].width,
-          height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
-          stroke: "var(--color-slate-500)",
-          strokeWidth: 16,
-        },
-        selected: true,
-      };
-    }
-
-    case "several_actors": {
       const transactionId = uuid();
       const actorId = uuid();
       const transactionSize = calculateDoubleDiamondInCircleDimensions(
@@ -265,6 +123,7 @@ export const createNode = ({
         {
           id: id,
           type: type,
+          ariaLabel: "Transactor",
           position,
           data: {
             state: "default",
@@ -281,11 +140,13 @@ export const createNode = ({
           },
           selected: true,
           draggable: true,
-          zIndex: 5000,
+          zIndex: 9999,
+          dragHandle: "drag-handle",
         },
         {
           id: actorId,
           type: "actor",
+          ariaLabel: "Actor",
           position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
           data: {
             state: "default",
@@ -335,6 +196,344 @@ export const createNode = ({
         {
           id: transactionId,
           type: "transaction",
+          ariaLabel: "Transaction",
+          position: {
+            x:
+              DEFAULT_SIZE_MAP[type].width / 2 -
+              DEFAULT_SIZE_MAP["transaction"].width / 2,
+            y: 0,
+          },
+          data: {
+            state: "default",
+            content: DEFAULT_CONTENT_MAP["transaction"],
+            handles: {
+              isVisible: true,
+              top: {
+                handles: [{ id: uuid(), type: "source" }],
+                max: 1,
+              },
+            },
+            actions: [
+              "addHandle",
+              "changeColor",
+              "toggleHandlesVisibility",
+              "editText",
+              "changeFontSize",
+            ],
+            resizable: false,
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP["transaction"].width,
+            height: DEFAULT_SIZE_MAP["transaction"].height,
+            stroke: "var(--color-slate-900)",
+            strokeWidth: 2,
+          },
+          selected: false,
+          parentId: id,
+          extent: [
+            [
+              DEFAULT_SIZE_MAP[type].width / 2 -
+                DEFAULT_SIZE_MAP["transaction"].width / 2,
+              0,
+            ],
+            [
+              DEFAULT_SIZE_MAP[type].width / 2 +
+                DEFAULT_SIZE_MAP["transaction"].width / 2,
+              DEFAULT_SIZE_MAP["transaction"].height,
+            ],
+          ],
+          zIndex: 3000,
+          draggable: false,
+        },
+      ];
+    }
+
+    case "self_activation": {
+      return {
+        id: id,
+        type: type,
+        position,
+        ariaLabel: "Self Activation",
+        data: {
+          state: "default",
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            isVisible: true,
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
+        style: {
+          width: DEFAULT_SIZE_MAP[type].width,
+          height: DEFAULT_SIZE_MAP[type].height,
+          fill: "white",
+          stroke: "black",
+        },
+        selected: true,
+      };
+    }
+
+    case "composite": {
+      return {
+        id: id,
+        type: type,
+        position,
+        ariaLabel: "Composite",
+        data: {
+          state: "default",
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            isVisible: true,
+            top: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            bottom: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            left: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+            right: {
+              handles: [{ id: uuid(), type: "source" }],
+            },
+          },
+        },
+        style: {
+          width: DEFAULT_SIZE_MAP[type].width,
+          height: DEFAULT_SIZE_MAP[type].height,
+          fill: "white",
+          stroke: "var(--color-slate-500)",
+          strokeWidth: 16,
+        },
+        selected: true,
+      };
+    }
+
+    case "elementary_actor": {
+      const transactionId = uuid();
+      const compositeId = uuid();
+
+      return [
+        {
+          id: id,
+          type: type,
+          position,
+          ariaLabel: "Elementary Actor",
+          data: {
+            state: "default",
+            content: DEFAULT_CONTENT_MAP[type],
+            actions: [
+              "changeColor",
+              "changeFontSize",
+              "toggleHandlesVisibility",
+            ],
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP[type].width,
+            height: DEFAULT_SIZE_MAP[type].height,
+          },
+          selected: true,
+          draggable: true,
+          zIndex: 5000,
+        },
+        {
+          id: compositeId,
+          type: "composite",
+          ariaLabel: "Composite",
+          position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
+          data: {
+            state: "default",
+            content: DEFAULT_CONTENT_MAP["composite"],
+            handles: {
+              isVisible: true,
+              bottom: {
+                handles: [{ id: uuid(), type: "source" }],
+                max: 1,
+              },
+              left: {
+                handles: [{ id: uuid(), type: "source" }],
+                max: 1,
+              },
+              right: {
+                handles: [{ id: uuid(), type: "source" }],
+                max: 1,
+              },
+            },
+            resizable: false,
+            actions: [
+              "addHandle",
+              "changeColor",
+              "toggleHandlesVisibility",
+              "editText",
+              "changeFontSize",
+            ],
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP[type].width,
+            height:
+              DEFAULT_SIZE_MAP[type].height -
+              DEFAULT_SIZE_MAP["transaction"].height / 2,
+            fill: "white",
+            stroke: "var(--color-slate-500)",
+          },
+          selected: false,
+          parentId: id,
+          draggable: false,
+          extent: [
+            [0, DEFAULT_SIZE_MAP["transaction"].height],
+            [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
+          ],
+          zIndex: 2000,
+        },
+        {
+          id: transactionId,
+          type: "transaction",
+          ariaLabel: "Transaction",
+          position: {
+            x:
+              DEFAULT_SIZE_MAP[type].width / 2 -
+              DEFAULT_SIZE_MAP["transaction"].width / 2,
+            y: 0,
+          },
+          data: {
+            state: "default",
+            content: DEFAULT_CONTENT_MAP["transaction"],
+            handles: {
+              isVisible: true,
+              top: {
+                handles: [{ id: uuid(), type: "source" }],
+                max: 1,
+              },
+            },
+            actions: [
+              "addHandle",
+              "changeColor",
+              "toggleHandlesVisibility",
+              "editText",
+              "changeFontSize",
+            ],
+            resizable: false,
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP["transaction"].width,
+            height: DEFAULT_SIZE_MAP["transaction"].height,
+            stroke: "var(--color-slate-900)",
+            strokeWidth: 2,
+          },
+          selected: false,
+          parentId: id,
+          extent: [
+            [
+              DEFAULT_SIZE_MAP[type].width / 2 -
+                DEFAULT_SIZE_MAP["transaction"].width / 2,
+              0,
+            ],
+            [
+              DEFAULT_SIZE_MAP[type].width / 2 +
+                DEFAULT_SIZE_MAP["transaction"].width / 2,
+              DEFAULT_SIZE_MAP["transaction"].height,
+            ],
+          ],
+          zIndex: 3000,
+          draggable: false,
+        },
+      ];
+    }
+
+    case "several_actors": {
+      const transactionId = uuid();
+      const actorId = uuid();
+      const transactionSize = calculateDoubleDiamondInCircleDimensions(
+        DEFAULT_SIZE_MAP["transaction"].width
+      );
+      transactionSize.width = transactionSize.width + 4;
+      return [
+        {
+          id: id,
+          type: type,
+          position,
+          ariaLabel: "Several Actors",
+          data: {
+            state: "default",
+            content: DEFAULT_CONTENT_MAP[type],
+            actions: [
+              "changeColor",
+              "changeFontSize",
+              "toggleHandlesVisibility",
+            ],
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP[type].width,
+            height: DEFAULT_SIZE_MAP[type].height,
+          },
+          selected: true,
+          draggable: true,
+          zIndex: 5000,
+        },
+        {
+          id: actorId,
+          type: "actor",
+          ariaLabel: "Actor",
+          position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
+          data: {
+            state: "default",
+            content: DEFAULT_CONTENT_MAP["actor"],
+            handles: {
+              isVisible: true,
+              bottom: {
+                handles: [{ id: uuid(), type: "source" }],
+                max: 1,
+              },
+              left: {
+                handles: [{ id: uuid(), type: "source" }],
+                max: 1,
+              },
+              right: {
+                handles: [{ id: uuid(), type: "source" }],
+                max: 1,
+              },
+            },
+            resizable: false,
+            actions: [
+              "addHandle",
+              "changeColor",
+              "toggleHandlesVisibility",
+              "editText",
+              "changeFontSize",
+            ],
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP[type].width,
+            height:
+              DEFAULT_SIZE_MAP[type].height -
+              DEFAULT_SIZE_MAP["transaction"].height / 2,
+            fill: "white",
+            stroke: "var(--color-slate-900)",
+            strokeWidth: 2,
+          },
+          selected: false,
+          parentId: id,
+          draggable: false,
+          extent: [
+            [0, DEFAULT_SIZE_MAP["transaction"].height],
+            [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
+          ],
+          zIndex: 2000,
+        },
+        {
+          id: transactionId,
+          type: "transaction",
+          ariaLabel: "Transaction",
           position: {
             x: DEFAULT_SIZE_MAP[type].width / 2 - transactionSize.width / 2,
             y: 0,
@@ -347,6 +546,8 @@ export const createNode = ({
               top: {
                 handles: [{ id: uuid(), type: "source" }],
                 max: 1,
+                offset:
+                  DEFAULT_SIZE_MAP["transaction"].width * (1 / 8) * -1 - 1,
               },
             },
             actions: [
@@ -384,6 +585,7 @@ export const createNode = ({
         id: id,
         type: type,
         position,
+        ariaLabel: "Production Event",
         data: {
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
@@ -427,6 +629,7 @@ export const createNode = ({
         id: id,
         type: type,
         position,
+        ariaLabel: "Entity Class",
         data: {
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
@@ -461,6 +664,7 @@ export const createNode = ({
         id,
         type: type,
         position,
+        ariaLabel: "Derived Entity",
         data: {
           scope: "in",
           content: DEFAULT_CONTENT_MAP[type],
@@ -498,6 +702,7 @@ export const createNode = ({
           id,
           type: "transaction_time",
           position,
+          ariaLabel: "Transaction Time",
           data: {
             handles: {
               isVisible: true,
@@ -523,6 +728,7 @@ export const createNode = ({
           id: uuid(),
           parentId: id,
           type: "transaction_kind",
+          ariaLabel: "Transaction Kind",
           position: {
             x:
               DEFAULT_SIZE_MAP["transaction_time"].width / 2 -
@@ -555,6 +761,7 @@ export const createNode = ({
         type,
         position,
         parentId,
+        ariaLabel: "Initiation Fact",
         data: {
           color: "default",
           handles: {
@@ -595,6 +802,7 @@ export const createNode = ({
         type,
         position,
         parentId,
+        ariaLabel: "C-Fact",
         data: {
           color: "default",
           handles: {
@@ -635,6 +843,7 @@ export const createNode = ({
         type,
         position,
         parentId,
+        ariaLabel: "C-Act",
         data: {
           color: "default",
           handles: {
@@ -674,6 +883,7 @@ export const createNode = ({
         type,
         position,
         parentId,
+        ariaLabel: "TK / Execution",
         data: {
           color: "default",
           handles: {
@@ -713,6 +923,7 @@ export const createNode = ({
         type,
         position,
         parentId,
+        ariaLabel: "Text",
         data: {
           fontSize: 12,
           alignContent: "start",

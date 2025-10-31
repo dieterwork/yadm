@@ -20,7 +20,7 @@ const useExport = () => {
   const exportAsPNG = async (scaleFactor: number) => {
     try {
       setExportEnabled(true);
-      const { url } = await generatePNG(nodesBounds, scaleFactor);
+      const { url } = await generatePNG({ nodesBounds, scaleFactor });
       downloadFile(url, fileName + ` x${scaleFactor}.png`);
       setExportEnabled(false);
     } catch (err) {
@@ -31,10 +31,10 @@ const useExport = () => {
   const exportAsPDF = async (scaleFactor: number) => {
     try {
       setExportEnabled(true);
-      const { url, width, height } = await generatePNG(
+      const { url, width, height } = await generatePNG({
         nodesBounds,
-        scaleFactor * (4 / 3)
-      );
+        scaleFactor: scaleFactor * (4 / 3),
+      });
       const doc = new jsPDF("landscape", "px", [width, height]);
       doc.addImage(url, "png", width / 4, height / 4, width / 2, height / 2);
       doc.output("dataurlnewwindow", {

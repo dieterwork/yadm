@@ -12,7 +12,7 @@ import "@xyflow/react/dist/style.css";
 import { edgeTypes, type DEMOEdge } from "../edges/edges.types";
 import { nodeTypes, type DEMONode } from "../nodes/nodes.types";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   getNode,
   onConnect,
@@ -40,6 +40,8 @@ import useKeyboardShortcuts from "../keyboard/useKeyboardShortcuts";
 import useSave from "../actions/save/useSave";
 import useAttachNode from "../actions/attach/useAttachNode";
 import useTitleTranslate from "$/shared/hooks/useTitleTranslate";
+import toast from "react-hot-toast/headless";
+import { LinkIcon } from "@phosphor-icons/react";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -194,6 +196,14 @@ const DEMOModeler = () => {
     }
 
     attachNode([childNodeIdAttach], parentNodeId);
+    const childNode = getNode(childNodeIdAttach);
+    const parentNode = getNode(parentNodeId);
+    toast(
+      `Attached ${childNode.ariaLabel} node to ${parentNode.ariaLabel} node`,
+      {
+        icon: "link",
+      }
+    );
 
     resetAttach();
   };
@@ -220,6 +230,7 @@ const DEMOModeler = () => {
     >
       <div className="react-flow-wrapper | h-full">
         <ReactFlow
+          data-action={action}
           ref={ref}
           nodes={nodes}
           nodeTypes={nodeTypes}
