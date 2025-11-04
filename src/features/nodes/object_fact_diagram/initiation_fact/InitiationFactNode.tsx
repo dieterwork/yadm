@@ -9,6 +9,7 @@ const InitiationFactNode = ({
   selected,
   width,
   height,
+  draggable,
 }: NodeProps<InitiationFactNodeType>) => {
   return (
     <>
@@ -18,6 +19,7 @@ const InitiationFactNode = ({
         selected={selected}
         width={width}
         height={height}
+        draggable={draggable}
         resizable={false}
         type="initiation_fact"
         actions={[

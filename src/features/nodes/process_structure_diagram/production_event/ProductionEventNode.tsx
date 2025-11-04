@@ -10,43 +10,44 @@ const ProductionEventNode = ({
   selected,
   width,
   height,
+  draggable,
+  parentId,
 }: NodeProps<ProductionEventNodeType>) => {
   const { content, fontSize, isEditable } = data;
 
   return (
-    <>
-      <DEMONodeBase
-        id={id}
-        data={data}
-        selected={selected}
+    <DEMONodeBase
+      id={id}
+      data={data}
+      selected={selected}
+      width={width}
+      height={height}
+      type="production_event"
+      keepAspectRatio={true}
+      draggable={draggable}
+      actions={[
+        "addHandle",
+        "changeColor",
+        "changeFontSize",
+        "delete",
+        "editText",
+        "toggleHandlesVisibility",
+      ].concat(parentId ? "attachNode" : [])}
+    >
+      <EditableContent
+        isSelected={selected}
+        isEditable={isEditable}
+        content={content}
         width={width}
         height={height}
-        type="production_event"
-        keepAspectRatio={true}
-        actions={[
-          "addHandle",
-          "changeColor",
-          "changeFontSize",
-          "delete",
-          "editText",
-          "toggleHandlesVisibility",
-        ]}
-      >
-        <EditableContent
-          isSelected={selected}
-          isEditable={isEditable}
-          content={content}
-          width={width}
-          height={height}
-          fontSize={fontSize}
-          color={
-            data.color === "default"
-              ? "var(--color-white)"
-              : "var(--color-slate-900)"
-          }
-        />
-      </DEMONodeBase>
-    </>
+        fontSize={fontSize}
+        color={
+          data.color === "default"
+            ? "var(--color-white)"
+            : "var(--color-slate-900)"
+        }
+      />
+    </DEMONodeBase>
   );
 };
 

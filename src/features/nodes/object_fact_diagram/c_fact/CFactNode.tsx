@@ -9,25 +9,25 @@ const CFactNode = ({
   selected,
   width,
   height,
+  draggable,
 }: NodeProps<CFactNodeType>) => {
   return (
-    <>
-      <DEMONodeBase
-        id={id}
-        data={data}
-        selected={selected}
-        width={width}
-        height={height}
-        resizable={false}
-        type="c_fact"
-        actions={[
-          "delete",
-          "changeColor",
-          "attachNode",
-          "toggleHandlesVisibility",
-        ]}
-      />
-    </>
+    <DEMONodeBase
+      id={id}
+      data={data}
+      selected={selected}
+      width={width}
+      height={height}
+      resizable={false}
+      type="c_fact"
+      actions={[
+        "delete",
+        "changeColor",
+        "attachNode",
+        "toggleHandlesVisibility",
+      ]}
+      draggable={draggable}
+    />
   );
 };
 

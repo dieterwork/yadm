@@ -21,6 +21,8 @@ const ElementaryActorNode = ({
   width,
   height,
   dragHandle,
+  draggable,
+  parentId,
 }: NodeProps<ElementaryActorNodeType>) => {
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const node = getNode(id);
@@ -74,10 +76,11 @@ const ElementaryActorNode = ({
       id={id}
       data={data}
       selected={selected}
+      draggable={draggable}
       width={width}
       height={height}
       type="elementary_actor"
-      actions={["delete"]}
+      actions={["delete"].concat(parentId ? "attachNode" : [])}
       resizerProps={{ onResize }}
       dragHandle={!!dragHandle}
     />

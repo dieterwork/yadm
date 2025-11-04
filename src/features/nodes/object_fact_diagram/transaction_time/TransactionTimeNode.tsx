@@ -10,6 +10,8 @@ const TransactionTimeNode = ({
   selected,
   width,
   height,
+  draggable,
+  parentId,
 }: NodeProps<TransactionTimeNodeType>) => {
   return (
     <DEMONodeBase
@@ -18,8 +20,11 @@ const TransactionTimeNode = ({
       selected={selected}
       width={width}
       height={height}
+      draggable={draggable}
       type="transaction_time"
-      actions={["changeColor", "delete", "toggleHandlesVisibility"]}
+      actions={["changeColor", "delete", "toggleHandlesVisibility"].concat(
+        parentId ? "attachNode" : []
+      )}
       resizerProps={{ maxHeight: SMALL_NODE_SIZE }}
     />
   );

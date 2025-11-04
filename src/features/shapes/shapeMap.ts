@@ -11,6 +11,7 @@ import InitiationFactShape from "../nodes/object_fact_diagram/initiation_fact/In
 import TKExecutionShape from "../nodes/object_fact_diagram/tk_execution/TKExecutionShape";
 import TransactionKindShape from "../nodes/object_fact_diagram/transaction_kind/TransactionKindShape";
 import TransactionTimeShape from "../nodes/object_fact_diagram/transaction_time/TransactionTimeShape";
+import OrganizationShape from "../nodes/organization/OrganizationShape";
 import DerivedEntityShape from "../nodes/process_structure_diagram/derived_entity/DerivedEntityShape";
 import EntityClassShape from "../nodes/process_structure_diagram/entity_class/EntityClassShape";
 import ProductionEventShape from "../nodes/process_structure_diagram/production_event/ProductionEventShape";
@@ -35,4 +36,5 @@ export const shapeMap = {
   production_event: ProductionEventShape,
   entity_class: EntityClassShape,
   derived_entity: DerivedEntityShape,
+  organization: OrganizationShape,
 };

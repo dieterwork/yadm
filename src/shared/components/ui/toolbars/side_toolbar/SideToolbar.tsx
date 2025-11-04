@@ -18,6 +18,7 @@ import {
   LineVerticalIcon,
   SelectionPlusIcon,
   ShapesIcon,
+  SquareIcon,
 } from "@phosphor-icons/react";
 import { cn } from "@sglara/cn";
 import { useShallow } from "zustand/react/shallow";
@@ -276,6 +277,35 @@ const SideToolbar = () => {
               <FilePlusIcon
                 color={
                   previewNode?.type === "text"
+                    ? "var(--color-sky-500)"
+                    : "var(--color-slate-900)"
+                }
+              />
+            </DEMOModelerToolbarButton>
+          </TooltipTrigger>
+          <TooltipTrigger>
+            <DEMOModelerToolbarTooltip
+              orientation="vertical"
+              label={t(($) => $["Add organization node"])}
+            />
+            <DEMOModelerToolbarButton
+              aria-label={t(($) => $["Add organization node"])}
+              onClick={(e) => {
+                setPreviewNode({
+                  type: "organization",
+                  width: 100,
+                  height: 100,
+                  position: { x: e.clientX, y: e.clientY },
+                });
+              }}
+              onPress={() => {
+                setAction("preview");
+              }}
+              isDisabled={!isEnabled}
+            >
+              <SquareIcon
+                color={
+                  previewNode?.type === "organization"
                     ? "var(--color-sky-500)"
                     : "var(--color-slate-900)"
                 }

@@ -9,24 +9,24 @@ const CActNode = ({
   selected,
   width,
   height,
+  draggable,
 }: NodeProps<CActNodeType>) => {
   return (
-    <>
-      <DEMONodeBase
-        id={id}
-        data={data}
-        selected={selected}
-        width={width}
-        height={height}
-        type="c_act"
-        actions={[
-          "delete",
-          "changeColor",
-          "attachNode",
-          "toggleHandlesVisibility",
-        ]}
-      />
-    </>
+    <DEMONodeBase
+      id={id}
+      data={data}
+      selected={selected}
+      width={width}
+      height={height}
+      type="c_act"
+      draggable={draggable}
+      actions={[
+        "delete",
+        "changeColor",
+        "attachNode",
+        "toggleHandlesVisibility",
+      ]}
+    />
   );
 };
 

@@ -6,6 +6,7 @@ import {
   DEFAULT_SIZE_MAP,
   MEDIUM_NODE_SIZE,
   SMALL_NODE_SIZE,
+  X_SMALL_NODE_SIZE,
 } from "./consts";
 import type { CSSProperties } from "react";
 import { calculateDoubleDiamondInCircleDimensions } from "$/features/shapes/utils/calculateDoubleDiamondInCircleDimensions";
@@ -70,6 +71,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
+        zIndex: 1,
       };
     }
 
@@ -109,6 +111,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
+        zIndex: 1,
       };
     }
 
@@ -120,29 +123,6 @@ export const createNode = ({
       );
       transactionSize.width = transactionSize.width + 4;
       return [
-        {
-          id: id,
-          type: type,
-          ariaLabel: "Transactor",
-          position,
-          data: {
-            state: "default",
-            content: DEFAULT_CONTENT_MAP[type],
-            actions: [
-              "changeColor",
-              "changeFontSize",
-              "toggleHandlesVisibility",
-            ],
-          },
-          style: {
-            width: DEFAULT_SIZE_MAP[type].width,
-            height: DEFAULT_SIZE_MAP[type].height,
-          },
-          selected: true,
-          draggable: true,
-          zIndex: 9999,
-          dragHandle: "drag-handle",
-        },
         {
           id: actorId,
           type: "actor",
@@ -191,7 +171,7 @@ export const createNode = ({
             [0, DEFAULT_SIZE_MAP["transaction"].height],
             [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
           ],
-          zIndex: 2000,
+          zIndex: 1,
         },
         {
           id: transactionId,
@@ -242,8 +222,29 @@ export const createNode = ({
               DEFAULT_SIZE_MAP["transaction"].height,
             ],
           ],
-          zIndex: 3000,
+          zIndex: 2,
           draggable: false,
+        },
+        {
+          id: id,
+          type: type,
+          ariaLabel: "Transactor",
+          position,
+          data: {
+            state: "default",
+            content: DEFAULT_CONTENT_MAP[type],
+            actions: [
+              "changeColor",
+              "changeFontSize",
+              "toggleHandlesVisibility",
+            ],
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP[type].width,
+            height: DEFAULT_SIZE_MAP[type].height,
+          },
+          selected: true,
+          zIndex: 3,
         },
       ];
     }
@@ -280,6 +281,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
+        zIndex: 1,
       };
     }
 
@@ -316,6 +318,7 @@ export const createNode = ({
           strokeWidth: 16,
         },
         selected: true,
+        zIndex: 1,
       };
     }
 
@@ -324,28 +327,6 @@ export const createNode = ({
       const compositeId = uuid();
 
       return [
-        {
-          id: id,
-          type: type,
-          position,
-          ariaLabel: "Elementary Actor",
-          data: {
-            state: "default",
-            content: DEFAULT_CONTENT_MAP[type],
-            actions: [
-              "changeColor",
-              "changeFontSize",
-              "toggleHandlesVisibility",
-            ],
-          },
-          style: {
-            width: DEFAULT_SIZE_MAP[type].width,
-            height: DEFAULT_SIZE_MAP[type].height,
-          },
-          selected: true,
-          draggable: true,
-          zIndex: 5000,
-        },
         {
           id: compositeId,
           type: "composite",
@@ -393,7 +374,7 @@ export const createNode = ({
             [0, DEFAULT_SIZE_MAP["transaction"].height],
             [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
           ],
-          zIndex: 2000,
+          zIndex: 1,
         },
         {
           id: transactionId,
@@ -444,25 +425,14 @@ export const createNode = ({
               DEFAULT_SIZE_MAP["transaction"].height,
             ],
           ],
-          zIndex: 3000,
           draggable: false,
+          zIndex: 2,
         },
-      ];
-    }
-
-    case "several_actors": {
-      const transactionId = uuid();
-      const actorId = uuid();
-      const transactionSize = calculateDoubleDiamondInCircleDimensions(
-        DEFAULT_SIZE_MAP["transaction"].width
-      );
-      transactionSize.width = transactionSize.width + 4;
-      return [
         {
           id: id,
           type: type,
           position,
-          ariaLabel: "Several Actors",
+          ariaLabel: "Elementary Actor",
           data: {
             state: "default",
             content: DEFAULT_CONTENT_MAP[type],
@@ -477,9 +447,19 @@ export const createNode = ({
             height: DEFAULT_SIZE_MAP[type].height,
           },
           selected: true,
-          draggable: true,
-          zIndex: 5000,
+          zIndex: 3,
         },
+      ];
+    }
+
+    case "several_actors": {
+      const transactionId = uuid();
+      const actorId = uuid();
+      const transactionSize = calculateDoubleDiamondInCircleDimensions(
+        DEFAULT_SIZE_MAP["transaction"].width
+      );
+      transactionSize.width = transactionSize.width + 4;
+      return [
         {
           id: actorId,
           type: "actor",
@@ -528,7 +508,7 @@ export const createNode = ({
             [0, DEFAULT_SIZE_MAP["transaction"].height],
             [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
           ],
-          zIndex: 2000,
+          zIndex: 1,
         },
         {
           id: transactionId,
@@ -574,8 +554,29 @@ export const createNode = ({
               transactionSize.height,
             ],
           ],
-          zIndex: 3000,
+          zIndex: 2,
           draggable: false,
+        },
+        {
+          id: id,
+          type: type,
+          position,
+          ariaLabel: "Several Actors",
+          data: {
+            state: "default",
+            content: DEFAULT_CONTENT_MAP[type],
+            actions: [
+              "changeColor",
+              "changeFontSize",
+              "toggleHandlesVisibility",
+            ],
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP[type].width,
+            height: DEFAULT_SIZE_MAP[type].height,
+          },
+          selected: true,
+          zIndex: 3,
         },
       ];
     }
@@ -621,6 +622,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
+        zIndex: 1,
       };
     }
 
@@ -656,6 +658,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
+        zIndex: 1,
       };
     }
 
@@ -692,6 +695,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
+        zIndex: 1,
       };
     }
 
@@ -792,7 +796,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 2000,
+        zIndex: 3,
       };
     }
 
@@ -833,7 +837,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 2000,
+        zIndex: 3,
       };
     }
 
@@ -874,7 +878,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 2000,
+        zIndex: 3,
       };
     }
     case "tk_execution": {
@@ -914,7 +918,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 2000,
+        zIndex: 3,
       };
     }
     case "text": {
@@ -936,8 +940,56 @@ export const createNode = ({
           height: height ?? DEFAULT_SIZE_MAP["text"].height,
         },
         selected: selected ?? true,
-        zIndex: 3000,
+        zIndex: 4,
       };
+    }
+    case "organization": {
+      return [
+        {
+          id,
+          type,
+          position,
+          data: { state: "default" },
+          ariaLabel: "Organization",
+          style: {
+            width: width ?? DEFAULT_SIZE_MAP["organization"].width,
+            height: height ?? DEFAULT_SIZE_MAP["organization"].height,
+            fill: "white",
+            stroke: "var(--color-rose-500)",
+            strokeWidth: 16,
+          },
+          selected: selected ?? true,
+          zIndex: 0,
+        },
+        {
+          id: uuid(),
+          type: "text",
+          position: {
+            x:
+              DEFAULT_SIZE_MAP["organization"].width / 2 -
+              DEFAULT_SIZE_MAP["organization"].width / 4,
+            y: -X_SMALL_NODE_SIZE - 4,
+          },
+          parentId: id,
+          ariaLabel: "Text",
+          data: {
+            content: "",
+            textAlign: "center",
+            isEditable: false,
+            alignContent: "center",
+            fontSize: 12,
+            isBorderVisible: true,
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP["organization"].width / 2,
+            height: X_SMALL_NODE_SIZE,
+            fill: "white",
+            stroke: "var(--color-rose-500)",
+          },
+          selected: selected ?? true,
+          zIndex: 1,
+        },
+      ];
     }
     default:
       throw new Error(`Could not find node type ${type}`);

@@ -42,6 +42,7 @@ import useAttachNode from "../actions/attach/useAttachNode";
 import useTitleTranslate from "$/shared/hooks/useTitleTranslate";
 import toast from "react-hot-toast/headless";
 import { LinkIcon } from "@phosphor-icons/react";
+import { useNodeDragHandlers } from "../nodes/hooks/useNodeDragHandlers";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -223,6 +224,8 @@ const DEMOModeler = () => {
     return true;
   };
 
+  const { onNodeDrag, onNodeDragStop } = useNodeDragHandlers();
+
   return (
     <div
       className="DEMO-modeler | [grid-area:modeler] h-full"
@@ -230,10 +233,13 @@ const DEMOModeler = () => {
     >
       <div className="react-flow-wrapper | h-full">
         <ReactFlow
+          elevateNodesOnSelect={false}
           data-action={action}
           ref={ref}
           nodes={nodes}
           nodeTypes={nodeTypes}
+          onNodeDrag={onNodeDrag}
+          onNodeDragStop={onNodeDragStop}
           onNodesChange={(changes) => {
             onNodesChange(changes);
             autoSave();

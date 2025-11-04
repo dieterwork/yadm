@@ -29,7 +29,7 @@ const AttachNodeControl = ({ nodeId }: { nodeId: string }) => {
           detachNode([node.id]);
           setAction("pan");
           toast(
-            `Deattached ${childNode.ariaLabel} node from ${parentNode.ariaLabel}`,
+            `Detached ${childNode.ariaLabel} node from ${parentNode.ariaLabel} node`,
             { icon: "linkBreak" }
           );
         } else {

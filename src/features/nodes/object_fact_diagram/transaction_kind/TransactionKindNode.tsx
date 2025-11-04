@@ -10,33 +10,33 @@ const TransactionKindNode = ({
   selected,
   width,
   height,
+  draggable,
 }: NodeProps<TransactionKindNodeType>) => {
   const { content, fontSize, isEditable } = data;
 
   return (
-    <>
-      <DEMONodeBase
-        id={id}
-        data={data}
-        selected={selected}
+    <DEMONodeBase
+      id={id}
+      data={data}
+      selected={selected}
+      width={width}
+      height={height}
+      type="transaction_kind"
+      resizable={false}
+      draggable={draggable}
+      actions={["editText", "changeColor"]}
+    >
+      <EditableContent
+        isSelected={selected}
+        isEditable={isEditable}
+        content={content}
         width={width}
         height={height}
-        type="transaction_kind"
-        resizable={false}
-        actions={["editText", "changeColor"]}
-      >
-        <EditableContent
-          isSelected={selected}
-          isEditable={isEditable}
-          content={content}
-          width={width}
-          height={height}
-          maxLines={1}
-          maxLength={3}
-          fontSize={fontSize}
-        />
-      </DEMONodeBase>
-    </>
+        maxLines={1}
+        maxLength={3}
+        fontSize={fontSize}
+      />
+    </DEMONodeBase>
   );
 };
 

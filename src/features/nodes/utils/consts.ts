@@ -37,6 +37,11 @@ export const DEFAULT_SIZE_MAP = {
     height: 300,
   },
 
+  organization: {
+    width: 200,
+    height: 200,
+  },
+
   // transaction pattern diagram
   transaction_time: {
     width: TRANSACTION_TIME_SIZE,
@@ -162,6 +167,10 @@ export const MIN_SIZE_MAP = {
     height: 20,
   },
   ghost: null,
+  organization: {
+    width: 100,
+    height: 100,
+  },
 } satisfies Record<DEMONode["type"], { width: number; height: number } | null>;
 
 export const DEFAULT_CONTENT_MAP = {
@@ -186,4 +195,5 @@ export const DEFAULT_CONTENT_MAP = {
   text: "<div>Insert text here</div>",
   transaction_time: null,
   ghost: null,
+  organization: null,
 } satisfies Record<DEMONode["type"], string | null>;

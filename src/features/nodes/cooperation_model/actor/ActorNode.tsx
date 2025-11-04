@@ -16,44 +16,46 @@ const ActorNode = ({
   selected,
   width,
   height,
+  draggable,
+  parentId,
 }: NodeProps<ActorNodeType>) => {
   const { content, fontSize, isEditable, resizable, actions } = data;
 
   return (
-    <>
-      <DEMONodeBase
-        id={id}
-        data={data}
-        selected={selected}
+    <DEMONodeBase
+      id={id}
+      data={data}
+      selected={selected}
+      width={width}
+      height={height}
+      resizable={resizable}
+      draggable={draggable}
+      type="actor"
+      actions={
+        actions ??
+        [
+          "addHandle",
+          "changeColor",
+          "changeFontSize",
+          "delete",
+          "toggleHandlesVisibility",
+          "changeScope",
+          "changeState",
+          "editText",
+        ].concat(parentId ? "attachNode" : [])
+      }
+    >
+      <EditableContent
+        isSelected={selected}
+        isEditable={isEditable}
+        content={content}
         width={width}
         height={height}
-        resizable={resizable}
-        type="actor"
-        actions={
-          actions ?? [
-            "addHandle",
-            "changeColor",
-            "changeFontSize",
-            "delete",
-            "toggleHandlesVisibility",
-            "changeScope",
-            "changeState",
-            "editText",
-          ]
-        }
-      >
-        <EditableContent
-          isSelected={selected}
-          isEditable={isEditable}
-          content={content}
-          width={width}
-          height={height}
-          fontSize={fontSize}
-          maxLength={60}
-          hidden={data.state === "unclear"}
-        />
-      </DEMONodeBase>
-    </>
+        fontSize={fontSize}
+        maxLength={60}
+        hidden={data.state === "unclear"}
+      />
+    </DEMONodeBase>
   );
 };
 

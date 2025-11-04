@@ -27,6 +27,7 @@ import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolba
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
 import { useTranslation } from "react-i18next";
 import { calculateDoubleDiamondInCircleDimensions } from "$/features/shapes/utils/calculateDoubleDiamondInCircleDimensions";
+import type { OrganizationState } from "$/features/nodes/nodes.types";
 
 const NODES_WITH_STATE = [
   "actor",
@@ -112,6 +113,10 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
       { id: "internal", label: internalT as string },
       { id: "external", label: externalT as string },
     ],
+    organization: [
+      { id: "default", label: defaultT as string },
+      { id: "missing", label: missingT as string },
+    ],
   } satisfies {
     actor: {
       id: ActorState;
@@ -139,6 +144,10 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
     }[];
     several_actors: {
       id: SeveralActorsState;
+      label: string;
+    }[];
+    organization: {
+      id: OrganizationState;
       label: string;
     }[];
   };

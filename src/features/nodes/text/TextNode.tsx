@@ -58,6 +58,7 @@ const TextNode = ({
           textAlign={textAlign}
           fontSize={fontSize}
           color={color}
+          padding={0}
         />
       </div>
     </>

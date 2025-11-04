@@ -25,6 +25,8 @@ const TransactionNode = ({
   selected,
   width,
   height,
+  draggable,
+  parentId,
 }: NodeProps<TransactionNodeType>) => {
   const { content, fontSize, isEditable, actions } = data;
 
@@ -38,7 +40,8 @@ const TransactionNode = ({
       type="transaction"
       keepAspectRatio={true}
       actions={
-        actions ?? [
+        actions ??
+        [
           "addHandle",
           "changeColor",
           "changeFontSize",
@@ -47,9 +50,10 @@ const TransactionNode = ({
           "changeScope",
           "editText",
           "changeState",
-        ]
+        ].concat(parentId ? "attachNode" : [])
       }
       resizable={false}
+      draggable={draggable}
     >
       <EditableContent
         isSelected={selected}

@@ -19,11 +19,12 @@ import type { ObjectFactDiagramNode } from "./object_fact_diagram/objectFactDiag
 import type { ProcessStructureDiagramNode } from "./process_structure_diagram/processStructureDiagram.types";
 import type { TextNode as TextNodeType } from "./text/textNode.types";
 import type { CSSProperties } from "react";
-import type { Position } from "@xyflow/react";
+import type { Node, Position } from "@xyflow/react";
 import type { GhostNode as GhostNodeType } from "./ghost/ghost.types";
 import GhostNode from "./ghost/GhostNode";
 import type { CooperationModelNode } from "./cooperation_model/cooperationModel.types";
 import type { NodeToolbarAction } from "./DEMONodeBase";
+import OrganizationNodeComponent from "./organization/OrganizationNode";
 
 export const nodeTypes = {
   // cooperation model
@@ -52,6 +53,7 @@ export const nodeTypes = {
   // misc
   text: TextNode,
   ghost: GhostNode,
+  organization: OrganizationNodeComponent,
 };
 
 export type DEMONode =
@@ -59,7 +61,8 @@ export type DEMONode =
   | ObjectFactDiagramNode
   | ProcessStructureDiagramNode
   | TextNodeType
-  | GhostNodeType;
+  | GhostNodeType
+  | OrganizationNode;
 
 export type DEMOHandle = { id: string; type?: string; style?: CSSProperties };
 
@@ -98,3 +101,13 @@ export type DEMONodeBaseData<T extends SubModel> = {
 // Scope
 export const ALL_NODE_SCOPE_OPTIONS = ["in", "out"] as const;
 export type NodeScope = (typeof ALL_NODE_SCOPE_OPTIONS)[number];
+
+// Organization
+export type OrganizationState = "default" | "missing";
+export type OrganizationNode = Node<
+  {
+    state: OrganizationState;
+    actions?: NodeToolbarAction[];
+  },
+  "organization"
+>;

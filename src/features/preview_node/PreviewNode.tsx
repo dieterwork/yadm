@@ -16,6 +16,7 @@ import productionEventIcon from "$assets/Production Event.svg";
 import entityClassIcon from "$assets/Entity Class.svg";
 import derivedEntityIcon from "$assets/Derived Entity.svg";
 import textIcon from "$assets/Text.svg";
+import organizationIcon from "$assets/Organization.svg";
 import type { DEMONode } from "../nodes/nodes.types";
 
 const previewNodeMap = {
@@ -37,6 +38,7 @@ const previewNodeMap = {
   transaction_kind: null,
   ghost: null,
   text: textIcon,
+  organization: organizationIcon,
 } satisfies Record<DEMONode["type"], string | null>;
 
 interface PreviewNodeProps {

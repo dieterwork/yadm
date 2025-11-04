@@ -18,6 +18,8 @@ const TransactorNode = ({
   width,
   height,
   dragHandle,
+  draggable,
+  parentId,
 }: NodeProps<TransactorNodeType>) => {
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const node = getNode(id);
@@ -71,10 +73,11 @@ const TransactorNode = ({
       id={id}
       data={data}
       selected={selected}
+      draggable={draggable}
       width={width}
       height={height}
       type="transactor"
-      actions={["delete"]}
+      actions={["delete"].concat(parentId ? "attachNode" : [])}
       resizerProps={{ onResize }}
       dragHandle={!!dragHandle}
     />

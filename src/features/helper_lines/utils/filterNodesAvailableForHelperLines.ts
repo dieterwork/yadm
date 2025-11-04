@@ -71,6 +71,28 @@ const textAvailableNodes: DEMONode["type"][] = [
   "tk_execution",
 ];
 
+const organizationAvailableNodes: DEMONode["type"][] = [
+  "actor",
+  "transaction",
+  "transactor",
+  "self_activation",
+  "composite",
+  "elementary_actor",
+  "several_actors",
+  "transaction_time",
+  "production_event",
+  "entity_class",
+  "derived_entity",
+  "tk_execution",
+  "text",
+  "c_fact",
+  "c_act",
+  "initiation_fact",
+  "tk_execution",
+  "transaction_time",
+  "organization",
+];
+
 type NodesMapType = Record<DEMONode["type"], DEMONode["type"][] | null>;
 
 const availableNodesMap: NodesMapType = {
@@ -92,6 +114,7 @@ const availableNodesMap: NodesMapType = {
   text: textAvailableNodes,
   transaction_kind: null,
   ghost: null,
+  organization: organizationAvailableNodes,
 };
 
 export default function filterNodesAvailableForHelperLines(

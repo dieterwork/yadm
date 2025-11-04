@@ -28,6 +28,7 @@ interface EditableContentProps
   isSelected?: boolean;
   maxLength?: number;
   leading?: number;
+  padding?: number;
 }
 
 const getPadding = (fontSize: number) => {
@@ -71,6 +72,7 @@ const EditableContent = ({
   textAlign = "center",
   alignContent = "center",
   isSelected,
+  padding,
   ...restProps
 }: EditableContentProps) => {
   const nodeId = useNodeId();
@@ -101,7 +103,7 @@ const EditableContent = ({
         className={cn(
           "editable-content-wrapper | absolute inset-0 m-auto overflow-hidden",
           { "w-full": !width, "h-full": !height },
-          getPadding(fontSize),
+          !padding && getPadding(fontSize),
           hide && "hidden",
           restProps.className
         )}
@@ -110,6 +112,7 @@ const EditableContent = ({
           width,
           height,
           container: "editable-content / size",
+          padding,
         }}
       >
         <span

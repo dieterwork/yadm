@@ -10,6 +10,8 @@ import useExport from "$/features/actions/export/useExport";
 import useImport from "$/features/actions/import/useImport";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast/headless";
+import DEMOModal from "$/shared/components/ui/modal/DEMOModal";
+import { useState } from "react";
 
 const FileMenu = () => {
   const { save } = useSave();
@@ -20,108 +22,128 @@ const FileMenu = () => {
 
   const { t } = useTranslation();
 
+  const [isNewModalOpen, setNewModalOpen] = useState(false);
+
   return (
-    <TopbarMenuButton label={t(($) => $["File"])}>
-      <TopbarMenuItem
+    <>
+      <TopbarMenuButton label={t(($) => $["File"])}>
+        <TopbarMenuItem
+          onAction={() => {
+            setNewModalOpen(true);
+          }}
+        >
+          {t(($) => $["New"])}
+        </TopbarMenuItem>
+        <TopbarMenuItem
+          onAction={() => {
+            const result = save();
+            if (result?.success) {
+              toast.success(`Saved "${fileName}"`);
+            } else if (result?.error) {
+              for (const error of result?.error.issues) {
+                toast.error(error.message);
+              }
+            }
+          }}
+        >
+          {t(($) => $["Save"])}
+        </TopbarMenuItem>
+
+        <TopbarMenuItem
+          onAction={() => {
+            importJSON();
+          }}
+        >
+          {t(($) => $["Import JSON"])}
+        </TopbarMenuItem>
+        <TopbarSubMenuButton label={t(($) => $["Export as"])}>
+          <TopbarMenuItem
+            onAction={() => {
+              exportAsJSON();
+            }}
+          >
+            JSON
+          </TopbarMenuItem>
+          <TopbarSubMenuButton label={t(($) => $["PNG"])}>
+            <TopbarMenuItem
+              onAction={() => {
+                exportAsPNG(1);
+              }}
+            >
+              1x
+            </TopbarMenuItem>
+            <TopbarMenuItem
+              onAction={() => {
+                exportAsPNG(2);
+              }}
+            >
+              2x
+            </TopbarMenuItem>
+            <TopbarMenuItem
+              onAction={() => {
+                exportAsPNG(3);
+              }}
+            >
+              3x
+            </TopbarMenuItem>
+            <TopbarMenuItem
+              onAction={() => {
+                exportAsPNG(4);
+              }}
+            >
+              4x
+            </TopbarMenuItem>
+          </TopbarSubMenuButton>
+          <TopbarSubMenuButton label={t(($) => $["PDF"])}>
+            <TopbarMenuItem
+              onAction={() => {
+                exportAsPDF(1);
+              }}
+            >
+              1x
+            </TopbarMenuItem>
+            <TopbarMenuItem
+              onAction={() => {
+                exportAsPDF(2);
+              }}
+            >
+              2x
+            </TopbarMenuItem>
+            <TopbarMenuItem
+              onAction={() => {
+                exportAsPDF(3);
+              }}
+            >
+              3x
+            </TopbarMenuItem>
+            <TopbarMenuItem
+              onAction={() => {
+                exportAsPDF(4);
+              }}
+            >
+              4x
+            </TopbarMenuItem>
+          </TopbarSubMenuButton>
+        </TopbarSubMenuButton>
+      </TopbarMenuButton>
+      <DEMOModal
+        isOpen={isNewModalOpen}
+        onOpenChange={(isOpen) => setNewModalOpen(isOpen)}
         onAction={() => {
           clearModel();
           localStorage.removeItem("demo-model");
+          setNewModalOpen(false);
         }}
+        title={t(($) => $["Create new model?"])}
+        actionLabel={t(($) => $["Yes, create new model"])}
+        actionType="danger"
+        cancelLabel={t(($) => $["Keep my current model"])}
       >
-        {t(($) => $["New"])}
-      </TopbarMenuItem>
-      <TopbarMenuItem
-        onAction={() => {
-          const result = save();
-          if (result?.success) {
-            toast.success(`Saved "${fileName}"`);
-          } else if (result?.error) {
-            for (const error of result?.error.issues) {
-              toast.error(error.message);
-            }
-          }
-        }}
-      >
-        {t(($) => $["Save"])}
-      </TopbarMenuItem>
-
-      <TopbarMenuItem
-        onAction={() => {
-          importJSON();
-        }}
-      >
-        {t(($) => $["Import JSON"])}
-      </TopbarMenuItem>
-      <TopbarSubMenuButton label={t(($) => $["Export as"])}>
-        <TopbarMenuItem
-          onAction={() => {
-            exportAsJSON();
-          }}
-        >
-          JSON
-        </TopbarMenuItem>
-        <TopbarSubMenuButton label={t(($) => $["PNG"])}>
-          <TopbarMenuItem
-            onAction={() => {
-              exportAsPNG(1);
-            }}
-          >
-            1x
-          </TopbarMenuItem>
-          <TopbarMenuItem
-            onAction={() => {
-              exportAsPNG(2);
-            }}
-          >
-            2x
-          </TopbarMenuItem>
-          <TopbarMenuItem
-            onAction={() => {
-              exportAsPNG(3);
-            }}
-          >
-            3x
-          </TopbarMenuItem>
-          <TopbarMenuItem
-            onAction={() => {
-              exportAsPNG(4);
-            }}
-          >
-            4x
-          </TopbarMenuItem>
-        </TopbarSubMenuButton>
-        <TopbarSubMenuButton label={t(($) => $["PDF"])}>
-          <TopbarMenuItem
-            onAction={() => {
-              exportAsPDF(1);
-            }}
-          >
-            1x
-          </TopbarMenuItem>
-          <TopbarMenuItem
-            onAction={() => {
-              exportAsPDF(2);
-            }}
-          >
-            2x
-          </TopbarMenuItem>
-          <TopbarMenuItem
-            onAction={() => {
-              exportAsPDF(3);
-            }}
-          >
-            3x
-          </TopbarMenuItem>
-          <TopbarMenuItem
-            onAction={() => {
-              exportAsPDF(4);
-            }}
-          >
-            4x
-          </TopbarMenuItem>
-        </TopbarSubMenuButton>
-      </TopbarSubMenuButton>
-    </TopbarMenuButton>
+        <div className="prose prose-slate">
+          <p>{t(($) => $["This action cannot be undone."])}</p>
+        </div>
+      </DEMOModal>
+    </>
   );
 };
 

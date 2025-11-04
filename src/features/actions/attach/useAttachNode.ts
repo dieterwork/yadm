@@ -1,8 +1,4 @@
-import {
-  getNode,
-  setNodes,
-  useDEMOModelerStore,
-} from "../../modeler/useDEMOModelerStore";
+import { getNode, setNodes } from "../../modeler/useDEMOModelerStore";
 import { sortNodes } from "../../../shared/utils/sortNodes";
 import convertAbsoluteToRelativePosition from "$/features/nodes/utils/convertAbsoluteToRelativePosition";
 import convertRelativeToAbsolutePosition from "$/features/nodes/utils/convertRelativeToAbsolutePosition";

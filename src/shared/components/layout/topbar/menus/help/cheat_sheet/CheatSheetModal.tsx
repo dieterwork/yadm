@@ -1,15 +1,15 @@
-import DEMOModal, {
-  type DEMOModalProps,
+import TopbarMenuModal, {
+  type TopbarMenuModalProps,
 } from "$/shared/components/layout/topbar/_components/TopbarMenuModal";
 
 import ReactMarkdown from "react-markdown";
 import md from "./cheat_sheet.md";
 
-const CheatSheetModal = ({ ...restProps }: DEMOModalProps) => {
+const CheatSheetModal = ({ ...restProps }: TopbarMenuModalProps) => {
   return (
-    <DEMOModal {...restProps}>
+    <TopbarMenuModal {...restProps}>
       <ReactMarkdown children={md} />
-    </DEMOModal>
+    </TopbarMenuModal>
   );
 };
 
