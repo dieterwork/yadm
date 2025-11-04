@@ -140,6 +140,7 @@ const FileMenu = () => {
         cancelLabel={t(($) => $["Keep my current model"])}
       >
         <div className="prose prose-slate">
+          <p>{t(($) => $["This will delete the current model."])}</p>
           <p>{t(($) => $["This action cannot be undone."])}</p>
         </div>
       </DEMOModal>
