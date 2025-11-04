@@ -10,7 +10,7 @@ type Props = {
 const OrganizationShape = ({ state }: Props) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) return null;
-  const { width, height, strokeWidth, ...restSvgAttributes } = svgAttributes;
+  const { width, height, ...restSvgAttributes } = svgAttributes;
 
   return (
     <Rectangle

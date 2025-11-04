@@ -21,7 +21,7 @@ const OrganizationNode = ({
       width={width}
       height={height}
       draggable={draggable}
-      type="actor"
+      type="organization"
       actions={actions ?? ["delete", "changeState"]}
     />
   );
