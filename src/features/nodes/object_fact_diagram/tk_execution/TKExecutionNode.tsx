@@ -19,9 +19,8 @@ const TKExecutionNode = ({
         selected={selected}
         width={width}
         height={height}
-        resizable={false}
-        type="tk_execution"
         draggable={draggable}
+        type="tk_execution"
         actions={[
           "delete",
           "changeColor",

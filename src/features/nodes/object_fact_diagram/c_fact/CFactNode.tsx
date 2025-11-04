@@ -18,7 +18,7 @@ const CFactNode = ({
       selected={selected}
       width={width}
       height={height}
-      resizable={false}
+      draggable={draggable}
       type="c_fact"
       actions={[
         "delete",
@@ -26,7 +26,6 @@ const CFactNode = ({
         "attachNode",
         "toggleHandlesVisibility",
       ]}
-      draggable={draggable}
     />
   );
 };

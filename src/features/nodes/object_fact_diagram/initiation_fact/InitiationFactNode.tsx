@@ -20,7 +20,6 @@ const InitiationFactNode = ({
         width={width}
         height={height}
         draggable={draggable}
-        resizable={false}
         type="initiation_fact"
         actions={[
           "delete",
