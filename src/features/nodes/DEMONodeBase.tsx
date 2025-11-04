@@ -73,7 +73,8 @@ const DEMONodeBase = ({
       {(type === "elementary_actor" ||
         type === "transactor" ||
         type === "several_actors") &&
-        draggable && (
+        draggable &&
+        !isExportEnabled && (
           <div className="drag-handle w-6 h-6 grid place-items-center absolute top-1 right-1 pointer-events-all">
             <CornersOutIcon color="var(--clr-slate-900)" size={20} />
           </div>
