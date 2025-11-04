@@ -103,6 +103,9 @@
   "This action cannot be undone": {
     "": ""
   },
+  "This will delete the current model and remove any saved changes": {
+    "": ""
+  },
   "TK / Execution": "TK / Uitvoering",
   "Top": "Bovenkant",
   "Transaction": "Transactie",
