@@ -32,6 +32,9 @@ import { updateHelperLines } from "../helper_lines/useHelperLinesStore";
 import type { CooperationModelNode } from "../nodes/cooperation_model/cooperationModel.types";
 import formatDate from "$/shared/utils/formatDate";
 
+import { useStoreWithEqualityFn } from "zustand/traditional";
+import type { TemporalState } from "zundo";
+
 export type ModelerAction =
   | "attach"
   | "preview"
@@ -39,6 +42,7 @@ export type ModelerAction =
   | "pan"
   | "edit"
   | null;
+
 export interface DEMOModelerState {
   id: string;
   fileName: string;
@@ -50,6 +54,7 @@ export interface DEMOModelerState {
   isGridVisible: boolean;
   isGridSnapEnabled: boolean;
   DEMOInstance: null | ReactFlowInstance<DEMONode, DEMOEdge>;
+  undoAction: "undo" | "redo" | null;
 }
 
 export const useDEMOModelerStore = create<DEMOModelerState>()(
@@ -61,6 +66,7 @@ export const useDEMOModelerStore = create<DEMOModelerState>()(
       edges: initialEdges,
       DEMOInstance: null,
       action: null,
+      undoAction: null,
       isGridVisible: true,
       isGridSnapEnabled: true,
       isEnabled: true,
@@ -71,7 +77,6 @@ export const useDEMOModelerStore = create<DEMOModelerState>()(
         throttle((state) => {
           handleSet(state);
         }, 1000),
-      onSave: () => {},
       partialize: (state) => {
         const { nodes, edges } = state;
         const savedNodes = nodes.map((node) => {
@@ -281,6 +286,7 @@ export const onConnect: OnConnect = (connection) => {
     },
     markerStart: marker.markerStart,
     markerEnd: marker.markerEnd,
+    zIndex: 110,
   };
   addEdge(newEdge);
 };
@@ -358,6 +364,10 @@ export const updateNodeContent = (id: string, content: string) => {
 
 export const setAction = (action: ModelerAction) => {
   useDEMOModelerStore.setState(() => ({ action }));
+};
+
+export const setUndoAction = (undoAction: "undo" | "redo" | null) => {
+  useDEMOModelerStore.setState(() => ({ undoAction }));
 };
 
 export const setFileName = (fileName: string) => {

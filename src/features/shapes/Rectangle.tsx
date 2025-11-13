@@ -1,6 +1,11 @@
 import type { ShapeProps } from "./shapes.types";
 
-const Rectangle = ({ width, height, ...svgAttributes }: ShapeProps) => {
+const Rectangle = ({
+  width,
+  height,
+  transparent,
+  ...svgAttributes
+}: ShapeProps) => {
   if (!width || !height)
     throw new Error("No width/height provided for rectangle");
   return (
@@ -9,7 +14,7 @@ const Rectangle = ({ width, height, ...svgAttributes }: ShapeProps) => {
         {...svgAttributes}
         width={width}
         height={height}
-        fill="white"
+        fill={transparent ? "none" : "var(--color-white)"}
         fillOpacity={1}
       />
       <rect

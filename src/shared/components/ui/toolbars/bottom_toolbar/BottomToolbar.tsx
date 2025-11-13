@@ -21,11 +21,9 @@ import DEMOModelerToolbarButton from "../_components/DEMOModelerToolbarButton";
 import DEMOModelerToolbarTooltip from "../_components/DEMOModelerToolbarTooltip";
 import {
   resetPreviewNode,
-  setPreviewNode,
   usePreviewNodeStore,
 } from "$/features/preview_node/usePreviewNodeStore";
 import { useTranslation } from "react-i18next";
-import toast from "react-hot-toast/headless";
 import useSave from "$/features/actions/save/useSave";
 
 const BottomToolbar = () => {
@@ -36,6 +34,7 @@ const BottomToolbar = () => {
   const orientation = "horizontal";
   const isCtrlYPressed = useKeyPress(["Control+y", "Meta+y"]);
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
+  const undoAction = useDEMOModelerStore((state) => state.undoAction);
 
   const { t } = useTranslation();
 
@@ -173,7 +172,13 @@ const BottomToolbar = () => {
                 undo();
               }}
             >
-              <ArrowCounterClockwiseIcon />
+              <ArrowCounterClockwiseIcon
+                color={
+                  undoAction === "undo"
+                    ? "var(--color-sky-500)"
+                    : "var(--color-slate-900)"
+                }
+              />
             </DEMOModelerToolbarButton>
           </TooltipTrigger>
 
@@ -185,14 +190,19 @@ const BottomToolbar = () => {
             />
             <DEMOModelerToolbarButton
               aria-label={t(($) => $["Redo"])}
-              isActive={isCtrlYPressed}
               isDisabled={!isEnabled}
               onPress={() => {
                 if (previewNode) return resetPreviewNode();
                 redo();
               }}
             >
-              <ArrowClockwiseIcon />
+              <ArrowClockwiseIcon
+                color={
+                  undoAction === "redo"
+                    ? "var(--color-sky-500)"
+                    : "var(--color-slate-900"
+                }
+              />
             </DEMOModelerToolbarButton>
           </TooltipTrigger>
         </DEMOModelerToolbarGroup>

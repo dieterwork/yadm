@@ -6,7 +6,6 @@ import { z } from "zod";
 const useSave = () => {
   const DEMOInstance = useDEMOModelerStore((state) => state.DEMOInstance);
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
-  const fileName = useDEMOModelerStore((state) => state.fileName);
 
   const save = () => {
     if (!DEMOInstance) return;

@@ -71,7 +71,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 1,
+        zIndex: 190,
       };
     }
 
@@ -111,7 +111,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 1,
+        zIndex: 190,
       };
     }
 
@@ -171,7 +171,7 @@ export const createNode = ({
             [0, DEFAULT_SIZE_MAP["transaction"].height],
             [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
           ],
-          zIndex: 1,
+          zIndex: 170,
         },
         {
           id: transactionId,
@@ -222,7 +222,7 @@ export const createNode = ({
               DEFAULT_SIZE_MAP["transaction"].height,
             ],
           ],
-          zIndex: 2,
+          zIndex: 180,
           draggable: false,
         },
         {
@@ -244,7 +244,7 @@ export const createNode = ({
             height: DEFAULT_SIZE_MAP[type].height,
           },
           selected: true,
-          zIndex: 3,
+          zIndex: 190,
         },
       ];
     }
@@ -281,7 +281,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 1,
+        zIndex: 190,
       };
     }
 
@@ -318,7 +318,7 @@ export const createNode = ({
           strokeWidth: 16,
         },
         selected: true,
-        zIndex: 1,
+        zIndex: 190,
       };
     }
 
@@ -374,7 +374,7 @@ export const createNode = ({
             [0, DEFAULT_SIZE_MAP["transaction"].height],
             [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
           ],
-          zIndex: 1,
+          zIndex: 170,
         },
         {
           id: transactionId,
@@ -426,7 +426,7 @@ export const createNode = ({
             ],
           ],
           draggable: false,
-          zIndex: 2,
+          zIndex: 180,
         },
         {
           id: id,
@@ -447,7 +447,7 @@ export const createNode = ({
             height: DEFAULT_SIZE_MAP[type].height,
           },
           selected: true,
-          zIndex: 3,
+          zIndex: 190,
         },
       ];
     }
@@ -508,7 +508,7 @@ export const createNode = ({
             [0, DEFAULT_SIZE_MAP["transaction"].height],
             [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
           ],
-          zIndex: 1,
+          zIndex: 170,
         },
         {
           id: transactionId,
@@ -554,7 +554,7 @@ export const createNode = ({
               transactionSize.height,
             ],
           ],
-          zIndex: 2,
+          zIndex: 180,
           draggable: false,
         },
         {
@@ -576,7 +576,7 @@ export const createNode = ({
             height: DEFAULT_SIZE_MAP[type].height,
           },
           selected: true,
-          zIndex: 3,
+          zIndex: 190,
         },
       ];
     }
@@ -622,7 +622,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 1,
+        zIndex: 190,
       };
     }
 
@@ -658,7 +658,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 1,
+        zIndex: 190,
       };
     }
 
@@ -695,7 +695,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 1,
+        zIndex: 190,
       };
     }
 
@@ -726,7 +726,7 @@ export const createNode = ({
             stroke: "black",
           },
           selected: true,
-          zIndex: 1,
+          zIndex: 190,
         },
         {
           id: uuid(),
@@ -754,7 +754,7 @@ export const createNode = ({
           extent: "parent",
           selected: false,
           connectable: false,
-          zIndex: 2,
+          zIndex: 180,
         },
       ];
     }
@@ -796,7 +796,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 3,
+        zIndex: 190,
       };
     }
 
@@ -837,7 +837,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 3,
+        zIndex: 190,
       };
     }
 
@@ -878,7 +878,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 3,
+        zIndex: 190,
       };
     }
     case "tk_execution": {
@@ -918,7 +918,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 3,
+        zIndex: 190,
       };
     }
     case "text": {
@@ -940,7 +940,7 @@ export const createNode = ({
           height: height ?? DEFAULT_SIZE_MAP["text"].height,
         },
         selected: selected ?? true,
-        zIndex: 4,
+        zIndex: 200,
       };
     }
     case "organization": {
@@ -959,7 +959,7 @@ export const createNode = ({
             strokeWidth: 16,
           },
           selected: selected ?? true,
-          zIndex: 0,
+          zIndex: 100,
         },
         {
           id: uuid(),
@@ -987,7 +987,7 @@ export const createNode = ({
             stroke: "var(--color-rose-500)",
           },
           selected: selected ?? true,
-          zIndex: 1,
+          zIndex: 200,
         },
       ];
     }

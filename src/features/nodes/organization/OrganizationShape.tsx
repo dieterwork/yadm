@@ -19,6 +19,7 @@ const OrganizationShape = ({ state }: Props) => {
       height={height}
       strokeDasharray={state === "missing" ? "6 4" : undefined}
       strokeWidth={4}
+      transparent
     />
   );
 };

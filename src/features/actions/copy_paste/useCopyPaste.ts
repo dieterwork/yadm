@@ -133,21 +133,22 @@ const useCopyPaste = () => {
     // create an old/new id map to keep track of old ids
     const idMap = new Map<string, string>();
     for (const node of bufferedNodes) {
-      idMap.set(node.id, uuid());
+      const newId = uuid();
+      idMap.set(node.id, newId);
     }
 
     const newNodes = bufferedNodes.map((node) => {
       // get new id
-      const id = idMap.get(node.id)!;
+      const newId = idMap.get(node.id)!;
 
       // if has a parent id, fetch the id from the map, else it's undefined
-      const parentId = node.parentId ? idMap.get(node.parentId) : undefined;
+      const parentId = idMap.get(node.parentId);
 
       const x = pasteX + (node.position.x - minX);
       const y = pasteY + (node.position.y - minY);
       const position = node.parentId ? node.position : { x, y };
 
-      return { ...node, id, parentId, position };
+      return { ...node, id: newId, parentId, position };
     }) satisfies DEMONode[];
 
     const newEdges = bufferedEdges.map((edge) => {
