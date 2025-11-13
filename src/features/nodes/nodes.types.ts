@@ -64,7 +64,12 @@ export type DEMONode =
   | GhostNodeType
   | OrganizationNode;
 
-export type DEMOHandle = { id: string; type?: string; style?: CSSProperties };
+export type DEMOHandle = {
+  id: string;
+  offset: number;
+  type?: string;
+  style?: CSSProperties;
+};
 
 export type DEMOHandlePosition = Position;
 
@@ -76,7 +81,6 @@ export type SubModel =
 export type DEMOHandlesPositionData = {
   handles?: DEMOHandle[];
   max?: number;
-  offset?: number;
   step?: number;
 };
 

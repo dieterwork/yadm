@@ -55,6 +55,7 @@ export interface DEMOModelerState {
   isGridSnapEnabled: boolean;
   DEMOInstance: null | ReactFlowInstance<DEMONode, DEMOEdge>;
   undoAction: "undo" | "redo" | null;
+  isHandleEditModeEnabled: boolean;
 }
 
 export const useDEMOModelerStore = create<DEMOModelerState>()(
@@ -71,6 +72,7 @@ export const useDEMOModelerStore = create<DEMOModelerState>()(
       isGridSnapEnabled: true,
       isEnabled: true,
       isExportEnabled: false,
+      isHandleEditModeEnabled: false,
     }),
     {
       handleSet: (handleSet) =>
@@ -222,6 +224,9 @@ export const onReconnectEnd = (
   handleType: HandleType,
   connectionState: FinalConnectionState
 ) => {
+  const isHandleEditModeEnabled =
+    useDEMOModelerStore.getState().isHandleEditModeEnabled;
+  if (isHandleEditModeEnabled) return;
   if (handleType === "source") {
     setNodes((nodes) => {
       return nodes.filter((node) => {
@@ -271,6 +276,9 @@ export const addEdge = (edge: DEMOEdge) => {
 };
 
 export const onConnect: OnConnect = (connection) => {
+  const isHandleEditModeEnabled =
+    useDEMOModelerStore.getState().isHandleEditModeEnabled;
+  if (isHandleEditModeEnabled) return;
   const sourceNode = getNode(connection.source);
   const targetNode = getNode(connection.target);
   const type = getEdgeType(sourceNode.type, targetNode.type);
@@ -292,6 +300,9 @@ export const onConnect: OnConnect = (connection) => {
 };
 
 export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
+  const isHandleEditModeEnabled =
+    useDEMOModelerStore.getState().isHandleEditModeEnabled;
+  if (isHandleEditModeEnabled) return;
   const sourceNode = getNode(newConnection.source);
   const targetNode = getNode(newConnection.target);
   const reconnectedEdges = reconnectEdge<DEMOEdge>(
@@ -455,6 +466,45 @@ export const updateNodeHandles = (
   });
 };
 
+export const updateNodeHandle = (
+  id: string,
+  handleId: string,
+  position: Position,
+  newHandle: ReactStyleStateSetter<DEMOHandle>
+) => {
+  updateNodeData(id, (data) => {
+    if (!("handles" in data) || !data?.handles) return data;
+    if (!(position in data.handles)) return data;
+    return {
+      handles: {
+        ...data.handles,
+        [position]: {
+          ...data.handles[position],
+          handles: data.handles[position]?.handles?.map((handle) =>
+            handle.id === handleId
+              ? typeof newHandle === "object"
+                ? newHandle
+                : newHandle(handle)
+              : handle
+          ),
+        },
+      },
+    };
+  });
+};
+
+export const updateNodeHandleOffset = (
+  id: string,
+  handleId: string,
+  position: Position,
+  offset: number
+) => {
+  updateNodeHandle(id, handleId, position, (handle) => ({
+    ...handle,
+    offset,
+  }));
+};
+
 export const updateNodeEditable = (
   id: string,
   isEditable: ReactStyleStateSetter<boolean>
@@ -513,4 +563,27 @@ export const setExportEnabled = (
         ? isExportEnabled
         : isExportEnabled(state.isExportEnabled),
   }));
+};
+
+export const setHandleEditModeEnabled = (
+  isHandleEditModeEnabled: ReactStyleStateSetter<boolean>
+) => {
+  useDEMOModelerStore.setState((state) => ({
+    isHandleEditModeEnabled:
+      typeof isHandleEditModeEnabled === "boolean"
+        ? isHandleEditModeEnabled
+        : isHandleEditModeEnabled(state.isHandleEditModeEnabled),
+  }));
+};
+
+export const onConnectStart = () => {
+  const isHandleEditModeEnabled =
+    useDEMOModelerStore.getState().isHandleEditModeEnabled;
+  if (isHandleEditModeEnabled) return;
+};
+
+export const onReconnectStart = () => {
+  const isHandleEditModeEnabled =
+    useDEMOModelerStore.getState().isHandleEditModeEnabled;
+  if (isHandleEditModeEnabled) return;
 };

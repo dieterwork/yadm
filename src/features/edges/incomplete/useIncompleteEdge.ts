@@ -59,7 +59,11 @@ const getTransactionTimeGhostNodePositionX = (
 export const useIncompleteEdge = () => {
   const { screenToFlowPosition } = useReactFlow();
   const nodes = useDEMOModelerStore((state) => state.nodes);
+  const isHandleEditModeEnabled = useDEMOModelerStore(
+    (state) => state.isHandleEditModeEnabled
+  );
   const onConnectEnd: OnConnectEnd = (event, connectionState) => {
+    if (isHandleEditModeEnabled) return;
     if (
       connectionState.isValid ||
       connectionState.fromHandle?.type === "target" ||

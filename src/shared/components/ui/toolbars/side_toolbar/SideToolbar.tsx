@@ -16,6 +16,7 @@ import {
   GridFourIcon,
   HandIcon,
   LineVerticalIcon,
+  PencilRulerIcon,
   SelectionPlusIcon,
   ShapesIcon,
   SquareIcon,
@@ -26,6 +27,7 @@ import {
   setAction,
   setGridSnapEnabled,
   setGridVisible,
+  setHandleEditModeEnabled,
   setNodes,
   setNodesHandlesVisibility,
   useDEMOModelerStore,
@@ -47,18 +49,27 @@ import DEMOModelerToolbarToggleButton from "../_components/DEMOModelerToolbarTog
 import DEMOModelerToolbarSeparator from "../_components/DEMOModelerToolbarSeparator";
 import DEMOModelerToolbarTooltip from "../_components/DEMOModelerToolbarTooltip";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 const SideToolbar = () => {
-  const { isGridSnapEnabled, isGridVisible, action, nodes, isEnabled } =
-    useDEMOModelerStore(
-      useShallow((state) => ({
-        nodes: state.nodes,
-        action: state.action,
-        isGridSnapEnabled: state.isGridSnapEnabled,
-        isGridVisible: state.isGridVisible,
-        isEnabled: state.isEnabled,
-      }))
-    );
+  const {
+    isGridSnapEnabled,
+    isGridVisible,
+    action,
+    nodes,
+    isEnabled,
+    isHandleEditModeEnabled,
+  } = useDEMOModelerStore(
+    useShallow((state) => ({
+      nodes: state.nodes,
+      action: state.action,
+      isGridSnapEnabled: state.isGridSnapEnabled,
+      isGridVisible: state.isGridVisible,
+      isEnabled: state.isEnabled,
+      isHandleEditModeEnabled: state.isHandleEditModeEnabled,
+    }))
+  );
+
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
   const areHelperLinesEnabled = useHelperLinesStore((state) => state.isEnabled);
 
@@ -244,6 +255,33 @@ const SideToolbar = () => {
             >
               <FlowArrowIcon
                 className={cn(!areHandlesVisible && "opacity-30")}
+              />
+            </DEMOModelerToolbarToggleButton>
+          </TooltipTrigger>
+          <TooltipTrigger>
+            <DEMOModelerToolbarTooltip
+              orientation="vertical"
+              label={
+                areHandlesVisible
+                  ? t(($) => $["Hide node handles"])
+                  : t(($) => $["Show node handles"])
+              }
+            />
+            <DEMOModelerToolbarToggleButton
+              isSelected={isHandleEditModeEnabled}
+              isDisabled={nodes.length === 0 || !isEnabled}
+              onChange={(isEnabled) => {
+                if (previewNode) return resetPreviewNode();
+                setHandleEditModeEnabled(isEnabled);
+              }}
+              aria-label={
+                isHandleEditModeEnabled
+                  ? t(($) => $["Disable handle edit mode"])
+                  : t(($) => $["Enable handle edit mode"])
+              }
+            >
+              <PencilRulerIcon
+                className={cn(!isHandleEditModeEnabled && "opacity-30")}
               />
             </DEMOModelerToolbarToggleButton>
           </TooltipTrigger>

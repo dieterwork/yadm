@@ -524,10 +524,15 @@ export const createNode = ({
             handles: {
               isVisible: true,
               top: {
-                handles: [{ id: uuid(), type: "source" }],
+                handles: [
+                  {
+                    id: uuid(),
+                    type: "source",
+                    offset:
+                      DEFAULT_SIZE_MAP["transaction"].width * (1 / 8) * -1 - 1,
+                  },
+                ],
                 max: 1,
-                offset:
-                  DEFAULT_SIZE_MAP["transaction"].width * (1 / 8) * -1 - 1,
               },
             },
             actions: [

@@ -16,11 +16,13 @@ import { useEffect, useRef } from "react";
 import {
   getNode,
   onConnect,
+  onConnectStart,
   onEdgesChange,
   onEdgesDelete,
   onNodesChange,
   onReconnect,
   onReconnectEnd,
+  onReconnectStart,
   setDEMOInstance,
   useDEMOModelerStore,
   type DEMOModelerState,
@@ -251,6 +253,7 @@ const DEMOModeler = () => {
             autoSave();
           }}
           onEdgesDelete={onEdgesDelete}
+          onConnectStart={onConnectStart}
           onConnect={onConnect}
           onConnectEnd={onConnectEnd}
           isValidConnection={isValidConnection}
@@ -263,6 +266,7 @@ const DEMOModeler = () => {
           onPaneClick={() => {
             resetAttach();
           }}
+          onReconnectStart={onReconnectStart}
           onReconnect={onReconnect}
           onReconnectEnd={onReconnectEnd}
           nodesFocusable={isEnabled}
