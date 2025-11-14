@@ -1,14 +1,12 @@
 import {
   getConnectedEdges,
-  Handle,
   Position,
   useInternalNode,
   useReactFlow,
   useUpdateNodeInternals,
 } from "@xyflow/react";
-import type { DEMOHandlesData, DEMONode } from "../nodes/nodes.types";
+import type { DEMOHandlesData } from "../nodes/nodes.types";
 import DEMOHandle from "./DEMOHandle";
-import { useNodeHandles } from "./useNodeHandles";
 import { cn } from "@sglara/cn";
 import {
   getNode,

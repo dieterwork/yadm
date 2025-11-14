@@ -1,5 +1,4 @@
-import { useCallback } from "react";
-import { OnNodeDrag, useReactFlow, type Node } from "@xyflow/react";
+import { useReactFlow, type Node, type OnNodeDrag } from "@xyflow/react";
 import { sortNodes } from "$/shared/utils/sortNodes";
 import {
   setNodes,
