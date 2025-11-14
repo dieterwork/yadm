@@ -44,6 +44,9 @@ export const updateHelperLines = (
   // this will be true if it's a single node being dragged
   // inside we calculate the helper lines and snap position for the position where the node is being moved to
   const change = changes[0];
+
+  console.log(change.type);
+
   if (
     isEnabled &&
     changes.length === 1 &&
