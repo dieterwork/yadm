@@ -40,7 +40,7 @@ const useUndoShortcut = () => {
       document.removeEventListener("keydown", redoHandler);
       document.removeEventListener("keyup", handleKeyUp);
     };
-  });
+  }, [setUndoAction, undoAction, undo, redo]);
 };
 
 export default useUndoShortcut;

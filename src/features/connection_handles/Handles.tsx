@@ -34,11 +34,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
   if (!node || !width || !height || !("handles" in node.data)) return null;
   const { screenToFlowPosition } = useReactFlow();
   const internalNode = useInternalNode(nodeId);
-  const isHandleEditModeEnabled = useDEMOModelerStore(
-    (state) => state.isHandleEditModeEnabled
-  );
   const edges = useDEMOModelerStore((state) => state.edges);
-  const nodes = useDEMOModelerStore((state) => state.nodes);
   const updateNodeInternals = useUpdateNodeInternals();
 
   const onDragStart = (e: {

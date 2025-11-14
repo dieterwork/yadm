@@ -32,7 +32,6 @@ const BottomToolbar = () => {
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const { undo, redo } = useDEMOModelerStore.temporal.getState();
   const orientation = "horizontal";
-  const isCtrlYPressed = useKeyPress(["Control+y", "Meta+y"]);
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
   const undoAction = useDEMOModelerStore((state) => state.undoAction);
 

@@ -1,17 +1,5 @@
-import {
-  getConnectedEdges,
-  Handle,
-  Position,
-  type HandleProps,
-} from "@xyflow/react";
-import {
-  getNode,
-  setEdges,
-  setNodes,
-  updateNodeHandles,
-  useDEMOModelerStore,
-} from "../modeler/useDEMOModelerStore";
-import { useState } from "react";
+import { Handle, Position, type HandleProps } from "@xyflow/react";
+import { useDEMOModelerStore } from "../modeler/useDEMOModelerStore";
 import { useGesture } from "@use-gesture/react";
 import { cn } from "@sglara/cn";
 
@@ -52,22 +40,26 @@ const DEMOHandle = ({
   const isHandleEditModeEnabled = useDEMOModelerStore(
     (state) => state.isHandleEditModeEnabled
   );
+  const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
 
   const bind = useGesture({
     onDragStart: ({ event, xy }) => {
       if (!isHandleEditModeEnabled) return;
+      if (!isEnabled) return;
       event.preventDefault();
       event.stopPropagation();
       onDragStart && onDragStart({ event, xy });
     },
     onDrag: ({ event, xy }) => {
       if (!isHandleEditModeEnabled) return;
+      if (!isEnabled) return;
       event.preventDefault();
       event.stopPropagation();
       onDrag && onDrag({ event, xy });
     },
     onDragEnd: ({ event, xy }) => {
       if (!isHandleEditModeEnabled) return;
+      if (!isEnabled) return;
       event.preventDefault();
       event.stopPropagation();
       onDragEnd && onDragEnd({ event, xy });
@@ -91,9 +83,11 @@ const DEMOHandle = ({
       className={cn(
         "demo-handle",
         isHandleEditModeEnabled &&
+          isEnabled &&
           (position === Position.Top || position === Position.Bottom) &&
           "cursor-col-resize!",
         isHandleEditModeEnabled &&
+          isEnabled &&
           (position === Position.Right || position === Position.Left) &&
           "cursor-row-resize!"
       )}

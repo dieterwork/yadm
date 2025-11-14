@@ -6,6 +6,7 @@ import {
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
 import type { DEMONode } from "../nodes.types";
+import useTemporalDEMOModelerStore from "$/features/modeler/useTemporalDEMOModelerStore";
 
 const getNodePositionInsideParent = (
   node: Partial<Node>,
@@ -45,6 +46,7 @@ const getNodePositionInsideParent = (
 export function useNodeDragHandlers() {
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const { getIntersectingNodes } = useReactFlow();
+  const { pause } = useTemporalDEMOModelerStore((state) => state);
 
   const onNodeDragStop: OnNodeDrag = (_, node) => {
     if (
@@ -94,6 +96,7 @@ export function useNodeDragHandlers() {
   };
 
   const onNodeDrag: OnNodeDrag<DEMONode> = (_, node) => {
+    pause();
     if (
       (node.type === "ghost" ||
         node.type === "transaction_kind" ||

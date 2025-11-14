@@ -2,8 +2,6 @@ import {
   getNode,
   updateNodeColor,
 } from "$/features/modeler/useDEMOModelerStore";
-import type { NodeColor } from "$/shared/components/ui/colors/colors.types";
-import { isNodeColor } from "$/shared/components/ui/colors/colors.utils";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarColorSwatch from "$/shared/components/ui/element_toolbar/DEMOElementToolbarColorSwatch";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
@@ -24,9 +22,11 @@ const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
     { id: "default", label: t(($) => $["Default"]) },
     { id: "blue", label: t(($) => $["Blue"]) },
     { id: "green", label: t(($) => $["Green"]) },
-    { id: "red", label: t(($) => $["Red"]) },
+    node.type === "organization"
+      ? { id: "black", label: t(($) => $["Black"]) }
+      : { id: "red", label: t(($) => $["Red"]) },
     { id: "yellow", label: t(($) => $["Yellow"]) },
-  ] satisfies { id: NodeColor; label: string }[];
+  ] satisfies { id: string; label: string }[];
 
   const [colorSelected, setColorSelected] = useState<Selection>(
     new Set([colorOptions[0].id])
@@ -51,7 +51,7 @@ const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
             setColorSelected(selection);
             if (!(selection instanceof Set)) return;
             for (const entry of selection) {
-              if (typeof entry !== "string" || !isNodeColor(entry)) return;
+              if (typeof entry !== "string") return;
               updateNodeColor(nodeId, entry);
               updateNodeInternals(nodeId);
             }
@@ -63,9 +63,13 @@ const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
               label={item.label}
               textValue={item.label}
               id={item.id}
-              isDisabled={node.data?.scope === "out"}
+              isDisabled={"scope" in node.data && node.data.scope === "out"}
               icon={({ size }) => (
-                <DEMOElementToolbarColorSwatch color={item.id} size={size} />
+                <DEMOElementToolbarColorSwatch
+                  color={item.id}
+                  size={size}
+                  nodeType={node.type}
+                />
               )}
             />
           )}
