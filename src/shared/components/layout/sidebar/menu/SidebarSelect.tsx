@@ -31,9 +31,9 @@ const SidebarSelect = ({
     menuItem.sections[0].items[0].id
   );
 
-  if (previewNode === null) {
-    setSelected(null);
-  }
+  useEffect(() => {
+    if (previewNode === null) setSelected(null);
+  }, [previewNode]);
 
   return (
     <div className="select-wrapper">
