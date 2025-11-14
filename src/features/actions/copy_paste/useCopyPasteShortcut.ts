@@ -15,7 +15,7 @@ const useCopyPasteShortcut = () => {
   useShortcut(["Meta+v", "Control+v"], () => {
     paste();
   });
-  useShortcut(["Meta+d", "Control+d"], () => {
+  useShortcut(["Meta+d", "Control+d", "Delete"], () => {
     deleteNode();
     deleteEdge();
   });

@@ -31,9 +31,9 @@ const SidebarSelect = ({
     menuItem.sections[0].items[0].id
   );
 
-  useEffect(() => {
-    if (previewNode === null) setSelected(null);
-  }, [previewNode]);
+  if (previewNode === null) {
+    setSelected(null);
+  }
 
   return (
     <div className="select-wrapper">
@@ -64,6 +64,7 @@ const SidebarSelect = ({
                     isDisabled={!isEnabled}
                     id={item.id}
                     onClick={(e) => {
+                      if (isDisabled) return;
                       setPreviewNode({
                         type: item.type,
                         width: DEFAULT_SIZE_MAP[item.type]?.width ?? 0,
