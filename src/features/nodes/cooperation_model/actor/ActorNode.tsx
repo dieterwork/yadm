@@ -1,14 +1,8 @@
-import {
-  Handle,
-  Position,
-  useUpdateNodeInternals,
-  type NodeProps,
-} from "@xyflow/react";
+import { type NodeProps } from "@xyflow/react";
 
 import type { ActorNode as ActorNodeType } from "./actor.types";
 import DEMONodeBase from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
-import { useResizerHandles } from "../../../resize/useResizer";
 
 const ActorNode = ({
   id,

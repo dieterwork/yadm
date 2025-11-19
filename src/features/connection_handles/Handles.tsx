@@ -17,7 +17,7 @@ import {
   useDEMOModelerStore,
 } from "../modeler/useDEMOModelerStore";
 import clamp from "$/shared/utils/clamp";
-import type { MouseEvent } from "react";
+import { useEffect, type MouseEvent } from "react";
 
 interface HandlesProps {
   nodeId: string;
@@ -27,13 +27,22 @@ interface HandlesProps {
   isVisible?: boolean;
 }
 
+let didInit = false;
+
 const Handles = ({ nodeId, width, height }: HandlesProps) => {
   const node = getNode(nodeId);
-  if (!node || !width || !height || !("handles" in node.data)) return null;
-  const { screenToFlowPosition } = useReactFlow();
   const internalNode = useInternalNode(nodeId);
-  const edges = useDEMOModelerStore((state) => state.edges);
   const updateNodeInternals = useUpdateNodeInternals();
+  const edges = useDEMOModelerStore((state) => state.edges);
+  const { screenToFlowPosition } = useReactFlow();
+  useEffect(() => {
+    if (!didInit) {
+      didInit = true;
+      updateNodeInternals(nodeId);
+    }
+  }, []);
+  if (!node || !internalNode || !width || !height || !("handles" in node.data))
+    return null;
 
   const onDragStart = (e: {
     event: PointerEvent | MouseEvent | TouchEvent | KeyboardEvent;
@@ -66,7 +75,6 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
       const _offset = offsetClamp / (internalNode?.measured.width ?? 0);
 
       updateNodeHandleOffset(nodeId, id, position, _offset);
-      updateNodeInternals(nodeId);
     } else {
       // y movement
       const minY = 0;
@@ -81,8 +89,8 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
       const _offset = offsetClamp / (internalNode?.measured.height ?? 0);
 
       updateNodeHandleOffset(nodeId, id, position, _offset);
-      updateNodeInternals(nodeId);
     }
+    updateNodeInternals(nodeId);
   };
 
   const onDragEnd = (e: {

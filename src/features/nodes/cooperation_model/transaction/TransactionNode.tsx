@@ -1,23 +1,8 @@
-import {
-  type NodeProps,
-  Handle,
-  Position,
-  useUpdateNodeInternals,
-} from "@xyflow/react";
+import { type NodeProps, Position } from "@xyflow/react";
 
 import type { TransactionNode as TransactionNodeType } from "./transaction.types";
 import DEMONodeBase from "../../DEMONodeBase";
-import uuid from "../../../../shared/utils/uuid";
 import EditableContent from "../../../editable_content/EditableContent";
-import { calculateDoubleDiamondInCircleDimensions } from "../../../shapes/utils/calculateDoubleDiamondInCircleDimensions";
-import { useEffect } from "react";
-
-const handlePositions = [
-  Position.Top,
-  Position.Right,
-  Position.Bottom,
-  Position.Left,
-];
 
 const TransactionNode = ({
   id,

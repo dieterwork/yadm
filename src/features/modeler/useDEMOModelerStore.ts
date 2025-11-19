@@ -224,9 +224,6 @@ export const onReconnectEnd = (
   handleType: HandleType,
   connectionState: FinalConnectionState
 ) => {
-  const isHandleEditModeEnabled =
-    useDEMOModelerStore.getState().isHandleEditModeEnabled;
-  if (isHandleEditModeEnabled) return;
   if (handleType === "source") {
     setNodes((nodes) => {
       return nodes.filter((node) => {
@@ -300,9 +297,6 @@ export const onConnect: OnConnect = (connection) => {
 };
 
 export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
-  const isHandleEditModeEnabled =
-    useDEMOModelerStore.getState().isHandleEditModeEnabled;
-  if (isHandleEditModeEnabled) return;
   const sourceNode = getNode(newConnection.source);
   const targetNode = getNode(newConnection.target);
   const reconnectedEdges = reconnectEdge<DEMOEdge>(
@@ -582,8 +576,4 @@ export const onConnectStart = () => {
   if (isHandleEditModeEnabled) return;
 };
 
-export const onReconnectStart = () => {
-  const isHandleEditModeEnabled =
-    useDEMOModelerStore.getState().isHandleEditModeEnabled;
-  if (isHandleEditModeEnabled) return;
-};
+export const onReconnectStart = () => {};

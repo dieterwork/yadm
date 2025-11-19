@@ -12,7 +12,6 @@ import {
   TextAlignLeftIcon,
   TextAlignRightIcon,
 } from "@phosphor-icons/react";
-import { useUpdateNodeInternals } from "@xyflow/react";
 import { useState } from "react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
 import { useTranslation } from "react-i18next";
@@ -52,7 +51,6 @@ const ChangeTextAlignMenuItem = ({ nodeId }: { nodeId: string }) => {
   const [selected, setSelected] = useState<Selection>(
     new Set([textAlignOptions[0].id])
   );
-  const updateNodeInternals = useUpdateNodeInternals();
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton
@@ -73,7 +71,6 @@ const ChangeTextAlignMenuItem = ({ nodeId }: { nodeId: string }) => {
             for (const entry of selection) {
               if (typeof entry !== "string" || !isNodeTextAlign(entry)) return;
               updateNodeTextAlign(nodeId, entry);
-              updateNodeInternals(nodeId);
             }
           }}
         >

@@ -142,7 +142,7 @@ const useCopyPaste = () => {
       const newId = idMap.get(node.id)!;
 
       // if has a parent id, fetch the id from the map, else it's undefined
-      const parentId = idMap.get(node.parentId);
+      const parentId = node.parentId ? idMap.get(node.parentId) : undefined;
 
       const x = pasteX + (node.position.x - minX);
       const y = pasteY + (node.position.y - minY);

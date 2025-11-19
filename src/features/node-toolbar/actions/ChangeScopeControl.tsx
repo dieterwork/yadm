@@ -9,7 +9,6 @@ import {
   ArrowRightIcon,
   ArrowsLeftRightIcon,
 } from "@phosphor-icons/react";
-import { useUpdateNodeInternals } from "@xyflow/react";
 import { useState } from "react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
@@ -33,7 +32,6 @@ const ChangeScopeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const [scopeSelected, setScopeSelected] = useState<Selection>(
     new Set([node.data?.scope ?? "in"])
   );
-  const updateNodeInternals = useUpdateNodeInternals();
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton
@@ -58,7 +56,6 @@ const ChangeScopeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
             for (const entry of selection) {
               if (typeof entry !== "string" || !isNodeScope(entry)) return;
               updateNodeScope(nodeId, entry);
-              updateNodeInternals(nodeId);
             }
           }}
         >

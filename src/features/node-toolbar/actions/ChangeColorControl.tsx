@@ -7,7 +7,6 @@ import DEMOElementToolbarColorSwatch from "$/shared/components/ui/element_toolba
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
 import { PaintBrushHouseholdIcon } from "@phosphor-icons/react";
-import { useUpdateNodeInternals } from "@xyflow/react";
 import { useState } from "react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
@@ -31,7 +30,6 @@ const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const [colorSelected, setColorSelected] = useState<Selection>(
     new Set([colorOptions[0].id])
   );
-  const updateNodeInternals = useUpdateNodeInternals();
 
   return (
     <MenuTrigger>
@@ -53,7 +51,6 @@ const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
             for (const entry of selection) {
               if (typeof entry !== "string") return;
               updateNodeColor(nodeId, entry);
-              updateNodeInternals(nodeId);
             }
           }}
         >

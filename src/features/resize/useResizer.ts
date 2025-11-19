@@ -1,7 +1,6 @@
 import { useState } from "react";
 import uuid from "../../shared/utils/uuid";
 import { MEDIUM_NODE_SIZE } from "../nodes/utils/consts";
-import { useUpdateNodeInternals } from "@xyflow/react";
 
 type PosArrParams =
   | {
