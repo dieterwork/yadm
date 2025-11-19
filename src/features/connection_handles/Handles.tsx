@@ -32,7 +32,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
   const updateNodeInternals = useUpdateNodeInternals();
   useEffect(() => {
     updateNodeInternals(nodeId);
-  }, []);
+  }, [updateNodeInternals, nodeId]);
 
   if (!node || !width || !height || !("handles" in node.data)) return null;
 
