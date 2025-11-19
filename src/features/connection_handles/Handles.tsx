@@ -27,16 +27,11 @@ interface HandlesProps {
   isVisible?: boolean;
 }
 
-let didInit = false;
-
 const Handles = ({ nodeId, width, height }: HandlesProps) => {
   const node = getNode(nodeId);
   const updateNodeInternals = useUpdateNodeInternals();
   useEffect(() => {
-    if (!didInit) {
-      didInit = true;
-      updateNodeInternals(nodeId);
-    }
+    updateNodeInternals(nodeId);
   }, []);
 
   if (!node || !width || !height || !("handles" in node.data)) return null;

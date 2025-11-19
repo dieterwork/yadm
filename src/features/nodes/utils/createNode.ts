@@ -45,6 +45,7 @@ export const createNode = ({
         type: type,
         position,
         data: {
+          subModel: "cooperation_model",
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
           scope: "in",
@@ -82,6 +83,8 @@ export const createNode = ({
         type: type,
         position,
         data: {
+          subModel: "cooperation_model",
+          scope: "in",
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
@@ -466,6 +469,7 @@ export const createNode = ({
           ariaLabel: "Actor",
           position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
           data: {
+            subModel: "cooperation_model",
             state: "default",
             content: DEFAULT_CONTENT_MAP["actor"],
             handles: {
@@ -568,7 +572,8 @@ export const createNode = ({
           position,
           ariaLabel: "Several Actors",
           data: {
-            state: "default",
+            subModel: "cooperation_model",
+            state: "internal",
             content: DEFAULT_CONTENT_MAP[type],
             actions: [
               "changeColor",
@@ -593,6 +598,7 @@ export const createNode = ({
         position,
         ariaLabel: "Production Event",
         data: {
+          subModel: "process_structure_diagram",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
             isVisible: true,
@@ -638,6 +644,7 @@ export const createNode = ({
         position,
         ariaLabel: "Entity Class",
         data: {
+          subModel: "process_structure_diagram",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
             isVisible: true,
@@ -674,7 +681,7 @@ export const createNode = ({
         position,
         ariaLabel: "Derived Entity",
         data: {
-          scope: "in",
+          subModel: "process_structure_diagram",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
             isVisible: true,
@@ -713,6 +720,7 @@ export const createNode = ({
           position,
           ariaLabel: "Transaction Time",
           data: {
+            subModel: "object_fact_diagram",
             handles: {
               isVisible: true,
               left: {
@@ -772,6 +780,7 @@ export const createNode = ({
         parentId,
         ariaLabel: "Initiation Fact",
         data: {
+          subModel: "object_fact_diagram",
           color: "default",
           handles: {
             isVisible: true,
@@ -813,6 +822,7 @@ export const createNode = ({
         parentId,
         ariaLabel: "C-Fact",
         data: {
+          subModel: "object_fact_diagram",
           color: "default",
           handles: {
             isVisible: true,
@@ -854,6 +864,7 @@ export const createNode = ({
         parentId,
         ariaLabel: "C-Act",
         data: {
+          subModel: "object_fact_diagram",
           color: "default",
           handles: {
             isVisible: true,
@@ -894,6 +905,7 @@ export const createNode = ({
         parentId,
         ariaLabel: "TK / Execution",
         data: {
+          subModel: "object_fact_diagram",
           color: "default",
           handles: {
             isVisible: true,
