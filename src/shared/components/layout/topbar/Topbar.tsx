@@ -13,8 +13,6 @@ import { useTranslation } from "react-i18next";
 import ChangeLanguageMenu from "./menus/ChangeLanguageMenu";
 import { useState } from "react";
 
-const validRegex = new RegExp(/[A-Za-z0-9\-\_]+/);
-
 const Topbar = () => {
   const { t } = useTranslation();
   const [modelName, setModelName] = useState("");
@@ -52,10 +50,7 @@ const Topbar = () => {
                       return;
                     }
 
-                    if (e.length === 80) {
-                      setModelName(e);
-                      const fileName = `${e} ` + date;
-                      setFileName(fileName);
+                    if (e.length > 80) {
                       return;
                     }
                     const cleanedInput = e.replace(/[^a-zA-Z0-9_\-\s]/g, "");
