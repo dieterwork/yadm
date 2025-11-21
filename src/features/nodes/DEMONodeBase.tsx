@@ -12,8 +12,9 @@ import type { DEMONode } from "./nodes.types";
 import DEMONodeResizer from "../resize/NodeResizer";
 import Handles from "../connection_handles/Handles";
 import { cn } from "@sglara/cn";
-import { useDEMOModelerStore } from "../modeler/useDEMOModelerStore";
+import { getNode, useDEMOModelerStore } from "../modeler/useDEMOModelerStore";
 import { CornersOutIcon, NotchesIcon } from "@phosphor-icons/react";
+import getChildNodes from "./utils/getChildNodes";
 
 interface DEMONodeBaseProps extends Omit<NodeProps<DEMONode>, "dragHandle"> {
   resizable?: boolean;
@@ -67,6 +68,14 @@ const DEMONodeBase = ({
   const { inProgress: isConnectionInProgress } = useConnection();
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const isExportEnabled = useDEMOModelerStore((state) => state.isExportEnabled);
+  const nodes = useDEMOModelerStore((state) => state.nodes);
+  const node = getNode(id);
+
+  if (!node) return;
+  const areNodeHandlesVisible = getChildNodes([node], nodes).every((node) => {
+    if (!("handles" in node.data)) return false;
+    return node.data.handles.isVisible;
+  });
 
   return (
     <>
@@ -74,7 +83,8 @@ const DEMONodeBase = ({
         type === "transactor" ||
         type === "several_actors") &&
         draggable &&
-        !isExportEnabled && (
+        !isExportEnabled &&
+        areNodeHandlesVisible && (
           <div className="drag-handle w-6 h-6 grid place-items-center absolute top-1 right-1 pointer-events-all">
             <CornersOutIcon color="var(--clr-slate-900)" size={20} />
           </div>

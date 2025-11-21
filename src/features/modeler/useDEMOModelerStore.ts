@@ -78,7 +78,7 @@ export const useDEMOModelerStore = create<DEMOModelerState>()(
       handleSet: (handleSet) =>
         throttle((state) => {
           handleSet(state);
-        }, 1000),
+        }, 500),
       partialize: (state) => {
         const { nodes, edges } = state;
         const savedNodes = nodes.map((node) => {

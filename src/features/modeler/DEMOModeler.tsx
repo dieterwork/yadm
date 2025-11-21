@@ -45,6 +45,7 @@ import useTitleTranslate from "$/shared/hooks/useTitleTranslate";
 import toast from "react-hot-toast/headless";
 import { LinkIcon } from "@phosphor-icons/react";
 import { useNodeDragHandlers } from "../nodes/hooks/useNodeDragHandlers";
+import useTemporalDEMOModelerStore from "./useTemporalDEMOModelerStore";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -153,6 +154,9 @@ const DEMOModeler = () => {
       }))
     );
 
+  const { pause, resume, isTracking } = useTemporalDEMOModelerStore(
+    (state) => state
+  );
   useTitleTranslate();
 
   const ref = useRef<HTMLDivElement>(null!);
@@ -240,8 +244,22 @@ const DEMOModeler = () => {
           ref={ref}
           nodes={nodes}
           nodeTypes={nodeTypes}
-          onNodeDrag={onNodeDrag}
-          onNodeDragStop={onNodeDragStop}
+          onNodeDragStart={() => {
+            if (isTracking) {
+              console.log("pause");
+              pause();
+            }
+          }}
+          onNodeDrag={(...params) => {
+            onNodeDrag(...params);
+          }}
+          onNodeDragStop={(...params) => {
+            onNodeDragStop(...params);
+            if (!isTracking) {
+              console.log("resume");
+              resume();
+            }
+          }}
           onNodesChange={(changes) => {
             onNodesChange(changes);
             autoSave();

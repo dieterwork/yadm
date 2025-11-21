@@ -242,10 +242,16 @@ const SideToolbar = () => {
             />
             <DEMOModelerToolbarToggleButton
               isSelected={areHandlesVisible}
-              isDisabled={nodes.length === 0 || !isEnabled}
+              isDisabled={
+                nodes.length === 0 || !isEnabled || isHandleEditModeEnabled
+              }
               onChange={(isVisible) => {
                 if (previewNode) return resetPreviewNode();
                 setNodesHandlesVisibility(isVisible);
+
+                if (!isVisible && isHandleEditModeEnabled) {
+                  setHandleEditModeEnabled(false);
+                }
               }}
               aria-label={
                 areHandlesVisible
@@ -262,9 +268,9 @@ const SideToolbar = () => {
             <DEMOModelerToolbarTooltip
               orientation="vertical"
               label={
-                areHandlesVisible
-                  ? t(($) => $["Hide node handles"])
-                  : t(($) => $["Show node handles"])
+                isHandleEditModeEnabled
+                  ? t(($) => $["Disable handle edit mode"])
+                  : t(($) => $["Enable handle edit mode"])
               }
             />
             <DEMOModelerToolbarToggleButton
@@ -273,6 +279,10 @@ const SideToolbar = () => {
               onChange={(isEnabled) => {
                 if (previewNode) return resetPreviewNode();
                 setHandleEditModeEnabled(isEnabled);
+
+                if (isEnabled && !areHandlesVisible) {
+                  setNodesHandlesVisibility(true);
+                }
               }}
               aria-label={
                 isHandleEditModeEnabled
