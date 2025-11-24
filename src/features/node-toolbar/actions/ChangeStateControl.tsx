@@ -28,6 +28,7 @@ import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types
 import { useTranslation } from "react-i18next";
 import { calculateDoubleDiamondInCircleDimensions } from "$/features/shapes/utils/calculateDoubleDiamondInCircleDimensions";
 import type { OrganizationState } from "$/features/nodes/nodes.types";
+import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 
 const NODES_WITH_STATE = [
   "actor",
@@ -201,6 +202,7 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
                   },
                 }));
               }
+              takeSnapshot();
             }
           }}
         >

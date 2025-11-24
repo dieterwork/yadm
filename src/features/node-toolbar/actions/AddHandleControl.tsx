@@ -18,14 +18,14 @@ import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEM
 import DEMOElementToolbarMenu from "$/shared/components/ui/element_toolbar/DEMOElementToolbarMenu";
 import DEMOElementToolbarMenuItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarMenuItem";
 import { useTranslation } from "react-i18next";
+import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 
 const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
-  const node = getNode(nodeId);
-  if (!node) return null;
-  if (!("handles" in node.data)) return;
-  const handles = node.data?.handles;
   const updateNodeInternals = useUpdateNodeInternals();
   const { t } = useTranslation();
+  const node = getNode(nodeId);
+  if (!node || !("handles" in node.data) || !node.data.handles) return null;
+  const handles = node.data?.handles;
   const handleOptions = [
     {
       id: Position.Top,
@@ -59,11 +59,18 @@ const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
           onAction={(key) => {
             if (typeof key !== "string") return;
             assertIsPosition(key);
+            // get node's lowest offset
+            const leastOffsetHandle = handles[key]?.handles?.sort((a, b) => {
+              console.log(a, b);
+              return a.offset - b.offset;
+            })[0];
+
             updateNodeHandles(nodeId, key, (handles) => [
               ...handles,
-              { id: uuid() },
+              { id: uuid(), offset: (leastOffsetHandle?.offset ?? 0.5) / 2 },
             ]);
             updateNodeInternals(nodeId);
+            takeSnapshot();
           }}
         >
           {(item) => (

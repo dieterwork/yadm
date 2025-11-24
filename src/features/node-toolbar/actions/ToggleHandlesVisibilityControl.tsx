@@ -6,6 +6,7 @@ import DEMOElementToolbarToggleButton from "$/shared/components/ui/element_toolb
 import { EyeClosedIcon, EyeIcon } from "@phosphor-icons/react";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
 import { useTranslation } from "react-i18next";
+import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 
 const ToggleHandlesVisibilityControl = ({
   nodeId,
@@ -26,6 +27,7 @@ const ToggleHandlesVisibilityControl = ({
       isSelected={isVisible}
       onChange={(isVisible) => {
         updateNodeHandlesVisibility(nodeId, isVisible);
+        takeSnapshot();
       }}
     />
   );

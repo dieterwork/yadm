@@ -24,10 +24,12 @@ const DEMOHandle = ({
   nodeId,
   position,
   offset,
+  canDrag = true,
   ...restProps
 }: Omit<HandleProps, "onDragStart" | "onDrag" | "onDragEnd"> & {
   nodeId: string;
   offset: number;
+  canDrag?: boolean;
 }) => {
   const isHandleEditModeEnabled = useDEMOModelerStore(
     (state) => state.isHandleEditModeEnabled
@@ -42,9 +44,8 @@ const DEMOHandle = ({
 
   const bind = useGesture({
     onDrag: ({ event, xy }) => {
-      if (!isHandleEditModeEnabled) return;
-      if (!isEnabled) return;
-      if (!id) return;
+      if (!isHandleEditModeEnabled || !isEnabled || !id || !canDrag) return;
+
       event.preventDefault();
 
       const xyPosition = screenToFlowPosition({ x: xy[0], y: xy[1] });
@@ -100,12 +101,15 @@ const DEMOHandle = ({
         "demo-handle",
         isHandleEditModeEnabled &&
           isEnabled &&
+          canDrag &&
           (position === Position.Top || position === Position.Bottom) &&
           "cursor-col-resize!",
         isHandleEditModeEnabled &&
           isEnabled &&
+          canDrag &&
           (position === Position.Right || position === Position.Left) &&
-          "cursor-row-resize!"
+          "cursor-row-resize!",
+        isHandleEditModeEnabled && isEnabled && !canDrag && "cursor-not-allowed"
       )}
       id={id}
       position={position}

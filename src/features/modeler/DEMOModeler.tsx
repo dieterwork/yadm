@@ -6,6 +6,8 @@ import {
   BackgroundVariant,
   SelectionMode,
   type Connection,
+  type NodeChange,
+  type EdgeChange,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
@@ -20,6 +22,7 @@ import {
   onEdgesChange,
   onEdgesDelete,
   onNodesChange,
+  onNodesDelete,
   onReconnect,
   onReconnectEnd,
   onReconnectStart,
@@ -39,13 +42,11 @@ import { resetAttach, useAttachStore } from "../actions/attach/useAttachStore";
 import { usePreviewNode } from "../preview_node/usePreviewNode";
 import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
 import useKeyboardShortcuts from "../keyboard/useKeyboardShortcuts";
-import useSave from "../actions/save/useSave";
 import useAttachNode from "../actions/attach/useAttachNode";
 import useTitleTranslate from "$/shared/hooks/useTitleTranslate";
 import toast from "react-hot-toast/headless";
-import { LinkIcon } from "@phosphor-icons/react";
 import { useNodeDragHandlers } from "../nodes/hooks/useNodeDragHandlers";
-import useTemporalDEMOModelerStore from "./useTemporalDEMOModelerStore";
+import { takeSnapshot } from "../actions/undo/useUndoRedoStore";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -140,6 +141,19 @@ const allowedConnectionMap = {
   "text" | "transaction_kind"
 >;
 
+const acceptableNodeChanges: NodeChange<DEMONode>["type"][] = [
+  "add",
+  "remove",
+  "dimensions",
+  "replace",
+];
+
+const acceptableEdgeChanges: EdgeChange<DEMOEdge>["type"][] = [
+  "add",
+  "remove",
+  "replace",
+];
+
 const DEMOModeler = () => {
   const { isEnabled, nodes, edges, action, isGridVisible, isGridSnapEnabled } =
     useDEMOModelerStore(
@@ -154,14 +168,9 @@ const DEMOModeler = () => {
       }))
     );
 
-  const { pause, resume, isTracking } = useTemporalDEMOModelerStore(
-    (state) => state
-  );
   useTitleTranslate();
 
   const ref = useRef<HTMLDivElement>(null!);
-
-  const { autoSave } = useSave();
 
   const {
     horizontal: horizontalHelperLine,
@@ -244,40 +253,21 @@ const DEMOModeler = () => {
           ref={ref}
           nodes={nodes}
           nodeTypes={nodeTypes}
-          onNodeDragStart={() => {}}
-          onNodeDrag={(...params) => {
-            onNodeDrag(...params);
-            if (isTracking) {
-              pause();
-            }
+          onNodeDragStart={() => {
+            takeSnapshot();
           }}
-          onNodeDragStop={(...params) => {
-            onNodeDragStop(...params);
-            if (!isTracking) {
-              resume();
-            }
-          }}
-          onNodesChange={(changes) => {
-            onNodesChange(changes);
-            autoSave();
-          }}
+          onNodeDrag={onNodeDrag}
+          onNodeDragStop={onNodeDragStop}
+          onNodesChange={onNodesChange}
           edges={edges}
           edgeTypes={edgeTypes}
-          onEdgesChange={(changes) => {
-            onEdgesChange(changes);
-            autoSave();
-          }}
+          onEdgesChange={onEdgesChange}
+          onNodesDelete={onNodesDelete}
           onEdgesDelete={onEdgesDelete}
           onConnectStart={onConnectStart}
           onConnect={onConnect}
           onConnectEnd={onConnectEnd}
           isValidConnection={isValidConnection}
-          onMoveEnd={() => {
-            autoSave();
-          }}
-          onBlur={() => {
-            autoSave();
-          }}
           onPaneClick={() => {
             resetAttach();
           }}

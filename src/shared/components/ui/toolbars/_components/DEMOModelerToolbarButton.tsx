@@ -13,8 +13,8 @@ const DEMOModelerToolbarButton = ({
   return (
     <ToggleButton
       {...restProps}
-      className={({ isHovered, isPressed }) =>
-        DEMOToolbarButtonClasses(isHovered, isPressed, isActive)
+      className={({ isHovered, isPressed, isDisabled }) =>
+        DEMOToolbarButtonClasses(isHovered, isPressed, isActive, isDisabled)
       }
       style={{ width }}
     />

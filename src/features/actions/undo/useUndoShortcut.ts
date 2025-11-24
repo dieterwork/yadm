@@ -1,43 +1,55 @@
-import {
-  setUndoAction,
-  useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
-import useTemporalDEMOModelerStore from "$/features/modeler/useTemporalDEMOModelerStore";
 import { useEffect } from "react";
+import {
+  redo,
+  setUndoAction,
+  undo,
+  useUndoRedoStore,
+} from "./useUndoRedoStore";
 
 const useUndoShortcut = () => {
-  const { undo, redo, futureStates } = useTemporalDEMOModelerStore(
-    (state) => state
-  );
-
-  const undoAction = useDEMOModelerStore((state) => state.undoAction);
+  const undoAction = useUndoRedoStore((state) => state.action);
+  const pastHistory = useUndoRedoStore((state) => state.past);
+  const futureHistory = useUndoRedoStore((state) => state.future);
 
   useEffect(() => {
-    const undoHandler = (e: KeyboardEvent) => {
-      if (e.key?.toLowerCase() === "y" && (e.ctrlKey || e.metaKey)) {
-        if (undoAction !== "redo") {
-          setUndoAction("redo");
-        }
+    const keyDownHandler = (event: KeyboardEvent) => {
+      if (
+        event.key?.toLowerCase() === "y" &&
+        (event.ctrlKey || event.metaKey) &&
+        futureHistory.length > 0
+      ) {
         redo();
-      } else if (e.key?.toLowerCase() === "z" && (e.ctrlKey || e.metaKey)) {
-        if (undoAction !== "undo") {
-          setUndoAction("undo");
-        }
+        setUndoAction("redo");
+      } else if (
+        event.key?.toLowerCase() === "z" &&
+        (event.ctrlKey || event.metaKey) &&
+        pastHistory.length > 0
+      ) {
         undo();
+        setUndoAction("undo");
       }
     };
 
-    const handleKeyUp = () => {
-      setUndoAction(null);
+    const keyUpHandler = (e: KeyboardEvent) => {
+      if (undoAction) return;
+      if (
+        e.key.toLowerCase() === "z" ||
+        e.key.toLowerCase() === "y" ||
+        e.key.toLowerCase() === "control" ||
+        e.key.toLowerCase() === "meta"
+      ) {
+        setUndoAction(null);
+      }
     };
 
-    document.addEventListener("keydown", undoHandler);
-    document.addEventListener("keyup", handleKeyUp);
+    document.addEventListener("keydown", keyDownHandler);
+    document.addEventListener("keydown", keyUpHandler);
+
     return () => {
-      document.removeEventListener("keydown", undoHandler);
-      document.removeEventListener("keyup", handleKeyUp);
+      document.removeEventListener("keydown", keyDownHandler);
+      document.addEventListener("keydown", keyUpHandler);
     };
-  }, [setUndoAction, undoAction, undo, redo]);
+  }, [undo, redo, setUndoAction, undoAction]);
 };
 
 export default useUndoShortcut;

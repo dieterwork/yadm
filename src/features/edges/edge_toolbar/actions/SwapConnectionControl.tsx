@@ -5,6 +5,7 @@ import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEM
 import { getEdge } from "$/features/modeler/useDEMOModelerStore";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
+import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 
 const SwapConnectionControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const edge = getEdge(edgeId);
@@ -21,6 +22,7 @@ const SwapConnectionControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
       label={t(($) => $["Swap connection"])}
       onPress={() => {
         swapConnection();
+        takeSnapshot();
       }}
     />
   );

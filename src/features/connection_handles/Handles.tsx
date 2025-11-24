@@ -1,23 +1,9 @@
-import {
-  getConnectedEdges,
-  Position,
-  useInternalNode,
-  useReactFlow,
-  useUpdateNodeInternals,
-} from "@xyflow/react";
+import { Position, useUpdateNodeInternals } from "@xyflow/react";
 import type { DEMOHandlesData } from "../nodes/nodes.types";
 import DEMOHandle from "./DEMOHandle";
 import { cn } from "@sglara/cn";
-import {
-  getNode,
-  setEdges,
-  setNodes,
-  updateNodeHandleOffset,
-  updateNodeHandles,
-  useDEMOModelerStore,
-} from "../modeler/useDEMOModelerStore";
-import clamp from "$/shared/utils/clamp";
-import { useEffect, type MouseEvent } from "react";
+import { getNode } from "../modeler/useDEMOModelerStore";
+import { useEffect } from "react";
 
 interface HandlesProps {
   nodeId: string;
@@ -34,7 +20,14 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
     updateNodeInternals(nodeId);
   }, [updateNodeInternals, nodeId]);
 
-  if (!node || !width || !height || !("handles" in node.data)) return null;
+  if (
+    !node ||
+    !width ||
+    !height ||
+    !("handles" in node.data) ||
+    !node.data.handles
+  )
+    return null;
 
   return (
     <div
@@ -57,6 +50,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             position={Position.Top}
             nodeId={nodeId}
             offset={handle.offset}
+            canDrag={handle.canDrag}
           />
         ))}
       {node.data.handles.bottom?.handles &&
@@ -69,6 +63,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             position={Position.Bottom}
             nodeId={nodeId}
             offset={handle.offset}
+            canDrag={handle.canDrag}
           />
         ))}
       {node.data.handles.left?.handles &&
@@ -81,6 +76,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             position={Position.Left}
             nodeId={nodeId}
             offset={handle.offset}
+            canDrag={handle.canDrag}
           />
         ))}
       {node.data.handles.right?.handles &&
@@ -93,6 +89,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             position={Position.Right}
             nodeId={nodeId}
             offset={handle.offset}
+            canDrag={handle.canDrag}
           />
         ))}
     </div>

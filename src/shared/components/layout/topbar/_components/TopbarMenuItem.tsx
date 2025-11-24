@@ -17,11 +17,11 @@ const TopbarMenuItem = ({
         )
       }
     >
-      {({ hasSubmenu }) => (
-        <>
+      {({ isDisabled, hasSubmenu }) => (
+        <span className={cn(isDisabled && "opacity-50")}>
           {children}
           {hasSubmenu && <CaretRightIcon size={14} />}
-        </>
+        </span>
       )}
     </MenuItem>
   );

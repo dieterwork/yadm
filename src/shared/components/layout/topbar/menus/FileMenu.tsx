@@ -3,9 +3,9 @@ import TopbarMenuItem from "../_components/TopbarMenuItem";
 import TopbarSubMenuButton from "../_components/TopbarSubMenuButton";
 import {
   clearModel,
+  saveModel,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
-import useSave from "$/features/actions/save/useSave";
 import useExport from "$/features/actions/export/useExport";
 import useImport from "$/features/actions/import/useImport";
 import { useTranslation } from "react-i18next";
@@ -14,7 +14,6 @@ import DEMOModal from "$/shared/components/ui/modal/DEMOModal";
 import { useState } from "react";
 
 const FileMenu = () => {
-  const { save } = useSave();
   const { exportAsPNG, exportAsPDF, exportAsJSON } = useExport();
   const fileName = useDEMOModelerStore((state) => state.fileName);
 
@@ -36,7 +35,7 @@ const FileMenu = () => {
         </TopbarMenuItem>
         <TopbarMenuItem
           onAction={() => {
-            save();
+            saveModel();
             toast.success(`Saved "${fileName}" to local storage`);
           }}
         >

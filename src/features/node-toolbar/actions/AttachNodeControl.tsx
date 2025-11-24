@@ -1,5 +1,6 @@
 import useAttachNode from "$/features/actions/attach/useAttachNode";
 import { setAttachChildNodeId } from "$/features/actions/attach/useAttachStore";
+import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 import { getNode, setAction } from "$/features/modeler/useDEMOModelerStore";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import { LinkBreakIcon, LinkIcon } from "@phosphor-icons/react";
@@ -32,6 +33,7 @@ const AttachNodeControl = ({ nodeId }: { nodeId: string }) => {
             `Detached ${childNode.ariaLabel} node from ${parentNode.ariaLabel} node`,
             { icon: "linkBreak" }
           );
+          takeSnapshot();
         } else {
           setAttachChildNodeId(nodeId);
         }

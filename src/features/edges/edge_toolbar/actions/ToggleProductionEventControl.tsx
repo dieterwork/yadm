@@ -1,3 +1,4 @@
+import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 import { getEdge, updateEdge } from "$/features/modeler/useDEMOModelerStore";
 import DEMOElementToolbarToggleButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarToggleButton";
 import { MinusIcon, PlusIcon } from "@phosphor-icons/react";
@@ -24,6 +25,7 @@ const ToggleProductionEventMenuItem = ({ edgeId }: { edgeId: string }) => {
         updateEdge(edgeId, {
           markerStart: isProductionFactVisible ? "diamond" : undefined,
         });
+        takeSnapshot();
       }}
     />
   );

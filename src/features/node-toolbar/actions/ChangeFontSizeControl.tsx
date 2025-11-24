@@ -7,6 +7,7 @@ import { useState } from "react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
 import { useTranslation } from "react-i18next";
+import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 
 const fontSizeOptions = [10, 12, 14, 16, 20, 24].map((num) => ({
   id: num,
@@ -38,6 +39,7 @@ const ChangeFontSizeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
             for (const entry of selection) {
               if (typeof entry !== "number") return;
               updateNodeFontSize(nodeId, entry);
+              takeSnapshot();
             }
           }}
         >

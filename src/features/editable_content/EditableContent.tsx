@@ -11,6 +11,7 @@ import {
 } from "../modeler/useDEMOModelerStore";
 import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
+import { takeSnapshot } from "../actions/undo/useUndoRedoStore";
 
 interface EditableContentProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, "content"> {
@@ -85,6 +86,7 @@ const EditableContent = ({
     ref,
     onContentUpdate: (content) => {
       updateNodeContent(nodeId, content);
+      takeSnapshot();
     },
     maxLines,
     maxLength,

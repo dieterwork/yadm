@@ -1,3 +1,4 @@
+import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 import { updateNodeTextAlign } from "$/features/modeler/useDEMOModelerStore";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
@@ -71,6 +72,7 @@ const ChangeTextAlignMenuItem = ({ nodeId }: { nodeId: string }) => {
             for (const entry of selection) {
               if (typeof entry !== "string" || !isNodeTextAlign(entry)) return;
               updateNodeTextAlign(nodeId, entry);
+              takeSnapshot();
             }
           }}
         >

@@ -10,6 +10,7 @@ import { useReactFlow } from "@xyflow/react";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import { z } from "zod";
 import toast from "react-hot-toast/headless";
+import formatDate from "$/shared/utils/formatDate";
 
 const fileNameSchema = z
   .string()
@@ -18,17 +19,6 @@ const fileNameSchema = z
     error:
       "File name can only contain letters, numbers, parentheses, underscores, and dashes",
   });
-
-const testFileName = (fileName: string) => {
-  try {
-    fileNameSchema.parse(fileName);
-    return { success: true };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { success: false, error: error };
-    }
-  }
-};
 
 const useExport = () => {
   const nodes = useDEMOModelerStore((state) => state.nodes);
@@ -41,9 +31,13 @@ const useExport = () => {
   const exportAsPNG = async (scaleFactor: number) => {
     try {
       const parsedFileName = fileNameSchema.parse(fileName);
+      const date = formatDate();
       setExportEnabled(true);
       const { url } = await generatePNG({ nodesBounds, scaleFactor });
-      downloadFile(url, parsedFileName + ` x${scaleFactor}.png`);
+      downloadFile(
+        url,
+        (parsedFileName || "Demo Model") + " " + date + ` x${scaleFactor}.png`
+      );
       setExportEnabled(false);
     } catch (err) {
       console.error("Could not generate PNG.", err);
@@ -58,6 +52,7 @@ const useExport = () => {
   const exportAsPDF = async (scaleFactor: number) => {
     try {
       const parsedFileName = fileNameSchema.parse(fileName);
+      const date = formatDate();
       setExportEnabled(true);
       const { url, width, height } = await generatePNG({
         nodesBounds,
@@ -66,7 +61,11 @@ const useExport = () => {
       const doc = new jsPDF("landscape", "px", [width, height]);
       doc.addImage(url, "png", width / 4, height / 4, width / 2, height / 2);
       doc.output("dataurlnewwindow", {
-        filename: parsedFileName + ` x${scaleFactor}.pdf`,
+        filename:
+          (parsedFileName || "Demo Model") +
+          " " +
+          date +
+          ` x${scaleFactor}.pdf`,
       });
       setExportEnabled(false);
     } catch (err) {
@@ -91,7 +90,11 @@ const useExport = () => {
       const jsonModel = JSON.stringify(jsModel);
       const file = new Blob([jsonModel], { type: "application/json" });
       const url = URL.createObjectURL(file);
-      downloadFile(url, parsedFileName + ".json");
+      const date = formatDate();
+      downloadFile(
+        url,
+        (parsedFileName || "Demo Model") + " " + date + ".json"
+      );
     } catch (err) {
       console.error("Could not generate JSON:", err);
       if (err instanceof z.ZodError) {

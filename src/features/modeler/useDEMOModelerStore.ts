@@ -31,9 +31,10 @@ import throttle from "$/shared/utils/throttle";
 import { updateHelperLines } from "../helper_lines/useHelperLinesStore";
 import type { CooperationModelNode } from "../nodes/cooperation_model/cooperationModel.types";
 import formatDate from "$/shared/utils/formatDate";
-
-import { useStoreWithEqualityFn } from "zustand/traditional";
-import type { TemporalState } from "zundo";
+import diff from "microdiff";
+import { takeSnapshot } from "../actions/undo/useUndoRedoStore";
+import debounce from "$/shared/utils/debounce";
+import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 
 export type ModelerAction =
   | "attach"
@@ -54,42 +55,22 @@ export interface DEMOModelerState {
   isGridVisible: boolean;
   isGridSnapEnabled: boolean;
   DEMOInstance: null | ReactFlowInstance<DEMONode, DEMOEdge>;
-  undoAction: "undo" | "redo" | null;
   isHandleEditModeEnabled: boolean;
 }
 
-export const useDEMOModelerStore = create<DEMOModelerState>()(
-  temporal(
-    (set, get) => ({
-      id: uuid(),
-      fileName: `DEMO Model ${formatDate()}`,
-      nodes: initialNodes,
-      edges: initialEdges,
-      DEMOInstance: null,
-      action: null,
-      undoAction: null,
-      isGridVisible: true,
-      isGridSnapEnabled: true,
-      isEnabled: true,
-      isExportEnabled: false,
-      isHandleEditModeEnabled: false,
-    }),
-    {
-      handleSet: (handleSet) =>
-        throttle((state) => {
-          handleSet(state);
-        }, 1000),
-      partialize: (state) => {
-        const { nodes, edges } = state;
-        return {
-          nodes,
-          edges,
-        };
-      },
-      limit: 50,
-    }
-  )
-);
+export const useDEMOModelerStore = create<DEMOModelerState>()((set, get) => ({
+  id: uuid(),
+  fileName: `DEMO Model ${formatDate()}`,
+  nodes: initialNodes,
+  edges: initialEdges,
+  DEMOInstance: null,
+  action: null,
+  isGridVisible: true,
+  isGridSnapEnabled: true,
+  isEnabled: true,
+  isExportEnabled: false,
+  isHandleEditModeEnabled: false,
+}));
 
 export const setNodes = (newNodes: ReactStyleStateSetter<DEMONode[]>) => {
   useDEMOModelerStore.setState((state) => ({
@@ -245,6 +226,7 @@ export const onEdgesDelete = (deletedEdges: DEMOEdge[]) => {
       nodes
     );
   });
+  takeSnapshot();
 };
 
 export const addNode = (node: DEMONode | DEMONode[]) => {
@@ -287,6 +269,7 @@ export const onConnect: OnConnect = (connection) => {
     zIndex: 110,
   };
   addEdge(newEdge);
+  takeSnapshot();
 };
 
 export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
@@ -322,6 +305,7 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
   useDEMOModelerStore.setState(() => ({
     edges: newEdges,
   }));
+  takeSnapshot();
 };
 
 export const updateNodeColor = (id: string, color: string) => {
@@ -362,10 +346,6 @@ export const updateNodeContent = (id: string, content: string) => {
 
 export const setAction = (action: ModelerAction) => {
   useDEMOModelerStore.setState(() => ({ action }));
-};
-
-export const setUndoAction = (undoAction: "undo" | "redo" | null) => {
-  useDEMOModelerStore.setState(() => ({ undoAction }));
 };
 
 export const setFileName = (fileName: string) => {
@@ -570,3 +550,24 @@ export const onConnectStart = () => {
 };
 
 export const onReconnectStart = () => {};
+
+export const onNodesDelete = () => {
+  takeSnapshot();
+};
+
+export const saveModel = () => {
+  const DEMOInstance = useDEMOModelerStore.getState().DEMOInstance;
+  const isEnabled = useDEMOModelerStore.getState().isEnabled;
+
+  if (!DEMOInstance) return;
+  const jsonModel = JSON.stringify({
+    ...DEMOInstance.toObject(),
+    isEnabled,
+    version: "1.0.0",
+  } satisfies DEMOModelJSON);
+  localStorage.setItem("demo-model", jsonModel);
+};
+
+export const autoSaveModel = debounce(() => {
+  saveModel();
+}, 3000);

@@ -69,6 +69,7 @@ export type DEMOHandle = {
   offset: number;
   type?: string;
   style?: CSSProperties;
+  canDrag?: boolean;
 };
 
 export type DEMOHandlePosition = Position;
@@ -89,11 +90,11 @@ export type DEMOHandlesData = {
   bottom?: DEMOHandlesPositionData;
   left?: DEMOHandlesPositionData;
   right?: DEMOHandlesPositionData;
-  isVisible: boolean;
+  isVisible?: boolean;
 };
 
 export type DEMONodeBaseData<T extends SubModel> = {
-  handles: DEMOHandlesData;
+  handles?: DEMOHandlesData;
   subModel: T;
   fontSize?: string;
   color?: string;

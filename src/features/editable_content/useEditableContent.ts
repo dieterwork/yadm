@@ -40,7 +40,6 @@ export const useEditableContent = ({
   leading: number;
   textAlign: CSSProperties["textAlign"];
 }) => {
-  const action = useDEMOModelerStore((state) => state.action);
   useEffect(() => {
     if (!didInit) {
       didInit = true;

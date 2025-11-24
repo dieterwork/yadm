@@ -1,22 +1,29 @@
-import {
-  clearModel,
-  setUndoAction,
-} from "$/features/modeler/useDEMOModelerStore";
+import { clearModel } from "$/features/modeler/useDEMOModelerStore";
 import TopbarMenuButton from "../_components/TopbarMenuButton";
 import TopbarMenuItem from "../_components/TopbarMenuItem";
 import { useTranslation } from "react-i18next";
-import useTemporalDEMOModelerStore from "$/features/modeler/useTemporalDEMOModelerStore";
 import { useRef } from "react";
+import {
+  redo,
+  setUndoAction,
+  undo,
+  useUndoRedoStore,
+} from "$/features/actions/undo/useUndoRedoStore";
 
 const EditMenu = () => {
-  const { undo, redo } = useTemporalDEMOModelerStore((state) => state);
   const { t } = useTranslation();
   const timer = useRef<NodeJS.Timeout | null>(null);
+  const pastHistory = useUndoRedoStore((state) => state.past);
+  const futureHistory = useUndoRedoStore((state) => state.future);
   return (
     <TopbarMenuButton label={t(($) => $["Edit"])}>
       <TopbarMenuItem
+        isDisabled={pastHistory.length === 0}
         onAction={() => {
-          if (timer.current) clearTimeout(timer.current);
+          if (timer.current) {
+            clearTimeout(timer.current);
+            timer.current = null;
+          }
           setUndoAction("undo");
           undo();
           timer.current = setTimeout(() => {
@@ -27,8 +34,12 @@ const EditMenu = () => {
         {t(($) => $["Undo"])}
       </TopbarMenuItem>
       <TopbarMenuItem
+        isDisabled={futureHistory.length === 0}
         onAction={() => {
-          if (timer.current) clearTimeout(timer.current);
+          if (timer.current) {
+            clearTimeout(timer.current);
+            timer.current = null;
+          }
           setUndoAction("redo");
           redo();
           timer.current = setTimeout(() => {

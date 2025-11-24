@@ -56,6 +56,7 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
                 ...data,
                 lineType: data?.lineType === "solid" ? "dashed" : "solid",
               }));
+              takeSnapshot();
             }
           }}
         >

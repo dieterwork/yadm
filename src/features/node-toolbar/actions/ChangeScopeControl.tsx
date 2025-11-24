@@ -16,6 +16,7 @@ import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DE
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
 import { useTranslation } from "react-i18next";
+import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 
 const ChangeScopeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const node = getNode(nodeId);
@@ -56,6 +57,7 @@ const ChangeScopeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
             for (const entry of selection) {
               if (typeof entry !== "string" || !isNodeScope(entry)) return;
               updateNodeScope(nodeId, entry);
+              takeSnapshot();
             }
           }}
         >

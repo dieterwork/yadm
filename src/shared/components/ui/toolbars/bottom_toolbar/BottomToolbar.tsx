@@ -1,15 +1,15 @@
-import { Tooltip, TooltipTrigger } from "react-aria-components";
+import { TooltipTrigger } from "react-aria-components";
 import {
   ArrowClockwiseIcon,
   ArrowCounterClockwiseIcon,
   CornersOutIcon,
   LockSimpleIcon,
-  LockSimpleOpenIcon,
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
 } from "@phosphor-icons/react";
-import { useKeyPress, useReactFlow, useViewport } from "@xyflow/react";
+import { useReactFlow, useViewport } from "@xyflow/react";
 import {
+  saveModel,
   toggleLock,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
@@ -24,20 +24,23 @@ import {
   usePreviewNodeStore,
 } from "$/features/preview_node/usePreviewNodeStore";
 import { useTranslation } from "react-i18next";
-import useSave from "$/features/actions/save/useSave";
+import {
+  redo,
+  undo,
+  useUndoRedoStore,
+} from "$/features/actions/undo/useUndoRedoStore";
 
 const BottomToolbar = () => {
   const { zoomIn, zoomOut, fitView, zoomTo } = useReactFlow();
   const { zoom } = useViewport();
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
-  const { undo, redo } = useDEMOModelerStore.temporal.getState();
   const orientation = "horizontal";
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
-  const undoAction = useDEMOModelerStore((state) => state.undoAction);
+  const undoAction = useUndoRedoStore((state) => state.action);
+  const pastHistory = useUndoRedoStore((state) => state.past);
+  const futureHistory = useUndoRedoStore((state) => state.future);
 
   const { t } = useTranslation();
-
-  const { save } = useSave();
 
   return (
     <div className="bottom-toolbar-wrapper | absolute bottom-4 left-[50%] translate-x-[-50%] z-9999">
@@ -65,7 +68,7 @@ const BottomToolbar = () => {
               onChange={(isEnabled) => {
                 if (previewNode) return resetPreviewNode();
                 toggleLock(isEnabled);
-                save();
+                saveModel();
               }}
             >
               <LockSimpleIcon
@@ -165,7 +168,7 @@ const BottomToolbar = () => {
             />
             <DEMOModelerToolbarButton
               aria-label={t(($) => $["Undo"])}
-              isDisabled={!isEnabled}
+              isDisabled={!isEnabled || pastHistory.length === 0}
               onPress={() => {
                 if (previewNode) return resetPreviewNode();
                 undo();
@@ -177,6 +180,7 @@ const BottomToolbar = () => {
                     ? "var(--color-sky-500)"
                     : "var(--color-slate-900)"
                 }
+                opacity={pastHistory.length === 0 ? 0.5 : 1}
               />
             </DEMOModelerToolbarButton>
           </TooltipTrigger>
@@ -189,7 +193,7 @@ const BottomToolbar = () => {
             />
             <DEMOModelerToolbarButton
               aria-label={t(($) => $["Redo"])}
-              isDisabled={!isEnabled}
+              isDisabled={!isEnabled || futureHistory.length === 0}
               onPress={() => {
                 if (previewNode) return resetPreviewNode();
                 redo();
@@ -199,8 +203,9 @@ const BottomToolbar = () => {
                 color={
                   undoAction === "redo"
                     ? "var(--color-sky-500)"
-                    : "var(--color-slate-900"
+                    : "var(--color-slate-900)"
                 }
+                opacity={futureHistory.length === 0 ? 0.5 : 1}
               />
             </DEMOModelerToolbarButton>
           </TooltipTrigger>
