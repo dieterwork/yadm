@@ -244,19 +244,16 @@ const DEMOModeler = () => {
           ref={ref}
           nodes={nodes}
           nodeTypes={nodeTypes}
-          onNodeDragStart={() => {
-            if (isTracking) {
-              console.log("pause");
-              pause();
-            }
-          }}
+          onNodeDragStart={() => {}}
           onNodeDrag={(...params) => {
             onNodeDrag(...params);
+            if (isTracking) {
+              pause();
+            }
           }}
           onNodeDragStop={(...params) => {
             onNodeDragStop(...params);
             if (!isTracking) {
-              console.log("resume");
               resume();
             }
           }}

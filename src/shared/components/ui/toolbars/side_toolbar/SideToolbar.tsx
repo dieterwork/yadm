@@ -242,9 +242,7 @@ const SideToolbar = () => {
             />
             <DEMOModelerToolbarToggleButton
               isSelected={areHandlesVisible}
-              isDisabled={
-                nodes.length === 0 || !isEnabled || isHandleEditModeEnabled
-              }
+              isDisabled={nodes.length === 0 || !isEnabled}
               onChange={(isVisible) => {
                 if (previewNode) return resetPreviewNode();
                 setNodesHandlesVisibility(isVisible);

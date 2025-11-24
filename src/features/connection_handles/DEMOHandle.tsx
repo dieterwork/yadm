@@ -8,6 +8,7 @@ import {
   type HandleProps,
 } from "@xyflow/react";
 import {
+  getNode,
   setEdges,
   setNodes,
   updateNodeHandleOffset,
@@ -36,6 +37,8 @@ const DEMOHandle = ({
   const updateNodeInternals = useUpdateNodeInternals();
   const internalNode = useInternalNode(nodeId);
   const edges = useDEMOModelerStore((state) => state.edges);
+  const node = getNode(nodeId);
+  if (!node) return null;
 
   const bind = useGesture({
     onDrag: ({ event, xy }) => {
@@ -43,7 +46,6 @@ const DEMOHandle = ({
       if (!isEnabled) return;
       if (!id) return;
       event.preventDefault();
-      event.stopPropagation();
 
       const xyPosition = screenToFlowPosition({ x: xy[0], y: xy[1] });
       if (position === Position.Top || position === Position.Bottom) {

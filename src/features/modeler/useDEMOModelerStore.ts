@@ -78,22 +78,15 @@ export const useDEMOModelerStore = create<DEMOModelerState>()(
       handleSet: (handleSet) =>
         throttle((state) => {
           handleSet(state);
-        }, 500),
+        }, 1000),
       partialize: (state) => {
         const { nodes, edges } = state;
-        const savedNodes = nodes.map((node) => {
-          const { selected, ...restNode } = node;
-          return { ...restNode };
-        });
-        const savedEdges = edges.map((edge) => {
-          const { selected, ...restEdge } = edge;
-          return { ...restEdge };
-        });
         return {
-          nodes: savedNodes,
-          edges: savedEdges,
+          nodes,
+          edges,
         };
       },
+      limit: 50,
     }
   )
 );
