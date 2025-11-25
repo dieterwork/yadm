@@ -49,7 +49,7 @@ const useUndoShortcut = () => {
       document.removeEventListener("keydown", keyDownHandler);
       document.addEventListener("keydown", keyUpHandler);
     };
-  }, [undo, redo, setUndoAction, undoAction]);
+  }, [undo, redo, setUndoAction, undoAction, pastHistory, futureHistory]);
 };
 
 export default useUndoShortcut;
