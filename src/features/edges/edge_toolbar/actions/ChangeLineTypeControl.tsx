@@ -16,6 +16,7 @@ import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types
 import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
+import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 
 const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const edge = getEdge(edgeId);
