@@ -1,4 +1,7 @@
-import { clearModel } from "$/features/modeler/useDEMOModelerStore";
+import {
+  clearModel,
+  useDEMOModelerStore,
+} from "$/features/modeler/useDEMOModelerStore";
 import TopbarMenuButton from "../_components/TopbarMenuButton";
 import TopbarMenuItem from "../_components/TopbarMenuItem";
 import { useTranslation } from "react-i18next";
@@ -15,10 +18,11 @@ const EditMenu = () => {
   const timer = useRef<NodeJS.Timeout | null>(null);
   const pastHistory = useUndoRedoStore((state) => state.past);
   const futureHistory = useUndoRedoStore((state) => state.future);
+  const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   return (
     <TopbarMenuButton label={t(($) => $["Edit"])}>
       <TopbarMenuItem
-        isDisabled={pastHistory.length === 0}
+        isDisabled={pastHistory.length === 0 || !isEnabled}
         onAction={() => {
           if (timer.current) {
             clearTimeout(timer.current);
@@ -34,7 +38,7 @@ const EditMenu = () => {
         {t(($) => $["Undo"])}
       </TopbarMenuItem>
       <TopbarMenuItem
-        isDisabled={futureHistory.length === 0}
+        isDisabled={futureHistory.length === 0 || !isEnabled}
         onAction={() => {
           if (timer.current) {
             clearTimeout(timer.current);
@@ -50,6 +54,7 @@ const EditMenu = () => {
         {t(($) => $["Redo"])}
       </TopbarMenuItem>
       <TopbarMenuItem
+        isDisabled={!isEnabled}
         onAction={() => {
           clearModel();
         }}

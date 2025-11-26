@@ -4,11 +4,13 @@ import {
   Popover,
   SubmenuTrigger,
   type MenuProps,
+  type MenuTriggerProps,
+  type SubmenuTriggerProps,
 } from "react-aria-components";
 import TopbarMenuItem from "./TopbarMenuItem";
 
 type TopbarSubMenuButtonProps<T> = MenuProps<T> &
-  Omit<menuTriggerProps, "children"> & {
+  Omit<SubmenuTriggerProps, "children"> & {
     label?: string;
   };
 

@@ -1,4 +1,4 @@
-import { CaretRightIcon } from "@phosphor-icons/react";
+import { CaretCircleRightIcon, CaretRightIcon } from "@phosphor-icons/react";
 import { cn } from "@sglara/cn";
 import { MenuItem, type MenuItemProps } from "react-aria-components";
 
@@ -18,10 +18,12 @@ const TopbarMenuItem = ({
       }
     >
       {({ isDisabled, hasSubmenu }) => (
-        <span className={cn(isDisabled && "opacity-50")}>
+        <div
+          className={cn(isDisabled && "opacity-50", "flex items-center w-full")}
+        >
           {children}
-          {hasSubmenu && <CaretRightIcon size={14} />}
-        </span>
+          {hasSubmenu && <CaretCircleRightIcon size={20} className="ml-auto" />}
+        </div>
       )}
     </MenuItem>
   );
