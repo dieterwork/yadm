@@ -83,10 +83,15 @@ const DEMOHandle = ({
     },
   });
 
+  const dragHandlers = () => {
+    if (!isHandleEditModeEnabled) return [];
+    return bind();
+  };
+
   return (
     <Handle
       {...restProps}
-      {...(bind() as any)}
+      {...dragHandlers}
       style={{
         left:
           position === Position.Top || position === Position.Bottom
