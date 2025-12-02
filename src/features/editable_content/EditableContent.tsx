@@ -1,17 +1,25 @@
 import { cn } from "@sglara/cn";
 import {
+  useEffect,
   useRef,
+  useState,
   type CSSProperties,
   type HTMLAttributes,
   type RefObject,
 } from "react";
 import {
+  autoSaveModel,
+  getNode,
   updateNodeContent,
   useDEMOModelerStore,
 } from "../modeler/useDEMOModelerStore";
 import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
-import { takeSnapshot } from "../actions/undo/useUndoRedoStore";
+import {
+  debounceTakeSnapshot,
+  takeSnapshot,
+} from "../actions/undo/useUndoRedoStore";
+import debounce from "$/shared/utils/debounce";
 
 interface EditableContentProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, "content"> {
@@ -86,7 +94,7 @@ const EditableContent = ({
     ref,
     onContentUpdate: (content) => {
       updateNodeContent(nodeId, content);
-      takeSnapshot();
+      debounceTakeSnapshot();
     },
     maxLines,
     maxLength,
@@ -97,6 +105,10 @@ const EditableContent = ({
   });
 
   const isContentEditable = !!isEditable && isEnabled;
+
+  useEffect(() => {
+    ref.current.innerHTML = content ?? "";
+  }, []);
 
   return (
     <>
@@ -120,10 +132,10 @@ const EditableContent = ({
         <span
           {...props}
           ref={ref}
-          contentEditable={isContentEditable}
           spellCheck={false}
           suppressContentEditableWarning={true}
-          className="editable-content | inline-block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none"
+          contentEditable={isContentEditable}
+          className="editable-content | inline-block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none empty:caret-transparent before:absolute before:inset-0 before:m-auto before:w-full before:h-full before:content-['...'] before:grid before:place-items-center before:hidden before:pointer-events-none empty:before:grid before:text-slate-500 [&[contenteditable=false]::before]:hidden"
           style={{
             alignContent,
             color,

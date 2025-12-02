@@ -1,5 +1,6 @@
 import type { DEMOEdge } from "$/features/edges/edges.types";
 import {
+  getNode,
   setEdges,
   setNodes,
   useDEMOModelerStore,
@@ -130,41 +131,206 @@ const useCopyPaste = () => {
         .map((node) => node.position.y)
     );
 
-    // create an old/new id map to keep track of old ids
-    const idMap = new Map<string, string>();
+    // create an old/new id map to keep track of old node ids
+    const nodeIdMap = new Map<string, string>();
     for (const node of bufferedNodes) {
       const newId = uuid();
-      idMap.set(node.id, newId);
+      nodeIdMap.set(node.id, newId);
     }
 
     const newNodes = bufferedNodes.map((node) => {
       // get new id
-      const newId = idMap.get(node.id)!;
+      const newId = nodeIdMap.get(node.id)!;
 
       // if has a parent id, fetch the id from the map, else it's undefined
-      const parentId = node.parentId ? idMap.get(node.parentId) : undefined;
+      const parentId = node.parentId ? nodeIdMap.get(node.parentId) : undefined;
 
       const x = pasteX + (node.position.x - minX);
       const y = pasteY + (node.position.y - minY);
       const position = node.parentId ? node.position : { x, y };
 
-      return { ...node, id: newId, parentId, position };
+      // remap handles
+      return {
+        ...node,
+        id: newId,
+        parentId,
+        position,
+        data: {
+          ...node.data,
+          handles:
+            "handles" in node.data
+              ? {
+                  ...node.data.handles,
+                  bottom: {
+                    ...node.data.handles?.bottom,
+                    handles: node.data.handles?.bottom?.handles?.map(
+                      (handle) => ({
+                        ...handle,
+                        id: uuid(),
+                      })
+                    ),
+                  },
+                  top: {
+                    ...node.data.handles?.top,
+                    handles: node.data.handles?.top?.handles?.map((handle) => ({
+                      ...handle,
+                      id: uuid(),
+                    })),
+                  },
+                  left: {
+                    ...node.data.handles?.left,
+                    handles: node.data.handles?.left?.handles?.map(
+                      (handle) => ({
+                        ...handle,
+                        id: uuid(),
+                      })
+                    ),
+                  },
+                  right: {
+                    ...node.data.handles?.right,
+                    handles: node.data.handles?.right?.handles?.map(
+                      (handle) => ({
+                        ...handle,
+                        id: uuid(),
+                      })
+                    ),
+                  },
+                }
+              : undefined,
+        },
+      };
     }) satisfies DEMONode[];
 
-    const newEdges = bufferedEdges.map((edge) => {
-      const id = uuid();
-      const sourceId = uuid();
-      const targetId = uuid();
-      const source = sourceId;
-      const target = targetId;
+    // create an old/new id map to keep track of old edge ids
+    const edgeIdMap = new Map<string, string>();
+    for (const edge of bufferedEdges) {
+      const newId = uuid();
+      edgeIdMap.set(edge.id, newId);
+    }
 
-      return { ...edge, id, source, target };
-    }) satisfies DEMOEdge[];
+    const newEdges = bufferedEdges
+      .map((edge) => {
+        // get new id
+        const newId = edgeIdMap.get(edge.id)!;
+
+        const sourceNode = bufferedNodes.find(
+          (node) => node.id === edge.source
+        );
+        const targetNode = bufferedNodes.find(
+          (node) => node.id === edge.target
+        );
+
+        const newSource = nodeIdMap.get(edge.source)!;
+        const newTarget = nodeIdMap.get(edge.target)!;
+
+        const newSourceNode = newNodes.find((node) => node.id == newSource);
+        const newTargetNode = newNodes.find((node) => node.id == newTarget);
+
+        if (
+          !sourceNode ||
+          !targetNode ||
+          !("handles" in sourceNode.data) ||
+          !("handles" in targetNode.data)
+        ) {
+          return null;
+        }
+
+        // get sourceHandle index
+
+        const topSourceNodeHandle =
+          sourceNode.data.handles?.top?.handles?.findIndex(
+            (handle) => handle.id === edge.sourceHandle
+          ) ?? -1;
+        const bottomSourceNodeHandle =
+          sourceNode.data.handles?.bottom?.handles?.findIndex(
+            (handle) => handle.id === edge.sourceHandle
+          ) ?? -1;
+        const leftSourceNodeHandle =
+          sourceNode.data.handles?.left?.handles?.findIndex(
+            (handle) => handle.id === edge.sourceHandle
+          ) ?? -1;
+        const rightSourceNodeHandle =
+          sourceNode.data.handles?.right?.handles?.findIndex(
+            (handle) => handle.id === edge.sourceHandle
+          ) ?? -1;
+
+        const sourceNodeHandleSelections = [
+          topSourceNodeHandle,
+          bottomSourceNodeHandle,
+          leftSourceNodeHandle,
+          rightSourceNodeHandle,
+        ];
+
+        // get targetHandle index
+
+        const topTargetNodeHandle =
+          targetNode.data.handles?.top?.handles?.findIndex(
+            (handle) => handle.id === edge.targetHandle
+          ) ?? -1;
+        const bottomTargetNodeHandle =
+          targetNode.data.handles?.bottom?.handles?.findIndex(
+            (handle) => handle.id === edge.targetHandle
+          ) ?? -1;
+        const leftTargetNodeHandle =
+          targetNode.data.handles?.left?.handles?.findIndex(
+            (handle) => handle.id === edge.targetHandle
+          ) ?? -1;
+        const rightTargetNodeHandle =
+          targetNode.data.handles?.right?.handles?.findIndex(
+            (handle) => handle.id === edge.targetHandle
+          ) ?? -1;
+
+        const targetNodeHandleSelections = [
+          topTargetNodeHandle,
+          bottomTargetNodeHandle,
+          leftTargetNodeHandle,
+          rightTargetNodeHandle,
+        ];
+
+        const newSourceHandle =
+          newSourceNode?.data.handles?.top?.handles?.[
+            sourceNodeHandleSelections[0]
+          ]?.id ??
+          newSourceNode?.data.handles?.bottom?.handles?.[
+            sourceNodeHandleSelections[1]
+          ]?.id ??
+          newSourceNode?.data.handles?.left?.handles?.[
+            sourceNodeHandleSelections[2]
+          ]?.id ??
+          newSourceNode?.data.handles?.right?.handles?.[
+            sourceNodeHandleSelections[3]
+          ]?.id;
+
+        const newTargetHandle =
+          newTargetNode?.data.handles?.top?.handles?.[
+            targetNodeHandleSelections[0]
+          ]?.id ??
+          newTargetNode?.data.handles?.bottom?.handles?.[
+            targetNodeHandleSelections[1]
+          ]?.id ??
+          newTargetNode?.data.handles?.left?.handles?.[
+            targetNodeHandleSelections[2]
+          ]?.id ??
+          newTargetNode?.data.handles?.right?.handles?.[
+            targetNodeHandleSelections[3]
+          ]?.id;
+
+        return {
+          ...edge,
+          id: newId,
+          source: newSource,
+          target: newTarget,
+          sourceHandle: newSourceHandle,
+          targetHandle: newTargetHandle,
+        };
+      })
+      .filter((edge) => !!edge) satisfies DEMOEdge[];
 
     setNodes((nodes) => [
       ...nodes.map((node) => ({ ...node, selected: false })),
       ...newNodes,
     ]);
+
     setEdges((edges) => [
       ...edges.map((edge) => ({ ...edge, selected: false })),
       ...newEdges,

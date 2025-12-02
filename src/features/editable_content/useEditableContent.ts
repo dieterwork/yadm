@@ -17,8 +17,6 @@ import {
 import { setMaxLines } from "./utils/setMaxLines";
 import useClickOutside from "$/shared/hooks/useClickOutside";
 
-let didInit = false;
-
 export const useEditableContent = ({
   content,
   ref,
@@ -40,27 +38,17 @@ export const useEditableContent = ({
   leading: number;
   textAlign: CSSProperties["textAlign"];
 }) => {
-  useEffect(() => {
-    if (!didInit) {
-      didInit = true;
-      const el = ref?.current;
-      if (el && content) {
-        if (!el.textContent) {
-          el.innerHTML = "<br />";
-        } else {
-          el.innerHTML = content;
-        }
-      }
-    }
-  }, []);
-
   useClickOutside(ref, () => {
     if (document.activeElement !== ref.current) return;
     if (!(document.activeElement instanceof HTMLSpanElement)) return;
-    document.activeElement.blur();
     updateNodeEditable(nodeId, false);
     updateNode(nodeId, { draggable: true, selected: true });
     setAction("pan");
+    setTimeout(() => {
+      if (document.activeElement !== ref.current) return;
+      if (!(document.activeElement instanceof HTMLSpanElement)) return;
+      document.activeElement.blur();
+    }, 50);
   });
 
   const onInput = (e: FormEvent<HTMLDivElement>) => {

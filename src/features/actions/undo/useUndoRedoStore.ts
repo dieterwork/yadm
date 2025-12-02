@@ -1,12 +1,14 @@
 import type { DEMOEdge } from "$/features/edges/edges.types";
 import {
   autoSaveModel,
+  saveModel,
   setEdges,
   setNodes,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
 import type { DEMONode } from "$/features/nodes/nodes.types";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
+import debounce from "$/shared/utils/debounce";
 import { create } from "zustand";
 
 type HistoryItem = {
@@ -55,9 +57,10 @@ export const takeSnapshot = () => {
   // whenever we take a new snapshot, the redo operations need to be cleared to avoid state mismatches
   setFuture([]);
 
-  // autosave model
-  autoSaveModel();
+  saveModel();
 };
+
+export const debounceTakeSnapshot = debounce(takeSnapshot, 3000);
 
 export const undo = () => {
   const past = useUndoRedoStore.getState().past;

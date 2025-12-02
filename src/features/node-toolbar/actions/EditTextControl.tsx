@@ -12,8 +12,9 @@ import { useTranslation } from "react-i18next";
 import setEndOfContentEditable from "$/features/editable_content/utils/setEndOfContentEditable";
 
 const EditTextControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
-  if (!nodeId) return null;
   const { t } = useTranslation("translation");
+  if (!nodeId) return null;
+
   return (
     <DEMOElementToolbarButton
       onPress={() => {
@@ -25,9 +26,9 @@ const EditTextControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
         updateNode(nodeId, { selected: false });
         setAction("edit");
         setTimeout(() => {
-          element?.focus();
+          element.focus();
           setEndOfContentEditable(element);
-        }, 0);
+        }, 50);
       }}
       icon={(iconProps) => <PencilIcon {...iconProps} />}
       label={t(($) => $["Edit text"])}

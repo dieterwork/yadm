@@ -61,7 +61,6 @@ const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
             assertIsPosition(key);
             // get node's lowest offset
             const leastOffsetHandle = handles[key]?.handles?.sort((a, b) => {
-              console.log(a, b);
               return a.offset - b.offset;
             })[0];
 
