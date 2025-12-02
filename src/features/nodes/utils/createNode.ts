@@ -841,7 +841,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 190,
+        zIndex: 200,
       };
     }
 
@@ -891,7 +891,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 190,
+        zIndex: 200,
       };
     }
 
@@ -941,7 +941,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 190,
+        zIndex: 200,
       };
     }
     case "tk_execution": {
@@ -990,7 +990,7 @@ export const createNode = ({
           stroke: "black",
         },
         selected: true,
-        zIndex: 190,
+        zIndex: 200,
       };
     }
     case "text": {
@@ -1012,7 +1012,7 @@ export const createNode = ({
           height: height ?? DEFAULT_SIZE_MAP["text"].height,
         },
         selected: selected ?? true,
-        zIndex: 200,
+        zIndex: 210,
       };
     }
     case "organization": {
@@ -1059,7 +1059,7 @@ export const createNode = ({
             stroke: "var(--color-rose-500)",
           },
           selected: selected ?? true,
-          zIndex: 200,
+          zIndex: 210,
         },
       ];
     }
