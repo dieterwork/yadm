@@ -45,11 +45,8 @@ const AttachNodeControl = ({ nodeId }: { nodeId: string }) => {
           takeSnapshot();
         } else {
           setAttachChildNodeId(nodeId);
-          const nodeLabel = t(($) => $[node.ariaLabel]);
           toast(
-            t(($) => $["attach_toast"], {
-              childNode: nodeLabel,
-            }),
+            t(($) => $["attach_toast"]),
             {
               icon: "link",
               id: nodeId,
