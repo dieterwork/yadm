@@ -29,6 +29,10 @@ import {
   undo,
   useUndoRedoStore,
 } from "$/features/actions/undo/useUndoRedoStore";
+import {
+  resetAttach,
+  useAttachStore,
+} from "$/features/actions/attach/useAttachStore";
 
 const BottomToolbar = () => {
   const { zoomIn, zoomOut, fitView, zoomTo } = useReactFlow();
@@ -41,6 +45,8 @@ const BottomToolbar = () => {
   const futureHistory = useUndoRedoStore((state) => state.future);
 
   const { t } = useTranslation();
+
+  const childNodeId = useAttachStore((state) => state.childNodeId);
 
   return (
     <div className="bottom-toolbar-wrapper | absolute bottom-4 left-[50%] translate-x-[-50%] z-9999">
@@ -66,9 +72,11 @@ const BottomToolbar = () => {
               }
               isSelected={isEnabled}
               onChange={(isEnabled) => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 toggleLock(isEnabled);
                 saveModel();
+                resetAttach();
               }}
             >
               <LockSimpleIcon
@@ -92,7 +100,8 @@ const BottomToolbar = () => {
             <DEMOModelerToolbarButton
               aria-label={t(($) => $["Show all nodes"])}
               onPress={() => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 fitView({ duration: 500 });
               }}
             >
@@ -114,7 +123,8 @@ const BottomToolbar = () => {
             <DEMOModelerToolbarButton
               aria-label={t(($) => $["Zoom out"])}
               onPress={() => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 zoomOut({ duration: 500 });
               }}
             >
@@ -130,7 +140,8 @@ const BottomToolbar = () => {
               aria-label={t(($) => $["Zoom level"])}
               width="3.5rem"
               onPress={() => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 zoomTo(1, { duration: 500 });
               }}
             >
@@ -147,7 +158,8 @@ const BottomToolbar = () => {
             <DEMOModelerToolbarButton
               aria-label={t(($) => $["Zoom in"])}
               onPress={() => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 zoomIn({ duration: 500 });
               }}
             >
@@ -170,7 +182,8 @@ const BottomToolbar = () => {
               aria-label={t(($) => $["Undo"])}
               isDisabled={!isEnabled || pastHistory.length === 0}
               onPress={() => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 undo();
               }}
             >
@@ -195,7 +208,8 @@ const BottomToolbar = () => {
               aria-label={t(($) => $["Redo"])}
               isDisabled={!isEnabled || futureHistory.length === 0}
               onPress={() => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 redo();
               }}
             >

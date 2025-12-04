@@ -20,6 +20,7 @@ import DEMOElementToolbarGroup from "$/shared/components/ui/element_toolbar/DEMO
 import DeleteControl from "./actions/DeleteControl";
 import DEMOElementToolbar from "$/shared/components/ui/element_toolbar/DEMOElementToolbar";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 const DEMONodeToolbar = ({
   nodeId,
@@ -78,7 +79,7 @@ const DEMONodeToolbar = ({
 
         {actions?.indexOf("delete") !== -1 && (
           <>
-            {actions.length > 1 && <DEMOElementToolbarSeparator />}
+            {actions && actions.length > 1 && <DEMOElementToolbarSeparator />}
             <DEMOElementToolbarGroup
               aria-label={t(($) => $["Danger zone actions"])}
             >

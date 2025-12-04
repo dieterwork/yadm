@@ -18,6 +18,7 @@ import {
 import { useGesture } from "@use-gesture/react";
 import { cn } from "@sglara/cn";
 import clamp from "$/shared/utils/clamp";
+import type { CSSProperties, MouseEventHandler } from "react";
 
 const DEMOHandle = ({
   id,
@@ -83,70 +84,78 @@ const DEMOHandle = ({
     },
   });
 
-  const dragHandlers = () => {
-    if (!isHandleEditModeEnabled) return [];
-    return bind();
+  const onContextMenu: MouseEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+    const connectedEdges = getConnectedEdges([node], edges).filter((edge) => {
+      edge.sourceHandle === id || edge.targetHandle === id;
+    });
+
+    const targetNodes = connectedEdges.map((edge) => edge.target);
+
+    if (connectedEdges) {
+      setEdges((edges) =>
+        edges.filter((edge) => !connectedEdges.includes(edge))
+      );
+    }
+
+    if (targetNodes) {
+      setNodes((nodes) =>
+        nodes.filter(
+          (node) => !targetNodes.includes(node.id) && node.type !== "ghost"
+        )
+      );
+    }
+
+    updateNodeHandles(nodeId, position, (handles) =>
+      handles.filter((handle) => handle.id !== id)
+    );
+    updateNodeInternals(nodeId);
   };
+
+  const style: CSSProperties = {
+    left:
+      position === Position.Top || position === Position.Bottom
+        ? (offset ?? 0.5) * 100 + "%"
+        : undefined,
+    top:
+      position === Position.Left || position === Position.Right
+        ? (offset ?? 0.5) * 100 + "%"
+        : undefined,
+  };
+
+  if (isHandleEditModeEnabled)
+    return (
+      <Handle
+        {...restProps}
+        {...bind()}
+        style={style}
+        className={cn(
+          "demo-handle",
+          "touch-none",
+          isEnabled &&
+            canDrag &&
+            (position === Position.Top || position === Position.Bottom) &&
+            "cursor-col-resize!",
+          isEnabled &&
+            canDrag &&
+            (position === Position.Right || position === Position.Left) &&
+            "cursor-row-resize!",
+          isEnabled && !canDrag && "cursor-not-allowed"
+        )}
+        id={id}
+        position={position}
+        onContextMenu={onContextMenu}
+      />
+    );
 
   return (
     <Handle
       {...restProps}
-      {...dragHandlers}
-      style={{
-        left:
-          position === Position.Top || position === Position.Bottom
-            ? (offset ?? 0.5) * 100 + "%"
-            : undefined,
-        top:
-          position === Position.Left || position === Position.Right
-            ? (offset ?? 0.5) * 100 + "%"
-            : undefined,
-      }}
-      className={cn(
-        "demo-handle",
-        isHandleEditModeEnabled &&
-          isEnabled &&
-          canDrag &&
-          (position === Position.Top || position === Position.Bottom) &&
-          "cursor-col-resize!",
-        isHandleEditModeEnabled &&
-          isEnabled &&
-          canDrag &&
-          (position === Position.Right || position === Position.Left) &&
-          "cursor-row-resize!",
-        isHandleEditModeEnabled && isEnabled && !canDrag && "cursor-not-allowed"
-      )}
+      style={style}
+      className={"demo-handle"}
       id={id}
       position={position}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        const connectedEdges = getConnectedEdges([node], edges).filter(
-          (edge) => {
-            edge.sourceHandle === id || edge.targetHandle === id;
-          }
-        );
-
-        const targetNodes = connectedEdges.map((edge) => edge.target);
-
-        if (connectedEdges) {
-          setEdges((edges) =>
-            edges.filter((edge) => !connectedEdges.includes(edge))
-          );
-        }
-
-        if (targetNodes) {
-          setNodes((nodes) =>
-            nodes.filter(
-              (node) => !targetNodes.includes(node.id) && node.type !== "ghost"
-            )
-          );
-        }
-
-        updateNodeHandles(nodeId, position, (handles) =>
-          handles.filter((handle) => handle.id !== id)
-        );
-        updateNodeInternals(nodeId);
-      }}
+      onContextMenu={onContextMenu}
     />
   );
 };

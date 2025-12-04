@@ -36,7 +36,9 @@ const FileMenu = () => {
         <TopbarMenuItem
           onAction={() => {
             saveModel();
-            toast.success(`Saved "${fileName}" to local storage`);
+            toast.success(
+              t(($) => $["save_storage_toast"], { fileName: fileName })
+            );
           }}
         >
           {t(($) => $["Save"])}

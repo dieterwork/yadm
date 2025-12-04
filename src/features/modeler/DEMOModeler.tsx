@@ -47,6 +47,7 @@ import useTitleTranslate from "$/shared/hooks/useTitleTranslate";
 import toast from "react-hot-toast/headless";
 import { useNodeDragHandlers } from "../nodes/hooks/useNodeDragHandlers";
 import { takeSnapshot } from "../actions/undo/useUndoRedoStore";
+import { useTranslation } from "react-i18next";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -194,6 +195,8 @@ const DEMOModeler = () => {
 
   const { attachNode } = useAttachNode();
 
+  const { t } = useTranslation();
+
   const handleNodeAttach = (node: DEMONode) => {
     if (action !== "attach" || !childNodeIdAttach) return;
     if (!childNodeIdAttach) {
@@ -214,14 +217,20 @@ const DEMOModeler = () => {
     attachNode([childNodeIdAttach], parentNodeId);
     const childNode = getNode(childNodeIdAttach);
     const parentNode = getNode(parentNodeId);
+    const parentNodeLabel = t(($) => $[parentNode.ariaLabel]);
+    const childNodeLabel = t(($) => $[childNode.ariaLabel]);
     toast(
-      `Attached ${childNode.ariaLabel} node to ${parentNode.ariaLabel} node`,
+      t(($) => $["attached_toast"], {
+        childNode: childNodeLabel,
+        parentNode: parentNodeLabel,
+      }),
       {
         icon: "link",
       }
     );
 
     resetAttach();
+    toast.dismiss(childNode.id);
   };
 
   const isValidConnection = (connection: DEMOEdge | Connection) => {

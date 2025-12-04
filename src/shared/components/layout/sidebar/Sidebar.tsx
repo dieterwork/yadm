@@ -17,7 +17,6 @@ import derivedEntityIcon from "$assets/Derived Entity.svg";
 import SidebarSelect from "./menu/SidebarSelect";
 import {
   resetPreviewNode,
-  setPreviewNode,
   usePreviewNodeStore,
 } from "$/features/preview_node/usePreviewNodeStore";
 import PreviewNode from "$/features/preview_node/PreviewNode";
@@ -26,7 +25,6 @@ import { useId, useState } from "react";
 import SidebarToggleButton from "./SidebarToggleButton";
 import { cn } from "@sglara/cn";
 import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
-import i18n from "$/features/i18n/config";
 import { useTranslation } from "react-i18next";
 
 export type SidebarMenuSectionItemType = {
@@ -255,7 +253,8 @@ const Sidebar = () => {
               if (isEnabled) {
                 setOpen(isOpen);
               }
-              resetPreviewNode();
+              if (previewNode) resetPreviewNode();
+              if (childNodeId) resetAttach();
             }}
           />
         </div>

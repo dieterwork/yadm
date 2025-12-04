@@ -16,6 +16,7 @@ const useKeyboardShortcuts = () => {
   useSaveShortcut();
   useLockShortcut();
   useZoomShortcut();
+  usePreviewNodeShortcut();
 };
 
 export default useKeyboardShortcuts;

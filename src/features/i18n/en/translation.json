@@ -1,4 +1,9 @@
 {
+  "attached_toast": "Attached {{childNode}} node to {{parentNode}} node",
+  "detached_toast": "Detached {{childNode}} node from {{parentNode}} node",
+  "attach_toast": "Attaching {{childNode}} node",
+  "save_toast": "Saved {{fileName}}",
+  "save_storage_toast": "Saved {{fileName}} to local storage",
   "About": "About",
   "Activate hand tool": "Activate hand tool",
   "Activate selection tool": "Activate selection tool",
@@ -103,12 +108,8 @@
   "Start": "Start",
   "State": "State",
   "Swap connection": "Swap connection",
-  "This action cannot be undone": {
-    "": "This action cannot be undone."
-  },
-  "This will delete the current model and remove any saved changes": {
-    "": "This will delete the current model and remove any saved changes."
-  },
+  "This action cannot be undone.": "This action cannot be undone.",
+  "This will delete the current model and remove any saved changes.": "This will delete the current model and remove any saved changes.",
   "TK / Execution": "TK / Execution",
   "Top": "Top",
   "Transaction": "Transaction",

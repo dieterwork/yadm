@@ -77,7 +77,7 @@ const Notifications = () => {
               </div>
               {/* @ts-ignore */}
               <div className="leading-[1.3]">{toast.message}</div>
-              {toast.duration !== 0 && (
+              {!toast.className?.includes("no-remove") && (
                 <div className="grid place-items-center">
                   <Button
                     className="cursor-pointer"

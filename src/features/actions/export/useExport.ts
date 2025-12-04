@@ -11,14 +11,7 @@ import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import { z } from "zod";
 import toast from "react-hot-toast/headless";
 import formatDate from "$/shared/utils/formatDate";
-
-const fileNameSchema = z
-  .string()
-  .max(80, { error: "File name must be less than 80 characters" })
-  .regex(new RegExp(/([A-Za-z0-9\-\_]+)/), {
-    error:
-      "File name can only contain letters, numbers, parentheses, underscores, and dashes",
-  });
+import { useTranslation } from "react-i18next";
 
 const useExport = () => {
   const nodes = useDEMOModelerStore((state) => state.nodes);
@@ -27,6 +20,22 @@ const useExport = () => {
   const { getNodesBounds } = useReactFlow();
   const nodesBounds = getNodesBounds(nodes);
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
+
+  const { t } = useTranslation();
+
+  const fileNameSchema = z
+    .string()
+    .max(80, {
+      error: t(($) => $["File name must be less than 80 characters"]),
+    })
+    .regex(new RegExp(/([A-Za-z0-9\-\_]+)/), {
+      error: t(
+        ($) =>
+          $[
+            "File name can only contain letters, numbers, parentheses, underscores, and dashes"
+          ]
+      ),
+    });
 
   const exportAsPNG = async (scaleFactor: number) => {
     try {

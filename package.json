@@ -37,6 +37,8 @@
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-react-aria-components": "^2.0.1",
     "uuid": "^11.1.0",
+    "vite-plugin-html": "^3.2.2",
+    "vite-plugin-singlefile": "^2.3.0",
     "zod": "^4.1.12",
     "zundo": "^2.3.0",
     "zustand": "^5.0.6"

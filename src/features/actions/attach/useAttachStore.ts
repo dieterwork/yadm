@@ -1,5 +1,6 @@
 import { setAction } from "$/features/modeler/useDEMOModelerStore";
 import { create } from "zustand";
+import toast from "react-hot-toast/headless";
 
 interface AttachState {
   childNodeId: string | null;
@@ -15,6 +16,10 @@ export const setAttachChildNodeId = (id: string) => {
 };
 
 export const resetAttach = () => {
+  const childNodeId = useAttachStore.getState().childNodeId;
+  if (childNodeId) {
+    toast.dismiss(childNodeId);
+  }
   useAttachStore.setState(() => ({
     childNodeId: null,
   }));

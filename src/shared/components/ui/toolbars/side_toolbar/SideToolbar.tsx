@@ -50,6 +50,10 @@ import DEMOModelerToolbarSeparator from "../_components/DEMOModelerToolbarSepara
 import DEMOModelerToolbarTooltip from "../_components/DEMOModelerToolbarTooltip";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
+import {
+  resetAttach,
+  useAttachStore,
+} from "$/features/actions/attach/useAttachStore";
 
 const SideToolbar = () => {
   const {
@@ -84,6 +88,8 @@ const SideToolbar = () => {
 
   const { t } = useTranslation();
 
+  const childNodeId = useAttachStore((state) => state.childNodeId);
+
   return (
     <div
       className={cn(
@@ -108,7 +114,8 @@ const SideToolbar = () => {
             />
             <DEMOModelerToolbarButton
               onPress={() => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 setAction("pan");
               }}
               aria-label={t(($) => $["Activate hand tool"])}
@@ -129,7 +136,8 @@ const SideToolbar = () => {
             />
             <DEMOModelerToolbarButton
               onPress={() => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 setAction("select");
               }}
               aria-label={t(($) => $["Activate selection tool"])}
@@ -162,7 +170,8 @@ const SideToolbar = () => {
             <DEMOModelerToolbarToggleButton
               isSelected={areHelperLinesEnabled}
               onChange={(isEnabled) => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 toggleHelperLines(isEnabled);
               }}
               aria-label={
@@ -189,7 +198,8 @@ const SideToolbar = () => {
             <DEMOModelerToolbarToggleButton
               isSelected={isGridSnapEnabled}
               onChange={(isEnabled) => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 setGridSnapEnabled(isEnabled);
               }}
               aria-label={
@@ -218,7 +228,8 @@ const SideToolbar = () => {
             <DEMOModelerToolbarToggleButton
               isSelected={isGridVisible}
               onChange={(isVisible) => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 setGridVisible(isVisible);
               }}
               aria-label={
@@ -244,7 +255,8 @@ const SideToolbar = () => {
               isSelected={areHandlesVisible}
               isDisabled={nodes.length === 0 || !isEnabled}
               onChange={(isVisible) => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 setNodesHandlesVisibility(isVisible);
 
                 if (!isVisible && isHandleEditModeEnabled) {
@@ -275,7 +287,8 @@ const SideToolbar = () => {
               isSelected={isHandleEditModeEnabled}
               isDisabled={nodes.length === 0 || !isEnabled}
               onChange={(isEnabled) => {
-                if (previewNode) return resetPreviewNode();
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
                 setHandleEditModeEnabled(isEnabled);
 
                 if (isEnabled && !areHandlesVisible) {

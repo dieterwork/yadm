@@ -1,7 +1,11 @@
 import useAttachNode from "$/features/actions/attach/useAttachNode";
 import { setAttachChildNodeId } from "$/features/actions/attach/useAttachStore";
 import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
-import { getNode, setAction } from "$/features/modeler/useDEMOModelerStore";
+import {
+  getNode,
+  setAction,
+  updateNode,
+} from "$/features/modeler/useDEMOModelerStore";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import { LinkBreakIcon, LinkIcon } from "@phosphor-icons/react";
 import toast, { useToaster } from "react-hot-toast/headless";
@@ -29,13 +33,32 @@ const AttachNodeControl = ({ nodeId }: { nodeId: string }) => {
           const parentNode = getNode(node.parentId!);
           detachNode([node.id]);
           setAction("pan");
+          const parentNodeLabel = t(($) => $[parentNode.ariaLabel]);
+          const childNodeLabel = t(($) => $[childNode.ariaLabel]);
           toast(
-            `Detached ${childNode.ariaLabel} node from ${parentNode.ariaLabel} node`,
+            t(($) => $["detached_toast"], {
+              childNode: childNodeLabel,
+              parentNode: parentNodeLabel,
+            }),
             { icon: "linkBreak" }
           );
           takeSnapshot();
         } else {
           setAttachChildNodeId(nodeId);
+          const nodeLabel = t(($) => $[node.ariaLabel]);
+          toast(
+            t(($) => $["attach_toast"], {
+              childNode: nodeLabel,
+            }),
+            {
+              icon: "link",
+              id: nodeId,
+              // TODO adjust toaster to set autoremove to false
+              duration: 1000000,
+              className: "no-remove",
+            }
+          );
+          updateNode(nodeId, { selected: false });
         }
       }}
     />
