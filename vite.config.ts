@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from "vite";
+import { build, defineConfig, loadEnv } from "vite";
 import { createHtmlPlugin } from "vite-plugin-html";
 import { viteSingleFile } from "vite-plugin-singlefile";
 import react from "@vitejs/plugin-react-swc";
@@ -11,17 +11,12 @@ export default ({ mode }: { mode: string }) => {
   const buildSingleHTMLFile =
     process.env.VITE_BUILD_SINGLE_HTML_FILE === "true";
 
-  if (!buildSingleHTMLFile) {
-    return defineConfig({
-      resolve: {
-        alias: {
-          $: path.resolve(__dirname, "./src"),
-          $features: path.resolve(__dirname, "./src/features"),
-          $shared: path.resolve(__dirname, "./src/shared"),
-          $assets: path.resolve(__dirname, "./src/assets"),
-        },
-      },
-      plugins: [
+  const plugins = buildSingleHTMLFile
+    ? [
+        viteSingleFile(),
+        createHtmlPlugin({
+          minify: true,
+        }),
         react(),
         tailwindcss(),
         {
@@ -33,9 +28,21 @@ export default ({ mode }: { mode: string }) => {
             }
           },
         },
-      ],
-    });
-  }
+      ]
+    : [
+        react(),
+        tailwindcss(),
+        {
+          name: "markdown-loader",
+          transform(code, id) {
+            if (id.slice(-3) === ".md") {
+              // For .md files, get the raw content
+              return `export default ${JSON.stringify(code)};`;
+            }
+          },
+        },
+      ];
+
   return defineConfig({
     resolve: {
       alias: {
@@ -45,22 +52,6 @@ export default ({ mode }: { mode: string }) => {
         $assets: path.resolve(__dirname, "./src/assets"),
       },
     },
-    plugins: [
-      viteSingleFile(),
-      createHtmlPlugin({
-        minify: true,
-      }),
-      react(),
-      tailwindcss(),
-      {
-        name: "markdown-loader",
-        transform(code, id) {
-          if (id.slice(-3) === ".md") {
-            // For .md files, get the raw content
-            return `export default ${JSON.stringify(code)};`;
-          }
-        },
-      },
-    ],
+    plugins,
   });
 };
