@@ -93,7 +93,7 @@ const useExport = () => {
       const parsedFileName = fileNameSchema.parse(fileName);
       const jsModel: DEMOModelJSON = {
         ...DEMOInstance.toObject(),
-        isEnabled,
+        isEnabled: true,
         version: "1.0.0",
         fileName,
       };
