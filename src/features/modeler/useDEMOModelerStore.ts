@@ -558,12 +558,14 @@ export const onNodesDelete = () => {
 export const saveModel = () => {
   const DEMOInstance = useDEMOModelerStore.getState().DEMOInstance;
   const isEnabled = useDEMOModelerStore.getState().isEnabled;
+  const fileName = useDEMOModelerStore.getState().fileName;
 
   if (!DEMOInstance) return;
   const jsonModel = JSON.stringify({
     ...DEMOInstance.toObject(),
     isEnabled,
     version: "1.0.0",
+    fileName,
   } satisfies DEMOModelJSON);
   localStorage.setItem("demo-model", jsonModel);
 };

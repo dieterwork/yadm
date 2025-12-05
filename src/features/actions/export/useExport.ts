@@ -95,6 +95,7 @@ const useExport = () => {
         ...DEMOInstance.toObject(),
         isEnabled,
         version: "1.0.0",
+        fileName,
       };
       const jsonModel = JSON.stringify(jsModel);
       const file = new Blob([jsonModel], { type: "application/json" });
