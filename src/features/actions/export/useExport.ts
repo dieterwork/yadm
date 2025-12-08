@@ -1,4 +1,5 @@
 import {
+  setEnabled,
   setExportEnabled,
   setNodesHandlesVisibility,
   useDEMOModelerStore,
@@ -90,6 +91,7 @@ const useExport = () => {
   const exportAsJSON = () => {
     if (!DEMOInstance) return;
     try {
+      setEnabled(false);
       const parsedFileName = fileNameSchema.parse(fileName);
       const jsModel: DEMOModelJSON = {
         ...DEMOInstance.toObject(),
@@ -105,6 +107,7 @@ const useExport = () => {
         url,
         (parsedFileName || "Demo Model") + " " + date + ".json"
       );
+      setEnabled(true);
     } catch (err) {
       console.error("Could not generate JSON:", err);
       if (err instanceof z.ZodError) {

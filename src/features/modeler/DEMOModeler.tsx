@@ -27,6 +27,7 @@ import {
   onReconnectEnd,
   onReconnectStart,
   setDEMOInstance,
+  setNodes,
   useDEMOModelerStore,
   type DEMOModelerState,
 } from "./useDEMOModelerStore";
@@ -48,6 +49,16 @@ import toast from "react-hot-toast/headless";
 import { useNodeDragHandlers } from "../nodes/hooks/useNodeDragHandlers";
 import { takeSnapshot } from "../actions/undo/useUndoRedoStore";
 import { useTranslation } from "react-i18next";
+
+const hasChildrenMap = [
+  "elementary_actor",
+  "several_actors",
+  "composite",
+  "self_activation",
+  "transactor",
+  "transaction_time",
+  "organization",
+];
 
 const allowedConnectionMap = {
   // cooperation model
@@ -141,19 +152,6 @@ const allowedConnectionMap = {
   Record<DEMONode["type"], DEMONode["type"][]>,
   "text" | "transaction_kind"
 >;
-
-const acceptableNodeChanges: NodeChange<DEMONode>["type"][] = [
-  "add",
-  "remove",
-  "dimensions",
-  "replace",
-];
-
-const acceptableEdgeChanges: EdgeChange<DEMOEdge>["type"][] = [
-  "add",
-  "remove",
-  "replace",
-];
 
 const DEMOModeler = () => {
   const { isEnabled, nodes, edges, action, isGridVisible, isGridSnapEnabled } =
@@ -277,6 +275,31 @@ const DEMOModeler = () => {
           onConnect={onConnect}
           onConnectEnd={onConnectEnd}
           isValidConnection={isValidConnection}
+          onSelectionChange={({ nodes }) => {
+            // prevent selection if all nodes don't share parentId
+            if (nodes.length < 2) return;
+            const parents = new Set(nodes.map((n) => n.parentId));
+            if (parents.size <= 1) return;
+            // else, deselect all childNodes
+            setNodes((nodes) =>
+              nodes.map((node) =>
+                node.parentId ? { ...node, selected: false } : node
+              )
+            );
+            // setNodes((nodes) => {
+            //   const newNodes = nodes.map((node) => {
+            //     // find children nodes node
+            //     const parentNode = nodes.find(
+            //       (_node) =>
+            //         _node.id === node.parentId &&
+            //         hasChildrenMap.includes(_node.type)
+            //     );
+            //     if (!parentNode) return node;
+            //     return { ...node, selected: false };
+            //   });
+            //   return newNodes;
+            // });
+          }}
           onPaneClick={() => {
             resetAttach();
           }}

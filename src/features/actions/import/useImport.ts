@@ -1,4 +1,6 @@
 import {
+  saveModel,
+  setAction,
   setEdges,
   setEnabled,
   setNodes,
@@ -27,6 +29,7 @@ const useImport = () => {
         setNodes(demoModel.nodes);
         setEdges(demoModel.edges);
         setEnabled(true);
+        setAction("pan");
       };
       reader.onerror = () => {
         throw new Error("Error reading file");
