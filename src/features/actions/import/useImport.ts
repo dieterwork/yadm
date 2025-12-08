@@ -26,9 +26,10 @@ const useImport = () => {
         const demoModel: DEMOModelJSON = JSON.parse(reader.result);
         if (!demoModel.nodes || !demoModel.edges || !demoModel.version)
           throw new Error("Invalid DEMO Model file");
-        setNodes(demoModel.nodes);
+        demoModel.nodes.map((node) => console.log(node.draggable));
+        setNodes(demoModel.nodes.map((node) => ({ ...node, draggable: true })));
         setEdges(demoModel.edges);
-        setEnabled(true);
+        setEnabled(demoModel.isEnabled);
         setAction("pan");
       };
       reader.onerror = () => {
@@ -46,7 +47,7 @@ const useImport = () => {
         input.current = null;
       }
     };
-  }, [setNodes, setEdges]);
+  }, [setNodes, setEdges, setEnabled, setAction]);
   const importJSON = () => {
     if (!input.current) return;
     input.current.click();

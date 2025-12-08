@@ -13,6 +13,7 @@ import { z } from "zod";
 import toast from "react-hot-toast/headless";
 import formatDate from "$/shared/utils/formatDate";
 import { useTranslation } from "react-i18next";
+import { useRef } from "react";
 
 const useExport = () => {
   const nodes = useDEMOModelerStore((state) => state.nodes);
@@ -23,6 +24,8 @@ const useExport = () => {
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
 
   const { t } = useTranslation();
+
+  const timer = useRef<NodeJS.Timeout | null>(null);
 
   const fileNameSchema = z
     .string()
@@ -90,8 +93,8 @@ const useExport = () => {
 
   const exportAsJSON = () => {
     if (!DEMOInstance) return;
+    if (timer.current) clearTimeout(timer.current);
     try {
-      setEnabled(false);
       const parsedFileName = fileNameSchema.parse(fileName);
       const jsModel: DEMOModelJSON = {
         ...DEMOInstance.toObject(),
@@ -107,7 +110,6 @@ const useExport = () => {
         url,
         (parsedFileName || "Demo Model") + " " + date + ".json"
       );
-      setEnabled(true);
     } catch (err) {
       console.error("Could not generate JSON:", err);
       if (err instanceof z.ZodError) {
