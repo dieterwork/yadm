@@ -1,6 +1,10 @@
-import { setEdges, setNodes } from "$/features/modeler/useDEMOModelerStore";
+import {
+  setEdges,
+  setEnabled,
+  setNodes,
+} from "$/features/modeler/useDEMOModelerStore";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
-import { useEffect, useRef, type ChangeEvent, type RefObject } from "react";
+import { useEffect, useRef } from "react";
 
 const useImport = () => {
   const input = useRef<HTMLInputElement | null>(null);
@@ -22,6 +26,7 @@ const useImport = () => {
           throw new Error("Invalid DEMO Model file");
         setNodes(demoModel.nodes);
         setEdges(demoModel.edges);
+        setEnabled(true);
       };
       reader.onerror = () => {
         throw new Error("Error reading file");
