@@ -3,6 +3,7 @@ import {
   setAction,
   setEdges,
   setEnabled,
+  setFileName,
   setNodes,
 } from "$/features/modeler/useDEMOModelerStore";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
@@ -31,6 +32,7 @@ const useImport = () => {
         setEdges(demoModel.edges);
         setEnabled(demoModel.isEnabled);
         setAction("pan");
+        setFileName(demoModel.fileName);
       };
       reader.onerror = () => {
         throw new Error("Error reading file");
