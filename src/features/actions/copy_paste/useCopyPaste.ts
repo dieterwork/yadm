@@ -149,56 +149,55 @@ const useCopyPaste = () => {
       const y = pasteY + (node.position.y - minY);
       const position = node.parentId ? node.position : { x, y };
 
-      // remap handles
-      return {
+      const baseNewNode = {
         ...node,
         id: newId,
         parentId,
         position,
-        data: {
-          ...node.data,
-          handles:
-            "handles" in node.data
-              ? {
-                  ...node.data.handles,
-                  bottom: {
-                    ...node.data.handles?.bottom,
-                    handles: node.data.handles?.bottom?.handles?.map(
-                      (handle) => ({
-                        ...handle,
-                        id: uuid(),
-                      })
-                    ),
-                  },
-                  top: {
-                    ...node.data.handles?.top,
-                    handles: node.data.handles?.top?.handles?.map((handle) => ({
-                      ...handle,
-                      id: uuid(),
-                    })),
-                  },
-                  left: {
-                    ...node.data.handles?.left,
-                    handles: node.data.handles?.left?.handles?.map(
-                      (handle) => ({
-                        ...handle,
-                        id: uuid(),
-                      })
-                    ),
-                  },
-                  right: {
-                    ...node.data.handles?.right,
-                    handles: node.data.handles?.right?.handles?.map(
-                      (handle) => ({
-                        ...handle,
-                        id: uuid(),
-                      })
-                    ),
-                  },
-                }
-              : undefined,
-        },
-      };
+      } satisfies DEMONode;
+
+      if ("handles" in node.data) {
+        return {
+          ...baseNewNode,
+          data: {
+            ...node.data,
+            handles: {
+              ...node.data.handles,
+              bottom: {
+                ...node.data.handles?.bottom,
+                handles: node.data.handles?.bottom?.handles?.map((handle) => ({
+                  ...handle,
+                  id: uuid(),
+                })),
+              },
+              top: {
+                ...node.data.handles?.top,
+                handles: node.data.handles?.top?.handles?.map((handle) => ({
+                  ...handle,
+                  id: uuid(),
+                })),
+              },
+              left: {
+                ...node.data.handles?.left,
+                handles: node.data.handles?.left?.handles?.map((handle) => ({
+                  ...handle,
+                  id: uuid(),
+                })),
+              },
+              right: {
+                ...node.data.handles?.right,
+                handles: node.data.handles?.right?.handles?.map((handle) => ({
+                  ...handle,
+                  id: uuid(),
+                })),
+              },
+            },
+          },
+        };
+      }
+
+      // remap handles
+      return baseNewNode;
     }) satisfies DEMONode[];
 
     // create an old/new id map to keep track of old edge ids
@@ -325,6 +324,8 @@ const useCopyPaste = () => {
         };
       })
       .filter((edge) => !!edge) satisfies DEMOEdge[];
+
+    console.log(newNodes);
 
     setNodes((nodes) => [
       ...nodes.map((node) => ({ ...node, selected: false })),

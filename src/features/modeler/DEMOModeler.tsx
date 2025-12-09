@@ -295,19 +295,6 @@ const DEMOModeler = () => {
                 node.parentId ? { ...node, selected: false } : node
               )
             );
-            // setNodes((nodes) => {
-            //   const newNodes = nodes.map((node) => {
-            //     // find children nodes node
-            //     const parentNode = nodes.find(
-            //       (_node) =>
-            //         _node.id === node.parentId &&
-            //         hasChildrenMap.includes(_node.type)
-            //     );
-            //     if (!parentNode) return node;
-            //     return { ...node, selected: false };
-            //   });
-            //   return newNodes;
-            // });
           }}
           onPaneClick={() => {
             resetAttach();
