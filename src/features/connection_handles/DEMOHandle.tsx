@@ -40,8 +40,6 @@ const DEMOHandle = ({
   const updateNodeInternals = useUpdateNodeInternals();
   const internalNode = useInternalNode(nodeId);
   const edges = useDEMOModelerStore((state) => state.edges);
-  const node = getNode(nodeId);
-  if (!node) return null;
 
   const bind = useGesture({
     onDrag: ({ event, xy }) => {
@@ -84,10 +82,13 @@ const DEMOHandle = ({
     },
   });
 
+  const node = getNode(nodeId);
+  if (!node) return null;
+
   const onContextMenu: MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
     const connectedEdges = getConnectedEdges([node], edges).filter((edge) => {
-      edge.sourceHandle === id || edge.targetHandle === id;
+      return edge.sourceHandle === id || edge.targetHandle === id;
     });
 
     const targetNodes = connectedEdges.map((edge) => edge.target);
