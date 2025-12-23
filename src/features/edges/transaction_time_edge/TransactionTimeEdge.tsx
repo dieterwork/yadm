@@ -23,11 +23,7 @@ const TransactionTimeEdge = ({
         style={{ stroke: "var(--color-slate-500)", strokeWidth: 2 }}
       />
       {selected && (
-        <DEMOEdgeToolbar
-          edgeId={id}
-          position={{ x: labelX, y: labelY }}
-          actions={["delete"]}
-        />
+        <DEMOEdgeToolbar edgeId={id} position={{ x: labelX, y: labelY }} />
       )}
     </>
   );

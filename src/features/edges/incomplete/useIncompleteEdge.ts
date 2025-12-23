@@ -1,11 +1,7 @@
-import { convertAbsoluteToParentRelativePosition } from "$/features/nodes/utils/convertAbsoluteToParentRelativePosition";
 import uuid from "$/shared/utils/uuid";
 import {
-  isNode,
-  MarkerType,
   Position,
   useReactFlow,
-  type InternalNode,
   type OnConnectEnd,
   type XYPosition,
 } from "@xyflow/react";
@@ -128,6 +124,7 @@ export const useIncompleteEdge = () => {
       reconnectable: "target",
       type: newEdgeType,
       sourceHandle: connectionState.fromHandle?.id,
+      deletable: true,
       ...newEdgeMarker,
     } satisfies DEMOEdge;
 

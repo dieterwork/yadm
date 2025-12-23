@@ -20,7 +20,7 @@ import DEMOElementToolbarGroup from "$/shared/components/ui/element_toolbar/DEMO
 import DeleteControl from "./actions/DeleteControl";
 import DEMOElementToolbar from "$/shared/components/ui/element_toolbar/DEMOElementToolbar";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const DEMONodeToolbar = ({
   nodeId,
@@ -29,17 +29,19 @@ const DEMONodeToolbar = ({
   nodeId?: string;
   actions?: NodeToolbarAction[] | null;
 }) => {
-  if (!nodeId) return null;
   const node = getNode(nodeId);
-  if (!node) return null;
 
   const edges = useDEMOModelerStore((state) => state.edges);
   const nodes = useDEMOModelerStore((state) => state.nodes);
+
+  const { t } = useTranslation();
+
+  if (!nodeId) return null;
+  if (!node) return null;
+
   const hasTwoOrMoreNodesSelected =
     nodes.filter((node) => node.selected).length > 1;
   const hasEdgeSelected = edges.some((edge) => edge.selected);
-
-  const { t } = useTranslation();
 
   return (
     <NodeToolbar
@@ -77,7 +79,7 @@ const DEMONodeToolbar = ({
           <EditTextControl nodeId={nodeId} />
         )}
 
-        {actions?.indexOf("delete") !== -1 && (
+        {!!node.deletable && (
           <>
             {actions && actions.length > 1 && <DEMOElementToolbarSeparator />}
             <DEMOElementToolbarGroup

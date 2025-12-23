@@ -14,7 +14,7 @@ const ProcessStructureDiagramEdge = ({
         centerY={data?.center?.y}
         isDraggable={data?.center?.active}
         style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
-        actions={["delete", "swapConnection", "resetEdgeCenter"]}
+        actions={["swapConnection", "resetEdgeCenter"]}
       />
     </>
   );

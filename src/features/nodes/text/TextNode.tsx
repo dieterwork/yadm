@@ -33,7 +33,6 @@ const TextNode = ({
         <NodeToolbar
           nodeId={id}
           actions={[
-            "delete",
             "changeFontSize",
             "showBorder",
             "changeColor",
@@ -44,6 +43,7 @@ const TextNode = ({
           isVisible={isEnabled && !isExportEnabled}
         />
         <NodeResizer
+          nodeId={id}
           isVisible={selected && isEnabled && !isExportEnabled}
           minHeight={MIN_SIZE_MAP["text"].height}
           minWidth={MIN_SIZE_MAP["text"].width}

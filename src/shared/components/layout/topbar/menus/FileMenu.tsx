@@ -65,28 +65,28 @@ const FileMenu = () => {
                 exportAsPNG(1);
               }}
             >
-              1x
+              {t(($) => $["1x"])}
             </TopbarMenuItem>
             <TopbarMenuItem
               onAction={() => {
                 exportAsPNG(2);
               }}
             >
-              2x
+              {t(($) => $["2x"])}
             </TopbarMenuItem>
             <TopbarMenuItem
               onAction={() => {
                 exportAsPNG(3);
               }}
             >
-              3x
+              {t(($) => $["3x"])}
             </TopbarMenuItem>
             <TopbarMenuItem
               onAction={() => {
                 exportAsPNG(4);
               }}
             >
-              4x
+              {t(($) => $["4x"])}
             </TopbarMenuItem>
           </TopbarSubMenuButton>
           <TopbarSubMenuButton label={t(($) => $["PDF"])}>
@@ -95,28 +95,28 @@ const FileMenu = () => {
                 exportAsPDF(1);
               }}
             >
-              1x
+              {t(($) => $["1x"])}
             </TopbarMenuItem>
             <TopbarMenuItem
               onAction={() => {
                 exportAsPDF(2);
               }}
             >
-              2x
+              {t(($) => $["2x"])}
             </TopbarMenuItem>
             <TopbarMenuItem
               onAction={() => {
                 exportAsPDF(3);
               }}
             >
-              3x
+              {t(($) => $["3x"])}
             </TopbarMenuItem>
             <TopbarMenuItem
               onAction={() => {
                 exportAsPDF(4);
               }}
             >
-              4x
+              {t(($) => $["4x"])}
             </TopbarMenuItem>
           </TopbarSubMenuButton>
         </TopbarSubMenuButton>

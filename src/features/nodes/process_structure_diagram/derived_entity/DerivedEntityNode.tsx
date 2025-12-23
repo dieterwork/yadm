@@ -28,7 +28,6 @@ const DerivedEntityNode = ({
         "addHandle",
         "changeColor",
         "changeFontSize",
-        "delete",
         "editText",
         "toggleHandlesVisibility",
       ].concat(parentId ? "attachNode" : [])}

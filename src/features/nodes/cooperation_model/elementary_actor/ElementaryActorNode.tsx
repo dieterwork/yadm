@@ -1,6 +1,6 @@
 import { type NodeProps, type OnResize } from "@xyflow/react";
 
-import DEMONodeBase from "../../DEMONodeBase";
+import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import type { ElementaryActorNode as ElementaryActorNodeType } from "./elementaryActor.types";
 import uuid from "../../../../shared/utils/uuid";
 import EditableContent from "../../../editable_content/EditableContent";
@@ -27,16 +27,18 @@ const ElementaryActorNode = ({
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const node = getNode(id);
 
+  const defaultActions: NodeToolbarAction[] = parentId ? ["attachNode"] : [];
+
   const onResize: OnResize = (_, { width, height }) => {
     const childNodes = getChildNodes([node], nodes);
     const transaction = childNodes.find((node) => node.type === "transaction");
-    const actor = childNodes.find((node) => node.type === "actor");
+    const composite = childNodes.find((node) => node.type === "composite");
 
     if (
       !transaction ||
       !transaction?.style?.width ||
       !transaction?.style?.height ||
-      !actor
+      !composite
     )
       return;
 
@@ -53,7 +55,7 @@ const ElementaryActorNode = ({
         y: 0,
       },
     });
-    updateNode(actor.id, (node) => ({
+    updateNode(composite.id, (node) => ({
       ...node,
       position: {
         x: width,
@@ -80,7 +82,7 @@ const ElementaryActorNode = ({
       width={width}
       height={height}
       type="elementary_actor"
-      actions={["delete"].concat(parentId ? "attachNode" : [])}
+      actions={defaultActions}
       resizerProps={{ onResize }}
       dragHandle={!!dragHandle}
     />

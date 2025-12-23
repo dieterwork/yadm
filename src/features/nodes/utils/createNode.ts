@@ -44,6 +44,7 @@ export const createNode = ({
         ariaLabel: "Actor",
         type: type,
         position,
+        deletable: true,
         data: {
           subModel: "cooperation_model",
           state: "default",
@@ -82,6 +83,7 @@ export const createNode = ({
         ariaLabel: "Transaction",
         type: type,
         position,
+        deletable: true,
         data: {
           subModel: "cooperation_model",
           scope: "in",
@@ -139,6 +141,7 @@ export const createNode = ({
           type: "actor",
           ariaLabel: "Actor",
           position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
+          deletable: false,
           data: {
             state: "default",
             content: DEFAULT_CONTENT_MAP["actor"],
@@ -188,6 +191,7 @@ export const createNode = ({
           id: transactionId,
           type: "transaction",
           ariaLabel: "Transaction",
+          deletable: false,
           position: {
             x:
               DEFAULT_SIZE_MAP[type].width / 2 -
@@ -243,6 +247,7 @@ export const createNode = ({
           type: type,
           ariaLabel: "Transactor",
           position,
+          deletable: true,
           data: {
             state: "internal",
             content: DEFAULT_CONTENT_MAP[type],
@@ -269,6 +274,7 @@ export const createNode = ({
         type: type,
         position,
         ariaLabel: "Self Activation",
+        deletable: true,
         data: {
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
@@ -305,6 +311,7 @@ export const createNode = ({
         type: type,
         position,
         ariaLabel: "Composite",
+        deletable: true,
         data: {
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
@@ -345,6 +352,7 @@ export const createNode = ({
           id: compositeId,
           type: "composite",
           ariaLabel: "Composite",
+          deletable: false,
           position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
           data: {
             state: "default",
@@ -394,6 +402,7 @@ export const createNode = ({
           id: transactionId,
           type: "transaction",
           ariaLabel: "Transaction",
+          deletable: false,
           position: {
             x:
               DEFAULT_SIZE_MAP[type].width / 2 -
@@ -449,6 +458,7 @@ export const createNode = ({
           type: type,
           position,
           ariaLabel: "Elementary Actor",
+          deletable: true,
           data: {
             state: "internal",
             content: DEFAULT_CONTENT_MAP[type],
@@ -482,6 +492,7 @@ export const createNode = ({
           type: "actor",
           ariaLabel: "Actor",
           position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
+          deletable: false,
           data: {
             subModel: "cooperation_model",
             state: "default",
@@ -532,6 +543,7 @@ export const createNode = ({
           id: transactionId,
           type: "transaction",
           ariaLabel: "Transaction",
+          deletable: false,
           position: {
             x: DEFAULT_SIZE_MAP[type].width / 2 - transactionSize.width / 2,
             y: 0,
@@ -547,10 +559,10 @@ export const createNode = ({
                     id: uuid(),
                     type: "source",
                     offset:
-                      0.5 -
-                      (DEFAULT_SIZE_MAP["transaction"].width * (1 / 8) * -1 -
+                      (DEFAULT_SIZE_MAP["several_actors"].width / 2 -
+                        DEFAULT_SIZE_MAP["transaction"].width * (1 / 8) +
                         1) /
-                        DEFAULT_SIZE_MAP["transaction"].width,
+                      DEFAULT_SIZE_MAP["several_actors"].width,
                     canDrag: false,
                   },
                 ],
@@ -588,6 +600,7 @@ export const createNode = ({
           id: id,
           type: type,
           position,
+          deletable: true,
           ariaLabel: "Several Actors",
           data: {
             subModel: "cooperation_model",
@@ -615,6 +628,7 @@ export const createNode = ({
         type: type,
         position,
         ariaLabel: "Production Event",
+        deletable: true,
         data: {
           subModel: "process_structure_diagram",
           content: DEFAULT_CONTENT_MAP[type],
@@ -661,6 +675,7 @@ export const createNode = ({
         type: type,
         position,
         ariaLabel: "Entity Class",
+        deletable: true,
         data: {
           subModel: "process_structure_diagram",
           content: DEFAULT_CONTENT_MAP[type],
@@ -698,6 +713,7 @@ export const createNode = ({
         type: type,
         position,
         ariaLabel: "Derived Entity",
+        deletable: true,
         data: {
           subModel: "process_structure_diagram",
           content: DEFAULT_CONTENT_MAP[type],
@@ -735,6 +751,7 @@ export const createNode = ({
         {
           id,
           type: "transaction_time",
+          deletable: true,
           position,
           ariaLabel: "Transaction Time",
           data: {
@@ -767,6 +784,7 @@ export const createNode = ({
           id: uuid(),
           parentId: id,
           type: "transaction_kind",
+          deletable: false,
           ariaLabel: "Transaction Kind",
           position: {
             x:
@@ -802,6 +820,7 @@ export const createNode = ({
         position,
         parentId,
         ariaLabel: "Initiation Fact",
+        deletable: true,
         data: {
           subModel: "object_fact_diagram",
           color: "default",
@@ -852,6 +871,7 @@ export const createNode = ({
         position,
         parentId,
         ariaLabel: "C-Fact",
+        deletable: true,
         data: {
           subModel: "object_fact_diagram",
           color: "default",
@@ -902,6 +922,7 @@ export const createNode = ({
         position,
         parentId,
         ariaLabel: "C-Act",
+        deletable: true,
         data: {
           subModel: "object_fact_diagram",
           color: "default",
@@ -951,6 +972,7 @@ export const createNode = ({
         position,
         parentId,
         ariaLabel: "TK / Execution",
+        deletable: true,
         data: {
           subModel: "object_fact_diagram",
           color: "default",
@@ -1000,6 +1022,7 @@ export const createNode = ({
         position,
         parentId,
         ariaLabel: "Text",
+        deletable: true,
         data: {
           fontSize: 12,
           alignContent: "start",
@@ -1023,6 +1046,7 @@ export const createNode = ({
           position,
           data: { state: "default" },
           ariaLabel: "Organization",
+          deletable: true,
           style: {
             width: width ?? DEFAULT_SIZE_MAP["organization"].width,
             height: height ?? DEFAULT_SIZE_MAP["organization"].height,
@@ -1036,6 +1060,7 @@ export const createNode = ({
         {
           id: uuid(),
           type: "text",
+          deletable: true,
           position: {
             x:
               DEFAULT_SIZE_MAP["organization"].width / 2 -

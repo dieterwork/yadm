@@ -1,3 +1,4 @@
+import convertWhitePixelsToTransparentPixels from "$/shared/utils/convertWhitePixelsToTransparentPixels";
 import { getViewportForBounds, type Rect } from "@xyflow/react";
 import { toPng } from "html-to-image";
 
@@ -11,7 +12,7 @@ export const downloadFile = (dataUrl: string, fileName: string) => {
 
 export const generatePNG = async ({
   nodesBounds,
-  backgroundColor = "transparent",
+  backgroundColor = "#fff",
   scaleFactor = 1,
 }: {
   nodesBounds: Rect;
@@ -34,7 +35,7 @@ export const generatePNG = async ({
     ".react-flow__viewport"
   ) as HTMLDivElement;
 
-  return await toPng(viewportDomEl, {
+  const dataUrl = await toPng(viewportDomEl, {
     backgroundColor: backgroundColor,
     width: imageWidth,
     height: imageHeight,
@@ -43,7 +44,15 @@ export const generatePNG = async ({
       height: String(imageHeight),
       transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
     },
-  }).then((dataUrl) => {
-    return { url: dataUrl, width: imageWidth, height: imageHeight };
+    quality: 100,
   });
+  const image = new Image();
+  await new Promise((res, rej) => {
+    image.src = dataUrl;
+    image.onload = () => res(image);
+    image.onerror = () => rej(image);
+  });
+  const imgBlob = await convertWhitePixelsToTransparentPixels(image);
+  const newUrl = URL.createObjectURL(imgBlob);
+  return { url: newUrl, width: imageWidth, height: imageHeight };
 };

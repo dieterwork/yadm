@@ -22,7 +22,7 @@ const TransactionTimeNode = ({
       height={height}
       draggable={draggable}
       type="transaction_time"
-      actions={["changeColor", "delete", "toggleHandlesVisibility"].concat(
+      actions={["changeColor", "toggleHandlesVisibility"].concat(
         parentId ? "attachNode" : []
       )}
       resizerProps={{ maxHeight: SMALL_NODE_SIZE }}

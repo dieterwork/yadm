@@ -1,7 +1,7 @@
 import { type NodeProps } from "@xyflow/react";
 
 import type { ActorNode as ActorNodeType } from "./actor.types";
-import DEMONodeBase from "../../DEMONodeBase";
+import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
 
 const ActorNode = ({
@@ -15,6 +15,20 @@ const ActorNode = ({
 }: NodeProps<ActorNodeType>) => {
   const { content, fontSize, isEditable, resizable, actions } = data;
 
+  const defaultActions: NodeToolbarAction[] = [
+    "addHandle",
+    "changeColor",
+    "changeFontSize",
+    "toggleHandlesVisibility",
+    "changeScope",
+    "changeState",
+    "editText",
+  ];
+
+  if (parentId) {
+    defaultActions.push("attachNode");
+  }
+
   return (
     <DEMONodeBase
       id={id}
@@ -25,19 +39,7 @@ const ActorNode = ({
       resizable={resizable}
       draggable={draggable}
       type="actor"
-      actions={
-        actions ??
-        [
-          "addHandle",
-          "changeColor",
-          "changeFontSize",
-          "delete",
-          "toggleHandlesVisibility",
-          "changeScope",
-          "changeState",
-          "editText",
-        ].concat(parentId ? "attachNode" : [])
-      }
+      actions={actions ?? defaultActions}
     >
       <EditableContent
         isSelected={selected}

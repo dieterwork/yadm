@@ -13,12 +13,7 @@ const CooperationModelEdge = ({
       centerX={data?.center?.x}
       centerY={data?.center?.y}
       isDraggable={data?.center?.active}
-      actions={[
-        "delete",
-        "swapConnection",
-        "toggleProductionEvent",
-        "changeLineType",
-      ]}
+      actions={["swapConnection", "toggleProductionEvent", "changeLineType"]}
       style={{ strokeDasharray: data?.lineType === "solid" ? "0" : "5" }}
     />
   );

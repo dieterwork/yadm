@@ -63,32 +63,32 @@ export function useNodeDragHandlers() {
 
     // when there is an intersection on drag stop, we want to attach the node to its new parent
     if (intersections.length && node.parentId !== groupNode?.id) {
-      const nextNodes: Node[] = nodes
-        .map((n) => {
-          if (n.id === groupNode.id) {
-            return {
-              ...n,
-              className: "",
-            };
-          } else if (n.id === node.id) {
-            const position = getNodePositionInsideParent(n, groupNode) ?? {
-              x: 0,
-              y: 0,
-            };
+      const nextNodes: Node[] = nodes.map((n) => {
+        if (n.id === groupNode.id) {
+          return {
+            ...n,
+            className: "",
+          };
+        } else if (n.id === node.id) {
+          const position = getNodePositionInsideParent(n, groupNode) ?? {
+            x: 0,
+            y: 0,
+          };
 
-            return {
-              ...n,
-              position,
-              parentId: groupNode.id,
-              extent: "parent",
-            } as Node;
-          }
+          return {
+            ...n,
+            position,
+            parentId: groupNode.id,
+            extent: "parent",
+          } as Node;
+        }
 
-          return n;
-        })
-        .sort((a, b) => sortNodes(a, b, nodes));
+        return n;
+      });
 
-      setNodes(nextNodes);
+      const sortedNodes = nextNodes.sort((a, b) => sortNodes(a, b, nodes));
+
+      setNodes(sortedNodes);
     }
   };
 

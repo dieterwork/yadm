@@ -1,6 +1,6 @@
 import { type NodeProps } from "@xyflow/react";
 
-import DEMONodeBase from "../../DEMONodeBase";
+import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import type { SelfActivationNode as SelfActivationNodeType } from "./selfActivation.types";
 import { DEFAULT_SIZE_MAP } from "../../utils/consts";
 import EditableContent from "../../../editable_content/EditableContent";
@@ -18,6 +18,19 @@ const SelfActivationNode = ({
 }: NodeProps<SelfActivationNodeType>) => {
   const { content, fontSize, isEditable } = data;
 
+  const defaultActions: NodeToolbarAction[] = [
+    "addHandle",
+    "changeColor",
+    "changeFontSize",
+    "toggleHandlesVisibility",
+    "changeState",
+    "editText",
+  ];
+
+  if (parentId) {
+    defaultActions.push("attachNode");
+  }
+
   return (
     <DEMONodeBase
       id={id}
@@ -27,15 +40,7 @@ const SelfActivationNode = ({
       height={height}
       type="self_activation"
       draggable={draggable}
-      actions={[
-        "addHandle",
-        "changeColor",
-        "changeFontSize",
-        "delete",
-        "toggleHandlesVisibility",
-        "changeState",
-        "editText",
-      ].concat(parentId ? "attachNode" : [])}
+      actions={defaultActions}
     >
       <EditableContent
         isSelected={selected}

@@ -18,7 +18,7 @@ import {
 import { useGesture } from "@use-gesture/react";
 import { cn } from "@sglara/cn";
 import clamp from "$/shared/utils/clamp";
-import type { CSSProperties, MouseEventHandler } from "react";
+import { type CSSProperties, type MouseEventHandler } from "react";
 
 const DEMOHandle = ({
   id,

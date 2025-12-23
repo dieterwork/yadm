@@ -6,15 +6,13 @@ import {
   BackgroundVariant,
   SelectionMode,
   type Connection,
-  type NodeChange,
-  type EdgeChange,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
 import { edgeTypes, type DEMOEdge } from "../edges/edges.types";
 import { nodeTypes, type DEMONode } from "../nodes/nodes.types";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import {
   getNode,
   onConnect,
@@ -266,6 +264,7 @@ const DEMOModeler = () => {
           onNodeDrag={onNodeDrag}
           onNodeDragStop={onNodeDragStop}
           onNodesChange={onNodesChange}
+          deleteKeyCode={null}
           edges={edges}
           edgeTypes={edgeTypes}
           onEdgesChange={onEdgesChange}

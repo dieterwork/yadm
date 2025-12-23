@@ -17,35 +17,46 @@ const useDelete = () => {
       nodeId ? node.id === nodeId : node.selected
     );
 
-    const childNodes = getChildNodes(selectedNodes, nodes);
+    const childNodes = getChildNodes(selectedNodes, nodes).map((node) => ({
+      ...node,
+      deletable: true,
+    }));
 
-    const combinedSelectedNodes = selectedNodes.concat(childNodes);
+    const combinedSelectedNodes = selectedNodes
+      .concat(childNodes)
+      .filter((node) => !!node.deletable);
 
-    const selectedEdges = getConnectedEdges(selectedNodes, edges).filter(
-      (edge) => {
-        const isExternalSource = selectedNodes.every(
-          (n) => n.id !== edge.source
-        );
-        const isExternalTarget = selectedNodes.every(
-          (n) => n.id !== edge.target
-        );
+    console.log(combinedSelectedNodes);
 
-        return !(isExternalSource || isExternalTarget);
-      }
-    );
+    const selectedEdges = getConnectedEdges(
+      combinedSelectedNodes,
+      edges
+    ).filter((edge) => {
+      const isExternalSource = combinedSelectedNodes.every(
+        (n) => n.id !== edge.source
+      );
+      const isExternalTarget = combinedSelectedNodes.every(
+        (n) => n.id !== edge.target
+      );
+
+      return !(isExternalSource || isExternalTarget);
+    });
 
     if (!combinedSelectedNodes && !selectedEdges) return;
 
     setNodes((nodes) =>
-      nodes.filter((node) => !combinedSelectedNodes.includes(node))
+      nodes.filter(
+        (node) =>
+          !combinedSelectedNodes.map((node) => node.id).includes(node.id)
+      )
     );
     setEdges((edges) => edges.filter((edge) => !selectedEdges.includes(edge)));
   };
 
   const deleteEdge = (edgeId?: string) => {
-    const selectedEdges = edges.filter((edge) =>
-      edgeId ? edge.id === edgeId : edge.selected
-    );
+    const selectedEdges = edges
+      .filter((edge) => (edgeId ? edge.id === edgeId : edge.selected))
+      .filter((edge) => !!edge.deletable);
     if (!selectedEdges) return;
 
     // find edge source and target

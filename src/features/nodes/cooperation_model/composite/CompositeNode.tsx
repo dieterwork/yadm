@@ -1,8 +1,7 @@
 import { type NodeProps } from "@xyflow/react";
 
-import DEMONodeBase from "../../DEMONodeBase";
+import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import type { CompositeNode as CompositeNodeType } from "./composite.types";
-import uuid from "../../../../shared/utils/uuid";
 import EditableContent from "../../../editable_content/EditableContent";
 
 const CompositeNode = ({
@@ -14,7 +13,20 @@ const CompositeNode = ({
   draggable,
   parentId,
 }: NodeProps<CompositeNodeType>) => {
-  const { content, fontSize, isEditable } = data;
+  const { content, fontSize, isEditable, actions } = data;
+
+  const defaultActions: NodeToolbarAction[] = [
+    "addHandle",
+    "changeColor",
+    "changeFontSize",
+    "toggleHandlesVisibility",
+    "changeState",
+    "editText",
+  ];
+
+  if (parentId) {
+    defaultActions.push("attachNode");
+  }
 
   return (
     <DEMONodeBase
@@ -25,15 +37,7 @@ const CompositeNode = ({
       width={width}
       height={height}
       type="composite"
-      actions={[
-        "addHandle",
-        "changeColor",
-        "changeFontSize",
-        "delete",
-        "toggleHandlesVisibility",
-        "changeState",
-        "editText",
-      ].concat(parentId ? "attachNode" : [])}
+      actions={actions ?? defaultActions}
     >
       <EditableContent
         isSelected={selected}

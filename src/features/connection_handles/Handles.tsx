@@ -3,7 +3,8 @@ import type { DEMOHandlesData } from "../nodes/nodes.types";
 import DEMOHandle from "./DEMOHandle";
 import { cn } from "@sglara/cn";
 import { getNode } from "../modeler/useDEMOModelerStore";
-import { useEffect } from "react";
+import { useState } from "react";
+import useUpdateNodeHandles from "./useUpdateNodeHandles";
 
 interface HandlesProps {
   nodeId: string;
@@ -15,10 +16,6 @@ interface HandlesProps {
 
 const Handles = ({ nodeId, width, height }: HandlesProps) => {
   const node = getNode(nodeId);
-  const updateNodeInternals = useUpdateNodeInternals();
-  useEffect(() => {
-    updateNodeInternals(nodeId);
-  }, [updateNodeInternals, nodeId]);
 
   if (
     !node ||
@@ -36,8 +33,8 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
         node.data?.handles.isVisible ? "visible" : "invisible"
       )}
       style={{
-        width: width,
-        height: height,
+        width,
+        height,
       }}
     >
       {node.data.handles.top?.handles &&

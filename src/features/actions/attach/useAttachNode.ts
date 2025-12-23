@@ -12,27 +12,26 @@ export const useAttachNode = () => {
     extant?: "parent" | [[number, number], [number, number]]
   ) => {
     setNodes((nodes) => {
-      const nextNodes = nodes
-        .map((node) => {
-          if (!nodeIds.includes(node.id)) return node;
+      const nextNodes = nodes.map((node) => {
+        if (!nodeIds.includes(node.id)) return node;
 
-          const parentNode = getNode(parentNodeId);
-          const newPosition = convertAbsoluteToRelativePosition(
-            node.position,
-            parentNode,
-            nodes,
-            true
-          );
+        const parentNode = getNode(parentNodeId);
+        const newPosition = convertAbsoluteToRelativePosition(
+          node.position,
+          parentNode,
+          nodes,
+          true
+        );
 
-          return {
-            ...node,
-            parentId: parentNodeId,
-            extant,
-            position: { x: newPosition.x ?? 0, y: newPosition.y ?? 0 },
-          };
-        })
-        .sort((a, b) => sortNodes(a, b, nodes));
-      return nextNodes;
+        return {
+          ...node,
+          parentId: parentNodeId,
+          extant,
+          position: { x: newPosition.x ?? 0, y: newPosition.y ?? 0 },
+        };
+      });
+      const sortedNodes = nextNodes.sort((a, b) => sortNodes(a, b, nextNodes));
+      return sortedNodes;
     });
   };
 

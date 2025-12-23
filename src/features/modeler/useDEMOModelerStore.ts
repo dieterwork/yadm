@@ -27,11 +27,9 @@ import getMarkerType from "./utils/getMarkerType";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
 import getEdgeData from "./utils/getEdgeData";
 import { sortNodes } from "$/shared/utils/sortNodes";
-import throttle from "$/shared/utils/throttle";
 import { updateHelperLines } from "../helper_lines/useHelperLinesStore";
 import type { CooperationModelNode } from "../nodes/cooperation_model/cooperationModel.types";
 import formatDate from "$/shared/utils/formatDate";
-import diff from "microdiff";
 import { takeSnapshot } from "../actions/undo/useUndoRedoStore";
 import debounce from "$/shared/utils/debounce";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
@@ -234,10 +232,11 @@ export const addNode = (node: DEMONode | DEMONode[]) => {
     // create copy of nodes
     const newNodes = [...state.nodes]
       // add either node or array of nodes
-      .concat(Array.isArray(node) ? node : [node])
-      // sort nodes
-      .sort((a, b) => sortNodes(a, b, state.nodes));
-    return { nodes: newNodes };
+      .concat(Array.isArray(node) ? node : [node]);
+
+    // sort nodes
+    const sortedNodes = newNodes.sort((a, b) => sortNodes(a, b, newNodes));
+    return { nodes: sortedNodes };
   });
 };
 
@@ -256,7 +255,7 @@ export const onConnect: OnConnect = (connection) => {
   const type = getEdgeType(sourceNode.type, targetNode.type);
   const marker = getMarkerType(sourceNode.type, targetNode.type);
   const data = getEdgeData(type);
-  const newEdge: DEMOEdge = {
+  const newEdge = {
     ...connection,
     id: `${sourceNode.type}_${connection.sourceHandle}->${sourceNode.type}_${connection.targetHandle}`,
     type,
@@ -267,7 +266,8 @@ export const onConnect: OnConnect = (connection) => {
     markerStart: marker.markerStart,
     markerEnd: marker.markerEnd,
     zIndex: 110,
-  };
+    deletable: true,
+  } satisfies DEMOEdge;
   addEdge(newEdge);
   takeSnapshot();
 };

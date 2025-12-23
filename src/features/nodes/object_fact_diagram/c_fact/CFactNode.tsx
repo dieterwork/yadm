@@ -20,12 +20,7 @@ const CFactNode = ({
       height={height}
       draggable={draggable}
       type="c_fact"
-      actions={[
-        "delete",
-        "changeColor",
-        "attachNode",
-        "toggleHandlesVisibility",
-      ]}
+      actions={["changeColor", "attachNode", "toggleHandlesVisibility"]}
     />
   );
 };

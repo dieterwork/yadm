@@ -1,9 +1,7 @@
 import { type NodeProps, type OnResize } from "@xyflow/react";
 
-import DEMONodeBase from "../../DEMONodeBase";
+import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import type { TransactorNode as TransactorNodeType } from "./transactor.types";
-import EditableContent from "../../../editable_content/EditableContent";
-import { MEDIUM_NODE_SIZE } from "../../utils/consts";
 import {
   getNode,
   updateNode,
@@ -23,6 +21,8 @@ const TransactorNode = ({
 }: NodeProps<TransactorNodeType>) => {
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const node = getNode(id);
+
+  const defaultActions: NodeToolbarAction[] = parentId ? ["attachNode"] : [];
 
   const onResize: OnResize = (_, { width, height }) => {
     const childNodes = getChildNodes([node], nodes);
@@ -77,7 +77,7 @@ const TransactorNode = ({
       width={width}
       height={height}
       type="transactor"
-      actions={["delete"].concat(parentId ? "attachNode" : [])}
+      actions={defaultActions}
       resizerProps={{ onResize }}
       dragHandle={!!dragHandle}
     />

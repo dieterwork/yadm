@@ -21,6 +21,7 @@ import {
   useCopyPasteStore,
 } from "./useCopyPasteStore";
 import getChildNodes from "$/features/nodes/utils/getChildNodes";
+import { sortNodes } from "$/shared/utils/sortNodes";
 
 const useCopyPaste = () => {
   const rfDomNode = useStore((state) => state.domNode);
@@ -70,9 +71,20 @@ const useCopyPaste = () => {
 
   const copyNodes = () => {
     const selectedNodes = nodes.filter((node) => node.selected);
-    const disabledNodes = nodes.filter(
-      (node) => node.type === "transaction_kind"
-    );
+    const disabledNodes = nodes.filter((node) => {
+      const parentNode = node.parentId ? getNode(node.parentId) : null;
+
+      if (
+        parentNode &&
+        (parentNode.type === "elementary_actor" ||
+          parentNode.type === "several_actors" ||
+          parentNode.type === "transactor" ||
+          parentNode.type === "transaction_time")
+      ) {
+        return true;
+      }
+      return false;
+    });
 
     const filteredNodes = selectedNodes.filter(
       (node) => !disabledNodes?.includes(node)
@@ -140,7 +152,7 @@ const useCopyPaste = () => {
 
     const newNodes = bufferedNodes.map((node) => {
       // get new id
-      const newId = nodeIdMap.get(node.id)!;
+      const newId = node.type + "_" + nodeIdMap.get(node.id)!;
 
       // if has a parent id, fetch the id from the map, else it's undefined
       const parentId = node.parentId ? nodeIdMap.get(node.parentId) : undefined;
@@ -149,55 +161,54 @@ const useCopyPaste = () => {
       const y = pasteY + (node.position.y - minY);
       const position = node.parentId ? node.position : { x, y };
 
+      const nodeClone = structuredClone(node);
+
       const baseNewNode = {
-        ...node,
+        ...nodeClone,
         id: newId,
         parentId,
         position,
       } satisfies DEMONode;
 
-      if ("handles" in node.data) {
-        return {
-          ...baseNewNode,
-          data: {
-            ...node.data,
-            handles: {
-              ...node.data.handles,
-              bottom: {
-                ...node.data.handles?.bottom,
-                handles: node.data.handles?.bottom?.handles?.map((handle) => ({
-                  ...handle,
-                  id: uuid(),
-                })),
-              },
-              top: {
-                ...node.data.handles?.top,
-                handles: node.data.handles?.top?.handles?.map((handle) => ({
-                  ...handle,
-                  id: uuid(),
-                })),
-              },
-              left: {
-                ...node.data.handles?.left,
-                handles: node.data.handles?.left?.handles?.map((handle) => ({
-                  ...handle,
-                  id: uuid(),
-                })),
-              },
-              right: {
-                ...node.data.handles?.right,
-                handles: node.data.handles?.right?.handles?.map((handle) => ({
-                  ...handle,
-                  id: uuid(),
-                })),
-              },
+      if (!("handles" in node.data)) return baseNewNode;
+
+      return {
+        ...baseNewNode,
+        data: {
+          ...node.data,
+          handles: {
+            ...node.data.handles,
+            bottom: {
+              ...node.data.handles?.bottom,
+              handles: node.data.handles?.bottom?.handles?.map((handle) => ({
+                ...handle,
+                id: uuid(),
+              })),
+            },
+            top: {
+              ...node.data.handles?.top,
+              handles: node.data.handles?.top?.handles?.map((handle) => ({
+                ...handle,
+                id: uuid(),
+              })),
+            },
+            left: {
+              ...node.data.handles?.left,
+              handles: node.data.handles?.left?.handles?.map((handle) => ({
+                ...handle,
+                id: uuid(),
+              })),
+            },
+            right: {
+              ...node.data.handles?.right,
+              handles: node.data.handles?.right?.handles?.map((handle) => ({
+                ...handle,
+                id: uuid(),
+              })),
             },
           },
-        };
-      }
-
-      // remap handles
-      return baseNewNode;
+        },
+      };
     }) satisfies DEMONode[];
 
     // create an old/new id map to keep track of old edge ids
@@ -229,7 +240,11 @@ const useCopyPaste = () => {
           !sourceNode ||
           !targetNode ||
           !("handles" in sourceNode.data) ||
-          !("handles" in targetNode.data)
+          !("handles" in targetNode.data) ||
+          !newSourceNode ||
+          !newTargetNode ||
+          !("handles" in newSourceNode?.data) ||
+          !("handles" in newTargetNode?.data)
         ) {
           return null;
         }
@@ -314,8 +329,10 @@ const useCopyPaste = () => {
             targetNodeHandleSelections[3]
           ]?.id;
 
+        const edgeClone = structuredClone(edge);
+
         return {
-          ...edge,
+          ...edgeClone,
           id: newId,
           source: newSource,
           target: newTarget,
@@ -325,12 +342,16 @@ const useCopyPaste = () => {
       })
       .filter((edge) => !!edge) satisfies DEMOEdge[];
 
-    console.log(newNodes);
-
-    setNodes((nodes) => [
+    const updatedNodes = [
       ...nodes.map((node) => ({ ...node, selected: false })),
       ...newNodes,
-    ]);
+    ];
+
+    const sortedNodes = updatedNodes.sort((a, b) =>
+      sortNodes(a, b, updatedNodes)
+    );
+
+    setNodes(sortedNodes);
 
     setEdges((edges) => [
       ...edges.map((edge) => ({ ...edge, selected: false })),

@@ -1,11 +1,12 @@
 import {
   useConnection,
+  useUpdateNodeInternals,
   type NodeProps,
   type NodeResizerProps,
 } from "@xyflow/react";
 import { shapeMap } from "../shapes/shapeMap";
 import Shape from "../shapes/Shape";
-import { useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import NodeToolbar from "../node-toolbar/DEMONodeToolbar";
 import { MIN_SIZE_MAP } from "./utils/consts";
 import type { DEMONode } from "./nodes.types";
@@ -27,7 +28,6 @@ interface DEMONodeBaseProps extends Omit<NodeProps<DEMONode>, "dragHandle"> {
 
 export type NodeToolbarAction =
   | "changeColor"
-  | "delete"
   | "changeFontSize"
   | "addHandle"
   | "toggleHandlesVisibility"
@@ -49,14 +49,12 @@ const DEMONodeBase = ({
   children,
   actions = [
     "changeColor",
-    "delete",
     "changeFontSize",
     "addHandle",
     "toggleHandlesVisibility",
     "editText",
   ],
   resizerProps,
-  dragHandle,
   draggable,
 }: DEMONodeBaseProps) => {
   if (type === "text")
@@ -73,8 +71,8 @@ const DEMONodeBase = ({
 
   if (!node) return;
   const areNodeHandlesVisible = getChildNodes([node], nodes).every((node) => {
-    if (!("handles" in node.data)) return false;
-    return node.data.handles.isVisible;
+    if (!("handles" in node.data) || !node.data.handles) return false;
+    return !!node.data.handles.isVisible;
   });
 
   return (
@@ -91,10 +89,9 @@ const DEMONodeBase = ({
         )}
       <div className="isolate" style={{ width, height }}>
         {/* Controls */}
-        {actions &&
-          !isConnectionInProgress &&
-          isEnabled &&
-          !isExportEnabled && <NodeToolbar nodeId={id} actions={actions} />}
+        {!isConnectionInProgress && isEnabled && !isExportEnabled && (
+          <NodeToolbar nodeId={id} actions={actions} />
+        )}
         {resizable && isEnabled && !isExportEnabled && (
           <DEMONodeResizer
             {...resizerProps}
@@ -108,7 +105,7 @@ const DEMONodeBase = ({
             type={type}
           />
         )}
-        {"handles" in data && isEnabled && !isExportEnabled && (
+        {"handles" in data && data.handles && isEnabled && !isExportEnabled && (
           <Handles
             nodeId={id}
             handles={data?.handles}

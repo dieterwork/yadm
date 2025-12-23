@@ -1,6 +1,6 @@
 import { type NodeProps, type OnResize } from "@xyflow/react";
 
-import DEMONodeBase from "../../DEMONodeBase";
+import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import type { SeveralActorsNode as SeveralActorsNodeType } from "./severalActors.types";
 import { calculateDoubleDiamondInCircleDimensions } from "../../../shapes/utils/calculateDoubleDiamondInCircleDimensions";
 
@@ -23,6 +23,8 @@ const SeveralActorsNode = ({
 }: NodeProps<SeveralActorsNodeType>) => {
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const node = getNode(id);
+
+  const defaultActions: NodeToolbarAction[] = parentId ? ["attachNode"] : [];
 
   const onResize: OnResize = (_, { width, height }) => {
     const childNodes = getChildNodes([node], nodes);
@@ -76,7 +78,7 @@ const SeveralActorsNode = ({
       width={width}
       height={height}
       type="several_actors"
-      actions={["delete"].concat(parentId ? "attachNode" : [])}
+      actions={defaultActions}
       resizerProps={{ onResize }}
       dragHandle={!!dragHandle}
     />

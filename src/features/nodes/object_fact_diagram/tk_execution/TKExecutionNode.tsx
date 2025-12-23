@@ -21,12 +21,7 @@ const TKExecutionNode = ({
         height={height}
         draggable={draggable}
         type="tk_execution"
-        actions={[
-          "delete",
-          "changeColor",
-          "attachNode",
-          "toggleHandlesVisibility",
-        ]}
+        actions={["changeColor", "attachNode", "toggleHandlesVisibility"]}
       />
     </>
   );

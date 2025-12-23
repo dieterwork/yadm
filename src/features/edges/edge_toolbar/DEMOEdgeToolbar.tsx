@@ -16,7 +16,6 @@ import ResetEdgeCenter from "./actions/ResetEdgeCenter";
 
 export type EdgeToolbarAction =
   | "toggleProductionEvent"
-  | "delete"
   | "swapConnection"
   | "changeLineType"
   | "resetEdgeCenter";
@@ -65,7 +64,7 @@ const DEMOEdgeToolbar = ({
             <ResetEdgeCenter edgeId={edgeId} />
           )}
         </DEMOElementToolbarGroup>
-        {actions?.indexOf("delete") !== -1 && (
+        {!!edge.deletable && (
           <DEMOElementToolbarGroup aria-label={t(($) => $["Danger zone"])}>
             {actions?.length !== 1 && <DEMOElementToolbarSeparator />}
             <DeleteMenuItem edgeId={edgeId} />
