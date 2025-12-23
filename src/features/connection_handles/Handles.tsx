@@ -1,10 +1,8 @@
-import { Position, useUpdateNodeInternals } from "@xyflow/react";
+import { Position } from "@xyflow/react";
 import type { DEMOHandlesData } from "../nodes/nodes.types";
 import DEMOHandle from "./DEMOHandle";
 import { cn } from "@sglara/cn";
 import { getNode } from "../modeler/useDEMOModelerStore";
-import { useState } from "react";
-import useUpdateNodeHandles from "./useUpdateNodeHandles";
 
 interface HandlesProps {
   nodeId: string;
