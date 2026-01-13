@@ -16,14 +16,14 @@ const Topbar = () => {
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const { toasts } = useToasterStore();
   return (
-    <div className="topbar | [grid-area:topbar]  border-b border-gray-200 py-4 content-center sm:h-12 sm:p-0">
+    <div className="topbar | [grid-area:topbar] relative border-b border-gray-200 py-4 content-center sm:h-12 sm:p-0">
       <div className="topbar-inner | flex flex-col items-start content-center px-4 sm:grid sm:grid-cols-[auto_1fr] sm:items-center">
         <h1 className="text-md font-semibold text-slate-900 leading-none">
           {t(($) => $["YADM"])}
         </h1>
         <div className="nav-wrapper | flex flex-col mt-2 sm:flex-row sm:ml-4 sm:mt-0">
           <nav className="nav | w-full">
-            <ul className="flex flex-col justify-between items-start relative gap-2 sm:flex-row sm:items-center sm:gap-0">
+            <ul className="flex flex-col justify-between items-start gap-2 sm:flex-row sm:items-center sm:gap-0">
               <li>
                 <ul className="flex items-center gap-1">
                   <li>
@@ -37,7 +37,7 @@ const Topbar = () => {
                   </li>
                 </ul>
               </li>
-              <li className="w-fit content-center">
+              <li className="w-fit content-center sm:absolute sm:inset-0 sm:m-auto">
                 {isEnabled && (
                   <TextField
                     className="grid grid-cols-[auto_1fr] items-center gap-2"
