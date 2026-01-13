@@ -21,14 +21,8 @@ const Diamond = ({
 
   return (
     <g>
-      <path {...svgAttributes} d={diamondPath} fill="white" fillOpacity={1} />
-      <path
-        {...svgAttributes}
-        d={diamondPath}
-        fillOpacity={
-          svgAttributes.fillOpacity ? svgAttributes.fillOpacity : 0.2
-        }
-      />
+      <path {...svgAttributes} d={diamondPath} fill="white" />
+      <path {...svgAttributes} d={diamondPath} />
     </g>
   );
 };

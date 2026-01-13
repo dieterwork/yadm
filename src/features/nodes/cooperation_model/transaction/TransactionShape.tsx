@@ -4,7 +4,6 @@ import { getScopeFill } from "../../../../shared/utils/utils";
 import type { TransactionState } from "./transaction.types";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
-import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
 import DoubleDiamondInCircle from "../../../shapes/DoubleDiamondInCircle";
 import type { NodeScope } from "../../nodes.types";
 
@@ -29,7 +28,6 @@ const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
           strokeDasharray={"6 4"}
           width={width}
           height={height}
-          fillOpacity={DEFAULT_FILL_OPACITY}
           diamondAttributes={{ stroke: "var(--color-red-500)" }}
         />
       );
@@ -42,15 +40,9 @@ const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
             fill={fill}
             width={width}
             height={height}
-            fillOpacity={DEFAULT_FILL_OPACITY}
             diamondAttributes={{ stroke: "var(--color-red-500)" }}
           />
-          <QuestionMark
-            {...restSvgAttributes}
-            fill={fill}
-            width={width}
-            height={height}
-          />
+          <QuestionMark {...restSvgAttributes} width={width} height={height} />
         </g>
       );
 
@@ -61,7 +53,6 @@ const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
           fill={fill}
           width={width}
           height={height}
-          fillOpacity={DEFAULT_FILL_OPACITY}
           diamondAttributes={{ stroke: "var(--color-red-500)" }}
         />
       );
@@ -73,7 +64,6 @@ const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
           fill={fill}
           width={width}
           height={height}
-          fillOpacity={DEFAULT_FILL_OPACITY}
           diamondAttributes={{ stroke: "var(--color-red-500)" }}
         />
       );

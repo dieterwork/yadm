@@ -10,6 +10,11 @@ import {
 } from "./consts";
 import type { CSSProperties } from "react";
 import { calculateDoubleDiamondInCircleDimensions } from "$/features/shapes/utils/calculateDoubleDiamondInCircleDimensions";
+import {
+  NODE_BACKGROUND_COLOR_MAP,
+  NODE_BORDER_COLOR_MAP,
+  ORGANIZATION_BORDER_COLOR_MAP,
+} from "$/shared/components/ui/colors/colors.consts";
 
 interface CreateNodeParams {
   type: DEMONode["type"];
@@ -69,8 +74,8 @@ export const createNode = ({
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
-          stroke: "black",
+          fill: NODE_BACKGROUND_COLOR_MAP["default"],
+          stroke: NODE_BORDER_COLOR_MAP["default"],
         },
         selected: true,
         zIndex: 190,
@@ -120,8 +125,8 @@ export const createNode = ({
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
-          stroke: "black",
+          fill: NODE_BACKGROUND_COLOR_MAP["default"],
+          stroke: NODE_BORDER_COLOR_MAP["default"],
         },
         selected: true,
         zIndex: 190,
@@ -174,8 +179,8 @@ export const createNode = ({
             height:
               DEFAULT_SIZE_MAP[type].height -
               DEFAULT_SIZE_MAP["transaction"].height / 2,
-            fill: "white",
-            stroke: "var(--color-slate-900)",
+            fill: NODE_BACKGROUND_COLOR_MAP["default"],
+            stroke: NODE_BORDER_COLOR_MAP["default"],
             strokeWidth: 2,
           },
           selected: false,
@@ -222,7 +227,7 @@ export const createNode = ({
           style: {
             width: DEFAULT_SIZE_MAP["transaction"].width,
             height: DEFAULT_SIZE_MAP["transaction"].height,
-            stroke: "var(--color-slate-900)",
+            stroke: NODE_BORDER_COLOR_MAP["default"],
             strokeWidth: 2,
           },
           selected: false,
@@ -297,8 +302,8 @@ export const createNode = ({
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
-          stroke: "black",
+          fill: NODE_BACKGROUND_COLOR_MAP["default"],
+          stroke: NODE_BORDER_COLOR_MAP["default"],
         },
         selected: true,
         zIndex: 190,
@@ -334,8 +339,8 @@ export const createNode = ({
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
-          stroke: "var(--color-slate-500)",
+          fill: NODE_BACKGROUND_COLOR_MAP["default"],
+          stroke: NODE_BORDER_COLOR_MAP["gray"],
           strokeWidth: 16,
         },
         selected: true,
@@ -386,8 +391,8 @@ export const createNode = ({
             height:
               DEFAULT_SIZE_MAP[type].height -
               DEFAULT_SIZE_MAP["transaction"].height / 2,
-            fill: "white",
-            stroke: "var(--color-slate-500)",
+            fill: NODE_BACKGROUND_COLOR_MAP["default"],
+            stroke: NODE_BORDER_COLOR_MAP["gray"],
           },
           selected: false,
           parentId: id,
@@ -433,7 +438,7 @@ export const createNode = ({
           style: {
             width: DEFAULT_SIZE_MAP["transaction"].width,
             height: DEFAULT_SIZE_MAP["transaction"].height,
-            stroke: "var(--color-slate-900)",
+            stroke: NODE_BORDER_COLOR_MAP["default"],
             strokeWidth: 2,
           },
           selected: false,
@@ -526,8 +531,8 @@ export const createNode = ({
             height:
               DEFAULT_SIZE_MAP[type].height -
               DEFAULT_SIZE_MAP["transaction"].height / 2,
-            fill: "white",
-            stroke: "var(--color-slate-900)",
+            fill: NODE_BACKGROUND_COLOR_MAP["default"],
+            stroke: NODE_BORDER_COLOR_MAP["default"],
             strokeWidth: 2,
           },
           selected: false,
@@ -581,7 +586,7 @@ export const createNode = ({
           style: {
             width: transactionSize.width,
             height: transactionSize.height,
-            stroke: "var(--color-slate-900)",
+            stroke: NODE_BORDER_COLOR_MAP["default"],
             strokeWidth: 2,
           },
           selected: false,
@@ -659,10 +664,9 @@ export const createNode = ({
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
-          fill: "var(--color-red-500)",
-          fillOpacity: 1,
+          fill: NODE_BACKGROUND_COLOR_MAP["red"],
           strokeWidth: 2,
-          stroke: "black",
+          stroke: NODE_BORDER_COLOR_MAP["default"],
         },
         selected: true,
         zIndex: 190,
@@ -698,9 +702,9 @@ export const createNode = ({
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
+          fill: NODE_BACKGROUND_COLOR_MAP["default"],
           strokeWidth: 2,
-          stroke: "black",
+          stroke: NODE_BORDER_COLOR_MAP["default"],
         },
         selected: true,
         zIndex: 190,
@@ -736,9 +740,9 @@ export const createNode = ({
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
+          fill: NODE_BACKGROUND_COLOR_MAP["default"],
           strokeWidth: 2,
-          stroke: "black",
+          stroke: NODE_BORDER_COLOR_MAP["default"],
         },
         selected: true,
         zIndex: 190,
@@ -773,9 +777,9 @@ export const createNode = ({
           style: {
             width: DEFAULT_SIZE_MAP["transaction_time"].width,
             height: DEFAULT_SIZE_MAP["transaction_time"].height,
-            fill: "white",
+            fill: NODE_BACKGROUND_COLOR_MAP["default"],
             strokeWidth: 2,
-            stroke: "black",
+            stroke: NODE_BORDER_COLOR_MAP["default"],
           },
           selected: true,
           zIndex: 190,
@@ -801,9 +805,9 @@ export const createNode = ({
           style: {
             width: DEFAULT_SIZE_MAP["transaction_kind"].width,
             height: DEFAULT_SIZE_MAP["transaction_kind"].height,
-            fill: "white",
+            fill: NODE_BACKGROUND_COLOR_MAP["default"],
             strokeWidth: 2,
-            stroke: "black",
+            stroke: NODE_BORDER_COLOR_MAP["default"],
           },
           extent: "parent",
           selected: false,
@@ -855,9 +859,9 @@ export const createNode = ({
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
+          fill: NODE_BACKGROUND_COLOR_MAP["default"],
           strokeWidth: 2,
-          stroke: "black",
+          stroke: NODE_BORDER_COLOR_MAP["default"],
         },
         selected: true,
         zIndex: 200,
@@ -906,9 +910,9 @@ export const createNode = ({
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
+          fill: NODE_BACKGROUND_COLOR_MAP["default"],
           strokeWidth: 2,
-          stroke: "black",
+          stroke: NODE_BORDER_COLOR_MAP["default"],
         },
         selected: true,
         zIndex: 200,
@@ -957,9 +961,9 @@ export const createNode = ({
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
-          fill: "white",
+          fill: NODE_BACKGROUND_COLOR_MAP["default"],
           strokeWidth: 2,
-          stroke: "black",
+          stroke: NODE_BORDER_COLOR_MAP["default"],
         },
         selected: true,
         zIndex: 200,
@@ -1007,9 +1011,9 @@ export const createNode = ({
         style: {
           width: DEFAULT_SIZE_MAP[type].width,
           height: DEFAULT_SIZE_MAP[type].height,
-          fill: "var(--color-slate-500)",
+          fill: NODE_BACKGROUND_COLOR_MAP["gray"],
           strokeWidth: 2,
-          stroke: "black",
+          stroke: NODE_BORDER_COLOR_MAP["default"],
         },
         selected: true,
         zIndex: 200,
@@ -1050,8 +1054,8 @@ export const createNode = ({
           style: {
             width: width ?? DEFAULT_SIZE_MAP["organization"].width,
             height: height ?? DEFAULT_SIZE_MAP["organization"].height,
-            fill: "white",
-            stroke: "var(--color-rose-500)",
+            fill: NODE_BACKGROUND_COLOR_MAP["default"],
+            stroke: ORGANIZATION_BORDER_COLOR_MAP["default"],
             strokeWidth: 16,
           },
           selected: selected ?? true,
@@ -1080,8 +1084,8 @@ export const createNode = ({
           style: {
             width: DEFAULT_SIZE_MAP["organization"].width / 2,
             height: X_SMALL_NODE_SIZE,
-            fill: "white",
-            stroke: "var(--color-rose-500)",
+            fill: NODE_BACKGROUND_COLOR_MAP["default"],
+            stroke: NODE_BORDER_COLOR_MAP["red"],
           },
           selected: selected ?? true,
           zIndex: 210,

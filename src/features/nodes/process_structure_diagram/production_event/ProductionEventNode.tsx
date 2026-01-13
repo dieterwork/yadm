@@ -40,11 +40,6 @@ const ProductionEventNode = ({
         width={width}
         height={height}
         fontSize={fontSize}
-        color={
-          data.color === "default"
-            ? "var(--color-white)"
-            : "var(--color-slate-900)"
-        }
       />
     </DEMONodeBase>
   );

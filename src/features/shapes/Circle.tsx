@@ -11,7 +11,6 @@ const Circle = ({ width, height, ...svgAttributes }: ShapeProps) => {
         rx={width / 2}
         ry={height / 2}
         fill="white"
-        fillOpacity={1}
       />
       <ellipse
         {...svgAttributes}
@@ -19,9 +18,6 @@ const Circle = ({ width, height, ...svgAttributes }: ShapeProps) => {
         cy={height / 2}
         rx={width / 2}
         ry={height / 2}
-        fillOpacity={
-          svgAttributes.fillOpacity ? svgAttributes.fillOpacity : 0.2
-        }
       />
     </g>
   );

@@ -6,7 +6,6 @@ import type { SeveralActorsState } from "./severalActors.types";
 import Rectangle from "../../../shapes/Rectangle";
 import DoubleDiamondInCircle from "../../../shapes/DoubleDiamondInCircle";
 import { calculateDoubleDiamondInCircleDimensions } from "../../../shapes/utils/calculateDoubleDiamondInCircleDimensions";
-import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
 import { DEFAULT_SIZE_MAP } from "../../utils/consts";
 
 interface TransactionShapeProps {
@@ -34,7 +33,6 @@ const SeveralActorsShape = ({ state, color }: TransactionShapeProps) => {
         fill={fill}
         width={width}
         height={+height - 50}
-        fillOpacity={DEFAULT_FILL_OPACITY}
         strokeWidth={4}
       />
       <DoubleDiamondInCircle
@@ -45,7 +43,6 @@ const SeveralActorsShape = ({ state, color }: TransactionShapeProps) => {
         fill={fill}
         width={dimensions.width}
         height={dimensions.height}
-        fillOpacity={DEFAULT_FILL_OPACITY}
         diamondAttributes={{ stroke: "var(--color-red-500)" }}
       />
     </g>

@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import Diamond from "../../../shapes/Diamond";
 import type { NodeColor } from "$components/ui/colors/colors.types";
+import { NODE_BACKGROUND_COLOR_MAP } from "$/shared/components/ui/colors/colors.consts";
 
 type ProductionEventShapeProps = {
   width: number;
@@ -15,8 +16,10 @@ const ProductionEventShape = ({ color }: ProductionEventShapeProps) => {
 
   const { width, height, ...restSvgAttributes } = svgAttributes;
 
-  const fill = color !== "default" ? color : svgAttributes?.fill;
-  const fillOpacity = color !== "default" ? 0.2 : 1;
+  const fill =
+    color !== "default"
+      ? NODE_BACKGROUND_COLOR_MAP[color]
+      : svgAttributes?.fill;
 
   return (
     <>
@@ -25,7 +28,6 @@ const ProductionEventShape = ({ color }: ProductionEventShapeProps) => {
         width={width}
         height={height}
         fill={fill}
-        fillOpacity={fillOpacity}
       />
     </>
   );

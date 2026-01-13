@@ -4,7 +4,6 @@ import { getScopeFill } from "../../../../shared/utils/utils";
 import type { ActorState } from "./actor.types";
 import { useContext } from "react";
 import { ShapeContext } from "../../../shapes/ShapeContext";
-import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
 import type { NodeScope } from "../../nodes.types";
 
 interface ActorShapeProps {
@@ -28,7 +27,6 @@ const ActorShape = ({ state, scope, color }: ActorShapeProps) => {
           height={height}
           fill={fill}
           strokeDasharray={"6 4"}
-          fillOpacity={0.2}
         />
       );
 
@@ -40,7 +38,6 @@ const ActorShape = ({ state, scope, color }: ActorShapeProps) => {
             width={width}
             height={height}
             fill={fill}
-            fillOpacity={DEFAULT_FILL_OPACITY}
           />
           <QuestionMark {...restSvgAttributes} width={width} height={height} />
         </g>
@@ -54,7 +51,6 @@ const ActorShape = ({ state, scope, color }: ActorShapeProps) => {
             width={width}
             height={height}
             fill={fill}
-            fillOpacity={DEFAULT_FILL_OPACITY}
           />
         </>
       );

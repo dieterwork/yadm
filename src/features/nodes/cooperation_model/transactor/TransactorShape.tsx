@@ -4,7 +4,6 @@ import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
 import type { TransactorState } from "./transactor.types";
 import Rectangle from "../../../shapes/Rectangle";
-import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
 import { MEDIUM_NODE_SIZE } from "../../utils/consts";
 
 interface TransactionShapeProps {
@@ -27,7 +26,6 @@ const TransactorShape = ({ state, color }: TransactionShapeProps) => {
         fill={fill}
         width={width}
         height={+height - MEDIUM_NODE_SIZE / 2}
-        fillOpacity={DEFAULT_FILL_OPACITY}
       />
       <DiamondInCircle
         {...restSvgAttributes}
@@ -35,7 +33,6 @@ const TransactorShape = ({ state, color }: TransactionShapeProps) => {
         fill={fill}
         width={MEDIUM_NODE_SIZE}
         height={MEDIUM_NODE_SIZE}
-        fillOpacity={DEFAULT_FILL_OPACITY}
         diamondAttributes={{ stroke: "var(--color-red-500)" }}
       />
     </g>

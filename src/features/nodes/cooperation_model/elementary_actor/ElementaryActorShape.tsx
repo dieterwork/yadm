@@ -4,8 +4,7 @@ import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
 import type { ElementaryActorState } from "./elementaryActor.types";
 import Rectangle from "../../../shapes/Rectangle";
-import { DEFAULT_FILL_OPACITY } from "../../../shapes/utils/consts";
-import { DEFAULT_SIZE_MAP, MEDIUM_NODE_SIZE } from "../../utils/consts";
+import { MEDIUM_NODE_SIZE } from "../../utils/consts";
 
 interface TransactionShapeProps {
   state: ElementaryActorState;
@@ -28,7 +27,6 @@ const ElementaryActorShape = ({ state, color }: TransactionShapeProps) => {
         fill={fill}
         width={width}
         height={+height - MEDIUM_NODE_SIZE / 2}
-        fillOpacity={DEFAULT_FILL_OPACITY}
       />
       <DiamondInCircle
         transform={`translate(${width / 2 - MEDIUM_NODE_SIZE / 2}, 0)`}
@@ -37,7 +35,6 @@ const ElementaryActorShape = ({ state, color }: TransactionShapeProps) => {
         fill={fill}
         width={MEDIUM_NODE_SIZE}
         height={MEDIUM_NODE_SIZE}
-        fillOpacity={DEFAULT_FILL_OPACITY}
         diamondAttributes={{ stroke: "var(--color-red-500)" }}
       />
     </g>

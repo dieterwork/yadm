@@ -8,11 +8,13 @@ import {
 } from "$/features/modeler/useDEMOModelerStore";
 import { useTranslation } from "react-i18next";
 import ChangeLanguageMenu from "./menus/ChangeLanguageMenu";
+import toast, { useToasterStore } from "react-hot-toast/headless";
 
 const Topbar = () => {
   const { t } = useTranslation();
   const fileName = useDEMOModelerStore((state) => state.fileName);
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
+  const { toasts } = useToasterStore();
   return (
     <div className="topbar | [grid-area:topbar]  border-b border-gray-200 py-4 content-center sm:h-12 sm:p-0">
       <div className="topbar-inner | flex flex-col items-start content-center px-4 sm:grid sm:grid-cols-[auto_1fr] sm:items-center">
@@ -41,11 +43,22 @@ const Topbar = () => {
                     className="grid grid-cols-[auto_1fr] items-center gap-2"
                     value={fileName}
                     onChange={(e) => {
-                      if (e.length > 80) {
+                      if (e.length > 50) {
                         return;
                       }
                       const cleanedInput = e.replace(/[^a-zA-Z0-9_\-\s]/g, "");
                       setFileName(cleanedInput);
+                    }}
+                    onBlur={(e) => {
+                      if (
+                        !!toasts.find((toast) => toast.id === "emptyFilename")
+                      )
+                        return;
+                      if (e.currentTarget.value === "") {
+                        toast.error("Please enter a valid model name", {
+                          id: "emptyFilename",
+                        });
+                      }
                     }}
                   >
                     <Label className="text-slate-900 text-xs">

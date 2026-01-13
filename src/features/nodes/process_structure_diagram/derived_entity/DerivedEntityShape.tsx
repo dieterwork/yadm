@@ -17,11 +17,7 @@ const DerivedEntityShape = ({ scope, color }: DerivedEntityShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) throw new Error("No shape context found");
 
-  const { width, height, ...restSvgAttributes } = svgAttributes;
-
-  const strokeWidth = svgAttributes?.strokeWidth
-    ? +svgAttributes.strokeWidth
-    : 0;
+  const { width, height } = svgAttributes;
 
   const fill = getScopeFill(scope, color);
 

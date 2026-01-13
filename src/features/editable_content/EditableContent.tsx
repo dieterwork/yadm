@@ -2,24 +2,17 @@ import { cn } from "@sglara/cn";
 import {
   useEffect,
   useRef,
-  useState,
   type CSSProperties,
   type HTMLAttributes,
   type RefObject,
 } from "react";
 import {
-  autoSaveModel,
-  getNode,
   updateNodeContent,
   useDEMOModelerStore,
 } from "../modeler/useDEMOModelerStore";
 import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
-import {
-  debounceTakeSnapshot,
-  takeSnapshot,
-} from "../actions/undo/useUndoRedoStore";
-import debounce from "$/shared/utils/debounce";
+import { debounceTakeSnapshot } from "../actions/undo/useUndoRedoStore";
 
 interface EditableContentProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, "content"> {

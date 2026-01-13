@@ -25,8 +25,9 @@ const useExport = () => {
 
   const fileNameSchema = z
     .string()
-    .max(80, {
-      error: t(($) => $["File name must be less than 80 characters"]),
+    .nonempty({ error: t(($) => $["File name must not be empty"]) })
+    .max(50, {
+      error: t(($) => $["File name must be less than 50 characters"]),
     })
     .regex(new RegExp(/([A-Za-z0-9\-\_]+)/), {
       error: t(

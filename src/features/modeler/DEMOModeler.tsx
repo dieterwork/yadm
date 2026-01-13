@@ -44,19 +44,9 @@ import useKeyboardShortcuts from "../keyboard/useKeyboardShortcuts";
 import useAttachNode from "../actions/attach/useAttachNode";
 import useTitleTranslate from "$/shared/hooks/useTitleTranslate";
 import toast from "react-hot-toast/headless";
-import { useNodeDragHandlers } from "../nodes/hooks/useNodeDragHandlers";
 import { takeSnapshot } from "../actions/undo/useUndoRedoStore";
 import { useTranslation } from "react-i18next";
-
-const hasChildrenMap = [
-  "elementary_actor",
-  "several_actors",
-  "composite",
-  "self_activation",
-  "transactor",
-  "transaction_time",
-  "organization",
-];
+import Notifications from "../notifications/Notifications";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -244,11 +234,9 @@ const DEMOModeler = () => {
     return true;
   };
 
-  const { onNodeDrag, onNodeDragStop } = useNodeDragHandlers();
-
   return (
     <div
-      className="DEMO-modeler | [grid-area:modeler] h-full"
+      className="DEMO-modeler | [grid-area:modeler] h-full relative"
       data-action={action}
     >
       <div className="react-flow-wrapper | h-full">
@@ -261,8 +249,6 @@ const DEMOModeler = () => {
           onNodeDragStart={() => {
             takeSnapshot();
           }}
-          onNodeDrag={onNodeDrag}
-          onNodeDragStop={onNodeDragStop}
           onNodesChange={onNodesChange}
           deleteKeyCode={null}
           edges={edges}
@@ -350,6 +336,7 @@ const DEMOModeler = () => {
             horizontal={horizontalHelperLine}
             vertical={verticalHelperLine}
           />
+          <Notifications />
         </ReactFlow>
       </div>
     </div>

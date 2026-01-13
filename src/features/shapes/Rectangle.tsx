@@ -15,16 +15,8 @@ const Rectangle = ({
         width={width}
         height={height}
         fill={transparent ? "none" : "var(--color-white)"}
-        fillOpacity={1}
       />
-      <rect
-        {...svgAttributes}
-        width={width}
-        height={height}
-        fillOpacity={
-          svgAttributes.fillOpacity ? svgAttributes.fillOpacity : 0.2
-        }
-      />
+      <rect {...svgAttributes} width={width} height={height} />
     </g>
   );
 };

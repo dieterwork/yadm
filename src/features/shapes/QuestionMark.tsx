@@ -1,3 +1,7 @@
+import {
+  NODE_BORDER_COLOR_MAP,
+  NODE_COLOR_MAP,
+} from "$/shared/components/ui/colors/colors.consts";
 import type { ShapeProps } from "./shapes.types";
 
 const QuestionMark = ({ width, height, ...svgAttributes }: ShapeProps) => {
@@ -8,7 +12,7 @@ const QuestionMark = ({ width, height, ...svgAttributes }: ShapeProps) => {
       x={width / 2}
       y={height / 2}
       fontSize={40}
-      fill="black"
+      fill={NODE_BORDER_COLOR_MAP["default"]}
       textAnchor="middle"
       dominantBaseline="central"
       {...svgAttributes}

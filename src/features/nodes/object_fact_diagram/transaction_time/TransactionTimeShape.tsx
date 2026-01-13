@@ -1,6 +1,7 @@
 import Rectangle from "../../../shapes/Rectangle";
 import { useContext } from "react";
 import { ShapeContext } from "../../../shapes/ShapeContext";
+import { NODE_BACKGROUND_COLOR_MAP } from "$/shared/components/ui/colors/colors.consts";
 
 interface ActorShapeProps {
   color?: string;
@@ -11,7 +12,9 @@ const TransactionTimeShape = ({ color }: ActorShapeProps) => {
   if (!svgAttributes) return null;
   const { width, height, ...restSvgAttributes } = svgAttributes;
 
-  const fill = color ? color : restSvgAttributes.fill;
+  const fill = color
+    ? NODE_BACKGROUND_COLOR_MAP[color]
+    : restSvgAttributes.fill;
 
   const strokeWidth = svgAttributes.strokeWidth
     ? +svgAttributes.strokeWidth
@@ -25,7 +28,6 @@ const TransactionTimeShape = ({ color }: ActorShapeProps) => {
         width={width}
         height={height}
         fill={fill}
-        fillOpacity={0.2}
         {...restSvgAttributes}
       />
     </>

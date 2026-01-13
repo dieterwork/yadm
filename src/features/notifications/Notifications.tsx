@@ -17,11 +17,11 @@ const Notifications = () => {
 
   return (
     <div
-      className="notifications | fixed top-2 mx-auto left-0 right-0"
+      className="notifications | absolute top-2 right-2"
       onMouseEnter={startPause}
       onMouseLeave={endPause}
     >
-      {toasts.map((toast) => {
+      {toasts.map((toast, i) => {
         const offset = calculateOffset(toast, {
           reverseOrder: false,
           gutter: 8,
@@ -39,13 +39,14 @@ const Notifications = () => {
             key={toast.id}
             ref={ref}
             className={cn(
-              "toast | flex justify-center absolute w-[18rem] transition-all duration-500 ease-out left-0 right-0 mx-auto",
+              "toast | flex justify-end absolute w-[18rem] transition-all duration-500 ease-out top-2 right-2",
               toast?.visible
                 ? "animate-in fade-in"
                 : "animate-out fade-out opacity-0"
             )}
             style={{
               transform: `translateY(${offset}px)`,
+              zIndex: 99999 - i,
             }}
             {...toast.ariaProps}
           >
