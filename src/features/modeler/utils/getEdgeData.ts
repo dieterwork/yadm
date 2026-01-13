@@ -7,27 +7,30 @@ import type {
   TransactionTimeEdge,
 } from "$/features/edges/edges.types";
 
-const getEdgeData = <T extends DEMOEdge>(edgeType: T["type"]): T["data"] => {
+const getEdgeData = <T extends DEMOEdge>(
+  edgeType: T["type"],
+  data?: T["data"]
+): T["data"] => {
   if (!edgeType) return undefined;
   switch (edgeType) {
     case "cooperation_model_edge": {
-      const data = {
+      return {
         controlPoints: [],
-        lineType: "solid",
+        lineType:
+          data && "lineType" in data && !!data.lineType
+            ? data.lineType
+            : "solid",
       } satisfies CooperationModelEdge["data"];
-      return data;
     }
     case "object_fact_diagram_edge": {
-      const data = {
+      return {
         controlPoints: [],
       } satisfies ObjectFactDiagramEdge["data"];
-      return data;
     }
     case "process_structure_diagram_edge": {
-      const data = {
+      return {
         controlPoints: [],
       } satisfies ProcessStructureDiagramEdge["data"];
-      return data;
     }
     default: {
       return {};

@@ -299,17 +299,22 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
     if (newEdge?.id !== edge.id) return edge;
     const marker = getMarkerType(sourceNode.type, targetNode.type);
     const type = getEdgeType(sourceNode.type, targetNode.type);
+    const data = getEdgeData(type, edge.data);
+
     const _newEdge: DEMOEdge = {
       ...edge,
       id: `${type ?? "edge"}_${uuid()}`,
       data: {
         ...edge.data,
+        ...data,
         markerMid: marker.markerMid,
         center: undefined,
       },
-      type,
       markerStart: marker.markerStart,
       markerEnd: marker.markerEnd,
+      type,
+      zIndex: 110,
+      deletable: true,
     };
     return _newEdge;
   });

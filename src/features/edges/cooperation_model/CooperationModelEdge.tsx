@@ -6,6 +6,7 @@ const CooperationModelEdge = ({
   data,
   ...restProps
 }: EdgeProps<CooperationModelEdgeType>) => {
+  console.log(data);
   return (
     <EditableEdgeComponent
       {...restProps}

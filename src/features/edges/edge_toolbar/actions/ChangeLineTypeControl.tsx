@@ -31,7 +31,7 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   ];
 
   const [selected, setSelected] = useState<Selection>(
-    new Set([edge.data?.lineType ?? "solid"])
+    new Set([edge.data.lineType])
   );
 
   return (

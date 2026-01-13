@@ -88,13 +88,6 @@ export function EditableEdgeComponent({
     stepPosition,
   });
 
-  if (Array.isArray(actions)) {
-    actions =
-      targetNode.type === "ghost"
-        ? actions.filter((action) => action !== "swapConnection")
-        : actions;
-  }
-
   const [path, labelX, labelY] = getSmoothStepPath({
     sourceX: sourceX,
     sourceY: sourceY,

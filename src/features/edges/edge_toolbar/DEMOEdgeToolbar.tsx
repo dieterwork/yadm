@@ -1,6 +1,7 @@
 import { type XYPosition } from "@xyflow/react";
 import {
   getEdge,
+  getNode,
   useDEMOModelerStore,
 } from "../../modeler/useDEMOModelerStore";
 import EdgeToolbar from "./EdgeToolbar";
@@ -32,17 +33,19 @@ const DEMOEdgeToolbar = ({
   position,
   actions,
 }: DEMOEdgeToolbarProps) => {
+  const edges = useDEMOModelerStore((state) => state.edges);
+  const nodes = useDEMOModelerStore((state) => state.nodes);
+  const { t } = useTranslation();
+
   if (!edgeId) return null;
   const edge = getEdge(edgeId);
   if (!edge) return null;
 
-  const edges = useDEMOModelerStore((state) => state.edges);
-  const nodes = useDEMOModelerStore((state) => state.nodes);
+  const targetNode = getNode(edge.target);
+
   const hasTwoOrMoreEdgesSelected =
     edges.filter((edge) => edge.selected).length > 1;
   const hasNodeSelected = nodes.some((node) => node.selected);
-
-  const { t } = useTranslation();
 
   return (
     <EdgeToolbar
@@ -57,9 +60,10 @@ const DEMOEdgeToolbar = ({
           {actions?.indexOf("toggleProductionEvent") !== -1 && (
             <ToggleProductionEventMenuItem edgeId={edgeId} />
           )}
-          {actions?.indexOf("swapConnection") !== -1 && (
-            <SwapConnectionControl edgeId={edgeId} />
-          )}
+          {actions?.indexOf("swapConnection") !== -1 &&
+            targetNode.type !== "ghost" && (
+              <SwapConnectionControl edgeId={edgeId} />
+            )}
           {actions?.indexOf("resetEdgeCenter") !== -1 && (
             <ResetEdgeCenter edgeId={edgeId} />
           )}
