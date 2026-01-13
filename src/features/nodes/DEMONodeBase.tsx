@@ -1,20 +1,18 @@
 import {
   useConnection,
-  useUpdateNodeInternals,
   type NodeProps,
   type NodeResizerProps,
 } from "@xyflow/react";
 import { shapeMap } from "../shapes/shapeMap";
 import Shape from "../shapes/Shape";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import NodeToolbar from "../node-toolbar/DEMONodeToolbar";
 import { MIN_SIZE_MAP } from "./utils/consts";
 import type { DEMONode } from "./nodes.types";
 import DEMONodeResizer from "../resize/NodeResizer";
 import Handles from "../connection_handles/Handles";
-import { cn } from "@sglara/cn";
 import { getNode, useDEMOModelerStore } from "../modeler/useDEMOModelerStore";
-import { CornersOutIcon, NotchesIcon } from "@phosphor-icons/react";
+import { CornersOutIcon } from "@phosphor-icons/react";
 import getChildNodes from "./utils/getChildNodes";
 
 interface DEMONodeBaseProps extends Omit<NodeProps<DEMONode>, "dragHandle"> {

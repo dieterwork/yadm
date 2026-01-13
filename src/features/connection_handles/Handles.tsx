@@ -1,8 +1,13 @@
-import { Position } from "@xyflow/react";
+import { Position, useUpdateNodeInternals } from "@xyflow/react";
 import type { DEMOHandlesData } from "../nodes/nodes.types";
 import DEMOHandle from "./DEMOHandle";
 import { cn } from "@sglara/cn";
-import { getNode } from "../modeler/useDEMOModelerStore";
+import {
+  getNode,
+  updateNode,
+  useDEMOModelerStore,
+} from "../modeler/useDEMOModelerStore";
+import { useEffect, useState } from "react";
 
 interface HandlesProps {
   nodeId: string;
@@ -14,6 +19,11 @@ interface HandlesProps {
 
 const Handles = ({ nodeId, width, height }: HandlesProps) => {
   const node = getNode(nodeId);
+  const updateNodeInternals = useUpdateNodeInternals();
+
+  useEffect(() => {
+    updateNodeInternals(nodeId);
+  }, [nodeId]);
 
   if (
     !node ||

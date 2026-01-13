@@ -56,16 +56,26 @@ export interface DEMOModelerState {
   isHandleEditModeEnabled: boolean;
 }
 
+const localDEMOModelJSON = localStorage.getItem("demo-model");
+const localDEMOModel: DEMOModelJSON | null = !!localDEMOModelJSON
+  ? JSON.parse(localDEMOModelJSON)
+  : null;
+console.log(
+  !!localDEMOModel
+    ? `[Loaded version ${localDEMOModel?.version}]`
+    : "[Loaded version 1.0]"
+);
+
 export const useDEMOModelerStore = create<DEMOModelerState>()((set, get) => ({
   id: uuid(),
-  fileName: `DEMO Model ${formatDate()}`,
-  nodes: initialNodes,
-  edges: initialEdges,
+  fileName: localDEMOModel?.fileName ?? `DEMO Model`,
+  nodes: localDEMOModel?.nodes ?? [],
+  edges: localDEMOModel?.edges ?? [],
   DEMOInstance: null,
   action: null,
   isGridVisible: true,
   isGridSnapEnabled: true,
-  isEnabled: true,
+  isEnabled: localDEMOModel?.isEnabled ?? true,
   isExportEnabled: false,
   isHandleEditModeEnabled: false,
 }));
@@ -257,7 +267,7 @@ export const onConnect: OnConnect = (connection) => {
   const data = getEdgeData(type);
   const newEdge = {
     ...connection,
-    id: `${sourceNode.type}_${connection.sourceHandle}->${sourceNode.type}_${connection.targetHandle}`,
+    id: `${sourceNode.type}_${connection.sourceHandle}->${targetNode.type}_${connection.targetHandle}`,
     type,
     data: {
       ...data,
@@ -291,6 +301,7 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
     const type = getEdgeType(sourceNode.type, targetNode.type);
     const _newEdge: DEMOEdge = {
       ...edge,
+      id: `${type ?? "edge"}_${uuid()}`,
       data: {
         ...edge.data,
         markerMid: marker.markerMid,

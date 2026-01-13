@@ -118,7 +118,7 @@ export const useIncompleteEdge = () => {
       "ghost"
     );
     const newEdge = {
-      id: `${fromNode?.id}->${ghostId}`,
+      id: `${newEdgeType ?? "edge"}_${uuid()}`,
       source: fromNode?.id,
       target: ghostId,
       reconnectable: "target",

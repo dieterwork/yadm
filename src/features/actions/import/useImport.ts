@@ -1,10 +1,9 @@
 import {
-  saveModel,
   setAction,
   setEdges,
-  setEnabled,
   setFileName,
   setNodes,
+  toggleLock,
 } from "$/features/modeler/useDEMOModelerStore";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import { useEffect, useRef } from "react";
@@ -27,10 +26,7 @@ const useImport = () => {
         const demoModel: DEMOModelJSON = JSON.parse(reader.result);
         if (!demoModel.nodes || !demoModel.edges || !demoModel.version)
           throw new Error("Invalid DEMO Model file");
-        demoModel.nodes.map((node) => console.log(node.draggable));
-        setNodes(demoModel.nodes.map((node) => ({ ...node, draggable: true })));
-        setEdges(demoModel.edges);
-        setEnabled(demoModel.isEnabled);
+        toggleLock(demoModel.isEnabled);
         setAction("pan");
         setFileName(demoModel.fileName);
       };
@@ -49,7 +45,7 @@ const useImport = () => {
         input.current = null;
       }
     };
-  }, [setNodes, setEdges, setEnabled, setAction]);
+  }, [setNodes, setEdges, setAction]);
   const importJSON = () => {
     if (!input.current) return;
     input.current.click();

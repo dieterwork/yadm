@@ -1,7 +1,5 @@
 import {
-  setEnabled,
   setExportEnabled,
-  setNodesHandlesVisibility,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
 import jsPDF from "jspdf";
@@ -20,6 +18,7 @@ const useExport = () => {
   const DEMOInstance = useDEMOModelerStore((state) => state.DEMOInstance);
   const { getNodesBounds } = useReactFlow();
   const nodesBounds = getNodesBounds(nodes);
+  const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
 
   const { t } = useTranslation();
 
@@ -94,7 +93,7 @@ const useExport = () => {
       const parsedFileName = fileNameSchema.parse(fileName);
       const jsModel: DEMOModelJSON = {
         ...DEMOInstance.toObject(),
-        isEnabled: true,
+        isEnabled,
         version: "1.0.0",
         fileName,
       };

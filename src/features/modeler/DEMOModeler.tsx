@@ -31,7 +31,6 @@ import {
 } from "./useDEMOModelerStore";
 import { useShallow } from "zustand/react/shallow";
 import ConnectionLine from "../connection_line/ConnectionLine";
-import useLocalJSONModel from "./useLocalJSONModel";
 import HelperLines from "../helper_lines/HelperLines";
 import { useHelperLinesStore } from "../helper_lines/useHelperLinesStore";
 import { cn } from "@sglara/cn";
@@ -173,7 +172,6 @@ const DEMOModeler = () => {
 
   const onConnectEnd = useIncompleteEdge();
 
-  useLocalJSONModel();
   useKeyboardShortcuts();
   usePreviewNode();
 

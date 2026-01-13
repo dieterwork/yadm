@@ -125,8 +125,8 @@ const FileMenu = () => {
         isOpen={isNewModalOpen}
         onOpenChange={(isOpen) => setNewModalOpen(isOpen)}
         onAction={() => {
-          clearModel();
           localStorage.removeItem("demo-model");
+          clearModel();
           setNewModalOpen(false);
         }}
         title={t(($) => $["Create new model?"])}

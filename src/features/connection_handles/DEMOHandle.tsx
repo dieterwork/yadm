@@ -41,6 +41,8 @@ const DEMOHandle = ({
   const internalNode = useInternalNode(nodeId);
   const edges = useDEMOModelerStore((state) => state.edges);
 
+  const DEMOStore = useDEMOModelerStore((state) => state);
+
   const bind = useGesture({
     onDrag: ({ event, xy }) => {
       if (!isHandleEditModeEnabled || !isEnabled || !id || !canDrag) return;
@@ -153,7 +155,10 @@ const DEMOHandle = ({
     <Handle
       {...restProps}
       style={style}
-      className={"demo-handle"}
+      onClick={() => {
+        console.log(DEMOStore);
+      }}
+      className="demo-handle"
       id={id}
       position={position}
       onContextMenu={onContextMenu}
