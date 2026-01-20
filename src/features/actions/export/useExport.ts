@@ -4,7 +4,6 @@ import {
 } from "$/features/modeler/useDEMOModelerStore";
 import jsPDF from "jspdf";
 import { downloadFile, generatePNG } from "./utils";
-import "svg2pdf.js";
 import { useReactFlow } from "@xyflow/react";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import { z } from "zod";

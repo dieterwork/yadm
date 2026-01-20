@@ -27,7 +27,11 @@ const ChangeFontSizeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
         menuTrigger
         id="change_fontSize"
       />
-      <Popover placement="right top" shouldFlip={false}>
+      <Popover
+        placement="right top"
+        shouldFlip={false}
+        className="outline-hidden"
+      >
         <DEMOElementToolbarListBox
           aria-labelledby="change_fontSize"
           items={fontSizeOptions}

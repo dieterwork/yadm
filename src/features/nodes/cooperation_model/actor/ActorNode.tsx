@@ -13,7 +13,7 @@ const ActorNode = ({
   draggable,
   parentId,
 }: NodeProps<ActorNodeType>) => {
-  const { content, fontSize, isEditable, resizable, actions } = data;
+  const { content, fontSize, isEditable, resizable, actions, state } = data;
 
   const defaultActions: NodeToolbarAction[] = [
     "addHandle",
@@ -48,8 +48,9 @@ const ActorNode = ({
         width={width}
         height={height}
         fontSize={fontSize}
-        maxLength={60}
-        hidden={data.state === "unclear"}
+        maxLength={100}
+        maxLines={4}
+        hidden={state === "unclear"}
       />
     </DEMONodeBase>
   );

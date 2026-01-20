@@ -1,21 +1,6 @@
 import { CaretDownIcon } from "@phosphor-icons/react";
 import { cn } from "@sglara/cn";
-import { useId, useState } from "react";
-import {
-  Button,
-  Label,
-  Menu,
-  MenuTrigger,
-  Popover,
-  Select,
-  type ButtonProps,
-  type ListBoxProps,
-  type MenuProps,
-  type MenuTriggerProps,
-  type PressEvent,
-  type SelectProps,
-} from "react-aria-components";
-import SidebarMenu from "./SidebarMenu";
+import { Button, type ButtonProps } from "react-aria-components";
 
 type SidebarMenuButtonProps = ButtonProps & {
   label?: string;

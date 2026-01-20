@@ -7,7 +7,12 @@ const TopbarListbox = <T extends object>({
 }: TopbarListboxProps<T>) => {
   return (
     <div className="menu-wrapper | bg-white shadow-sm w-[12rem] border-1 border-slate-100 py-1 rounded-md">
-      <ListBox {...restProps} className="flex flex-col outline-hidden" />
+      <ListBox
+        {...restProps}
+        className="flex flex-col outline-hidden"
+        selectionBehavior="replace"
+        disallowEmptySelection
+      />
     </div>
   );
 };

@@ -60,7 +60,11 @@ const ChangeTextAlignMenuItem = ({ nodeId }: { nodeId: string }) => {
         menuTrigger
         id="change_textAlign"
       />
-      <Popover placement="right top" shouldFlip={false}>
+      <Popover
+        placement="right top"
+        shouldFlip={false}
+        className="outline-hidden"
+      >
         <DEMOElementToolbarListBox
           aria-labelledby="change_textAlign"
           items={textAlignOptions}

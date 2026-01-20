@@ -19,16 +19,26 @@ export const generatePNG = async ({
   backgroundColor?: string;
   scaleFactor?: number;
 }) => {
-  const padding = scaleFactor * 10;
-  const imageWidth = nodesBounds.width * scaleFactor + padding;
-  const imageHeight = nodesBounds.height * scaleFactor + padding;
+  const PADDING = 10;
+
+  // offset for edges is 30, so we need to account for that
+  const bounds: Rect = {
+    x: nodesBounds.x - 30,
+    y: nodesBounds.y - 30,
+    width: nodesBounds.width + 60,
+    height: nodesBounds.height + 60,
+  };
+
+  const imageWidth = scaleFactor * (bounds.width + PADDING);
+  const imageHeight = scaleFactor * (bounds.height + PADDING);
+
   const viewport = getViewportForBounds(
-    nodesBounds,
+    bounds,
     imageWidth,
     imageHeight,
     1 * scaleFactor,
     1 * scaleFactor,
-    padding
+    PADDING
   );
 
   const viewportDomEl = document.querySelector(

@@ -52,7 +52,11 @@ const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
         menuTrigger
         id="add_handle"
       />
-      <Popover placement="right top" shouldFlip={false}>
+      <Popover
+        placement="right top"
+        shouldFlip={false}
+        className="outline-hidden"
+      >
         <DEMOElementToolbarMenu
           aria-labelledby="add_handle"
           items={handleOptions}

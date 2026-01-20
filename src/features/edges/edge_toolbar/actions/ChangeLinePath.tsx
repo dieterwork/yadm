@@ -42,7 +42,11 @@ const ChangeLinePathControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
         menuTrigger
         id="change_linePath"
       />
-      <Popover placement="right top" shouldFlip={false}>
+      <Popover
+        placement="right top"
+        shouldFlip={false}
+        className="outline-hidden"
+      >
         <DEMOElementToolbarListBox
           aria-labelledby="change_linePath"
           items={options}

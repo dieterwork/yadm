@@ -40,7 +40,11 @@ const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
         menuTrigger
         id="change_color"
       />
-      <Popover placement="right top" shouldFlip={false}>
+      <Popover
+        placement="right top"
+        shouldFlip={false}
+        className="outline-hidden"
+      >
         <DEMOElementToolbarListBox
           aria-labelledby="change_color"
           items={colorOptions}

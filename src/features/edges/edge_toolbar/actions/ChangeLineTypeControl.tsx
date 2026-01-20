@@ -41,7 +41,11 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
         menuTrigger
         id="change_lineType"
       />
-      <Popover placement="right top" shouldFlip={false}>
+      <Popover
+        placement="right top"
+        shouldFlip={false}
+        className="outline-hidden"
+      >
         <DEMOElementToolbarListBox
           aria-labelledby="change_lineType"
           items={options}

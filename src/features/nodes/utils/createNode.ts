@@ -4,7 +4,6 @@ import uuid from "../../../shared/utils/uuid";
 import {
   DEFAULT_CONTENT_MAP,
   DEFAULT_SIZE_MAP,
-  MEDIUM_NODE_SIZE,
   SMALL_NODE_SIZE,
   X_SMALL_NODE_SIZE,
 } from "./consts";
@@ -90,6 +89,7 @@ export const createNode = ({
         position,
         deletable: true,
         data: {
+          resizable: true,
           subModel: "cooperation_model",
           scope: "in",
           state: "default",

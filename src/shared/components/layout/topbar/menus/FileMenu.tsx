@@ -4,6 +4,7 @@ import TopbarSubMenuButton from "../_components/TopbarSubMenuButton";
 import {
   clearModel,
   saveModel,
+  setFileName,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
 import useExport from "$/features/actions/export/useExport";
@@ -127,6 +128,7 @@ const FileMenu = () => {
         onAction={() => {
           localStorage.removeItem("demo-model");
           clearModel();
+          setFileName("New model");
           setNewModalOpen(false);
         }}
         title={t(($) => $["Create new model?"])}

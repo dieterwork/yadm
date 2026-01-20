@@ -14,9 +14,12 @@ import setEndOfContentEditable from "$/features/editable_content/utils/setEndOfC
 const EditTextControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const { t } = useTranslation("translation");
   if (!nodeId) return null;
+  const node = getNode(nodeId);
+  if (!node) return null;
 
   return (
     <DEMOElementToolbarButton
+      isDisabled={"state" in node.data && node.data.state === "unclear"}
       onPress={() => {
         const element = document.querySelector<HTMLDivElement>(
           `.react-flow__node[data-id='${nodeId}'] [contenteditable]`

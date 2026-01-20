@@ -13,7 +13,7 @@ const TransactionNode = ({
   draggable,
   parentId,
 }: NodeProps<TransactionNodeType>) => {
-  const { content, fontSize, isEditable, actions } = data;
+  const { content, fontSize, isEditable, actions, resizable } = data;
 
   const defaultActions: NodeToolbarAction[] = [
     "addHandle",
@@ -39,7 +39,7 @@ const TransactionNode = ({
       type="transaction"
       keepAspectRatio={true}
       actions={actions ?? defaultActions}
-      resizable={false}
+      resizable={resizable}
       draggable={draggable}
     >
       <EditableContent
@@ -50,7 +50,8 @@ const TransactionNode = ({
         height={height}
         fontSize={fontSize}
         hide={data.state === "unclear"}
-        maxLength={50}
+        maxLength={75}
+        maxLines={4}
         style={{ right: data.state === "double" ? "auto" : 0 }}
       />
     </DEMONodeBase>
