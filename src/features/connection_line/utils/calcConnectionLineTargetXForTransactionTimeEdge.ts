@@ -14,6 +14,6 @@ export const calcConnectionLineTargetXForTransactionTimeEdge = (
   ) {
     return toX;
   } else {
-    return fromX + (fromPosition === "left" ? -20 : 20);
+    return fromX + (fromPosition === "left" ? -30 : 30);
   }
 };

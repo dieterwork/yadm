@@ -17,7 +17,7 @@ const DoubleArrowMarker = ({
 }: {
   labelX: number;
   labelY: number;
-  rotation: number;
+  rotation?: number;
   direction?: 1 | -1;
 }) => {
   return (
@@ -29,7 +29,7 @@ const DoubleArrowMarker = ({
         className="absolute"
         style={{
           transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px) rotate(${
-            rotation * (180 / Math.PI)
+            (rotation ?? 0) * (180 / Math.PI)
           }deg)`,
         }}
       >

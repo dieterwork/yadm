@@ -17,22 +17,29 @@ export type CenterData = XYPosition & {
   active?: boolean;
 };
 
+export type LinePath = "step" | "straight";
+
+export type LineType = "solid" | "dashed";
+
 export type CooperationModelEdge = Edge<
-  { center: CenterData; lineType: "solid" | "dashed" },
+  { center?: CenterData; lineType: LineType; linePath: LinePath },
   "cooperation_model_edge"
 >;
 
 export type ObjectFactDiagramEdge = Edge<
-  { center: CenterData; markerMid?: MarkerType },
+  { center?: CenterData; markerMid?: MarkerType; linePath: LinePath },
   "object_fact_diagram_edge"
 >;
 
 export type ProcessStructureDiagramEdge = Edge<
-  { center: CenterData },
+  { center?: CenterData; linePath: LinePath },
   "process_structure_diagram_edge"
 >;
 
-export type GhostEdge = Edge<{ center: CenterData }, "ghost_edge">;
+export type GhostEdge = Edge<
+  { center?: CenterData; linePath: LinePath },
+  "ghost_edge"
+>;
 
 export type TransactionTimeEdge = Edge<{}, "transaction_time_edge">;
 

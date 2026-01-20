@@ -1,6 +1,7 @@
 import {
   getEdgeCenter,
   getSmoothStepPath,
+  getStraightPath,
   MarkerType,
   useInternalNode,
   useReactFlow,
@@ -9,7 +10,7 @@ import {
   type XYPosition,
 } from "@xyflow/react";
 
-import type { CenterData, DEMOEdge } from "../edges.types";
+import type { CenterData, DEMOEdge, LinePath } from "../edges.types";
 import { type DEMONode } from "../../nodes/nodes.types";
 import DEMOEdgeToolbar, {
   type EdgeToolbarAction,
@@ -18,19 +19,18 @@ import { useEffect, useState, type CSSProperties } from "react";
 import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
-  getEdge,
   updateEdge,
   updateEdgeData,
 } from "$/features/modeler/useDEMOModelerStore";
-import { getCenterEdgePoints, handleDirections } from "../utils/smoothStep";
+import { getCenterEdgePoints } from "../utils/smoothStep";
 import getInteractiveCenterEdgeDirection from "../utils/getInteractiveCenterEdgeDirection";
-import clamp from "$/shared/utils/clamp";
 import getArrowDirection from "../utils/getArrowDirection";
 import { calcEdgeMidpoint } from "../utils/calcEdgeMidpoint";
 import getArrowRotation from "../utils/getArrowRotation";
 
 export type EditableEdge = Edge<{
   center: CenterData;
+  linePath?: LinePath;
 }>;
 
 export function EditableEdgeComponent({
@@ -52,6 +52,7 @@ export function EditableEdgeComponent({
   selected,
   actions,
   style,
+  linePath,
 }: EdgeProps<EditableEdge> & {
   markerMid?: MarkerType;
   type?: DEMOEdge["type"];
@@ -60,6 +61,7 @@ export function EditableEdgeComponent({
   centerX?: number;
   centerY?: number;
   isDraggable?: boolean;
+  linePath?: "step" | "straight";
 }) {
   const sourceNode = useInternalNode<DEMONode>(source);
   const targetNode = useInternalNode<DEMONode>(target);
@@ -69,7 +71,7 @@ export function EditableEdgeComponent({
 
   const { screenToFlowPosition } = useReactFlow();
 
-  const offset = 20;
+  const offset = 30;
   const stepPosition = 0.5;
 
   const [sourceCenterPosition, targetCenterPosition] = getCenterEdgePoints({
@@ -88,18 +90,26 @@ export function EditableEdgeComponent({
     stepPosition,
   });
 
-  const [path, labelX, labelY] = getSmoothStepPath({
-    sourceX: sourceX,
-    sourceY: sourceY,
-    targetX: targetX,
-    targetY: targetY,
-    sourcePosition: sourcePosition,
-    targetPosition: targetPosition,
-    centerX,
-    centerY,
-    offset,
-    stepPosition,
-  });
+  const [path, labelX, labelY] =
+    linePath === "step"
+      ? getSmoothStepPath({
+          sourceX,
+          sourceY,
+          targetX,
+          targetY,
+          sourcePosition,
+          targetPosition,
+          centerX,
+          centerY,
+          offset,
+          stepPosition,
+        })
+      : getStraightPath({
+          sourceX,
+          sourceY,
+          targetX,
+          targetY,
+        });
 
   const interactiveEdgeDirection = getInteractiveCenterEdgeDirection({
     source: {
@@ -241,11 +251,6 @@ export function EditableEdgeComponent({
           labelY={interactiveEdgeMidpoint.y ?? centerY}
           rotation={arrowRotation}
           direction={arrowDirection}
-          // direction={getArrowDirection({
-          //   source: { x: sourceX, y: sourceY },
-          //   sourcePosition,
-          //   target: { x: targetX, y: targetY },
-          // })}
         />
       )}
     </>

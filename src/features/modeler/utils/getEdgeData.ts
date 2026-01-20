@@ -1,10 +1,8 @@
 import type {
   CooperationModelEdge,
   DEMOEdge,
-  GhostEdge,
   ObjectFactDiagramEdge,
   ProcessStructureDiagramEdge,
-  TransactionTimeEdge,
 } from "$/features/edges/edges.types";
 
 const getEdgeData = <T extends DEMOEdge>(
@@ -15,21 +13,38 @@ const getEdgeData = <T extends DEMOEdge>(
   switch (edgeType) {
     case "cooperation_model_edge": {
       return {
-        controlPoints: [],
         lineType:
           data && "lineType" in data && !!data.lineType
             ? data.lineType
             : "solid",
+        linePath:
+          data && "linePath" in data && !!data.linePath
+            ? data.linePath
+            : "step",
       } satisfies CooperationModelEdge["data"];
     }
     case "object_fact_diagram_edge": {
       return {
-        controlPoints: [],
+        linePath:
+          data && "linePath" in data && !!data.linePath
+            ? data.linePath
+            : "step",
       } satisfies ObjectFactDiagramEdge["data"];
     }
     case "process_structure_diagram_edge": {
       return {
-        controlPoints: [],
+        linePath:
+          data && "linePath" in data && !!data.linePath
+            ? data.linePath
+            : "step",
+      } satisfies ProcessStructureDiagramEdge["data"];
+    }
+    case "ghost_edge": {
+      return {
+        linePath:
+          data && "linePath" in data && !!data.linePath
+            ? data.linePath
+            : "step",
       } satisfies ProcessStructureDiagramEdge["data"];
     }
     default: {

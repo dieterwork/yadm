@@ -6,7 +6,6 @@ const CooperationModelEdge = ({
   data,
   ...restProps
 }: EdgeProps<CooperationModelEdgeType>) => {
-  console.log(data);
   return (
     <EditableEdgeComponent
       {...restProps}
@@ -14,8 +13,14 @@ const CooperationModelEdge = ({
       centerX={data?.center?.x}
       centerY={data?.center?.y}
       isDraggable={data?.center?.active}
-      actions={["swapConnection", "toggleProductionEvent", "changeLineType"]}
+      actions={[
+        "swapConnection",
+        "toggleProductionEvent",
+        "changeLineType",
+        "changeLinePath",
+      ]}
       style={{ strokeDasharray: data?.lineType === "solid" ? "0" : "5" }}
+      linePath={data?.linePath}
     />
   );
 };

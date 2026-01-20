@@ -3,9 +3,9 @@ import {
   updateEdgeData,
 } from "$/features/modeler/useDEMOModelerStore";
 import {
-  FlowArrowIcon,
-  RectangleDashedIcon,
-  RectangleIcon,
+  ArrowElbowUpRightIcon,
+  ArrowRightIcon,
+  LineSegmentIcon,
 } from "@phosphor-icons/react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
 import type { CooperationModelEdge } from "../../edges.types";
@@ -18,32 +18,33 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 
-const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
+const ChangeLinePathControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const { t } = useTranslation();
   const edge = getEdge(edgeId);
-  if (!edge || edge.type !== "cooperation_model_edge" || !edge.data?.lineType)
-    return null;
+  if (!edge || !edge.data?.linePath) return null;
 
   const options = [
-    { id: "solid", label: t(($) => $["Solid"]) },
-    { id: "dashed", label: t(($) => $["Dashed"]) },
+    { id: "step", label: t(($) => $["Step"]) },
+    { id: "straight", label: t(($) => $["Straight"]) },
   ];
 
   const [selected, setSelected] = useState<Selection>(
-    new Set([edge.data.lineType])
+    new Set([edge.data.linePath])
   );
 
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton
-        label={t(($) => $["Change line type"])}
-        icon={({ size, color }) => <FlowArrowIcon size={size} color={color} />}
+        label={t(($) => $["Change line path"])}
+        icon={({ size, color }) => (
+          <LineSegmentIcon size={size} color={color} />
+        )}
         menuTrigger
-        id="change_lineType"
+        id="change_linePath"
       />
       <Popover placement="right top" shouldFlip={false}>
         <DEMOElementToolbarListBox
-          aria-labelledby="change_lineType"
+          aria-labelledby="change_linePath"
           items={options}
           selectedKeys={selected}
           selectionMode="single"
@@ -54,7 +55,7 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
               if (typeof entry !== "string") return;
               updateEdgeData<CooperationModelEdge>(edgeId, (data) => ({
                 ...data,
-                lineType: data?.lineType === "solid" ? "dashed" : "solid",
+                linePath: data?.linePath === "straight" ? "step" : "straight",
               }));
               takeSnapshot();
             }
@@ -68,7 +69,9 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
               id={item.id}
               icon={(iconProps) => {
                 const Icon =
-                  item.id === "solid" ? RectangleIcon : RectangleDashedIcon;
+                  item.id === "straight"
+                    ? ArrowRightIcon
+                    : ArrowElbowUpRightIcon;
                 return <Icon {...iconProps} />;
               }}
             />
@@ -79,4 +82,4 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   );
 };
 
-export default ChangeLineTypeControl;
+export default ChangeLinePathControl;

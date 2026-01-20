@@ -12,7 +12,9 @@ const GhostEdge = ({ data, ...restProps }: EdgeProps<EditableEdge>) => {
       centerY={data?.center?.y}
       isDraggable={data?.center?.active}
       type="ghost_edge"
+      actions={["changeLinePath"]}
       style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
+      linePath={data?.linePath}
     />
   );
 };

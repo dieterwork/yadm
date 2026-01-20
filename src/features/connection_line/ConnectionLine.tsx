@@ -25,6 +25,7 @@ const ConnectionLine = ({
           targetY: toY,
           sourcePosition: fromPosition,
           targetPosition: toPosition,
+          offset: 30,
         })
       : getStraightPath({
           sourceX: fromX,

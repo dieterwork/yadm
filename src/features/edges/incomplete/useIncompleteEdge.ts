@@ -18,6 +18,7 @@ import getEdgeType from "$/features/modeler/utils/getEdgeType";
 import getMarkerType from "$/features/modeler/utils/getMarkerType";
 import convertAbsoluteToRelativePosition from "$/features/nodes/utils/convertAbsoluteToRelativePosition";
 import type { DEMONode } from "$/features/nodes/nodes.types";
+import getEdgeData from "$/features/modeler/utils/getEdgeData";
 
 const getPosition = (fromPosition: Position | null) => {
   switch (fromPosition) {
@@ -40,15 +41,15 @@ const getTransactionTimeGhostNodePositionX = (
   fromNodeWidth: number | undefined
 ) => {
   if (position === Position.Right) {
-    if (relativeParentCoordinates.x ?? 0 > (fromNodeWidth ?? 0)) {
+    if ((relativeParentCoordinates.x ?? 0) > (fromNodeWidth ?? 0)) {
       return relativeParentCoordinates.x ?? 0;
     }
-    return (fromNodeWidth ?? 0) + 20;
+    return (fromNodeWidth ?? 0) + 30;
   } else {
-    if (relativeParentCoordinates.x ?? 0 < 0) {
+    if ((relativeParentCoordinates.x ?? 0) < 0) {
       return relativeParentCoordinates.x ?? 0;
     }
-    return -20;
+    return -30;
   }
 };
 
@@ -117,8 +118,10 @@ export const useIncompleteEdge = () => {
       fromNode?.type as DEMONode["type"],
       "ghost"
     );
+    const data = getEdgeData(newEdgeType);
     const newEdge = {
       id: `${newEdgeType ?? "edge"}_${uuid()}`,
+      data,
       source: fromNode?.id,
       target: ghostId,
       reconnectable: "target",
