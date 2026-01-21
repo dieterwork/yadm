@@ -1,10 +1,5 @@
 import { cn } from "@sglara/cn";
-import {
-  ListBoxItem,
-  MenuItem,
-  type ListBoxItemProps,
-  type MenuItemProps,
-} from "react-aria-components";
+import { ListBoxItem, type ListBoxItemProps } from "react-aria-components";
 
 interface SidebarMenuSectionItemProps extends ListBoxItemProps {
   label?: string;

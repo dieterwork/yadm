@@ -1,5 +1,5 @@
 import type { DEMOEdge } from "$/features/edges/edges.types";
-import type { DEMONode, SubModel } from "$/features/nodes/nodes.types";
+import type { DEMONode } from "$/features/nodes/nodes.types";
 
 // Todo make an object
 const edgeMap: Partial<

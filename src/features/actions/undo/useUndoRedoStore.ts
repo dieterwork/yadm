@@ -1,6 +1,5 @@
 import type { DEMOEdge } from "$/features/edges/edges.types";
 import {
-  autoSaveModel,
   saveModel,
   setEdges,
   setNodes,

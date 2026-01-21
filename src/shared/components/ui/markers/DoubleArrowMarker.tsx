@@ -1,19 +1,9 @@
-import { EdgeLabelRenderer, Position } from "@xyflow/react";
-import type { CSSProperties } from "react";
-
-const getRotation = (direction: 1 | -1): CSSProperties["rotate"] => {
-  if (direction === 1) {
-    return "0";
-  } else {
-    return "180deg";
-  }
-};
+import { EdgeLabelRenderer } from "@xyflow/react";
 
 const DoubleArrowMarker = ({
   labelX,
   labelY,
   rotation,
-  direction = 1,
 }: {
   labelX: number;
   labelY: number;

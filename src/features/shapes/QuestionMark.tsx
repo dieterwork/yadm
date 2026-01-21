@@ -1,7 +1,4 @@
-import {
-  NODE_BORDER_COLOR_MAP,
-  NODE_COLOR_MAP,
-} from "$/shared/components/ui/colors/colors.consts";
+import { NODE_BORDER_COLOR_MAP } from "$/shared/components/ui/colors/colors.consts";
 import type { ShapeProps } from "./shapes.types";
 
 const QuestionMark = ({ width, height, ...svgAttributes }: ShapeProps) => {

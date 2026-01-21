@@ -1,10 +1,6 @@
-import {
-  CaretRightIcon,
-  type IconProps,
-  type Icon as IconType,
-} from "@phosphor-icons/react";
+import { CaretRightIcon, type IconProps } from "@phosphor-icons/react";
 import { cn } from "@sglara/cn";
-import type { ComponentType, ReactElement } from "react";
+import type { ReactElement } from "react";
 import { MenuItem, type MenuItemProps } from "react-aria-components";
 
 type DEMOElementToolbarMenuItemProps = MenuItemProps & {

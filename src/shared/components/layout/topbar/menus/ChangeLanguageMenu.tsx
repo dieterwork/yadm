@@ -1,9 +1,8 @@
 import { useTranslation } from "react-i18next";
 import TopbarListboxButton from "../_components/TopbarListboxButton";
 import TopbarListboxItem from "../_components/TopbarListBoxItem";
-import i18n from "$/features/i18n/config";
 import { useState } from "react";
-import type { Key, Selection } from "react-aria-components";
+import type { Key } from "react-aria-components";
 
 const ChangeLanguageMenu = () => {
   const { t, i18n } = useTranslation();

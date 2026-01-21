@@ -1,9 +1,7 @@
 import {
   CheckCircleIcon,
-  InfoIcon,
   LinkBreakIcon,
   LinkIcon,
-  WarningIcon,
   XCircleIcon,
   XIcon,
 } from "@phosphor-icons/react";
@@ -76,7 +74,7 @@ const Notifications = () => {
                   <LinkBreakIcon size={24} color="var(--color-slate-900)" />
                 )}
               </div>
-              {/* @ts-ignore */}
+              {/* @ts-expect-error toast.message throwing error that it cannot be a jsx element... */}
               <div className="leading-[1.3]">{toast.message}</div>
               {!toast.className?.includes("no-remove") && (
                 <div className="grid place-items-center">

@@ -2,7 +2,6 @@ import {
   getNode,
   setAction,
   updateNode,
-  updateNodeData,
   updateNodeEditable,
 } from "$/features/modeler/useDEMOModelerStore";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";

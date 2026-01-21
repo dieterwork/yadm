@@ -9,7 +9,7 @@ type Props = {
   isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
 } & Omit<ToggleButtonProps, "isSelected" | "onChange">;
-const SidebarToggleButton = ({ isOpen, onOpenChange, ...restProps }: Props) => {
+const SidebarToggleButton = ({ isOpen, onOpenChange }: Props) => {
   const Icon = isOpen ? CaretDoubleLeftIcon : CaretDoubleRightIcon;
   return (
     <ToggleButton

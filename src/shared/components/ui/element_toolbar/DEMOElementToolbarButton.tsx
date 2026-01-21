@@ -1,8 +1,4 @@
-import {
-  CaretRightIcon,
-  type IconProps,
-  type Icon as IconType,
-} from "@phosphor-icons/react";
+import { CaretRightIcon, type IconProps } from "@phosphor-icons/react";
 import { cn } from "@sglara/cn";
 import type { ReactElement } from "react";
 import { Button, type ButtonProps } from "react-aria-components";

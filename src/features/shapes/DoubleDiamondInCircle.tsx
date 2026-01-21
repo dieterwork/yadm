@@ -1,5 +1,4 @@
 import { type SVGAttributes } from "react";
-import Diamond from "./Diamond";
 import Circle from "./Circle";
 import DiamondInCircle from "./DiamondInCircle";
 import type { ShapeProps } from "./shapes.types";

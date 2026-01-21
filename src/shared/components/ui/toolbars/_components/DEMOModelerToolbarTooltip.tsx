@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { Tooltip, type TooltipProps } from "react-aria-components";
 import { cn } from "@sglara/cn";
 import type { Orientation } from "react-aria";

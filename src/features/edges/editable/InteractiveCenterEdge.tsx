@@ -28,7 +28,6 @@ const InteractiveCenterEdge = ({
   sourceY,
   targetX,
   targetY,
-  active,
   onDragStart,
   onDrag,
   onDragEnd,
@@ -36,13 +35,13 @@ const InteractiveCenterEdge = ({
 }: InteractiveCenterEdgeProps) => {
   const bind = useGesture({
     onDragStart: (params) => {
-      onDragStart && onDragStart(params);
+      if (onDragStart) onDragStart(params);
     },
     onDrag: (params) => {
-      onDrag && onDrag(params);
+      if (onDrag) onDrag(params);
     },
     onDragEnd: (params) => {
-      onDragEnd && onDragEnd(params);
+      if (onDragEnd) onDragEnd(params);
     },
   });
   const [path] = getStraightPath({ sourceX, sourceY, targetX, targetY });

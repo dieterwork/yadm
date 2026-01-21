@@ -50,9 +50,7 @@ const Topbar = () => {
                       setFileName(cleanedInput);
                     }}
                     onBlur={(e) => {
-                      if (
-                        !!toasts.find((toast) => toast.id === "emptyFilename")
-                      )
+                      if (toasts.find((toast) => toast.id === "emptyFilename"))
                         return;
                       if (e.currentTarget.value === "") {
                         toast.error("Please enter a valid model name", {

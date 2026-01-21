@@ -1,8 +1,4 @@
-import {
-  NODE_BACKGROUND_COLOR_MAP,
-  NODE_BORDER_COLOR_MAP,
-  NODE_COLOR_MAP,
-} from "../colors/colors.consts";
+import { NODE_COLOR_MAP } from "../colors/colors.consts";
 
 const DiamondMarker = () => {
   return (

@@ -27,7 +27,6 @@ interface EditableContentProps
   hide?: boolean;
   textAlign?: CSSProperties["textAlign"];
   alignContent?: string;
-  isSelected?: boolean;
   maxLength?: number;
   leading?: number;
   padding?: number;
@@ -73,7 +72,6 @@ const EditableContent = ({
   hide = false,
   textAlign = "center",
   alignContent = "center",
-  isSelected,
   padding,
   ...restProps
 }: EditableContentProps) => {

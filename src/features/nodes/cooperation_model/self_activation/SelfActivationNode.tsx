@@ -7,8 +7,6 @@ import {
 
 import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import type { SelfActivationNode as SelfActivationNodeType } from "./selfActivation.types";
-import { DEFAULT_SIZE_MAP } from "../../utils/consts";
-import EditableContent from "../../../editable_content/EditableContent";
 import getChildNodes from "../../utils/getChildNodes";
 import {
   getNode,

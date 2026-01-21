@@ -1,14 +1,4 @@
-import { getNode } from "$/features/modeler/useDEMOModelerStore";
 import type { DEMONode } from "../../features/nodes/nodes.types";
-
-type NodeMapNode = DEMONode & { children: NodeMapNode[] };
-
-const traverseNode = (node: NodeMapNode, result: NodeMapNode[]) => {
-  result.push(node);
-  for (const child of node.children) {
-    traverseNode(child, result);
-  }
-};
 
 export const sortNodes = (a: DEMONode, b: DEMONode, nodes: DEMONode[]) => {
   const getNodeDepth = (node: DEMONode) => {

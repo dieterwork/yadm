@@ -1,17 +1,7 @@
-import {
-  CaretRightIcon,
-  CheckIcon,
-  type IconProps,
-  type Icon as IconType,
-} from "@phosphor-icons/react";
+import { CheckIcon, type IconProps } from "@phosphor-icons/react";
 import { cn } from "@sglara/cn";
-import type { ComponentType, ReactElement } from "react";
-import {
-  ListBoxItem,
-  type ColorSwatchProps,
-  type ListBoxItemProps,
-} from "react-aria-components";
-import type { NodeColor } from "../colors/colors.types";
+import type { ReactElement } from "react";
+import { ListBoxItem, type ListBoxItemProps } from "react-aria-components";
 
 type DEMOElementToolbarListBoxItemProps = ListBoxItemProps & {
   icon?: ({
@@ -20,7 +10,7 @@ type DEMOElementToolbarListBoxItemProps = ListBoxItemProps & {
   }: {
     size: number;
     color: string;
-  }) => ReactElement<IconProps | { color: NodeColor }>;
+  }) => ReactElement<IconProps | { color: string }>;
   label?: string;
 };
 

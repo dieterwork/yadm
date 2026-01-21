@@ -239,12 +239,16 @@ const useCopyPaste = () => {
         if (
           !sourceNode ||
           !targetNode ||
+          !sourceNode.data ||
+          !targetNode.data ||
           !("handles" in sourceNode.data) ||
           !("handles" in targetNode.data) ||
           !newSourceNode ||
           !newTargetNode ||
-          !("handles" in newSourceNode?.data) ||
-          !("handles" in newTargetNode?.data)
+          !newSourceNode.data ||
+          !newTargetNode.data ||
+          !("handles" in newSourceNode.data) ||
+          !("handles" in newTargetNode.data)
         ) {
           return null;
         }

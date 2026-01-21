@@ -13,7 +13,6 @@ import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast/headless";
 import DEMOModal from "$/shared/components/ui/modal/DEMOModal";
 import { useState } from "react";
-import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 
 const FileMenu = () => {
   const { exportAsPNG, exportAsPDF, exportAsJSON } = useExport();

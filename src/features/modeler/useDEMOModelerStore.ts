@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { temporal } from "zundo";
 import {
   addEdge as _addEdge,
   applyNodeChanges,
@@ -10,15 +9,11 @@ import {
   type ReactFlowInstance,
   reconnectEdge,
   type OnReconnect,
-  type FinalConnectionState,
   type HandleType,
   Position,
   isEdge,
   isNode,
 } from "@xyflow/react";
-
-import { initialNodes } from "../nodes/initialNodes";
-import { initialEdges } from "../edges/initialEdges";
 import type { DEMONode, DEMOHandle, NodeScope } from "../nodes/nodes.types";
 import uuid from "../../shared/utils/uuid";
 import type { DEMOEdge } from "../edges/edges.types";
@@ -29,7 +24,6 @@ import getEdgeData from "./utils/getEdgeData";
 import { sortNodes } from "$/shared/utils/sortNodes";
 import { updateHelperLines } from "../helper_lines/useHelperLinesStore";
 import type { CooperationModelNode } from "../nodes/cooperation_model/cooperationModel.types";
-import formatDate from "$/shared/utils/formatDate";
 import { takeSnapshot } from "../actions/undo/useUndoRedoStore";
 import debounce from "$/shared/utils/debounce";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
@@ -57,16 +51,16 @@ export interface DEMOModelerState {
 }
 
 const localDEMOModelJSON = localStorage.getItem("demo-model");
-const localDEMOModel: DEMOModelJSON | null = !!localDEMOModelJSON
+const localDEMOModel: DEMOModelJSON | null = localDEMOModelJSON
   ? JSON.parse(localDEMOModelJSON)
   : null;
 console.log(
-  !!localDEMOModel
+  localDEMOModel
     ? `[Loaded version ${localDEMOModel?.version}]`
     : "[Loaded version 1.0]"
 );
 
-export const useDEMOModelerStore = create<DEMOModelerState>()((set, get) => ({
+export const useDEMOModelerStore = create<DEMOModelerState>()(() => ({
   id: uuid(),
   fileName: localDEMOModel?.fileName ?? `New Model`,
   nodes: localDEMOModel?.nodes ?? [],
@@ -203,8 +197,7 @@ export const setDEMOInstance = (
 export const onReconnectEnd = (
   event: MouseEvent | TouchEvent,
   edge: DEMOEdge,
-  handleType: HandleType,
-  connectionState: FinalConnectionState
+  handleType: HandleType
 ) => {
   if (handleType === "source") {
     setNodes((nodes) => {

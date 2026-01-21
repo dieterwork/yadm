@@ -2,17 +2,12 @@ import { type NodeProps, type OnResize } from "@xyflow/react";
 
 import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import type { ElementaryActorNode as ElementaryActorNodeType } from "./elementaryActor.types";
-import uuid from "../../../../shared/utils/uuid";
-import EditableContent from "../../../editable_content/EditableContent";
-import { DEFAULT_SIZE_MAP } from "../../utils/consts";
 import {
   getNode,
   updateNode,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
 import getChildNodes from "../../utils/getChildNodes";
-
-const padding = 4;
 
 const ElementaryActorNode = ({
   id,

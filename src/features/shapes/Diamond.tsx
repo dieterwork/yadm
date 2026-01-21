@@ -4,9 +4,6 @@ import { generatePath } from "./utils/generatePath";
 const Diamond = ({
   width,
   height,
-  path,
-  x,
-  y,
   offset = 0,
   ...svgAttributes
 }: ShapeProps & { offset?: number }) => {

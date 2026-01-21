@@ -30,6 +30,7 @@ import { calculateDoubleDiamondInCircleDimensions } from "$/features/shapes/util
 import type { OrganizationState } from "$/features/nodes/nodes.types";
 import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const NODES_WITH_STATE = [
   "actor",
   "composite",
@@ -40,7 +41,7 @@ const NODES_WITH_STATE = [
   "several_actors",
 ] as const;
 
-type NodeWithState = (typeof NODES_WITH_STATE)[number];
+export type NodeWithState = (typeof NODES_WITH_STATE)[number];
 
 const getIcon = (
   state:

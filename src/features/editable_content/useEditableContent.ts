@@ -1,5 +1,4 @@
 import {
-  useEffect,
   type CSSProperties,
   type FormEvent,
   type InputEvent,
@@ -12,13 +11,11 @@ import {
   setAction,
   updateNode,
   updateNodeEditable,
-  useDEMOModelerStore,
 } from "../modeler/useDEMOModelerStore";
 import { setMaxLines } from "./utils/setMaxLines";
 import useClickOutside from "$/shared/hooks/useClickOutside";
 
 export const useEditableContent = ({
-  content,
   ref,
   onContentUpdate,
   maxLines,

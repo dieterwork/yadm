@@ -17,9 +17,6 @@ const DiamondInCircle = ({
 }: DiamondInCircleProps) => {
   if (!width || !height)
     throw new Error("No width/height provided for diamond in circle");
-  const strokeWidth = restSvgAttributes.strokeWidth
-    ? +restSvgAttributes.strokeWidth
-    : 0;
 
   const diamondWidth = width - 2 * 2;
   const diamondHeight = height - 2 * 2;

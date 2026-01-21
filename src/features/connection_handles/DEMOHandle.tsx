@@ -41,8 +41,6 @@ const DEMOHandle = ({
   const internalNode = useInternalNode(nodeId);
   const edges = useDEMOModelerStore((state) => state.edges);
 
-  const DEMOStore = useDEMOModelerStore((state) => state);
-
   const bind = useGesture({
     onDrag: ({ event, xy }) => {
       if (!isHandleEditModeEnabled || !isEnabled || !id || !canDrag) return;

@@ -1,9 +1,4 @@
-import {
-  NodeToolbar as _NodeToolbar,
-  NodeToolbar,
-  Position,
-  type NodeToolbarProps,
-} from "@xyflow/react";
+import { NodeToolbar, Position, type NodeToolbarProps } from "@xyflow/react";
 import { getNode, useDEMOModelerStore } from "../modeler/useDEMOModelerStore";
 import ChangeFontSizeControl from "./actions/ChangeFontSizeControl";
 import AddHandleControl from "./actions/AddHandleControl";
@@ -20,7 +15,6 @@ import DEMOElementToolbarGroup from "$/shared/components/ui/element_toolbar/DEMO
 import DeleteControl from "./actions/DeleteControl";
 import DEMOElementToolbar from "$/shared/components/ui/element_toolbar/DEMOElementToolbar";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
 
 const DEMONodeToolbar = ({
   nodeId,

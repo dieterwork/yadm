@@ -8,7 +8,7 @@ import {
 } from "$/features/modeler/useDEMOModelerStore";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import { LinkBreakIcon, LinkIcon } from "@phosphor-icons/react";
-import toast, { useToaster } from "react-hot-toast/headless";
+import toast from "react-hot-toast/headless";
 import { useTranslation } from "react-i18next";
 
 const AttachNodeControl = ({ nodeId }: { nodeId: string }) => {

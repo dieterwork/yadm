@@ -1,6 +1,4 @@
-import type { DEMOEdge } from "$/features/edges/edges.types";
-import type { DEMONode } from "$/features/nodes/nodes.types";
-import { isEdge, Position, type Position as PositionType } from "@xyflow/react";
+import { Position, type Position as PositionType } from "@xyflow/react";
 
 export function assertIsPosition(value: string): asserts value is PositionType {
   if (!Object.values(Position).includes(value as PositionType)) {

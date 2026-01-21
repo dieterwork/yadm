@@ -11,7 +11,7 @@ export interface DEMOModelerState {
   vertical: number | undefined;
 }
 
-export const useHelperLinesStore = create<DEMOModelerState>()((set, get) => ({
+export const useHelperLinesStore = create<DEMOModelerState>()(() => ({
   isEnabled: true,
   horizontal: undefined,
   vertical: undefined,

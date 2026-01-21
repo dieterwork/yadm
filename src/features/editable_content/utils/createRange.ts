@@ -5,6 +5,7 @@ export const createRange = (
   start: number,
   end: number
 ): Range => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let startNode: any;
   searchNode(container, container, (node) => {
     if (node.nodeType === Node.TEXT_NODE) {
@@ -20,6 +21,7 @@ export const createRange = (
     return false;
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let endNode: any;
   if (startNode) {
     searchNode(container, startNode, (node) => {

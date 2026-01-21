@@ -1,4 +1,4 @@
-import { Position, type XYPosition } from "@xyflow/react";
+import { type XYPosition } from "@xyflow/react";
 import type { DEMONode } from "../nodes.types";
 import uuid from "../../../shared/utils/uuid";
 import {
@@ -39,7 +39,6 @@ export const createNode = ({
   height,
   content,
   selected,
-  zIndex,
   textAlign,
   translateFn: t,
 }: CreateNodeParams): DEMONode | DEMONode[] => {

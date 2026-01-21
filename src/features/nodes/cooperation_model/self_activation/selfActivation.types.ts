@@ -1,5 +1,5 @@
 import type { Node } from "@xyflow/react";
-import type { DEMOHandlesData, DEMONodeBaseData } from "../../nodes.types";
+import type { DEMONodeBaseData } from "../../nodes.types";
 
 export type SelfActivationState = "internal" | "external";
 

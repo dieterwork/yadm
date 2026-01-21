@@ -1,10 +1,8 @@
-import { cn } from "@sglara/cn";
 import {
   Menu,
   Popover,
   SubmenuTrigger,
   type MenuProps,
-  type MenuTriggerProps,
   type SubmenuTriggerProps,
 } from "react-aria-components";
 import TopbarMenuItem from "./TopbarMenuItem";

@@ -55,9 +55,6 @@ export const getDirection = ({
   return source.y < target.y ? { x: 0, y: 1 } : { x: 0, y: -1 };
 };
 
-const distance = (a: XYPosition, b: XYPosition) =>
-  Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
-
 /*
  * With this function we try to mimic an orthogonal edge routing behaviour
  * It's not as good as a real orthogonal edge routing, but it's faster and good enough as a default for step and smooth step edges
@@ -200,32 +197,4 @@ export function getCenterEdgePoints({
 
     return [];
   }
-}
-
-function getBend(
-  a: XYPosition,
-  b: XYPosition,
-  c: XYPosition,
-  size: number
-): string {
-  const bendSize = Math.min(distance(a, b) / 2, distance(b, c) / 2, size);
-  const { x, y } = b;
-
-  // no bend
-  if ((a.x === x && x === c.x) || (a.y === y && y === c.y)) {
-    return `L${x} ${y}`;
-  }
-
-  // first segment is horizontal
-  if (a.y === y) {
-    const xDir = a.x < c.x ? -1 : 1;
-    const yDir = a.y < c.y ? 1 : -1;
-    return `L ${x + bendSize * xDir},${y}Q ${x},${y} ${x},${
-      y + bendSize * yDir
-    }`;
-  }
-
-  const xDir = a.x < c.x ? 1 : -1;
-  const yDir = a.y < c.y ? -1 : 1;
-  return `L ${x},${y + bendSize * yDir}Q ${x},${y} ${x + bendSize * xDir},${y}`;
 }

@@ -1,16 +1,7 @@
-import {
-  Menu,
-  MenuItem,
-  ToggleButton,
-  TooltipTrigger,
-} from "react-aria-components";
+import { TooltipTrigger } from "react-aria-components";
 import {
   AlignLeftIcon,
   ArrowsInLineHorizontalIcon,
-  CornersInIcon,
-  DotIcon,
-  DotsNineIcon,
-  EyeIcon,
   FilePlusIcon,
   FlowArrowIcon,
   GridFourIcon,
@@ -18,7 +9,6 @@ import {
   LineVerticalIcon,
   PencilRulerIcon,
   SelectionPlusIcon,
-  ShapesIcon,
   SquareIcon,
 } from "@phosphor-icons/react";
 import { cn } from "@sglara/cn";
@@ -28,7 +18,6 @@ import {
   setGridSnapEnabled,
   setGridVisible,
   setHandleEditModeEnabled,
-  setNodes,
   setNodesHandlesVisibility,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
@@ -49,7 +38,6 @@ import DEMOModelerToolbarToggleButton from "../_components/DEMOModelerToolbarTog
 import DEMOModelerToolbarSeparator from "../_components/DEMOModelerToolbarSeparator";
 import DEMOModelerToolbarTooltip from "../_components/DEMOModelerToolbarTooltip";
 import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
 import {
   resetAttach,
   useAttachStore,

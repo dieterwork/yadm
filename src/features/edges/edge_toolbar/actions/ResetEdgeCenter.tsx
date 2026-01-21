@@ -1,12 +1,10 @@
-import { ArrowsLeftRightIcon, ClockClockwiseIcon } from "@phosphor-icons/react";
-import useSwapConnection from "../../hooks/useSwapConnection";
+import { ClockClockwiseIcon } from "@phosphor-icons/react";
 import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import {
   getEdge,
   updateEdgeData,
 } from "$/features/modeler/useDEMOModelerStore";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 

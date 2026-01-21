@@ -1,16 +1,7 @@
-import {
-  CaretRightIcon,
-  type IconProps,
-  type Icon as IconType,
-} from "@phosphor-icons/react";
+import { type IconProps } from "@phosphor-icons/react";
 import { cn } from "@sglara/cn";
-import type { ComponentType, ReactElement } from "react";
-import {
-  MenuItem,
-  ToggleButton,
-  type MenuItemProps,
-  type ToggleButtonProps,
-} from "react-aria-components";
+import type { ReactElement } from "react";
+import { ToggleButton, type ToggleButtonProps } from "react-aria-components";
 
 type ToolbarMenuItemProps = ToggleButtonProps & {
   icon: ({
@@ -22,14 +13,12 @@ type ToolbarMenuItemProps = ToggleButtonProps & {
   }) => ReactElement<IconProps>;
   label?: string;
   state?: "danger" | "default";
-  menuTrigger?: boolean;
 };
 
 const DEMOElementToolbarToggleButton = ({
   icon,
   label,
   state,
-  menuTrigger,
   ...restProps
 }: ToolbarMenuItemProps) => {
   return (

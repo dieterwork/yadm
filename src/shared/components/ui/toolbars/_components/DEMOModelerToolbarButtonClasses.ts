@@ -1,5 +1,4 @@
 import { cn } from "@sglara/cn";
-import type { CSSProperties } from "react";
 
 const DEMOModelerToolbarButtonClasses = (
   isHovered: boolean,

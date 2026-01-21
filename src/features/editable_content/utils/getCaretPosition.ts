@@ -7,7 +7,7 @@ export const getCaretPosition = (elem: HTMLElement) => {
 
   if (sel.anchorNode == elem) cum_length = [sel.anchorOffset, sel.focusOffset];
   else {
-    var nodes_to_find = [sel.anchorNode, sel.focusNode];
+    const nodes_to_find = [sel.anchorNode, sel.focusNode];
     if (!elem.contains(sel.anchorNode) || !elem.contains(sel.focusNode))
       return undefined;
     else {

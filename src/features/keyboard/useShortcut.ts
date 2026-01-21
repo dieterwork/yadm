@@ -1,7 +1,8 @@
 import { useKeyPress, type KeyCode } from "@xyflow/react";
 import { useEffect, useState } from "react";
 
-const useShortcut = (keyCode: KeyCode, callback: Function) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const useShortcut = (keyCode: KeyCode, callback: (args?: any) => any) => {
   const [didRun, setDidRun] = useState(false);
   const shouldRun = useKeyPress(keyCode, { preventDefault: true });
 

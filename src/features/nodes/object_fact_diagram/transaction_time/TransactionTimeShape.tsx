@@ -16,10 +16,6 @@ const TransactionTimeShape = ({ color }: ActorShapeProps) => {
     ? NODE_BACKGROUND_COLOR_MAP[color]
     : restSvgAttributes.fill;
 
-  const strokeWidth = svgAttributes.strokeWidth
-    ? +svgAttributes.strokeWidth
-    : 0;
-
   return (
     <>
       <Rectangle

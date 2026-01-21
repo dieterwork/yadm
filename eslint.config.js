@@ -3,31 +3,31 @@ import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
-import { globalIgnores } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import reactX from "eslint-plugin-react-x";
 import reactDom from "eslint-plugin-react-dom";
 import eslintPluginJsxA11y from "eslint-plugin-jsx-a11y";
 
-export default tseslint.config([
+export default defineConfig([
   globalIgnores(["dist"]),
+  js.configs.recommended,
+  tseslint.configs.recommended,
   {
     files: ["**/*.{ts,tsx}"],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs["recommended-latest"],
-      reactRefresh.configs.vite,
-      reactX.configs["recommended-typescript"],
-      reactDom.configs.recommended,
-      eslintPluginJsxA11y,
-    ],
+    plugins: {
+      reactHooks: reactHooks.configs["recommended-latest"],
+      reactRefresh: reactRefresh.configs.vite,
+      reactX: reactX.configs["recommended-typescript"],
+      reactDom: reactDom.configs.recommended,
+      eslintPluginJsxA11y: eslintPluginJsxA11y.flatConfigs.recommended,
+    },
     languageOptions: {
       parserOptions: {
         project: ["./tsconfig.node.json", "./tsconfig.app.json"],
         tsconfigRootDir: import.meta.dirname,
       },
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: { ...globals.browser, ...globals.node },
     },
   },
 ]);

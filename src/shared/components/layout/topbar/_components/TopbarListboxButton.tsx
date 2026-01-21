@@ -12,13 +12,11 @@ import {
 
 interface MySelectProps<T extends object>
   extends Omit<SelectProps<T>, "children"> {
-  label?: string;
   items?: Iterable<T>;
   children: React.ReactNode | ((item: T) => React.ReactNode);
 }
 
 const TopbarListboxButton = <T extends object>({
-  label,
   items,
   children,
   ...restProps

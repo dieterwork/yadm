@@ -1,5 +1,4 @@
-import isPrintableChar from "$/shared/utils/isPrintableChar";
-import type { InputEvent, KeyboardEvent } from "react";
+import type { InputEvent } from "react";
 
 export const setMaxLength = (
   e: InputEvent<HTMLSpanElement>,

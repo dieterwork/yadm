@@ -41,6 +41,7 @@ export type GhostEdge = Edge<
   "ghost_edge"
 >;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TransactionTimeEdge = Edge<{}, "transaction_time_edge">;
 
 export type DEMOEdge =

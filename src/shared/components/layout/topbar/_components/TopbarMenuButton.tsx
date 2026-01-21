@@ -4,7 +4,6 @@ import {
   Menu,
   MenuTrigger,
   Popover,
-  type ButtonProps,
   type MenuProps,
   type MenuTriggerProps,
 } from "react-aria-components";

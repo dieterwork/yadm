@@ -27,7 +27,7 @@ const useExport = () => {
     .max(50, {
       error: t(($) => $["File name must be less than 50 characters"]),
     })
-    .regex(new RegExp(/([A-Za-z0-9\-\_]+)/), {
+    .regex(new RegExp(/([A-Za-z0-9\-_]+)/), {
       error: t(
         ($) =>
           $[
