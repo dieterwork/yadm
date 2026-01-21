@@ -155,9 +155,6 @@ const DEMOHandle = ({
     <Handle
       {...restProps}
       style={style}
-      onClick={() => {
-        console.log(DEMOStore);
-      }}
       className="demo-handle"
       id={id}
       position={position}

@@ -192,7 +192,7 @@ export const DEFAULT_CONTENT_MAP = {
   production_event: "01",
   entity_class: "A",
   derived_entity: "A",
-  text: "<div>Insert text here</div>",
+  text: "Insert text here",
   transaction_time: null,
   ghost: null,
   organization: null,

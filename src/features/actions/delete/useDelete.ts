@@ -26,8 +26,6 @@ const useDelete = () => {
       .concat(childNodes)
       .filter((node) => !!node.deletable);
 
-    console.log(combinedSelectedNodes);
-
     const selectedEdges = getConnectedEdges(
       combinedSelectedNodes,
       edges

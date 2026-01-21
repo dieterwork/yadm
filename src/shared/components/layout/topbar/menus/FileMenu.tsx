@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast/headless";
 import DEMOModal from "$/shared/components/ui/modal/DEMOModal";
 import { useState } from "react";
+import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 
 const FileMenu = () => {
   const { exportAsPNG, exportAsPDF, exportAsJSON } = useExport();
@@ -127,8 +128,8 @@ const FileMenu = () => {
         onOpenChange={(isOpen) => setNewModalOpen(isOpen)}
         onAction={() => {
           localStorage.removeItem("demo-model");
-          clearModel();
           setFileName("New model");
+          clearModel();
           setNewModalOpen(false);
         }}
         title={t(($) => $["Create new model?"])}

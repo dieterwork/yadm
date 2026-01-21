@@ -1,8 +1,18 @@
-import { type NodeProps, Position } from "@xyflow/react";
+import {
+  type CoordinateExtent,
+  type NodeProps,
+  type OnResize,
+  type XYPosition,
+} from "@xyflow/react";
 
 import type { TransactionNode as TransactionNodeType } from "./transaction.types";
 import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
+import {
+  getNode,
+  updateNode,
+  useDEMOModelerStore,
+} from "$/features/modeler/useDEMOModelerStore";
 
 const TransactionNode = ({
   id,
@@ -14,6 +24,12 @@ const TransactionNode = ({
   parentId,
 }: NodeProps<TransactionNodeType>) => {
   const { content, fontSize, isEditable, actions, resizable } = data;
+  const node = getNode(id);
+  const nodes = useDEMOModelerStore((state) => state.nodes);
+  const selfActivationNode = nodes.find(
+    (parentNode) =>
+      parentNode.id === node.parentId && parentNode.type === "self_activation"
+  );
 
   const defaultActions: NodeToolbarAction[] = [
     "addHandle",
@@ -29,6 +45,39 @@ const TransactionNode = ({
     defaultActions.push("attachNode");
   }
 
+  const onResize: OnResize = (_, { width, height }) => {
+    // Check if has parent
+    if (
+      !selfActivationNode ||
+      !selfActivationNode.measured?.width ||
+      !selfActivationNode.measured?.height
+    )
+      return;
+
+    // If it does, update position
+
+    const extent: CoordinateExtent = [
+      [
+        selfActivationNode.measured.width / 2 - width / 2,
+        selfActivationNode.measured.height / 2 - height / 2,
+      ],
+      [
+        selfActivationNode.measured.width / 2 + width / 2,
+        selfActivationNode.measured.height / 2 + height / 2,
+      ],
+    ];
+
+    const position: XYPosition = {
+      x: selfActivationNode.measured.width / 2 - width / 2,
+      y: selfActivationNode.measured.height / 2 - height / 2,
+    };
+
+    updateNode(id, {
+      position,
+      extent,
+    });
+  };
+
   return (
     <DEMONodeBase
       id={id}
@@ -41,6 +90,11 @@ const TransactionNode = ({
       actions={actions ?? defaultActions}
       resizable={resizable}
       draggable={draggable}
+      resizerProps={{
+        onResize,
+        maxWidth: selfActivationNode?.width,
+        maxHeight: selfActivationNode?.height,
+      }}
     >
       <EditableContent
         isSelected={selected}

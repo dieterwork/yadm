@@ -1,11 +1,20 @@
-import { type NodeProps } from "@xyflow/react";
+import {
+  type CoordinateExtent,
+  type NodeProps,
+  type OnResize,
+  type XYPosition,
+} from "@xyflow/react";
 
 import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import type { SelfActivationNode as SelfActivationNodeType } from "./selfActivation.types";
 import { DEFAULT_SIZE_MAP } from "../../utils/consts";
 import EditableContent from "../../../editable_content/EditableContent";
-
-const padding = 4;
+import getChildNodes from "../../utils/getChildNodes";
+import {
+  getNode,
+  updateNode,
+  useDEMOModelerStore,
+} from "$/features/modeler/useDEMOModelerStore";
 
 const SelfActivationNode = ({
   id,
@@ -16,7 +25,9 @@ const SelfActivationNode = ({
   draggable,
   parentId,
 }: NodeProps<SelfActivationNodeType>) => {
-  const { content, fontSize, isEditable } = data;
+  const { actions } = data;
+  const node = getNode(id);
+  const nodes = useDEMOModelerStore((state) => state.nodes);
 
   const defaultActions: NodeToolbarAction[] = [
     "addHandle",
@@ -31,6 +42,36 @@ const SelfActivationNode = ({
     defaultActions.push("attachNode");
   }
 
+  const onResize: OnResize = (_, { width, height }) => {
+    const childNodes = getChildNodes([node], nodes);
+    const transaction = childNodes.find((node) => node.type === "transaction");
+
+    if (
+      !transaction ||
+      !transaction?.measured?.width ||
+      !transaction?.measured?.height
+    )
+      return;
+
+    const transactionWidth = transaction.measured.width;
+    const transactionHeight = transaction.measured.height;
+
+    const extent: CoordinateExtent = [
+      [width / 2 - transactionWidth / 2, height / 2 - transactionHeight / 2],
+      [width / 2 + transactionWidth / 2, height / 2 + transactionHeight / 2],
+    ];
+
+    const position: XYPosition = {
+      x: width / 2 - transactionWidth / 2,
+      y: height / 2 - transactionHeight / 2,
+    };
+
+    updateNode(transaction.id, {
+      position,
+      extent,
+    });
+  };
+
   return (
     <DEMONodeBase
       id={id}
@@ -40,18 +81,9 @@ const SelfActivationNode = ({
       height={height}
       type="self_activation"
       draggable={draggable}
-      actions={defaultActions}
-    >
-      <EditableContent
-        isSelected={selected}
-        isEditable={isEditable}
-        content={content}
-        width={DEFAULT_SIZE_MAP["transaction"].width}
-        height={DEFAULT_SIZE_MAP["transaction"].height}
-        fontSize={fontSize}
-        maxLength={50}
-      />
-    </DEMONodeBase>
+      actions={actions ?? defaultActions}
+      resizerProps={{ onResize }}
+    />
   );
 };
 

@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import useShortcut from "../keyboard/useShortcut";
 import {
   resetPreviewNode,
   updatePreviewNodePosition,
@@ -23,6 +22,7 @@ export const usePreviewNode = () => {
   const { t } = useTranslation();
 
   const addNodeFromSidebar = (e: MouseEvent) => {
+    if (!previewNode) return;
     const position = screenToFlowPosition({
       x: e.clientX,
       y: e.clientY,
@@ -30,27 +30,30 @@ export const usePreviewNode = () => {
 
     const id = uuid();
 
-    const newNode = createNode({ id, type: previewNode?.type, position }, t);
+    const newNode = createNode({
+      id,
+      type: previewNode.type,
+      position,
+      translateFn: t,
+    });
 
     addNode(newNode);
 
-    if (ofdNodes.includes(previewNode?.type)) {
+    if (ofdNodes.includes(previewNode.type)) {
       // create text node
-      const textNode = createNode(
-        {
-          type: "text",
-          position: {
-            x: X_SMALL_NODE_SIZE / 2 - 30 / 2,
-            y: -X_SMALL_NODE_SIZE,
-          },
-          parentId: id,
-          width: 30,
-          height: 20,
-          content: "",
-          textAlign: "center",
+      const textNode = createNode({
+        type: "text",
+        position: {
+          x: X_SMALL_NODE_SIZE / 2 - 30 / 2,
+          y: -X_SMALL_NODE_SIZE,
         },
-        t
-      );
+        parentId: id,
+        width: 30,
+        height: 20,
+        content: "",
+        textAlign: "center",
+        translateFn: t,
+      });
       addNode(textNode);
     }
 

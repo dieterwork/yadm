@@ -14,6 +14,7 @@ import {
   NODE_BORDER_COLOR_MAP,
   ORGANIZATION_BORDER_COLOR_MAP,
 } from "$/shared/components/ui/colors/colors.consts";
+import type { TFunction } from "i18next";
 
 interface CreateNodeParams {
   type: DEMONode["type"];
@@ -26,6 +27,7 @@ interface CreateNodeParams {
   selected?: boolean;
   zIndex?: number;
   textAlign?: CSSProperties["textAlign"];
+  translateFn: TFunction;
 }
 
 export const createNode = ({
@@ -39,13 +41,14 @@ export const createNode = ({
   selected,
   zIndex,
   textAlign,
+  translateFn: t,
 }: CreateNodeParams): DEMONode | DEMONode[] => {
   if (!id) id = uuid();
   switch (type) {
     case "actor": {
       return {
         id: `actor_${id}`,
-        ariaLabel: "Actor",
+        ariaLabel: t(($) => $["Actor"]),
         type: type,
         position,
         deletable: true,
@@ -84,7 +87,7 @@ export const createNode = ({
     case "transaction": {
       return {
         id: `transaction_${id}`,
-        ariaLabel: "Transaction",
+        ariaLabel: t(($) => $["Transaction"]),
         type: type,
         position,
         deletable: true,
@@ -136,15 +139,11 @@ export const createNode = ({
     case "transactor": {
       const transactionId = uuid();
       const actorId = uuid();
-      const transactionSize = calculateDoubleDiamondInCircleDimensions(
-        DEFAULT_SIZE_MAP["transaction"].width
-      );
-      transactionSize.width = transactionSize.width + 4;
       return [
         {
           id: actorId,
           type: "actor",
-          ariaLabel: "Actor",
+          ariaLabel: t(($) => $["Actor"]),
           position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
           deletable: false,
           data: {
@@ -195,7 +194,7 @@ export const createNode = ({
         {
           id: transactionId,
           type: "transaction",
-          ariaLabel: "Transaction",
+          ariaLabel: t(($) => $["Transaction"]),
           deletable: false,
           position: {
             x:
@@ -250,7 +249,7 @@ export const createNode = ({
         {
           id: id,
           type: type,
-          ariaLabel: "Transactor",
+          ariaLabel: t(($) => $["Transactor"]),
           position,
           deletable: true,
           data: {
@@ -274,40 +273,98 @@ export const createNode = ({
     }
 
     case "self_activation": {
-      return {
-        id: id,
-        type: type,
-        position,
-        ariaLabel: "Self Activation",
-        deletable: true,
-        data: {
-          state: "default",
-          content: DEFAULT_CONTENT_MAP[type],
-          handles: {
-            isVisible: true,
-            top: {
-              handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-            },
-            bottom: {
-              handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-            },
-            left: {
-              handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-            },
-            right: {
-              handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+      const transactionId = uuid();
+      return [
+        {
+          id: transactionId,
+          type: "transaction",
+          ariaLabel: t(($) => $["Transaction"]),
+          deletable: false,
+          position: {
+            x:
+              DEFAULT_SIZE_MAP[type].width / 2 -
+              DEFAULT_SIZE_MAP["transaction"].width / 2,
+            y:
+              DEFAULT_SIZE_MAP[type].height / 2 -
+              DEFAULT_SIZE_MAP["transaction"].height / 2,
+          },
+          data: {
+            state: "default",
+            content: DEFAULT_CONTENT_MAP["transaction"],
+            actions: ["changeColor", "editText", "changeFontSize"],
+            resizable: true,
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP["transaction"].width,
+            height: DEFAULT_SIZE_MAP["transaction"].height,
+            stroke: NODE_BORDER_COLOR_MAP["default"],
+            strokeWidth: 2,
+          },
+          selected: false,
+          parentId: id,
+          extent: [
+            [
+              DEFAULT_SIZE_MAP[type].width / 2 -
+                DEFAULT_SIZE_MAP["transaction"].width / 2,
+              DEFAULT_SIZE_MAP[type].height / 2 -
+                DEFAULT_SIZE_MAP["transaction"].height / 2,
+            ],
+            [
+              DEFAULT_SIZE_MAP[type].width / 2 +
+                DEFAULT_SIZE_MAP["transaction"].width / 2,
+              DEFAULT_SIZE_MAP[type].height / 2 +
+                DEFAULT_SIZE_MAP["transaction"].height / 2,
+            ],
+          ],
+          zIndex: 180,
+          draggable: false,
+        },
+        {
+          id: id,
+          type: type,
+          ariaLabel: t(($) => $["Self Activation"]),
+          position,
+          deletable: true,
+          data: {
+            state: "internal",
+            actions: [
+              "changeColor",
+              "toggleHandlesVisibility",
+              "addHandle",
+              "editText",
+            ],
+            subModel: "cooperation_model",
+            handles: {
+              isVisible: true,
+              top: {
+                handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+                max: 1,
+              },
+              bottom: {
+                handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+                max: 1,
+              },
+              left: {
+                handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+                max: 1,
+              },
+              right: {
+                handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+                max: 1,
+              },
             },
           },
+          style: {
+            width: DEFAULT_SIZE_MAP[type].width,
+            height: DEFAULT_SIZE_MAP[type].height,
+            fill: NODE_BACKGROUND_COLOR_MAP["default"],
+            stroke: NODE_BORDER_COLOR_MAP["default"],
+            strokeWidth: 2,
+          },
+          selected: true,
+          zIndex: 190,
         },
-        style: {
-          width: DEFAULT_SIZE_MAP[type].width,
-          height: DEFAULT_SIZE_MAP[type].height,
-          fill: NODE_BACKGROUND_COLOR_MAP["default"],
-          stroke: NODE_BORDER_COLOR_MAP["default"],
-        },
-        selected: true,
-        zIndex: 190,
-      };
+      ];
     }
 
     case "composite": {
@@ -315,7 +372,7 @@ export const createNode = ({
         id: id,
         type: type,
         position,
-        ariaLabel: "Composite",
+        ariaLabel: t(($) => $["Composite"]),
         deletable: true,
         data: {
           state: "default",
@@ -356,7 +413,7 @@ export const createNode = ({
         {
           id: compositeId,
           type: "composite",
-          ariaLabel: "Composite",
+          ariaLabel: t(($) => $["Composite"]),
           deletable: false,
           position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
           data: {
@@ -406,7 +463,7 @@ export const createNode = ({
         {
           id: transactionId,
           type: "transaction",
-          ariaLabel: "Transaction",
+          ariaLabel: t(($) => $["Transaction"]),
           deletable: false,
           position: {
             x:
@@ -462,7 +519,7 @@ export const createNode = ({
           id: id,
           type: type,
           position,
-          ariaLabel: "Elementary Actor",
+          ariaLabel: t(($) => $["Elementary Actor"]),
           deletable: true,
           data: {
             state: "internal",
@@ -495,7 +552,7 @@ export const createNode = ({
         {
           id: actorId,
           type: "actor",
-          ariaLabel: "Actor",
+          ariaLabel: t(($) => $["Actor"]),
           position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
           deletable: false,
           data: {
@@ -547,7 +604,7 @@ export const createNode = ({
         {
           id: transactionId,
           type: "transaction",
-          ariaLabel: "Transaction",
+          ariaLabel: t(($) => $["Transaction"]),
           deletable: false,
           position: {
             x: DEFAULT_SIZE_MAP[type].width / 2 - transactionSize.width / 2,
@@ -606,7 +663,7 @@ export const createNode = ({
           type: type,
           position,
           deletable: true,
-          ariaLabel: "Several Actors",
+          ariaLabel: t(($) => $["Several Actors"]),
           data: {
             subModel: "cooperation_model",
             state: "internal",
@@ -632,7 +689,7 @@ export const createNode = ({
         id: id,
         type: type,
         position,
-        ariaLabel: "Production Event",
+        ariaLabel: t(($) => $["Production Event"]),
         deletable: true,
         data: {
           subModel: "process_structure_diagram",
@@ -678,7 +735,7 @@ export const createNode = ({
         id: id,
         type: type,
         position,
-        ariaLabel: "Entity Class",
+        ariaLabel: t(($) => $["Entity Class"]),
         deletable: true,
         data: {
           subModel: "process_structure_diagram",
@@ -716,7 +773,7 @@ export const createNode = ({
         id,
         type: type,
         position,
-        ariaLabel: "Derived Entity",
+        ariaLabel: t(($) => $["Derived Entity"]),
         deletable: true,
         data: {
           subModel: "process_structure_diagram",
@@ -757,7 +814,7 @@ export const createNode = ({
           type: "transaction_time",
           deletable: true,
           position,
-          ariaLabel: "Transaction Time",
+          ariaLabel: t(($) => $["Transaction Time"]),
           data: {
             subModel: "object_fact_diagram",
             handles: {
@@ -789,7 +846,7 @@ export const createNode = ({
           parentId: id,
           type: "transaction_kind",
           deletable: false,
-          ariaLabel: "Transaction Kind",
+          ariaLabel: t(($) => $["Transaction Kind"]),
           position: {
             x:
               DEFAULT_SIZE_MAP["transaction_time"].width / 2 -
@@ -823,7 +880,7 @@ export const createNode = ({
         type,
         position,
         parentId,
-        ariaLabel: "Initiation Fact",
+        ariaLabel: t(($) => $["Initiation Fact"]),
         deletable: true,
         data: {
           subModel: "object_fact_diagram",
@@ -874,7 +931,7 @@ export const createNode = ({
         type,
         position,
         parentId,
-        ariaLabel: "C-Fact",
+        ariaLabel: t(($) => $["C-Fact"]),
         deletable: true,
         data: {
           subModel: "object_fact_diagram",
@@ -925,7 +982,7 @@ export const createNode = ({
         type,
         position,
         parentId,
-        ariaLabel: "C-Act",
+        ariaLabel: t(($) => $["C-Act"]),
         deletable: true,
         data: {
           subModel: "object_fact_diagram",
@@ -975,7 +1032,7 @@ export const createNode = ({
         type,
         position,
         parentId,
-        ariaLabel: "TK / Execution",
+        ariaLabel: t(($) => $["TK / Execution"]),
         deletable: true,
         data: {
           subModel: "object_fact_diagram",
@@ -1025,7 +1082,7 @@ export const createNode = ({
         type,
         position,
         parentId,
-        ariaLabel: "Text",
+        ariaLabel: t(($) => $["Text"]),
         deletable: true,
         data: {
           fontSize: 12,
@@ -1049,7 +1106,7 @@ export const createNode = ({
           type,
           position,
           data: { state: "default" },
-          ariaLabel: "Organization",
+          ariaLabel: t(($) => $["Organization"]),
           deletable: true,
           style: {
             width: width ?? DEFAULT_SIZE_MAP["organization"].width,
@@ -1072,7 +1129,7 @@ export const createNode = ({
             y: -X_SMALL_NODE_SIZE - 4,
           },
           parentId: id,
-          ariaLabel: "Text",
+          ariaLabel: t(($) => $["Text"]),
           data: {
             content: "",
             textAlign: "center",

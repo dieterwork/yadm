@@ -21,15 +21,6 @@ const SelfActivationShape = ({ state, color }: SelfActivationShapeProps) => {
   return (
     <g {...restSvgAttributes}>
       <Rectangle fill={fill} width={width} height={height} />
-      <DiamondInCircle
-        transform={`translate(${+width / 2 - MEDIUM_NODE_SIZE / 2}, ${
-          +height / 2 - MEDIUM_NODE_SIZE / 2
-        })`}
-        fill={fill}
-        width={MEDIUM_NODE_SIZE}
-        height={MEDIUM_NODE_SIZE}
-        diamondAttributes={{ stroke: "var(--color-red-500)" }}
-      />
     </g>
   );
 };
