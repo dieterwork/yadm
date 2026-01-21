@@ -68,7 +68,7 @@ console.log(
 
 export const useDEMOModelerStore = create<DEMOModelerState>()((set, get) => ({
   id: uuid(),
-  fileName: localDEMOModel?.fileName ?? `DEMO Model`,
+  fileName: localDEMOModel?.fileName ?? `New Model`,
   nodes: localDEMOModel?.nodes ?? [],
   edges: localDEMOModel?.edges ?? [],
   DEMOInstance: null,

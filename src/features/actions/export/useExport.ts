@@ -44,7 +44,7 @@ const useExport = () => {
       const { url } = await generatePNG({ nodesBounds, scaleFactor });
       downloadFile(
         url,
-        (parsedFileName || "Demo Model") + " " + date + ` x${scaleFactor}.png`
+        (parsedFileName || "New Model") + " " + date + ` x${scaleFactor}.png`
       );
       setExportEnabled(false);
     } catch (err) {
@@ -70,10 +70,7 @@ const useExport = () => {
       doc.addImage(url, "png", width / 4, height / 4, width / 2, height / 2);
       doc.output("dataurlnewwindow", {
         filename:
-          (parsedFileName || "Demo Model") +
-          " " +
-          date +
-          ` x${scaleFactor}.pdf`,
+          (parsedFileName || "New Model") + " " + date + ` x${scaleFactor}.pdf`,
       });
       setExportEnabled(false);
     } catch (err) {
@@ -100,10 +97,7 @@ const useExport = () => {
       const file = new Blob([jsonModel], { type: "application/json" });
       const url = URL.createObjectURL(file);
       const date = formatDate();
-      downloadFile(
-        url,
-        (parsedFileName || "Demo Model") + " " + date + ".json"
-      );
+      downloadFile(url, (parsedFileName || "New Model") + " " + date + ".json");
     } catch (err) {
       console.error("Could not generate JSON:", err);
       if (err instanceof z.ZodError) {
