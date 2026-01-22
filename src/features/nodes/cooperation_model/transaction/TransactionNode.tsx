@@ -24,12 +24,9 @@ const TransactionNode = ({
   parentId,
 }: NodeProps<TransactionNodeType>) => {
   const { content, fontSize, isEditable, actions, resizable } = data;
-  const node = getNode(id);
-  const nodes = useDEMOModelerStore((state) => state.nodes);
-  const selfActivationNode = nodes.find(
-    (parentNode) =>
-      parentNode.id === node.parentId && parentNode.type === "self_activation"
-  );
+  const selfActivationNode = parentId
+    ? getNode(parentId, (node) => node.type === "self_activation")
+    : null;
 
   const defaultActions: NodeToolbarAction[] = [
     "addHandle",

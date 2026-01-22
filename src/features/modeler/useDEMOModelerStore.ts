@@ -86,10 +86,17 @@ export const setEdges = (newEdges: ReactStyleStateSetter<DEMOEdge[]>) => {
   }));
 };
 
-export const getNode = (id: string) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getNode = (
+  id: string,
+  filter?: (node: DEMONode, index: number, array: DEMONode[]) => boolean
+) => {
   return useDEMOModelerStore
     .getState()
-    .nodes.filter((node) => node.id === id)[0];
+    .nodes.filter(
+      (node, index, array) =>
+        node.id === id && (filter ? filter(node, index, array) : true)
+    )[0];
 };
 
 export const getEdge = (id: string) => {
