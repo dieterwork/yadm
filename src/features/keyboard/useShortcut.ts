@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const useShortcut = (keyCode: KeyCode, callback: (args?: any) => any) => {
   const [didRun, setDidRun] = useState(false);
-  const shouldRun = useKeyPress(keyCode, { preventDefault: true });
+  const shouldRun = useKeyPress(keyCode, { preventDefault: true, actInsideInputWithModifier: false });
 
   useEffect(() => {
     if (shouldRun && !didRun) {

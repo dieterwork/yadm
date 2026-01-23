@@ -132,6 +132,7 @@ const useCopyPaste = () => {
   const paste = (
     { x: pasteX, y: pasteY } = screenToFlowPosition(mousePosition.current)
   ) => {
+
     const minX = Math.min(
       ...bufferedNodes
         .filter((node) => !node.parentId)

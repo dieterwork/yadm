@@ -32,6 +32,7 @@ const useUndoShortcut = () => {
 
     const keyUpHandler = (e: KeyboardEvent) => {
       if (undoAction) return;
+      if(!e.key) return;
       if (
         e.key.toLowerCase() === "z" ||
         e.key.toLowerCase() === "y" ||

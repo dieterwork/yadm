@@ -1,6 +1,10 @@
-YADM Modelling Tool is inspired by the Enterprise Engineering modelling language [DEMO](https://ee-institute.org/demo/).
-It provides a modern, intuitive environment for users to explore the modelling language, create models, and share their work with others.
+When we created **Y**et **A**nother **D**emo **M**odeler (**YADM**), our goal was to develop a simple, lightweight browser native modeling tool for the Enterprise Engineering modelling language [DEMO](https://ee-institute.org/demo/).
 
-For future ideas or feedback, please feel free to contact us.
+YADM provides a modern and intuitive environment  to explore the modelling language, to create and share your models. The non-account version stores minimal data locally in your browser and offers a rich set of features.
+
+With a paid YADM account, you support the project and gain online storage for your models. You can publish models publicly or share them via a link. Organizations can invite users under their account. All data is end-to-end encrypted — not even we can decrypt your models.
+
+For ideas or feedback, please [contact us.](https://www.yadm.app/contact)
 
 You are currently using YADM version 1.0.0
+[Privacy policy](https://www.yadm.app/pp-23-12-25.html) - [Terms and Conditions](https://www.yadm.app/tac-23-12-25.html) 

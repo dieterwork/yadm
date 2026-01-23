@@ -8,8 +8,8 @@ import path from "path";
 export default ({ mode }: { mode: string }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
-  const buildSingleHTMLFile =
-    process.env.VITE_BUILD_SINGLE_HTML_FILE === "true";
+  const buildSingleHTMLFile = false;
+    //process.env.VITE_BUILD_SINGLE_HTML_FILE === "true";
 
   const plugins = buildSingleHTMLFile
     ? [
