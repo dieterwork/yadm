@@ -15,12 +15,26 @@ const ServerPasswordModal = ({...restProps}: TopbarMenuModalProps) => {
         useAskServerPwdDataStore.getState().callback();
     }
 
+    function getBadPwdMessage() {
+        const show = useAskServerPwdDataStore.getState().showBadPasswordMessage;
+
+        if (show) {
+            return (
+                <Label className="text-slate-900 text-xs">
+                    {t(($) => $["bad_password"])}
+                </Label>
+            )
+        }
+
+    }
+
     return (
         <TopbarMenuModal {...restProps}>
             <TextField className="grid grid-cols-[auto_1fr] items-center gap-2">
                 <Label className="text-slate-900 text-xs">
                     {t(($) => $["password"])}
                 </Label>
+                { getBadPwdMessage() }
                 <Input name="password" type="password" autoComplete="off"
                        onChange={e => {
                            localStorage.setItem('yadm-pwd', sha256(e.target.value));

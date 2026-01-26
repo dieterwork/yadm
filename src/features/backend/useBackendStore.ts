@@ -9,10 +9,10 @@ import {
     useDEMOModelerStore
 } from "$features/modeler/useDEMOModelerStore.ts";
 
-export const useAskServerPwdDataStore = create<{ showPwdModal: boolean, callback: () => {} }>(
+export const useAskServerPwdDataStore = create<{ showPwdModal: boolean, showBadPasswordMessage: boolean, callback: () => {} }>(
     (set, get) => (
         {
-            showPwdModal: false, callback: () => {
+            showPwdModal: false, showBadPasswordMessage: false, callback: () => {
             }
         }
     )
@@ -120,7 +120,7 @@ export const loadServerFiles = async () => {
     const authKey = localStorage.getItem('yadm-auth-key') || '';
 
     try {
-        let res = await fetch(`${baseUrlApi}/files`, {
+        const res = await fetch(`${baseUrlApi}/files`, {
             method: "GET",
             headers: {
                 "Authorization": 'Digest ' + authKey,
@@ -168,8 +168,13 @@ export const loadServerFile = async (fileName: string) => {
         });
 
         if (res.status === 401) {
-            logOut();
+            // Wipe password and try again
+            localStorage.removeItem('yadm-pwd');
+            useAskServerPwdDataStore.setState({showBadPasswordMessage: true, showPwdModal:true});
+            await loadServerFile(fileName);
             return;
+        }else{
+            useAskServerPwdDataStore.setState({showBadPasswordMessage: false});
         }
 
         const data = await res.text();
@@ -232,8 +237,13 @@ export const saveServerFile = async () => {
         });
 
         if (res.status === 401) {
-            logOut();
+            // Wipe password and try again
+            localStorage.removeItem('yadm-pwd');
+            useAskServerPwdDataStore.setState({showBadPasswordMessage: true, showPwdModal:true});
+            await saveServerFile();
             return;
+        }else{
+            useAskServerPwdDataStore.setState({showBadPasswordMessage: false});
         }
 
         saveModel();
