@@ -5,10 +5,11 @@ import { MinusIcon, PlusIcon } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 
 const ToggleProductionEventMenuItem = ({ edgeId }: { edgeId: string }) => {
+  const { t } = useTranslation();
   const edge = getEdge(edgeId);
   if (!edge) return null;
+
   const isProductionFactVisible = !!edge?.markerStart;
-  const { t } = useTranslation();
   return (
     <DEMOElementToolbarToggleButton
       icon={(iconProps) => {
