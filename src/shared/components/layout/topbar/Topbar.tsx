@@ -72,10 +72,13 @@ const Topbar = () => {
                                         className="grid grid-cols-[auto_1fr] items-center gap-2"
                                         value={fileName}
                                         onChange={(e) => {
-                                            if (e.length > 50) {
+
+                                            const cleanedInput = e.trimStart().replace(/[^a-zA-Z0-9_\-\s]/g, "");
+
+                                            if (cleanedInput.length > 40) {
                                                 return;
                                             }
-                                            const cleanedInput = e.replace(/[^a-zA-Z0-9_\-\s]/g, "");
+
                                             setFileName(cleanedInput);
                                         }}
                                         onBlur={(e) => {
@@ -84,6 +87,7 @@ const Topbar = () => {
                                             if (e.currentTarget.value === "") {
                                                 toast.error("Please enter a valid model name", {
                                                     id: "emptyFilename",
+                                                    position: "top-center"
                                                 });
                                             }
                                         }}

@@ -105,7 +105,7 @@ const LoginEMailModal = ({...restProps}: TopbarMenuModalProps) => {
         if (showSendButton) {
             return (
                 <Button onPress={() => handleSend()}
-                        className="rounded bg-sky-600 px-4 py-2 text-sm text-white data-hover:bg-sky-500 data-hover:data-active:bg-sky-700">
+                        className="rounded bg-sky-600 px-4 py-2 text-sm text-white data-hover:bg-sky-500 data-hover:data-active:bg-sky-700 mt-2">
                     Send
                 </Button>
             );

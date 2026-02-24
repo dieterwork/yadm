@@ -8,11 +8,32 @@ const LoggedInMenu = () => {
 
     const {t} = useTranslation();
 
+    const handleClickMyModels = () => window.open('https://yadm.app/admin/models', '_blank');
+
+    const handleClickMyProfile = () => window.open('https://yadm.app/admin/profile', '_blank');
+
+    const handleClickOrg = () => window.open('https://yadm.app/admin/organisation', '_blank');
+
     const showPwdModal = useAskServerPwdDataStore(state => state.showPwdModal);
 
     return (
         <>
-            <TopbarMenuButton label={t(($) => $["User"])}>
+            <TopbarMenuButton label={t(($) => $["Account"])}>
+                <TopbarMenuItem
+                    onAction={handleClickMyModels}
+                >
+                    {t(($) => $["My models"])}
+                </TopbarMenuItem>
+                <TopbarMenuItem
+                    onAction={handleClickMyProfile}
+                >
+                    {t(($) => $["Profile"])}
+                </TopbarMenuItem>
+                <TopbarMenuItem
+                    onAction={handleClickOrg}
+                >
+                    {t(($) => $["Organization"])}
+                </TopbarMenuItem>
                 <TopbarMenuItem
                     onAction={() => {
                         logOut();

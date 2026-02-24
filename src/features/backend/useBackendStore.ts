@@ -188,6 +188,7 @@ export const loadServerFile = async (fileName: string) => {
 
         setTimeout(() => {
             saveModel();
+            document.getElementById('fit-view-button')?.click();
         }, 500);
 
         return
