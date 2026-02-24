@@ -2,7 +2,7 @@ import { NODE_COLOR_MAP } from "../colors/colors.consts";
 
 const DiamondMarker = () => {
   return (
-    <svg className="sr-only">
+    <svg aria-hidden="true">
       <defs>
         <marker
           id="diamond"

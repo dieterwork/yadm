@@ -6,6 +6,7 @@ import {
   BackgroundVariant,
   SelectionMode,
   type Connection,
+  ViewportPortal,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
@@ -46,6 +47,7 @@ import toast from "react-hot-toast/headless";
 import { takeSnapshot } from "../actions/undo/useUndoRedoStore";
 import { useTranslation } from "react-i18next";
 import Notifications from "../notifications/Notifications";
+import DiamondMarker from "$/shared/components/ui/markers/DiamondMarker";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -335,6 +337,9 @@ const DEMOModeler = () => {
             vertical={verticalHelperLine}
           />
           <Notifications />
+          <ViewportPortal>
+            <DiamondMarker />
+          </ViewportPortal>
         </ReactFlow>
       </div>
     </div>
