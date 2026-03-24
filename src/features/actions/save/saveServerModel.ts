@@ -8,7 +8,7 @@ const saveServerModel = async (model: DEMOModelJSON) => {
   const pwd = localStorage.getItem("yadm-pwd") || "";
 
   return fetch(
-    `${import.meta.env.VITE_BASE_URL}/files/${model.fileName}/data`,
+    `${import.meta.env.VITE_API_URL}/files/${model.fileName}/data`,
     {
       method: "PUT",
       headers: {
