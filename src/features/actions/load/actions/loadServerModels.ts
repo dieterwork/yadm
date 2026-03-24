@@ -10,7 +10,7 @@ const loadServerModels = async (): Promise<any> => {
     throw new Error("Unauthorized");
   }
 
-  const res = await fetch(`${import.meta.env.VITE_BASE_URL}/files`, {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/files`, {
     method: "GET",
     headers: {
       Authorization: "Digest " + authKey,
