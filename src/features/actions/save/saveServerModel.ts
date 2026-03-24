@@ -7,18 +7,19 @@ const saveServerModel = async (model: DEMOModelJSON) => {
   const authKey = localStorage.getItem("yadm-auth-key") || "";
   const pwd = localStorage.getItem("yadm-pwd") || "";
 
-  return fetch(
-    `${import.meta.env.VITE_API_URL}/files/${model.fileName}/data`,
-    {
-      method: "PUT",
-      headers: {
-        Authorization: "Digest " + authKey,
-        "X-Email": email,
-        "X-Pwd": pwd,
-      },
-      body: jsonModel,
-    }
+  const url = new URL(
+    `${import.meta.env.VITE_API_URL}/files/${model.fileName}/data`
   );
+
+  return fetch(url, {
+    method: "PUT",
+    headers: {
+      Authorization: "Digest " + authKey,
+      "X-Email": email,
+      "X-Pwd": pwd,
+    },
+    body: jsonModel,
+  });
 };
 
 export default saveServerModel;

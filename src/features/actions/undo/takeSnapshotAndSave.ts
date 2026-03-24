@@ -20,6 +20,7 @@ const takeSnapshotAndSave = () => {
     fileName,
     version: "1.0.0",
   } satisfies DEMOModelJSON;
+
   takeSnapshot(nodes, edges);
   saveLocalModel(model);
 };

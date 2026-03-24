@@ -64,7 +64,7 @@ console.log(
     : "[Loaded version 1.0]"
 );
 
-export const useDEMOModelerStore = create<DEMOModelerState>()(() => ({
+export const useDEMOModelerStore = create<DEMOModelerState>()((set, get) => ({
   id: uuid(),
   fileName: localDEMOModel?.fileName ?? `New Model`,
   nodes: localDEMOModel?.nodes ?? [],
@@ -600,6 +600,22 @@ export const saveModel = () => {
   localStorage.setItem("demo-model", jsonModel);
 };
 
+export const setModel = (model: DEMOModelJSON) => {
+  setNodes(model.nodes);
+  setEdges(model.edges);
+  setFileName(model.fileName);
+  setEnabled(model.isEnabled);
+  setViewport(model.viewport);
+};
+
 export const autoSaveModel = debounce(() => {
   saveModel();
 }, 3000);
+
+export const modelSelector = (state: DEMOModelerState) => ({
+  nodes: state.nodes,
+  edges: state.edges,
+  fileName: state.fileName,
+  isEnabled: state.isEnabled,
+  viewport: state.viewport,
+});
