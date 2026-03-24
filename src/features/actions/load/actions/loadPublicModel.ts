@@ -1,10 +1,12 @@
+import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
+
 const loadPublicModel = async ({
   fileName,
   company,
 }: {
   fileName: string;
   company: string;
-}) => {
+}): Promise<DEMOModelJSON> => {
   const url = new URL(
     `${import.meta.env.VITE_BASE_URL}/models/${company}/${fileName}.json`
   );

@@ -29,8 +29,7 @@ const ServerMenu = () => {
   const serverModelMutation = useMutation({
     mutationKey: ["server_model"],
     mutationFn: loadServerModel,
-    onSuccess: (data) => {
-      setModel(data);
+    onSuccess: () => {
       toast.dismiss(loadingId);
       toast.success(
         t(($) => $["Loaded model"], {
