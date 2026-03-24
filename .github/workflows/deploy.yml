@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-files
-          path: dist
+          path: dist/*
   deploy:
     name: Deploy
     needs: build
@@ -63,4 +63,3 @@ jobs:
           key: ${{ secrets.KEY }}
           source: dist/*
           target: /var/www/yadm/app/current
-          flatten: true
