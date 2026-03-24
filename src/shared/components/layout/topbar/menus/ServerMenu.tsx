@@ -3,7 +3,7 @@ import TopbarMenuItem from "../_components/TopbarMenuItem";
 import { useTranslation } from "react-i18next";
 import { useReactFlow } from "@xyflow/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useId, useState } from "react";
 import {
   setEdges,
   setEnabled,
@@ -14,7 +14,7 @@ import {
 } from "$/features/modeler/useDEMOModelerStore";
 import loadServerModels from "$/features/actions/load/actions/loadServerModels";
 import loadServerModel from "$/features/actions/load/actions/loadServerModel";
-import toast from "react-hot-toast/headless";
+import toast, { useToaster } from "react-hot-toast/headless";
 
 const ServerMenu = () => {
   const { t } = useTranslation();
@@ -24,17 +24,24 @@ const ServerMenu = () => {
     queryFn: loadServerModels,
   });
 
+  const loadingId = useId();
+
   const serverModelMutation = useMutation({
     mutationKey: ["server_model"],
     mutationFn: (fileName) => loadServerModel(fileName),
     onError: () => {
+      toast.dismiss(loadingId);
       toast.error(t(($) => $["Error loading model"]));
     },
     onMutate: () => {
-      toast.loading(t(($) => $["Loading model"]));
+      toast.loading(
+        t(($) => $["Loading model"]),
+        { id: loadingId }
+      );
     },
     onSuccess: (data) => {
       setModel(data);
+      toast.dismiss(loadingId);
       toast.success(
         t(($) => $["Loaded model"], {
           fileName,

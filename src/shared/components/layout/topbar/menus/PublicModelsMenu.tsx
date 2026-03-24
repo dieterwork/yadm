@@ -5,7 +5,7 @@ import TopbarSubMenuButton from "$shared/components/layout/topbar/_components/To
 import { useReactFlow } from "@xyflow/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import getPublicModelsByCompany from "$/shared/utils/getPublicModelsByCompany";
-import { useState } from "react";
+import { useId, useState } from "react";
 import {
   setEdges,
   setEnabled,
@@ -18,7 +18,6 @@ import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
 import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingState";
 import loadPublicModels from "$/features/actions/load/actions/loadPublicModels";
 import loadPublicModel from "$/features/actions/load/actions/loadPublicModel";
-import { saveLocalModel } from "$/features/actions/save/saveLocalModel";
 import toast from "react-hot-toast/headless";
 
 const PublicModelsMenu = () => {
@@ -29,17 +28,24 @@ const PublicModelsMenu = () => {
     queryFn: loadPublicModels,
   });
 
+  const loadingId = useId();
+
   const publicModelMutation = useMutation({
     mutationKey: ["public_model"],
     mutationFn: ({ fileName, company }) => loadPublicModel(fileName, company),
     onError: () => {
+      toast.dismiss(loadingId);
       toast.error(t(($) => $["Error loading model"]));
     },
     onMutate: () => {
-      toast.loading(t(($) => $["Loading model"]));
+      toast.loading(
+        t(($) => $["Loading model"]),
+        { id: loadingId }
+      );
     },
     onSuccess: (data) => {
       setModel(data);
+      toast.dismiss(loadingId);
       toast.success(
         t(($) => $["Loaded model"], {
           fileName,
