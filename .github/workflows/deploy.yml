@@ -53,6 +53,7 @@ jobs:
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USERNAME }}
           private_key: ${{ secrets.KEY }}
+          host_fingerprint: 3072 SHA256:LQiX5W8T/EmUzz6MPy3PvJkPzfdRHWBtcshcXwjuGtE root@ov-f5c33f (RSA)
           command: /var/www/yadm/app/current/cleanUpForNewDeploy.sh
       - name: Copy files via SSH
         uses: appleboy/scp-action@v1
