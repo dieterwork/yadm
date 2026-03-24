@@ -11,6 +11,7 @@ import { addNode } from "../modeler/useDEMOModelerStore";
 import { X_SMALL_NODE_SIZE } from "../nodes/utils/consts";
 import { resetAttach, useAttachStore } from "../actions/attach/useAttachStore";
 import { useTranslation } from "react-i18next";
+import takeSnapshotAndSave from "../actions/undo/takeSnapshotAndSave";
 
 const ofdNodes = ["c_fact", "c_act", "tk_execution", "initiation_fact"];
 
@@ -38,6 +39,7 @@ export const usePreviewNode = () => {
     });
 
     addNode(newNode);
+    takeSnapshotAndSave();
 
     if (ofdNodes.includes(previewNode.type)) {
       // create text node
@@ -55,6 +57,7 @@ export const usePreviewNode = () => {
         translateFn: t,
       });
       addNode(textNode);
+      takeSnapshotAndSave();
     }
 
     resetPreviewNode();

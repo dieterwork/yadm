@@ -19,6 +19,7 @@ import getMarkerType from "$/features/modeler/utils/getMarkerType";
 import convertAbsoluteToRelativePosition from "$/features/nodes/utils/convertAbsoluteToRelativePosition";
 import type { DEMONode } from "$/features/nodes/nodes.types";
 import getEdgeData from "$/features/modeler/utils/getEdgeData";
+import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 
 const getPosition = (fromPosition: Position | null) => {
   switch (fromPosition) {
@@ -133,6 +134,7 @@ export const useIncompleteEdge = () => {
 
     addNode(ghostNode);
     addEdge(newEdge);
+    takeSnapshotAndSave();
   };
   return onConnectEnd;
 };
