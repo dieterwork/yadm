@@ -48,6 +48,14 @@ const ServerMenu = () => {
         })
       );
     },
+    onSettled: (data, error) => {
+      if (data) {
+        console.log(data);
+      }
+      if (error) {
+        console.log(error.message);
+      }
+    },
   });
 
   return (

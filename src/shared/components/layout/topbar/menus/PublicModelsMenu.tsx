@@ -2,18 +2,10 @@ import TopbarMenuButton from "../_components/TopbarMenuButton";
 import TopbarMenuItem from "../_components/TopbarMenuItem";
 import { useTranslation } from "react-i18next";
 import TopbarSubMenuButton from "$shared/components/layout/topbar/_components/TopbarSubMenuButton.tsx";
-import { useReactFlow } from "@xyflow/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import getPublicModelsByCompany from "$/shared/utils/getPublicModelsByCompany";
-import { useId, useState } from "react";
-import {
-  setEdges,
-  setEnabled,
-  setFileName,
-  setModel,
-  setNodes,
-  useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+import { useId } from "react";
+import { setModel } from "$/features/modeler/useDEMOModelerStore";
 import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
 import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingState";
 import loadPublicModels from "$/features/actions/load/actions/loadPublicModels";
@@ -57,6 +49,14 @@ const PublicModelsMenu = () => {
           fileName,
         })
       );
+    },
+    onSettled: (data, error) => {
+      if (data) {
+        console.log(data);
+      }
+      if (error) {
+        console.log(error.message);
+      }
     },
   });
 
