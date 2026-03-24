@@ -13,9 +13,12 @@ import {
 import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
 import { debounceTakeSnapshot } from "../actions/undo/useUndoRedoStore";
+import takeSnapshotAndSave from "../actions/undo/takeSnapshotAndSave";
 
-interface EditableContentProps
-  extends Omit<HTMLAttributes<HTMLSpanElement>, "content"> {
+interface EditableContentProps extends Omit<
+  HTMLAttributes<HTMLSpanElement>,
+  "content"
+> {
   width?: number;
   height?: number;
   content?: string;
@@ -85,7 +88,7 @@ const EditableContent = ({
     ref,
     onContentUpdate: (content) => {
       updateNodeContent(nodeId, content);
-      debounceTakeSnapshot();
+      takeSnapshotAndSave();
     },
     maxLines,
     maxLength,

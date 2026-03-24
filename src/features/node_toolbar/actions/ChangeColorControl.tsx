@@ -11,13 +11,13 @@ import { useState } from "react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
 import { useTranslation } from "react-i18next";
-import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
+import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 
 const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
+  const { t } = useTranslation();
   const node = getNode(nodeId);
   if (!node) return null;
 
-  const { t } = useTranslation();
   const colorOptions = [
     { id: "default", label: t(($) => $["Default"]) },
     { id: "blue", label: t(($) => $["Blue"]) },
@@ -56,7 +56,7 @@ const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
             for (const entry of selection) {
               if (typeof entry !== "string") return;
               updateNodeColor(nodeId, entry);
-              takeSnapshot();
+              takeSnapshotAndSave();
             }
           }}
         >

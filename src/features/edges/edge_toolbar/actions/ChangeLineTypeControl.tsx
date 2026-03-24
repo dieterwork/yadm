@@ -17,6 +17,7 @@ import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
 import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
+import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 
 const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const { t } = useTranslation();
@@ -60,7 +61,7 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
                 ...data,
                 lineType: data?.lineType === "solid" ? "dashed" : "solid",
               }));
-              takeSnapshot();
+              takeSnapshotAndSave();
             }
           }}
         >

@@ -1,15 +1,27 @@
 import { defineConfig, loadEnv } from "vite";
 import { createHtmlPlugin } from "vite-plugin-html";
 import { viteSingleFile } from "vite-plugin-singlefile";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
+
+const markdownLoader = () => {
+  return {
+    name: "markdown-loader",
+    transform(code: JSON, id: string) {
+      if (id.slice(-3) === ".md") {
+        // For .md files, get the raw content
+        return `export default ${JSON.stringify(code)};`;
+      }
+    },
+  };
+};
 
 export default ({ mode }: { mode: string }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
   const buildSingleHTMLFile = false;
-    //process.env.VITE_BUILD_SINGLE_HTML_FILE === "true";
+  //process.env.VITE_BUILD_SINGLE_HTML_FILE === "true";
 
   const plugins = buildSingleHTMLFile
     ? [
@@ -19,29 +31,9 @@ export default ({ mode }: { mode: string }) => {
         }),
         react(),
         tailwindcss(),
-        {
-          name: "markdown-loader",
-          transform(code, id) {
-            if (id.slice(-3) === ".md") {
-              // For .md files, get the raw content
-              return `export default ${JSON.stringify(code)};`;
-            }
-          },
-        },
+        markdownLoader(),
       ]
-    : [
-        react(),
-        tailwindcss(),
-        {
-          name: "markdown-loader",
-          transform(code, id) {
-            if (id.slice(-3) === ".md") {
-              // For .md files, get the raw content
-              return `export default ${JSON.stringify(code)};`;
-            }
-          },
-        },
-      ];
+    : [react(), tailwindcss(), markdownLoader()];
 
   return defineConfig({
     resolve: {

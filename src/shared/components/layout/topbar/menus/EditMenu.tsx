@@ -19,6 +19,8 @@ const EditMenu = () => {
   const pastHistory = useUndoRedoStore((state) => state.past);
   const futureHistory = useUndoRedoStore((state) => state.future);
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
+  const nodes = useDEMOModelerStore((state) => state.nodes);
+  const edges = useDEMOModelerStore((state) => state.edges);
   return (
     <TopbarMenuButton label={t(($) => $["Edit"])}>
       <TopbarMenuItem
@@ -29,7 +31,7 @@ const EditMenu = () => {
             timer.current = null;
           }
           setUndoAction("undo");
-          undo();
+          undo(nodes, edges);
           timer.current = setTimeout(() => {
             setUndoAction(null);
           }, 300);
@@ -45,7 +47,7 @@ const EditMenu = () => {
             timer.current = null;
           }
           setUndoAction("redo");
-          redo();
+          redo(nodes, edges);
           timer.current = setTimeout(() => {
             setUndoAction(null);
           }, 300);

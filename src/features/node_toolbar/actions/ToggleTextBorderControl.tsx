@@ -6,7 +6,7 @@ import DEMOElementToolbarToggleButton from "$/shared/components/ui/element_toolb
 import { EyeClosedIcon, EyeIcon } from "@phosphor-icons/react";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
 import { useTranslation } from "react-i18next";
-import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
+import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 
 const ToggleTextBorderControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const node = getNode(nodeId);
@@ -27,7 +27,7 @@ const ToggleTextBorderControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
       isSelected={isBorderVisible}
       onChange={(isVisible) => {
         updateNodeBorderVisibility(nodeId, isVisible);
-        takeSnapshot();
+        takeSnapshotAndSave();
       }}
     />
   );

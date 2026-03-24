@@ -1,6 +1,5 @@
 import type { DEMOEdge } from "$/features/edges/edges.types";
 import {
-  saveModel,
   setEdges,
   setNodes,
   useDEMOModelerStore,
@@ -40,31 +39,25 @@ export const setFuture = (future: ReactStyleStateSetter<HistoryItem[]>) => {
   }));
 };
 
-export const takeSnapshot = () => {
+export const takeSnapshot = (nodes: DEMONode[], edges: DEMOEdge[]) => {
   const maxHistorySize = useUndoRedoStore.getState().maxHistorySize;
-  const nodes = useDEMOModelerStore.getState().nodes;
-  const edges = useDEMOModelerStore.getState().edges;
   // push the current graph to the past state
   setPast((past) => [
     ...past.slice(
       past.length - (maxHistorySize ?? past.length - 1) + 1,
       past.length
     ),
-    { nodes: nodes, edges: edges },
+    { nodes, edges },
   ]);
 
   // whenever we take a new snapshot, the redo operations need to be cleared to avoid state mismatches
   setFuture([]);
-
-  saveModel();
 };
 
 export const debounceTakeSnapshot = debounce(takeSnapshot, 3000);
 
-export const undo = () => {
+export const undo = (nodes: DEMONode[], edges: DEMOEdge[]) => {
   const past = useUndoRedoStore.getState().past;
-  const nodes = useDEMOModelerStore.getState().nodes;
-  const edges = useDEMOModelerStore.getState().edges;
   // get the last state that we want to go back to
   const pastState = past[past.length - 1];
 
@@ -79,10 +72,8 @@ export const undo = () => {
   }
 };
 
-export const redo = () => {
+export const redo = (nodes: DEMONode[], edges: DEMOEdge[]) => {
   const future = useUndoRedoStore.getState().future;
-  const nodes = useDEMOModelerStore.getState().nodes;
-  const edges = useDEMOModelerStore.getState().edges;
   const futureState = future[future.length - 1];
 
   if (futureState) {

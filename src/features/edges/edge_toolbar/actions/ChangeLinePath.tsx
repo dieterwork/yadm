@@ -1,6 +1,7 @@
 import {
   getEdge,
   updateEdgeData,
+  useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
 import {
   ArrowElbowUpRightIcon,
@@ -16,12 +17,12 @@ import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types
 import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
-import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
+import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 
 const ChangeLinePathControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const { t } = useTranslation();
   const edge = getEdge(edgeId);
-  if (!edge || !edge.data?.linePath) return null;
+  if (!edge || !edge.data || !("linePath" in edge.data)) return null;
 
   const options = [
     { id: "step", label: t(($) => $["Step"]) },
@@ -61,7 +62,7 @@ const ChangeLinePathControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
                 ...data,
                 linePath: data?.linePath === "straight" ? "step" : "straight",
               }));
-              takeSnapshot();
+              takeSnapshotAndSave();
             }
           }}
         >

@@ -27,6 +27,7 @@ import {
   onReconnectStart,
   setDEMOInstance,
   setNodes,
+  setViewport,
   useDEMOModelerStore,
   type DEMOModelerState,
 } from "./useDEMOModelerStore";
@@ -44,10 +45,10 @@ import useKeyboardShortcuts from "../keyboard/useKeyboardShortcuts";
 import useAttachNode from "../actions/attach/useAttachNode";
 import useTitleTranslate from "$/shared/hooks/useTitleTranslate";
 import toast from "react-hot-toast/headless";
-import { takeSnapshot } from "../actions/undo/useUndoRedoStore";
 import { useTranslation } from "react-i18next";
 import Notifications from "../notifications/Notifications";
 import DiamondMarker from "$/shared/components/ui/markers/DiamondMarker";
+import takeSnapshotAndSave from "../actions/undo/takeSnapshotAndSave";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -143,6 +144,8 @@ const allowedConnectionMap = {
 >;
 
 const DEMOModeler = () => {
+  const ref = useRef<HTMLDivElement>(null!);
+
   const { isEnabled, nodes, edges, action, isGridVisible, isGridSnapEnabled } =
     useDEMOModelerStore(
       useShallow((state: DEMOModelerState) => ({
@@ -157,8 +160,6 @@ const DEMOModeler = () => {
     );
 
   useTitleTranslate();
-
-  const ref = useRef<HTMLDivElement>(null!);
 
   const {
     horizontal: horizontalHelperLine,
@@ -241,13 +242,14 @@ const DEMOModeler = () => {
     >
       <div className="react-flow-wrapper | h-full">
         <ReactFlow
+          zIndexMode="manual"
           elevateNodesOnSelect={false}
           data-action={action}
           ref={ref}
           nodes={nodes}
           nodeTypes={nodeTypes}
           onNodeDragStart={() => {
-            takeSnapshot();
+            takeSnapshotAndSave();
           }}
           onNodesChange={onNodesChange}
           deleteKeyCode={null}
@@ -258,6 +260,7 @@ const DEMOModeler = () => {
           onEdgesDelete={onEdgesDelete}
           onConnectStart={onConnectStart}
           onConnect={onConnect}
+          onViewportChange={(viewport) => setViewport(viewport)}
           onConnectEnd={onConnectEnd}
           isValidConnection={isValidConnection}
           onSelectionChange={({ nodes }) => {

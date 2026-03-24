@@ -5,11 +5,14 @@ import {
   undo,
   useUndoRedoStore,
 } from "./useUndoRedoStore";
+import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
 
 const useUndoShortcut = () => {
   const undoAction = useUndoRedoStore((state) => state.action);
   const pastHistory = useUndoRedoStore((state) => state.past);
   const futureHistory = useUndoRedoStore((state) => state.future);
+  const nodes = useDEMOModelerStore((state) => state.nodes);
+  const edges = useDEMOModelerStore((state) => state.edges);
 
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
@@ -18,21 +21,21 @@ const useUndoShortcut = () => {
         (event.ctrlKey || event.metaKey) &&
         futureHistory.length > 0
       ) {
-        redo();
+        redo(nodes, edges);
         setUndoAction("redo");
       } else if (
         event.key?.toLowerCase() === "z" &&
         (event.ctrlKey || event.metaKey) &&
         pastHistory.length > 0
       ) {
-        undo();
+        undo(nodes, edges);
         setUndoAction("undo");
       }
     };
 
     const keyUpHandler = (e: KeyboardEvent) => {
       if (undoAction) return;
-      if(!e.key) return;
+      if (!e.key) return;
       if (
         e.key.toLowerCase() === "z" ||
         e.key.toLowerCase() === "y" ||

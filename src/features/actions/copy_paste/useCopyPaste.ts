@@ -14,7 +14,6 @@ import {
   type XYPosition,
 } from "@xyflow/react";
 import { useEffect, useRef } from "react";
-import { useShallow } from "zustand/react/shallow";
 import {
   setCopyPasteBufferedEdges,
   setCopyPasteBufferedNodes,
@@ -23,48 +22,36 @@ import {
 import getChildNodes from "$/features/nodes/utils/getChildNodes";
 import { sortNodes } from "$/shared/utils/sortNodes";
 
+const preventDefault = (e: Event) => e.preventDefault();
+
 const useCopyPaste = () => {
   const rfDomNode = useStore((state) => state.domNode);
   const mousePosition = useRef<XYPosition>({ x: 0, y: 0 });
   const { screenToFlowPosition } = useReactFlow();
-  const { nodes, edges } = useDEMOModelerStore(
-    useShallow((state) => ({
-      nodes: state.nodes,
-      edges: state.edges,
-    }))
-  );
-  const { bufferedNodes, bufferedEdges } = useCopyPasteStore(
-    useShallow((state) => ({
-      bufferedNodes: state.bufferedNodes,
-      bufferedEdges: state.bufferedEdges,
-    }))
-  );
+  const nodes = useDEMOModelerStore((state) => state.nodes);
+  const edges = useDEMOModelerStore((state) => state.edges);
+  const bufferedNodes = useCopyPasteStore((state) => state.bufferedNodes);
+  const bufferedEdges = useCopyPasteStore((state) => state.bufferedEdges);
 
   useEffect(() => {
-    const events = ["cut", "copy", "paste"];
-
     if (rfDomNode) {
-      const preventDefault = (e: Event) => e.preventDefault();
-
-      const onMouseMove = (event: MouseEvent) => {
+      const onMouseMove = (e: MouseEvent) => {
         mousePosition.current = {
-          x: event.clientX,
-          y: event.clientY,
+          x: e.clientX,
+          y: e.clientY,
         };
       };
 
       rfDomNode.addEventListener("mousemove", onMouseMove);
-
-      for (const event of events) {
-        rfDomNode.addEventListener(event, preventDefault);
-      }
+      rfDomNode.addEventListener("cut", preventDefault);
+      rfDomNode.addEventListener("copy", preventDefault);
+      rfDomNode.addEventListener("paste", preventDefault);
 
       return () => {
-        for (const event of events) {
-          rfDomNode.removeEventListener(event, preventDefault);
-        }
-
         rfDomNode.removeEventListener("mousemove", onMouseMove);
+        rfDomNode.removeEventListener("cut", preventDefault);
+        rfDomNode.removeEventListener("copy", preventDefault);
+        rfDomNode.removeEventListener("paste", preventDefault);
       };
     }
   }, [rfDomNode]);
@@ -132,7 +119,6 @@ const useCopyPaste = () => {
   const paste = (
     { x: pasteX, y: pasteY } = screenToFlowPosition(mousePosition.current)
   ) => {
-
     const minX = Math.min(
       ...bufferedNodes
         .filter((node) => !node.parentId)
@@ -351,6 +337,8 @@ const useCopyPaste = () => {
       ...nodes.map((node) => ({ ...node, selected: false })),
       ...newNodes,
     ];
+
+    console.log(newNodes);
 
     const sortedNodes = updatedNodes.sort((a, b) =>
       sortNodes(a, b, updatedNodes)

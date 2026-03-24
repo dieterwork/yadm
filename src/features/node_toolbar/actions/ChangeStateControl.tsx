@@ -28,7 +28,7 @@ import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types
 import { useTranslation } from "react-i18next";
 import { calculateDoubleDiamondInCircleDimensions } from "$/features/shapes/utils/calculateDoubleDiamondInCircleDimensions";
 import type { OrganizationState } from "$/features/nodes/nodes.types";
-import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
+import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const NODES_WITH_STATE = [
@@ -70,11 +70,11 @@ const getIcon = (
 };
 
 const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
+  const { t } = useTranslation();
   const node = getNode(nodeId);
   if (!node) return null;
   if (!("state" in node.data)) return null;
 
-  const { t } = useTranslation();
   const defaultT = t(($) => $["Default"]);
   const unclearT = t(($) => $["Unclear"]);
   const missingT = t(($) => $["Missing"]);
@@ -199,11 +199,11 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
                   ...node,
                   style: {
                     ...node.style,
-                    width: node.style.height ?? node.measured.height ?? 0,
+                    width: node.style?.height ?? node.measured?.height ?? 0,
                   },
                 }));
               }
-              takeSnapshot();
+              takeSnapshotAndSave();
             }
           }}
         >

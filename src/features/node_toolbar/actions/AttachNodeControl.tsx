@@ -1,6 +1,6 @@
 import useAttachNode from "$/features/actions/attach/useAttachNode";
 import { setAttachChildNodeId } from "$/features/actions/attach/useAttachStore";
-import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
+import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 import {
   getNode,
   setAction,
@@ -12,12 +12,12 @@ import toast from "react-hot-toast/headless";
 import { useTranslation } from "react-i18next";
 
 const AttachNodeControl = ({ nodeId }: { nodeId: string }) => {
+  const { detachNode } = useAttachNode();
+  const { t } = useTranslation();
   const node = getNode(nodeId);
   if (!node) return null;
 
   const parentId = node?.parentId;
-  const { detachNode } = useAttachNode();
-  const { t } = useTranslation();
 
   return (
     <DEMOElementToolbarButton
@@ -42,7 +42,7 @@ const AttachNodeControl = ({ nodeId }: { nodeId: string }) => {
             }),
             { icon: "linkBreak" }
           );
-          takeSnapshot();
+          takeSnapshotAndSave();
         } else {
           setAttachChildNodeId(nodeId);
           toast(

@@ -16,7 +16,12 @@ const Rectangle = ({
         height={height}
         fill={transparent ? "none" : "var(--color-white)"}
       />
-      <rect {...svgAttributes} width={width} height={height} />
+      <rect
+        {...svgAttributes}
+        width={width}
+        height={height}
+        fill={transparent ? "none" : "var(--color-white)"}
+      />
     </g>
   );
 };

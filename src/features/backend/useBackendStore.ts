@@ -1,310 +1,264 @@
-import {create} from "zustand";
-import type {DEMOModelJSON} from "$shared/types/reactFlow.types.ts";
+import { create } from "zustand";
+import type { DEMOModelJSON } from "$shared/types/reactFlow.types.ts";
 import {
-    saveModel,
-    setEdges,
-    setEnabled,
-    setFileName,
-    setNodes,
-    useDEMOModelerStore
+  saveModel,
+  setEdges,
+  setEnabled,
+  setFileName,
+  setNodes,
 } from "$features/modeler/useDEMOModelerStore.ts";
-
-export const useAskServerPwdDataStore = create<{ showPwdModal: boolean, showBadPasswordMessage: boolean, callback: () => {} }>(
-    (set, get) => (
-        {
-            showPwdModal: false, showBadPasswordMessage: false, callback: () => {
-            }
-        }
-    )
-);
-
 
 const baseUrl = "https://yadm.app";
 const baseUrlApi = baseUrl + "/api";
 
-export const usePublicModelsDataStore = create<{
-    files: { modelName: string, fileName: string, companyName: string }[]
-}>(
-    (set, get) => (
-        {
-            files: []
-        }
-    )
-);
+const backendData = (set, get) => ({
+  email: "",
+  code: "",
+  serverFiles: [],
+});
 
-const backendData = (set, get) => (
-    {
-        email: '',
-        code: '',
-        serverFiles: [],
-    }
-);
+type ServerFiles = {
+  fileName: string;
+  schemaVersion: string;
+  lastEditor: string;
+  modifiedTimestamp: string;
+}[];
 
-export const useUserDataStore = create<{
-    email: string,
-    code: string,
-    serverFiles: { fileName: string, schemaVersion: string, lastEditor: string, modifiedTimestamp: string }[]
-}>(backendData);
+// export const initUserDataStore = () => {
+//   const email = localStorage.getItem("yadm-user-email") || "";
+//   const authKey = localStorage.getItem("yadm-auth-key") || "";
 
-export const initUserDataStore = () => {
-    const email = localStorage.getItem('yadm-user-email') || '';
-
-    const authKey = localStorage.getItem('yadm-auth-key') || '';
-
-    useUserDataStore.setState({email, code: '', serverFiles: []});
-
-    if (authKey !== '') {
-        loadServerFiles().finally(() => console.log('loaded files'));
-    }
-
-}
-
-export const logOut = () => {
-    localStorage.removeItem('yadm-user-email');
-    localStorage.removeItem('yadm-auth-key');
-    localStorage.removeItem('yadm-pwd');
-    localStorage.removeItem('demo-model');
-    location.reload();
-};
-
-export const sendCodeToEmail = async () => {
-
-    try {
-        const res = await fetch(`${baseUrlApi}/login`, {
-            method: "POST",
-            body: JSON.stringify({
-                email: useUserDataStore.getState().email
-            })
-        });
-        const data = await res.json();
-        return data.ok;
-    } catch (err) {
-        console.log(err);
-        return false;
-    }
-
-};
+//   useUserDataStore.setState({ email, code: "", serverFiles: [] });
+//   if (authKey !== "") {
+//     loadServerFiles().finally(() => console.log("loaded files"));
+//   }
+// };
 
 export const verifyCode = async () => {
-
-    try {
-        let res = await fetch(`${baseUrlApi}/codeCheck`, {
-            method: "POST",
-            body: JSON.stringify({
-                email: useUserDataStore.getState().email,
-                code: useUserDataStore.getState().code,
-            })
-        });
-        let data: any = await res.json();
-        if (!data.ok) {
-            return false;
-        }
-        useUserDataStore.setState({email: data.email});
-
-        localStorage.setItem('yadm-user-email', data.email);
-        localStorage.setItem('yadm-auth-key', data.authKey);
-
-        await loadServerFiles();
-
-        return true;
-    } catch (err) {
-        console.log(err)
-        return false;
+  try {
+    let res = await fetch(`${baseUrlApi}/codeCheck`, {
+      method: "POST",
+      body: JSON.stringify({
+        email: useUserDataStore.getState().email,
+        code: useUserDataStore.getState().code,
+      }),
+    });
+    let data: any = await res.json();
+    if (!data.ok) {
+      return false;
     }
+    useUserDataStore.setState({ email: data.email });
 
+    localStorage.setItem("yadm-user-email", data.email);
+    localStorage.setItem("yadm-auth-key", data.authKey);
+
+    await loadServerFiles();
+
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 };
 
 export const loadServerFiles = async () => {
+  const email = useUserDataStore.getState().email;
+  const authKey = localStorage.getItem("yadm-auth-key") || "";
 
-    const email = useUserDataStore.getState().email;
-    const authKey = localStorage.getItem('yadm-auth-key') || '';
+  try {
+    const res = await fetch(`${baseUrlApi}/files`, {
+      method: "GET",
+      headers: {
+        Authorization: "Digest " + authKey,
+        "X-Email": email,
+      },
+    });
 
-    try {
-        const res = await fetch(`${baseUrlApi}/files`, {
-            method: "GET",
-            headers: {
-                "Authorization": 'Digest ' + authKey,
-                "X-Email": email
-            }
-        });
-
-        if (res.status === 401) {
-            logOut();
-            return;
-        }
-
-        useUserDataStore.setState({serverFiles: await res.json()});
-
-        return;
-
-    } catch (err) {
-        console.error(err);
+    if (res.status === 401) {
+      logOut();
+      return;
     }
+    //github.com/fgossiaux/yadm-admin-fe
 
-}
+    https: useUserDataStore.setState({ serverFiles: await res.json() });
+
+    return;
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 export const loadServerFile = async (fileName: string) => {
+  const authKey = localStorage.getItem("yadm-auth-key") || "";
+  const pwd = localStorage.getItem("yadm-pwd") || "";
+  const email = useUserDataStore.getState().email;
 
-    const authKey = localStorage.getItem('yadm-auth-key') || '';
-    const pwd = localStorage.getItem('yadm-pwd') || '';
-    const email = useUserDataStore.getState().email;
+  if (pwd === "") {
+    // Ask for pwd
+    useAskServerPwdDataStore.setState({
+      showPwdModal: true,
+      callback: () => loadServerFile(fileName),
+    });
+    return;
+  } else {
+    localStorage.setItem("yadm-pwd", pwd);
+  }
 
-    if (pwd === '') {
-        // Ask for pwd
-        useAskServerPwdDataStore.setState({showPwdModal: true, callback: () => loadServerFile(fileName)});
-        return;
+  try {
+    const res = await fetch(`${baseUrlApi}/files/${fileName}/data`, {
+      method: "GET",
+      headers: {
+        Authorization: "Digest " + authKey,
+        "X-Email": email,
+        "X-Pwd": pwd,
+      },
+    });
+
+    if (res.status === 401) {
+      // Wipe password and try again
+      localStorage.removeItem("yadm-pwd");
+      useAskServerPwdDataStore.setState({
+        showBadPasswordMessage: true,
+        showPwdModal: true,
+      });
+      await loadServerFile(fileName);
+      return;
     } else {
-        localStorage.setItem('yadm-pwd', pwd);
+      useAskServerPwdDataStore.setState({ showBadPasswordMessage: false });
     }
 
-    try {
-        const res = await fetch(`${baseUrlApi}/files/${fileName}/data`, {
-            method: "GET",
-            headers: {
-                "Authorization": 'Digest ' + authKey,
-                "X-Email": email,
-                "X-Pwd": pwd
-            }
-        });
+    const data = await res.text();
 
-        if (res.status === 401) {
-            // Wipe password and try again
-            localStorage.removeItem('yadm-pwd');
-            useAskServerPwdDataStore.setState({showBadPasswordMessage: true, showPwdModal:true});
-            await loadServerFile(fileName);
-            return;
-        }else{
-            useAskServerPwdDataStore.setState({showBadPasswordMessage: false});
-        }
+    const localDEMOModel: DEMOModelJSON = JSON.parse(data);
 
-        const data = await res.text();
+    setNodes(localDEMOModel.nodes);
+    setEdges(localDEMOModel.edges);
+    setEnabled(localDEMOModel.isEnabled);
+    setFileName(localDEMOModel.fileName);
 
-        const localDEMOModel: DEMOModelJSON = JSON.parse(data);
+    setTimeout(() => {
+      saveModel();
+      document.getElementById("fit-view-button")?.click();
+    }, 500);
 
-        setNodes(localDEMOModel.nodes);
-        setEdges(localDEMOModel.edges);
-        setEnabled(localDEMOModel.isEnabled);
-        setFileName(localDEMOModel.fileName);
+    return;
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-        setTimeout(() => {
-            saveModel();
-            document.getElementById('fit-view-button')?.click();
-        }, 500);
+// export const saveServerFile = async () => {
+//   const DEMOInstance = useDEMOModelerStore.getState().DEMOInstance;
+//   const isEnabled = useDEMOModelerStore.getState().isEnabled;
+//   const fileName = useDEMOModelerStore.getState().fileName;
 
-        return
+//   if (!DEMOInstance) return;
 
-    } catch (err) {
-        console.error(err);
-    }
-}
+//   const jsonModel = JSON.stringify({
+//     ...DEMOInstance.toObject(),
+//     isEnabled,
+//     version: "1.0.0",
+//     fileName,
+//   } satisfies DEMOModelJSON);
 
-export const saveServerFile = async () => {
+//   const email = useUserDataStore.getState().email;
 
-    const DEMOInstance = useDEMOModelerStore.getState().DEMOInstance;
-    const isEnabled = useDEMOModelerStore.getState().isEnabled;
-    const fileName = useDEMOModelerStore.getState().fileName;
+//   const authKey = localStorage.getItem("yadm-auth-key") || "";
+//   const pwd = localStorage.getItem("yadm-pwd") || "";
 
-    if (!DEMOInstance) return;
+//   if (pwd === "") {
+//     // Ask for pwd
+//     useAskServerPwdDataStore.setState({
+//       showPwdModal: true,
+//       callback: () => saveServerFile(),
+//     });
+//     return;
+//   } else {
+//     localStorage.setItem("yadm-pwd", pwd);
+//   }
 
-    const jsonModel = JSON.stringify({
-        ...DEMOInstance.toObject(),
-        isEnabled,
-        version: "1.0.0",
-        fileName,
-    } satisfies DEMOModelJSON);
+//   try {
+//     const res = await fetch(`${baseUrlApi}/files/${fileName}/data`, {
+//       method: "PUT",
+//       headers: {
+//         Authorization: "Digest " + authKey,
+//         "X-Email": email,
+//         "X-Pwd": pwd,
+//       },
+//       body: jsonModel,
+//     });
 
-    const email = useUserDataStore.getState().email;
+//     if (res.status === 401) {
+//       // Wipe password and try again
+//       localStorage.removeItem("yadm-pwd");
+//       useAskServerPwdDataStore.setState({
+//         showBadPasswordMessage: true,
+//         showPwdModal: true,
+//       });
+//       await saveServerFile();
+//       return;
+//     } else {
+//       useAskServerPwdDataStore.setState({ showBadPasswordMessage: false });
+//     }
 
-    const authKey = localStorage.getItem('yadm-auth-key') || '';
-    const pwd = localStorage.getItem('yadm-pwd') || '';
+//     saveModel();
 
-    if (pwd === '') {
-        // Ask for pwd
-        useAskServerPwdDataStore.setState({showPwdModal: true, callback: () => saveServerFile()});
-        return;
-    } else {
-        localStorage.setItem('yadm-pwd', pwd);
-    }
+//     await loadServerFiles();
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
 
-    try {
-        const res = await fetch(`${baseUrlApi}/files/${fileName}/data`, {
-            method: "PUT",
-            headers: {
-                "Authorization": 'Digest ' + authKey,
-                "X-Email": email,
-                "X-Pwd": pwd
-            },
-            body: jsonModel
-        });
+// export const loadPublicModels = async () => {
+//   try {
+//     const res = await fetch(`${baseUrlApi}/public-files`, {
+//       method: "GET",
+//     });
 
-        if (res.status === 401) {
-            // Wipe password and try again
-            localStorage.removeItem('yadm-pwd');
-            useAskServerPwdDataStore.setState({showBadPasswordMessage: true, showPwdModal:true});
-            await saveServerFile();
-            return;
-        }else{
-            useAskServerPwdDataStore.setState({showBadPasswordMessage: false});
-        }
+//     const files = (await res.json()) as {
+//       modelName: string;
+//       fileName: string;
+//       companyName: string;
+//     }[];
 
-        saveModel();
+//     const filteredFiles = files.filter((file) => file.companyName !== "shared");
 
-        await loadServerFiles();
+//     usePublicModelsDataStore.setState({ files: filteredFiles });
 
-    } catch (err) {
-        console.error(err);
-    }
+//     return;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
 
-}
+// export const openPublicFile = async (fileName: string, companyName: string) => {
+//   if (fileName === "" || companyName === "") {
+//     return;
+//   }
 
-export const loadPublicModels = async () => {
+//   try {
+//     const res = await fetch(
+//       `${baseUrl}/models/${companyName}/${fileName}.json`,
+//       {
+//         method: "GET",
+//       }
+//     );
 
-    try {
-        const res = await fetch(`${baseUrlApi}/public-files`, {
-            method: "GET"
-        });
+//     const data = await res.text();
 
-        const files = await res.json() as { modelName: string, fileName: string, companyName: string }[];
+//     const localDEMOModel: DEMOModelJSON = JSON.parse(data);
+//     setNodes(localDEMOModel.nodes);
+//     setEdges(localDEMOModel.edges);
+//     setEnabled(localDEMOModel.isEnabled);
+//     setFileName(localDEMOModel.fileName);
 
-        const filteredFiles = files.filter(file => file.companyName !== 'shared');
+//     setTimeout(() => {
+//       saveModel();
+//       document.getElementById("fit-view-button")?.click();
+//     }, 500);
 
-        usePublicModelsDataStore.setState({files: filteredFiles});
-
-        return;
-
-    } catch (err) {
-        console.error(err);
-    }
-
-}
-
-export const openPublicFile = async (fileName: string, companyName: string) => {
-
-    if (fileName === '' || companyName === '') {
-        return;
-    }
-
-    try {
-        const res = await fetch(`${baseUrl}/models/${companyName}/${fileName}.json`, {
-            method: "GET"
-        });
-
-        const data = await res.text();
-
-        const localDEMOModel: DEMOModelJSON = JSON.parse(data);
-        setNodes(localDEMOModel.nodes);
-        setEdges(localDEMOModel.edges);
-        setEnabled(localDEMOModel.isEnabled);
-        setFileName(localDEMOModel.fileName);
-
-        setTimeout(() => {
-            saveModel();
-            document.getElementById('fit-view-button')?.click();
-        }, 500);
-
-        return
-
-    } catch (err) {
-        console.error(err);
-    }
-}
+//     return;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };

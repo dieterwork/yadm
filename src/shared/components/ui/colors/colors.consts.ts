@@ -5,6 +5,7 @@ export const NODE_COLOR_MAP = {
   green: "var(--color-emerald-500)",
   yellow: "var(--color-yellow-500)",
   gray: "var(--color-slate-500)",
+  transparent: "none",
 } as const;
 
 export const NODE_BACKGROUND_COLOR_MAP = {
@@ -14,6 +15,7 @@ export const NODE_BACKGROUND_COLOR_MAP = {
   green: "var(--color-emerald-300)",
   yellow: "var(--color-yellow-300)",
   gray: "var(--color-slate-300)",
+  transparent: "none",
 } as const;
 
 export const NODE_BORDER_COLOR_MAP = {
@@ -23,6 +25,7 @@ export const NODE_BORDER_COLOR_MAP = {
   green: "var(--color-emerald-500)",
   yellow: "var(--color-yellow-500)",
   gray: "var(--color-slate-500)",
+  transparent: "none",
 } as const;
 
 export const ORGANIZATION_BACKGROUND_COLOR_MAP = {
@@ -31,6 +34,7 @@ export const ORGANIZATION_BACKGROUND_COLOR_MAP = {
   green: "var(--color-emerald-300)",
   yellow: "var(--color-yellow-300)",
   black: "var(--color-white)",
+  transparent: "none",
 } as const;
 
 export const ORGANIZATION_BORDER_COLOR_MAP = {
@@ -39,4 +43,5 @@ export const ORGANIZATION_BORDER_COLOR_MAP = {
   green: "var(--color-emerald-500)",
   yellow: "var(--color-yellow-500)",
   black: "var(--color-slate-900)",
+  transparent: "none",
 } as const;

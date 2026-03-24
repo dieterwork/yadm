@@ -18,7 +18,7 @@ import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEM
 import DEMOElementToolbarMenu from "$/shared/components/ui/element_toolbar/DEMOElementToolbarMenu";
 import DEMOElementToolbarMenuItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarMenuItem";
 import { useTranslation } from "react-i18next";
-import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
+import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 
 const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const updateNodeInternals = useUpdateNodeInternals();
@@ -73,7 +73,7 @@ const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
               { id: uuid(), offset: (leastOffsetHandle?.offset ?? 0.5) / 2 },
             ]);
             updateNodeInternals(nodeId);
-            takeSnapshot();
+            takeSnapshotAndSave();
           }}
         >
           {(item) => (

@@ -2,7 +2,7 @@ import EditableContent from "../../editable_content/EditableContent";
 import { NodeResizer, type NodeProps } from "@xyflow/react";
 import type { TextNode as TextNodeType } from "./textNode.types";
 import { cn } from "@sglara/cn";
-import NodeToolbar from "../../node-toolbar/DEMONodeToolbar";
+import NodeToolbar from "../../node_toolbar/DEMONodeToolbar";
 import { MIN_SIZE_MAP } from "../utils/consts";
 import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
 

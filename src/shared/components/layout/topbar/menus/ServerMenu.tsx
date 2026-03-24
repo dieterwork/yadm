@@ -1,33 +1,55 @@
 import TopbarMenuButton from "../_components/TopbarMenuButton";
 import TopbarMenuItem from "../_components/TopbarMenuItem";
-import {useTranslation} from "react-i18next";
-import {loadServerFile, useUserDataStore} from "$features/backend/useBackendStore.ts";
-import {useReactFlow} from "@xyflow/react";
+import { useTranslation } from "react-i18next";
+import { useReactFlow } from "@xyflow/react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import {
+  setEdges,
+  setEnabled,
+  setFileName,
+  setNodes,
+} from "$/features/modeler/useDEMOModelerStore";
+import loadServerModels from "$/features/actions/load/actions/loadServerModels";
+import loadServerModel from "$/features/actions/load/actions/loadServerModel";
 
 const ServerMenu = () => {
+  const { t } = useTranslation();
+  const [serverFileName, setServerFileName] = useState("");
 
-    const {t} = useTranslation();
+  const serverModelsQuery = useQuery({
+    queryKey: ["server_models"],
+    queryFn: loadServerModels,
+  });
 
-    const {fitView} = useReactFlow();
+  const serverModelQuery = useQuery({
+    queryKey: ["server_model", serverFileName],
+    queryFn: () => loadServerModel(serverFileName),
+    enabled: !!serverFileName,
+  });
 
-    const serverFiles = useUserDataStore(state => state.serverFiles);
+  const [prevServerModel, setPrevServerModel] = useState(serverModelQuery.data);
 
-    const openFile = (file: string) => {
-        loadServerFile(file).then(() => fitView());
-    };
+  if (prevServerModel !== serverModelQuery.data && serverModelQuery.isSuccess) {
+    setPrevServerModel(serverModelQuery.data);
+    setNodes(serverModelQuery.data.nodes);
+    setEdges(serverModelQuery.data.edges);
+    setFileName(serverModelQuery.data.fileName);
+    setEnabled(serverModelQuery.data.isEnabled);
+  }
 
-    const serverFileElements = serverFiles.map(value => (
-        <TopbarMenuItem key={value.fileName} onAction={() => openFile(value.fileName)}>
-            {value.fileName}
+  return (
+    <TopbarMenuButton label={t(($) => $["My models"])}>
+      {serverModelsQuery.data?.map((model) => (
+        <TopbarMenuItem
+          key={model.fileName}
+          onAction={() => setServerFileName(model.fileName)}
+        >
+          {model.fileName}
         </TopbarMenuItem>
-    ));
-
-    return (
-        <TopbarMenuButton label={t(($) => $["My models"])}>
-            {serverFileElements}
-        </TopbarMenuButton>
-    );
-
+      ))}
+    </TopbarMenuButton>
+  );
 };
 
 export default ServerMenu;

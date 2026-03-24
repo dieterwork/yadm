@@ -6,7 +6,7 @@ import {
   updateEdgeData,
 } from "$/features/modeler/useDEMOModelerStore";
 import { useTranslation } from "react-i18next";
-import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
+import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 
 const ResetEdgeCenter = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const edge = getEdge(edgeId);
@@ -19,7 +19,7 @@ const ResetEdgeCenter = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
       label={t(($) => $["Reset edge center"])}
       onPress={() => {
         updateEdgeData(edgeId, { center: undefined });
-        takeSnapshot();
+        takeSnapshotAndSave();
       }}
     />
   );

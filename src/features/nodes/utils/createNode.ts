@@ -1110,12 +1110,12 @@ export const createNode = ({
           style: {
             width: width ?? DEFAULT_SIZE_MAP["organization"].width,
             height: height ?? DEFAULT_SIZE_MAP["organization"].height,
-            fill: NODE_BACKGROUND_COLOR_MAP["default"],
+            fill: NODE_BACKGROUND_COLOR_MAP["transparent"],
             stroke: ORGANIZATION_BORDER_COLOR_MAP["default"],
             strokeWidth: 16,
           },
           selected: selected ?? true,
-          zIndex: 100,
+          zIndex: 210,
         },
         {
           id: uuid(),
@@ -1140,7 +1140,7 @@ export const createNode = ({
           style: {
             width: DEFAULT_SIZE_MAP["organization"].width / 2,
             height: X_SMALL_NODE_SIZE,
-            fill: NODE_BACKGROUND_COLOR_MAP["default"],
+            fill: NODE_BACKGROUND_COLOR_MAP["transparent"],
             stroke: NODE_BORDER_COLOR_MAP["red"],
           },
           selected: selected ?? true,
