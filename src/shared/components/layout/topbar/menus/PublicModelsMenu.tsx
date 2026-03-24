@@ -30,7 +30,10 @@ const PublicModelsMenu = () => {
     }: {
       fileName: string;
       company: string;
-    }) => loadPublicModel(fileName, company),
+    }) => {
+      console.log(fileName, company);
+      return loadPublicModel(fileName, company);
+    },
     onError: () => {
       toast.dismiss(loadingId);
       toast.error(t(($) => $["Error loading model"]));
