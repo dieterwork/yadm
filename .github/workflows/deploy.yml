@@ -47,6 +47,13 @@ jobs:
         with:
           name: build-files
           path: ./dist
+      - name: Run remote command via SSH
+        uses: D3rHase/ssh-command-action@latest
+        with:
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USERNAME }}
+          private_key: ${{ secrets.KEY }}
+          command: /var/www/yadm/app/current/cleanUpForNewDeploy.sh
       - name: Copy files via SSH
         uses: appleboy/scp-action@v1
         with:
