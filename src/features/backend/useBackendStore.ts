@@ -34,6 +34,14 @@ type ServerFiles = {
 //   }
 // };
 
+export const logOut = () => {
+  localStorage.removeItem("yadm-user-email");
+  localStorage.removeItem("yadm-auth-key");
+  localStorage.removeItem("yadm-pwd");
+  localStorage.removeItem("demo-model");
+  location.reload();
+};
+
 export const verifyCode = async () => {
   try {
     let res = await fetch(`${baseUrlApi}/codeCheck`, {

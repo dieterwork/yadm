@@ -5,7 +5,7 @@ import TopbarSubMenuButton from "$shared/components/layout/topbar/_components/To
 import { useReactFlow } from "@xyflow/react";
 import { useQuery } from "@tanstack/react-query";
 import getPublicModelsByCompany from "$/shared/utils/getPublicModelsByCompany";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   setEdges,
   setEnabled,

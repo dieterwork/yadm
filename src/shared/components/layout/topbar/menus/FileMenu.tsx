@@ -35,27 +35,23 @@ const FileMenu = () => {
 
   const mutation = useMutation({
     mutationFn: saveServerModel,
+    onError: () => {
+      toast.error(
+        t(($) => $["Error saving model to server. Please try again"])
+      );
+    },
+    onMutate: () => {
+      toast.loading(t(($) => $["Saving model to server"]));
+    },
     onSuccess: () => {
-      // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["server_models"] });
+      toast.success(
+        t(($) => $["save_on_server_storage_toast"], {
+          fileName,
+        })
+      );
     },
   });
-
-  if (mutation.isPending) {
-    toast.loading(t(($) => $["Saving model to server"]));
-  }
-
-  if (mutation.isError) {
-    toast.error(t(($) => $["Error saving model to server. Please try again"]));
-  }
-
-  if (mutation.isSuccess) {
-    toast.success(
-      t(($) => $["save_on_server_storage_toast"], {
-        fileName,
-      })
-    );
-  }
 
   return (
     <>
