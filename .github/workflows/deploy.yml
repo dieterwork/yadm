@@ -53,7 +53,7 @@ jobs:
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USERNAME }}
           private_key: ${{ secrets.KEY }}
-          # host_fingerprint: ${{ secrets.HOST_FINGERPRINT }}
+          host_fingerprint: ${{ secrets.HOST_FINGERPRINT }}
           command: /var/www/yadm/app/cleanUpForNewDeploy.sh
       - name: Copy files via SSH
         uses: appleboy/scp-action@v1
