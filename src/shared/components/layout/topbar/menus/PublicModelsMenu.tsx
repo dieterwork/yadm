@@ -25,11 +25,11 @@ const PublicModelsMenu = () => {
   const publicModelMutation = useMutation({
     mutationKey: ["public_model"],
     mutationFn: loadPublicModel,
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.dismiss(loadingId);
       toast.success(
         t(($) => $["Loaded model"], {
-          fileName,
+          fileName: data.fileName,
         })
       );
     },
@@ -87,12 +87,11 @@ const PublicModelsMenu = () => {
             {publicModels?.map((model) => (
               <TopbarMenuItem
                 key={`${model.fileName}-${company}`}
-                onAction={async () => {
-                  const data = await publicModelMutation.mutateAsync({
+                onAction={() => {
+                  publicModelMutation.mutate({
                     fileName: model.fileName,
                     company,
                   });
-                  setModel(data);
                 }}
               >
                 {model.modelName}

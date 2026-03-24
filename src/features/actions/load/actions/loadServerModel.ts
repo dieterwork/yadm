@@ -1,4 +1,6 @@
-const loadServerModel = async (fileName: string) => {
+import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
+
+const loadServerModel = async (fileName: string): Promise<DEMOModelJSON> => {
   const email = localStorage.getItem("yadm-user-email") || "";
   const authKey = localStorage.getItem("yadm-auth-key") || "";
   const pwd = localStorage.getItem("yadm-pwd") || "";
