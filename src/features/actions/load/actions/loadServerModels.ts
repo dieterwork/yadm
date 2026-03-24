@@ -19,7 +19,7 @@ const loadServerModels = async (): Promise<any> => {
   });
 
   if (!res.ok) {
-    throw new Error("Fetch error");
+    throw new Error("Fetch failed");
   }
 
   return res.json();

@@ -15,7 +15,7 @@ const loadServerModel = async (fileName: string) => {
   });
 
   if (!res.ok) {
-    throw new Error("Fetch error");
+    throw new Error("Fetch failed");
   }
 
   return res.json();

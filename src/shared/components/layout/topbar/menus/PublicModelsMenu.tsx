@@ -42,7 +42,6 @@ const PublicModelsMenu = () => {
     onError: () => {
       toast.dismiss(loadingId);
       toast.error(t(($) => $["Error loading model"]));
-      console.error(error);
     },
     onMutate: () => {
       toast.loading(
