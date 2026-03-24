@@ -32,10 +32,17 @@ const PublicModelsMenu = () => {
 
   const publicModelMutation = useMutation({
     mutationKey: ["public_model"],
-    mutationFn: ({ fileName, company }) => loadPublicModel(fileName, company),
+    mutationFn: ({
+      fileName,
+      company,
+    }: {
+      fileName: string;
+      company: string;
+    }) => loadPublicModel(fileName, company),
     onError: () => {
       toast.dismiss(loadingId);
       toast.error(t(($) => $["Error loading model"]));
+      console.log(error.message);
     },
     onMutate: () => {
       toast.loading(

@@ -28,7 +28,7 @@ const ServerMenu = () => {
 
   const serverModelMutation = useMutation({
     mutationKey: ["server_model"],
-    mutationFn: (fileName) => loadServerModel(fileName),
+    mutationFn: (fileName: string) => loadServerModel(fileName),
     onError: () => {
       toast.dismiss(loadingId);
       toast.error(t(($) => $["Error loading model"]));
