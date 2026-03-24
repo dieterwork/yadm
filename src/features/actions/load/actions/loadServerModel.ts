@@ -4,7 +4,7 @@ const loadServerModel = async (fileName: string) => {
   const pwd = localStorage.getItem("yadm-pwd") || "";
 
   const res = await fetch(
-    `${import.meta.env.VITE_BASE_URL}/files/${fileName}/data`,
+    `${import.meta.env.VITE_API_URL}/files/${fileName}/data`,
     {
       method: "GET",
       headers: {
