@@ -62,6 +62,7 @@ export const generatePNG = async ({
     image.onload = () => res(image);
     image.onerror = () => rej(image);
   });
+
   const imgBlob = await convertWhitePixelsToTransparentPixels(image);
   const newUrl = URL.createObjectURL(imgBlob);
   return { url: newUrl, width: imageWidth, height: imageHeight };
