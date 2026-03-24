@@ -35,7 +35,7 @@ jobs:
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v4
         with:
-          name: build-fies
+          name: build-files
           path: ./dist
   deploy:
     name: Deploy
@@ -45,7 +45,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: production-files
+          name: build-files
           path: ./dist
       - name: Copy files via SSH
         uses: appleboy/scp-action@v1
