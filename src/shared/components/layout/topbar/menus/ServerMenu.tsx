@@ -28,17 +28,7 @@ const ServerMenu = () => {
 
   const serverModelMutation = useMutation({
     mutationKey: ["server_model"],
-    mutationFn: (fileName: string) => loadServerModel(fileName),
-    onError: () => {
-      toast.dismiss(loadingId);
-      toast.error(t(($) => $["Error loading model"]));
-    },
-    onMutate: () => {
-      toast.loading(
-        t(($) => $["Loading model"]),
-        { id: loadingId }
-      );
-    },
+    mutationFn: loadServerModel,
     onSuccess: (data) => {
       setModel(data);
       toast.dismiss(loadingId);
@@ -48,13 +38,15 @@ const ServerMenu = () => {
         })
       );
     },
-    onSettled: (data, error) => {
-      if (data) {
-        console.log(data);
-      }
-      if (error) {
-        console.log(error.message);
-      }
+    onMutate: () => {
+      toast.loading(
+        t(($) => $["Loading model"]),
+        { id: loadingId }
+      );
+    },
+    onError: () => {
+      toast.dismiss(loadingId);
+      toast.error(t(($) => $["Error loading model"]));
     },
   });
 

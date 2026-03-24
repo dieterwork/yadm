@@ -24,26 +24,7 @@ const PublicModelsMenu = () => {
 
   const publicModelMutation = useMutation({
     mutationKey: ["public_model"],
-    mutationFn: ({
-      fileName,
-      company,
-    }: {
-      fileName: string;
-      company: string;
-    }) => {
-      console.log(fileName, company);
-      return loadPublicModel(fileName, company);
-    },
-    onError: () => {
-      toast.dismiss(loadingId);
-      toast.error(t(($) => $["Error loading model"]));
-    },
-    onMutate: () => {
-      toast.loading(
-        t(($) => $["Loading model"]),
-        { id: loadingId }
-      );
-    },
+    mutationFn: loadPublicModel,
     onSuccess: (data) => {
       setModel(data);
       toast.dismiss(loadingId);
@@ -53,13 +34,15 @@ const PublicModelsMenu = () => {
         })
       );
     },
-    onSettled: (data, error) => {
-      if (data) {
-        console.log(data);
-      }
-      if (error) {
-        console.log(error.message);
-      }
+    onMutate: () => {
+      toast.loading(
+        t(($) => $["Loading model"]),
+        { id: loadingId }
+      );
+    },
+    onError: () => {
+      toast.dismiss(loadingId);
+      toast.error(t(($) => $["Error loading model"]));
     },
   });
 

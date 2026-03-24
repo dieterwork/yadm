@@ -1,5 +1,10 @@
-const loadPublicModel = async (fileName: string, company: string) => {
-  console.log(fileName, company);
+const loadPublicModel = async ({
+  fileName,
+  company,
+}: {
+  fileName: string;
+  company: string;
+}) => {
   const url = new URL(
     `${import.meta.env.VITE_BASE_URL}/models/${company}/${fileName}.json`
   );
