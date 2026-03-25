@@ -26,6 +26,10 @@ import SidebarToggleButton from "./SidebarToggleButton";
 import { cn } from "@sglara/cn";
 import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
 import { useTranslation } from "react-i18next";
+import {
+  resetAttach,
+  useAttachStore,
+} from "$/features/actions/attach/useAttachStore";
 
 export type SidebarMenuSectionItemType = {
   id: string;
@@ -56,6 +60,8 @@ const Sidebar = () => {
   const id = useId();
 
   const { t } = useTranslation();
+
+  const childNodeId = useAttachStore((state) => state.childNodeId);
 
   const sidebarMenuItems = [
     {

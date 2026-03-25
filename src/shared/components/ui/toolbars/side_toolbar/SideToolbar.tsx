@@ -68,7 +68,11 @@ const SideToolbar = () => {
   const orientation = "vertical";
 
   const areHandlesVisible = nodes.some((node) => {
-    if (!("handles" in node.data) || !("isVisible" in node.data.handles))
+    if (
+      !("handles" in node.data) ||
+      !node.data.handles ||
+      !("isVisible" in node.data.handles)
+    )
       return false;
     if (!node.data.handles.isVisible) return false;
     return true;
