@@ -4,7 +4,6 @@ import TopbarSubMenuButton from "../_components/TopbarSubMenuButton";
 import {
   clearModel,
   modelSelector,
-  setFileName,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
 import useExport from "$/features/actions/export/useExport";
@@ -12,15 +11,16 @@ import useImport from "$/features/actions/import/useImport";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast/headless";
 import DEMOModal from "$/shared/components/ui/modal/DEMOModal";
-import { useEffect, useId, useState } from "react";
+import { useId, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import saveServerModel from "$/features/actions/save/saveServerModel";
-import { saveLocalModel } from "$/features/actions/save/saveLocalModel";
 import useUserStore from "$/features/auth/useUserStore";
 import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModal";
 import { useShallow } from "zustand/react/shallow";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import type { AppError } from "$/shared/utils/AppError";
+import useLocalModel from "$/features/modeler/useLocalModel";
+import useSharedServerModel from "$/features/modeler/useSharedServerModel";
 
 const FileMenu = () => {
   const { t } = useTranslation();
@@ -36,6 +36,9 @@ const FileMenu = () => {
   const [isNewModalOpen, setNewModalOpen] = useState(false);
 
   const loadingId = useId();
+
+  const [_, setLocalModel] = useLocalModel();
+  const [isSharedModel, setSharedModel] = useSharedServerModel();
 
   const mutation = useMutation<any, AppError, DEMOModelJSON, void>({
     mutationFn: saveServerModel,
@@ -76,18 +79,19 @@ const FileMenu = () => {
         >
           {t(($) => $["New"])}
         </TopbarMenuItem>
-        <TopbarMenuItem
-          onAction={() => {
-            saveLocalModel({ ...model, version: "1.0.0" });
-            toast.success(
-              t(($) => $["save_storage_toast"], { fileName: model.fileName })
-            );
-          }}
-        >
-          {t(($) => $[`Save` + (!isAuthenticated ? " (local)" : "")])}
-        </TopbarMenuItem>
-
-        {isAuthenticated && (
+        {!isSharedModel && (
+          <TopbarMenuItem
+            onAction={() => {
+              setLocalModel({ ...model, version: "1.0.0" });
+              toast.success(
+                t(($) => $["save_storage_toast"], { fileName: model.fileName })
+              );
+            }}
+          >
+            {t(($) => $[`Save` + (!isAuthenticated ? " (local)" : "")])}
+          </TopbarMenuItem>
+        )}
+        {isAuthenticated && !isSharedModel && (
           <TopbarMenuItem
             onAction={() => {
               mutation.mutate({ ...model, version: "1.0.0" });
@@ -177,9 +181,10 @@ const FileMenu = () => {
         isOpen={isNewModalOpen}
         onOpenChange={(isOpen) => setNewModalOpen(isOpen)}
         onAction={() => {
-          localStorage.removeItem("yadm-model");
+          setLocalModel(null);
           clearModel();
           setNewModalOpen(false);
+          setSharedModel(false);
         }}
         title={t(($) => $["Create new model?"])}
         actionLabel={t(($) => $["Yes, create new model"])}

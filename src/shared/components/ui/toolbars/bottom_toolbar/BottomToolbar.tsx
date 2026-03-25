@@ -9,6 +9,7 @@ import {
 } from "@phosphor-icons/react";
 import { useReactFlow, useViewport } from "@xyflow/react";
 import {
+  modelSelector,
   toggleLock,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
@@ -32,25 +33,27 @@ import {
   resetAttach,
   useAttachStore,
 } from "$/features/actions/attach/useAttachStore";
-import { saveLocalModel } from "$/features/actions/save/saveLocalModel";
+import { useShallow } from "zustand/react/shallow";
+import useLocalModel from "$/features/modeler/useLocalModel";
 
 const orientation = "horizontal";
 
 const BottomToolbar = () => {
   const { zoomIn, zoomOut, fitView, zoomTo } = useReactFlow();
   const viewport = useDEMOModelerStore((state) => state.viewport);
-  const fileName = useDEMOModelerStore((state) => state.fileName);
-  const edges = useDEMOModelerStore((state) => state.edges);
-  const nodes = useDEMOModelerStore((state) => state.nodes);
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
   const undoAction = useUndoRedoStore((state) => state.action);
   const pastHistory = useUndoRedoStore((state) => state.past);
   const futureHistory = useUndoRedoStore((state) => state.future);
 
+  const model = useDEMOModelerStore(useShallow(modelSelector));
+
   const { t } = useTranslation();
 
   const childNodeId = useAttachStore((state) => state.childNodeId);
+
+  const [_, setLocalModel] = useLocalModel();
 
   return (
     <div className="bottom-toolbar-wrapper | absolute bottom-4 left-[50%] translate-x-[-50%] z-9999">
@@ -79,13 +82,9 @@ const BottomToolbar = () => {
                 if (previewNode) resetPreviewNode();
                 if (childNodeId) resetAttach();
                 toggleLock(isEnabled);
-                saveLocalModel({
-                  nodes,
-                  edges,
-                  fileName,
-                  isEnabled,
+                setLocalModel({
+                  ...model,
                   version: "1.0.0",
-                  viewport,
                 });
                 resetAttach();
               }}

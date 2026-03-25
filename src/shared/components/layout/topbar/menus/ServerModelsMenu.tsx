@@ -2,7 +2,7 @@ import TopbarMenuButton from "../_components/TopbarMenuButton";
 import TopbarMenuItem from "../_components/TopbarMenuItem";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import loadServerModels from "$/features/actions/load/actions/loadServerModels";
 import loadServerModel from "$/features/actions/load/actions/loadServerModel";
 import toast, { useToaster } from "react-hot-toast/headless";
@@ -13,11 +13,13 @@ import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import { setModel } from "$/features/modeler/useDEMOModelerStore";
 import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingState";
 import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
+import useSharedServerModel from "$/features/modeler/useSharedServerModel";
 
 const ServerModelsMenu = () => {
   const { t } = useTranslation();
   const [isPwdModalOpen, setPwdModalOpen] = useState(false);
   const [currentFileName, setCurrentFileName] = useState(null);
+  const [isSharedModel, setSharedModel] = useSharedServerModel();
 
   const serverModelsQuery = useQuery({
     queryKey: ["server_models"],
@@ -64,6 +66,36 @@ const ServerModelsMenu = () => {
       }
     },
   });
+
+  useEffect(() => {
+    const handleSharedModel = () => {
+      const modelName =
+        new URLSearchParams(window.location.search).get("model") ?? "";
+
+      if (modelName !== "" && modelName.includes("/")) {
+        const piecesCount = modelName.split("/").length;
+
+        console.log(modelName);
+
+        if (piecesCount === 3) {
+          // 3 slashes is my models
+          const [mymodels, , name] = modelName.split("/");
+
+          if (mymodels === "mymodels") {
+            serverModelMutation.mutate(name);
+            setSharedModel(true);
+          } else {
+            setSharedModel(false);
+          }
+        } else {
+          setSharedModel(false);
+        }
+      } else {
+        setSharedModel(false);
+      }
+    };
+    handleSharedModel();
+  }, [isSharedModel, setSharedModel]);
 
   const label = t(($) => $["My models"]);
 

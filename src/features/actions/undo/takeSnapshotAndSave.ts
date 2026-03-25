@@ -1,9 +1,7 @@
-import {
-  debounceSaveLocalModel,
-  saveLocalModel,
-} from "$/features/actions/save/saveLocalModel";
 import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
+import { SHARED_MODEL_STORAGE_KEY } from "$/features/modeler/useSharedServerModel";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
+import saveLocalModel from "../save/saveLocalModel";
 import { takeSnapshot } from "./useUndoRedoStore";
 
 const takeSnapshotAndSave = () => {
@@ -22,7 +20,9 @@ const takeSnapshotAndSave = () => {
   } satisfies DEMOModelJSON;
 
   takeSnapshot(nodes, edges);
-  saveLocalModel(model);
+  if (localStorage.getItem(SHARED_MODEL_STORAGE_KEY) !== "true") {
+    saveLocalModel(model);
+  }
 };
 
 export default takeSnapshotAndSave;

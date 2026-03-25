@@ -1,8 +1,6 @@
-import type { DEMOModelJSON } from "../../../shared/types/reactFlow.types";
-import debounce from "../../../shared/utils/debounce";
+import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 
-export const saveLocalModel = (model: DEMOModelJSON) => {
+const saveLocalModel = (model: DEMOModelJSON) => {
   localStorage.setItem("yadm-model", JSON.stringify(model));
 };
-
-export const debounceSaveLocalModel = debounce(saveLocalModel, 3000);
+export default saveLocalModel;
