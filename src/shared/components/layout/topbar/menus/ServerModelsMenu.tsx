@@ -106,16 +106,19 @@ const ServerModelsMenu = () => {
         const [mymodels, , fileName] = modelName.split("/");
 
         if (mymodels === "mymodels") {
+          console.log("my models");
           serverModelMutation.mutate(fileName);
           setSharedModel(true);
         }
       } else if (piecesCount === 2) {
         // 2 slashes is a public model
 
+        console.log("public model");
+
         const [company, fileName] = modelName.split("/");
 
         publicModelMutation.mutate({ fileName, company });
-        setSharedModel(false);
+        setSharedModel(true);
       } else {
         setSharedModel(false);
       }
