@@ -40,7 +40,6 @@ const FileMenu = () => {
   const mutation = useMutation<any, AppError, DEMOModelJSON, void>({
     mutationFn: saveServerModel,
     onError: (error) => {
-      console.log(error);
       toast.dismiss(loadingId);
       if (error.httpCode === 401) {
         setPwdModalOpen(true);
