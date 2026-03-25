@@ -38,7 +38,10 @@ const ServerPasswordModal = ({
 
   return (
     <TopbarMenuModal {...restProps}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex items-center justify-between"
+      >
         <TextField className="grid grid-cols-[auto_1fr] items-center gap-2">
           <Label className="text-slate-900 text-xs">
             {t(($) => $["password"])}
