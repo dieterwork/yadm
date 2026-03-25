@@ -14,6 +14,7 @@ import { setModel } from "$/features/modeler/useDEMOModelerStore";
 import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingState";
 import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
 import useSharedServerModel from "$/features/modeler/useSharedServerModel";
+import loadPublicModel from "$/features/actions/load/actions/loadPublicModel";
 
 const ServerModelsMenu = () => {
   const { t } = useTranslation();
@@ -67,6 +68,30 @@ const ServerModelsMenu = () => {
     },
   });
 
+  const publicModelMutation = useMutation({
+    mutationKey: ["public_model_test"],
+    mutationFn: loadPublicModel,
+    onSuccess: (data) => {
+      toast.dismiss(loadingId);
+      toast.success(
+        t(($) => $["Loaded model"], {
+          fileName: data.fileName,
+        })
+      );
+      setModel({ ...data, isEnabled: false });
+    },
+    onMutate: () => {
+      toast.loading(
+        t(($) => $["Loading model"]),
+        { id: loadingId }
+      );
+    },
+    onError: () => {
+      toast.dismiss(loadingId);
+      toast.error(t(($) => $["Error loading model"]));
+    },
+  });
+
   useEffect(() => {
     const handleSharedModel = () => {
       const modelName =
@@ -79,14 +104,19 @@ const ServerModelsMenu = () => {
 
         if (piecesCount === 3) {
           // 3 slashes is my models
-          const [mymodels, , name] = modelName.split("/");
+          const [mymodels, , fileName] = modelName.split("/");
 
           if (mymodels === "mymodels") {
-            serverModelMutation.mutate(name);
+            serverModelMutation.mutate(fileName);
             setSharedModel(true);
-          } else {
-            setSharedModel(false);
           }
+        } else if (piecesCount === 2) {
+          // 2 slashes is a public model
+
+          const [company, fileName] = modelName.split("/");
+
+          publicModelMutation.mutate({ fileName, company });
+          setSharedModel(false);
         } else {
           setSharedModel(false);
         }
@@ -95,7 +125,7 @@ const ServerModelsMenu = () => {
       }
     };
     handleSharedModel();
-  }, [isSharedModel, setSharedModel]);
+  }, [isSharedModel, setSharedModel, publicModelMutation, serverModelMutation]);
 
   const label = t(($) => $["My models"]);
 
