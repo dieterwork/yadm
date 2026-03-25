@@ -51,9 +51,7 @@ const ServerModelsMenu = () => {
       );
     },
     onError: (error) => {
-      if (error) {
-        console.log(error);
-      }
+      console.log(error);
       toast.dismiss(loadingId);
       toast.error(t(($) => $["Error loading model"]));
     },

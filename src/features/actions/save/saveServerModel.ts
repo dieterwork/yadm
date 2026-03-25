@@ -1,3 +1,4 @@
+import { AppError } from "$/shared/utils/AppError";
 import type { DEMOModelJSON } from "../../../shared/types/reactFlow.types";
 
 const saveServerModel = async (model: DEMOModelJSON) => {
@@ -11,7 +12,7 @@ const saveServerModel = async (model: DEMOModelJSON) => {
     `${import.meta.env.VITE_API_URL}/files/${model.fileName}/data`
   );
 
-  return fetch(url, {
+  const res = await fetch(url, {
     method: "PUT",
     headers: {
       Authorization: "Digest " + authKey,
@@ -20,6 +21,16 @@ const saveServerModel = async (model: DEMOModelJSON) => {
     },
     body: jsonModel,
   });
+
+  if (!res.ok) {
+    if (res.status === 401) {
+      throw new AppError("Unauthorized", 401, "Invalid password", true);
+    } else {
+      throw new AppError("Fetch failed", 400, "Unknown reason", true);
+    }
+  }
+
+  return res.json();
 };
 
 export default saveServerModel;

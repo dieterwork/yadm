@@ -1,4 +1,5 @@
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
+import { AppError } from "$/shared/utils/AppError";
 
 const loadServerModel = async (fileName: string): Promise<DEMOModelJSON> => {
   const email = localStorage.getItem("yadm-user-email") || "";
@@ -17,7 +18,11 @@ const loadServerModel = async (fileName: string): Promise<DEMOModelJSON> => {
   });
 
   if (!res.ok) {
-    throw new Error("Fetch failed");
+    if (res.status === 401) {
+      throw new AppError("Unauthorized", 401, "Invalid password", true);
+    } else {
+      throw new AppError("Fetch failed", 400, "Unknown reason", true);
+    }
   }
 
   return res.json();
