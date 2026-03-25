@@ -11,6 +11,8 @@ import useUserStore from "$/features/auth/useUserStore";
 import type { AppError } from "$/shared/utils/AppError";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import { setModel } from "$/features/modeler/useDEMOModelerStore";
+import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingState";
+import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
 
 const ServerModelsMenu = () => {
   const { t } = useTranslation();
@@ -63,24 +65,48 @@ const ServerModelsMenu = () => {
     },
   });
 
+  const label = t(($) => $["My models"]);
+
+  if (serverModelsQuery.isError || !serverModelsQuery.data) {
+    return (
+      <TopbarMenuButton label={label}>
+        <TopbarMenuItemErrorState
+          onAction={() => serverModelsQuery.refetch()}
+        />
+      </TopbarMenuButton>
+    );
+  }
+
+  if (serverModelsQuery.isPending) {
+    return (
+      <TopbarMenuButton label={label}>
+        <TopbarMenuItemLoadingState />
+      </TopbarMenuButton>
+    );
+  }
+
   return (
     <>
-      <TopbarMenuButton label={t(($) => $["My models"])}>
-        {serverModelsQuery.data?.map((model) => (
-          <TopbarMenuItem
-            key={model.fileName}
-            onAction={() => {
-              setCurrentFileName(model.fileName);
-              if (user.password) {
-                serverModelMutation.mutate(model.fileName);
-              } else {
-                setPwdModalOpen(true);
-              }
-            }}
-          >
-            {model.fileName}
-          </TopbarMenuItem>
-        ))}
+      <TopbarMenuButton label={label}>
+        {serverModelsQuery.data?.length === 0 && (
+          <TopbarMenuItem>You have no models available.</TopbarMenuItem>
+        )}
+        {serverModelsQuery.data?.length > 0 &&
+          serverModelsQuery.data?.map((model) => (
+            <TopbarMenuItem
+              key={model.fileName}
+              onAction={() => {
+                setCurrentFileName(model.fileName);
+                if (user.password) {
+                  serverModelMutation.mutate(model.fileName);
+                } else {
+                  setPwdModalOpen(true);
+                }
+              }}
+            >
+              {model.fileName}
+            </TopbarMenuItem>
+          ))}
       </TopbarMenuButton>
       <ServerPasswordModal
         isOpen={isPwdModalOpen}
