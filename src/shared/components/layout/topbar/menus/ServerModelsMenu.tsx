@@ -17,6 +17,8 @@ import loadServerModel from "$/features/actions/load/actions/loadServerModel";
 import toast, { useToaster } from "react-hot-toast/headless";
 import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModal";
 import useUserStore from "$/features/auth/useUserStore";
+import type { AppError } from "$/shared/utils/AppError";
+import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 
 const ServerModelsMenu = () => {
   const { t } = useTranslation();
@@ -32,10 +34,18 @@ const ServerModelsMenu = () => {
 
   const { user } = useUserStore();
 
-  const serverModelMutation = useMutation({
+  const serverModelMutation = useMutation<
+    DEMOModelJSON,
+    AppError,
+    string,
+    void
+  >({
     mutationKey: ["server_model"],
     mutationFn: loadServerModel,
     onSuccess: (data) => {
+      if (isPwdModalOpen) {
+        setPwdModalOpen(false);
+      }
       toast.dismiss(loadingId);
       toast.success(
         t(($) => $["Loaded model"], {
@@ -51,9 +61,12 @@ const ServerModelsMenu = () => {
       );
     },
     onError: (error) => {
-      console.log(error);
       toast.dismiss(loadingId);
-      toast.error(t(($) => $["Error loading model"]));
+      if (error.httpCode === 401) {
+        setPwdModalOpen(true);
+      } else {
+        toast.error(t(($) => $["Error loading model. Please try again."]));
+      }
     },
   });
 
@@ -64,12 +77,12 @@ const ServerModelsMenu = () => {
           <TopbarMenuItem
             key={model.fileName}
             onAction={() => {
-              // if (user.password) {
-              serverModelMutation.mutate(model.fileName);
-              // } else {
-              //   setPwdModalOpen(true);
-              //   setCurrentFileName(model.fileName);
-              // }
+              if (user.password) {
+                serverModelMutation.mutate(model.fileName);
+              } else {
+                setPwdModalOpen(true);
+                setCurrentFileName(model.fileName);
+              }
             }}
           >
             {model.fileName}
