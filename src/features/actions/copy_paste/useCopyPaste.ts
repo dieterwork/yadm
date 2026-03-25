@@ -338,8 +338,6 @@ const useCopyPaste = () => {
       ...newNodes,
     ];
 
-    console.log(newNodes);
-
     const sortedNodes = updatedNodes.sort((a, b) =>
       sortNodes(a, b, updatedNodes)
     );

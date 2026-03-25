@@ -8,9 +8,7 @@ import sendCodeToEmail from "$/features/auth/sendCodeToEmail";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import verifyCode from "$/features/auth/verifyCode";
 import { CircleNotchIcon } from "@phosphor-icons/react";
-import { useEffect } from "react";
 import useUserStore from "$/features/auth/useUserStore";
-import z from "zod";
 
 type Inputs = {
   email: string;
@@ -25,20 +23,15 @@ const LoginEmailModal = ({ ...restProps }: TopbarMenuModalProps) => {
     mutationFn: ({ email, code }: { email: string; code: string }) =>
       verifyCode(email, code),
     mutationKey: ["verify_code"],
-    onSuccess: (data, variables, onMutateResult, context) => {
-      console.log(data);
+    onSuccess: (data) => {
       setEmail(data.email);
       setAuthKey(data.authKey);
-      // restProps.onOpenChange?.(false);
-      // reset();
+      restProps.onOpenChange?.(false);
+      reset();
     },
   });
 
   const { user, setEmail, setAuthKey } = useUserStore();
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   const loginForm = useForm<Inputs>({
     defaultValues: { email: user.email ?? "" },

@@ -35,7 +35,7 @@ const PublicModelsMenu = () => {
           fileName: data.fileName,
         })
       );
-      setModel(data);
+      setModel({ ...data, isEnabled: false });
     },
     onMutate: () => {
       toast.loading(
