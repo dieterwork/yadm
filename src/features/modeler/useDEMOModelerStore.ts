@@ -601,8 +601,8 @@ export const saveModel = () => {
 };
 
 export const setModel = (model: DEMOModelJSON) => {
-  setNodes(model.nodes);
-  setEdges(model.edges);
+  setNodes(model.nodes.map((node) => ({ ...node, selected: false })));
+  setEdges(model.edges.map((edge) => ({ ...edge, selected: false })));
   setFileName(model.fileName);
   setEnabled(model.isEnabled);
   setViewport(model.viewport);
