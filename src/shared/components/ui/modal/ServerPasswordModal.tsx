@@ -27,7 +27,7 @@ const ServerPasswordModal = ({
     handleSubmit,
   } = useForm<FormInputs>();
 
-  const { setPassword } = useUserStore;
+  const { setPassword } = useUserStore();
 
   const onSubmit: SubmitHandler<FormInputs> = (data) => {
     setPassword(sha256(data.password));
