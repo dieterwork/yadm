@@ -20,14 +20,14 @@ const useSharedServerModel = (): [boolean, (isShared: boolean) => void] => {
 
   const setSharedModel = (isShared: boolean) => {
     if (!isShared) {
-      localStorage.set(SHARED_MODEL_STORAGE_KEY, "false");
+      localStorage.setItem(SHARED_MODEL_STORAGE_KEY, "false");
     } else {
       localStorage.setItem(SHARED_MODEL_STORAGE_KEY, "true");
     }
     window.dispatchEvent(new Event("storage"));
   };
 
-  return [isSharedServerModel, setSharedModel];
+  return [isSharedServerModel === "true", setSharedModel];
 };
 
 export default useSharedServerModel;
