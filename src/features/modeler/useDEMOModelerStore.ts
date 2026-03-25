@@ -590,8 +590,8 @@ export const setModel = (model: DEMOModelJSON) => {
   setNodes(model.nodes.map((node) => ({ ...node, selected: false })));
   setEdges(model.edges.map((edge) => ({ ...edge, selected: false })));
   setFileName(model.fileName);
-  setEnabled(model.isEnabled);
-  setViewport(model.viewport);
+  setEnabled(model.isEnabled ?? true);
+  setViewport(model.viewport ?? { x: 0, y: 0, zoom: 1 });
 };
 
 export const modelSelector = (state: DEMOModelerState) => ({
