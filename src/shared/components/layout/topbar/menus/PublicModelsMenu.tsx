@@ -4,13 +4,14 @@ import { useTranslation } from "react-i18next";
 import TopbarSubMenuButton from "$shared/components/layout/topbar/_components/TopbarSubMenuButton.tsx";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import getPublicModelsByCompany from "$/shared/utils/getPublicModelsByCompany";
-import { useId } from "react";
+import { useId, useState } from "react";
 import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
 import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingState";
 import loadPublicModels from "$/features/actions/load/actions/loadPublicModels";
 import loadPublicModel from "$/features/actions/load/actions/loadPublicModel";
 import toast from "react-hot-toast/headless";
 import { setModel } from "$/features/modeler/useDEMOModelerStore";
+import TopbarMenuButtonAutoComplete from "../_components/TopbarMenuButtonAutoComplete";
 
 const PublicModelsMenu = () => {
   const { t } = useTranslation();
@@ -21,6 +22,8 @@ const PublicModelsMenu = () => {
   });
 
   const loadingId = useId();
+
+  const [searchValue, setSearchValue] = useState("");
 
   const publicModelMutation = useMutation({
     mutationKey: ["public_model"],
@@ -74,34 +77,53 @@ const PublicModelsMenu = () => {
   );
 
   return (
-    <TopbarMenuButton label={t(($) => $["Public models"])} autocomplete={true}>
-      {companies.map((company) => {
-        const publicModels = publicModelsByCompany
-          .get(company)
-          ?.sort((a, b) =>
-            a.modelName
-              .toLocaleLowerCase()
-              .localeCompare(b.modelName.toLocaleLowerCase())
+    <TopbarMenuButtonAutoComplete
+      label={t(($) => $["Public models"])}
+      searchValue={searchValue}
+      onSearchValueChange={(value) => setSearchValue(value)}
+    >
+      {searchValue &&
+        publicModelsQuery.data.map((model) => (
+          <TopbarMenuItem
+            key={`${model.fileName}-${model.companyName}`}
+            onAction={() => {
+              publicModelMutation.mutate({
+                fileName: model.fileName,
+                company: model.companyName,
+              });
+            }}
+          >
+            {model.modelName}
+          </TopbarMenuItem>
+        ))}
+      {!searchValue &&
+        companies.map((company) => {
+          const publicModels = publicModelsByCompany
+            .get(company)
+            ?.sort((a, b) =>
+              a.modelName
+                .toLocaleLowerCase()
+                .localeCompare(b.modelName.toLocaleLowerCase())
+            );
+          return (
+            <TopbarSubMenuButton label={company}>
+              {publicModels?.map((model) => (
+                <TopbarMenuItem
+                  key={`${model.fileName}-${company}`}
+                  onAction={() => {
+                    publicModelMutation.mutate({
+                      fileName: model.fileName,
+                      company,
+                    });
+                  }}
+                >
+                  {model.modelName}
+                </TopbarMenuItem>
+              ))}
+            </TopbarSubMenuButton>
           );
-        return (
-          <TopbarSubMenuButton label={company}>
-            {publicModels?.map((model) => (
-              <TopbarMenuItem
-                key={`${model.fileName}-${company}`}
-                onAction={() => {
-                  publicModelMutation.mutate({
-                    fileName: model.fileName,
-                    company,
-                  });
-                }}
-              >
-                {model.modelName}
-              </TopbarMenuItem>
-            ))}
-          </TopbarSubMenuButton>
-        );
-      })}
-    </TopbarMenuButton>
+        })}
+    </TopbarMenuButtonAutoComplete>
   );
 };
 
