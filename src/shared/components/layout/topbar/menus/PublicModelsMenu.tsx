@@ -5,12 +5,12 @@ import TopbarSubMenuButton from "$shared/components/layout/topbar/_components/To
 import { useMutation, useQuery } from "@tanstack/react-query";
 import getPublicModelsByCompany from "$/shared/utils/getPublicModelsByCompany";
 import { useId } from "react";
-import { setModel } from "$/features/modeler/useDEMOModelerStore";
 import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
 import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingState";
 import loadPublicModels from "$/features/actions/load/actions/loadPublicModels";
 import loadPublicModel from "$/features/actions/load/actions/loadPublicModel";
 import toast from "react-hot-toast/headless";
+import { setModel } from "$/features/modeler/useDEMOModelerStore";
 
 const PublicModelsMenu = () => {
   const { t } = useTranslation();
@@ -32,6 +32,7 @@ const PublicModelsMenu = () => {
           fileName: data.fileName,
         })
       );
+      setModel(data);
     },
     onMutate: () => {
       toast.loading(

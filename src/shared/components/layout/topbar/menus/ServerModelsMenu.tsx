@@ -1,17 +1,8 @@
 import TopbarMenuButton from "../_components/TopbarMenuButton";
 import TopbarMenuItem from "../_components/TopbarMenuItem";
 import { useTranslation } from "react-i18next";
-import { useReactFlow } from "@xyflow/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useId, useState } from "react";
-import {
-  setEdges,
-  setEnabled,
-  setFileName,
-  setModel,
-  setNodes,
-  useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
 import loadServerModels from "$/features/actions/load/actions/loadServerModels";
 import loadServerModel from "$/features/actions/load/actions/loadServerModel";
 import toast, { useToaster } from "react-hot-toast/headless";
@@ -19,6 +10,7 @@ import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModa
 import useUserStore from "$/features/auth/useUserStore";
 import type { AppError } from "$/shared/utils/AppError";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
+import { setModel } from "$/features/modeler/useDEMOModelerStore";
 
 const ServerModelsMenu = () => {
   const { t } = useTranslation();
@@ -53,6 +45,7 @@ const ServerModelsMenu = () => {
         })
       );
       setCurrentFileName(null);
+      setModel(data);
     },
     onMutate: () => {
       toast.loading(
