@@ -15,10 +15,12 @@ interface FormInputs {
 const ServerPasswordModal = ({
   onSubmitCallback,
   isPending,
+  errorMessage,
   ...restProps
 }: TopbarMenuModalProps & {
   onSubmitCallback?: () => void;
   isPending?: boolean;
+  errorMessage?: string;
 }) => {
   const { t } = useTranslation();
   const {
@@ -55,6 +57,7 @@ const ServerPasswordModal = ({
           Save
           {isPending && <CircleNotchIcon className="animate-spin" />}
         </Button>
+        {errorMessage && <p role="alert">{errorMessage}</p>}
       </form>
     </TopbarMenuModal>
   );
