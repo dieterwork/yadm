@@ -2,9 +2,7 @@ import { AppError } from "$/shared/utils/AppError";
 import type { DEMOModelJSON } from "../../../shared/types/reactFlow.types";
 
 const saveServerModel = async (model: DEMOModelJSON) => {
-  console.log("model", model);
   const jsonModel = JSON.stringify(model);
-  console.log("model", jsonModel);
 
   const email = localStorage.getItem("yadm-user-email") || "";
   const authKey = localStorage.getItem("yadm-auth-key") || "";
@@ -32,7 +30,11 @@ const saveServerModel = async (model: DEMOModelJSON) => {
     }
   }
 
-  return res.json();
+  const text = await res.text();
+
+  console.log(text);
+
+  return text;
 };
 
 export default saveServerModel;
