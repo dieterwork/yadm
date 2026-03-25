@@ -12,13 +12,15 @@ import useImport from "$/features/actions/import/useImport";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast/headless";
 import DEMOModal from "$/shared/components/ui/modal/DEMOModal";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import saveServerModel from "$/features/actions/save/saveServerModel";
 import { saveLocalModel } from "$/features/actions/save/saveLocalModel";
 import useUserStore from "$/features/auth/useUserStore";
 import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModal";
 import { useShallow } from "zustand/react/shallow";
+import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
+import type { AppError } from "$/shared/utils/AppError";
 
 const FileMenu = () => {
   const { t } = useTranslation();
@@ -33,18 +35,29 @@ const FileMenu = () => {
   const { isAuthenticated } = useUserStore();
   const [isNewModalOpen, setNewModalOpen] = useState(false);
 
-  const mutation = useMutation({
+  const loadingId = useId();
+
+  const mutation = useMutation<any, AppError, DEMOModelJSON, void>({
     mutationFn: saveServerModel,
-    onError: () => {
-      toast.error(
-        t(($) => $["Error saving model to server. Please try again"])
-      );
+    onError: (error) => {
+      toast.dismiss(loadingId);
+      if (error.httpCode === 401) {
+        setPwdModalOpen(true);
+      } else {
+        toast.error(
+          t(($) => $["Error saving model to server. Please try again"])
+        );
+      }
     },
     onMutate: () => {
-      toast.loading(t(($) => $["Saving model to server"]));
+      toast.loading(
+        t(($) => $["Saving model to server"]),
+        { id: loadingId }
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["server_models"] });
+      toast.dismiss(loadingId);
       toast.success(
         t(($) => $["save_on_server_storage_toast"], {
           fileName: model.fileName,
@@ -164,7 +177,7 @@ const FileMenu = () => {
         isOpen={isNewModalOpen}
         onOpenChange={(isOpen) => setNewModalOpen(isOpen)}
         onAction={() => {
-          localStorage.removeItem("demo-model");
+          localStorage.removeItem("yadm-model");
           clearModel();
           setNewModalOpen(false);
         }}
@@ -188,6 +201,13 @@ const FileMenu = () => {
       <ServerPasswordModal
         isOpen={isPwdModalOpen}
         onOpenChange={(isOpen) => setPwdModalOpen(isOpen)}
+        onSubmitCallback={() => {
+          mutation.mutate({ ...model, version: "1.0.0" });
+        }}
+        isPending={mutation.isPending}
+        errorMessage={
+          mutation.error?.httpCode === 401 ? "Invalid password" : undefined
+        }
       />
     </>
   );

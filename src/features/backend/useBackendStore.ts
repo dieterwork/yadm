@@ -38,7 +38,7 @@ export const logOut = () => {
   localStorage.removeItem("yadm-user-email");
   localStorage.removeItem("yadm-auth-key");
   localStorage.removeItem("yadm-pwd");
-  localStorage.removeItem("demo-model");
+  localStorage.removeItem("yadm-model");
   location.reload();
 };
 

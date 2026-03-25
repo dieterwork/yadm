@@ -54,7 +54,7 @@ export interface DEMOModelerState {
   viewport: Viewport;
 }
 
-const localDEMOModelJSON = localStorage.getItem("demo-model");
+const localDEMOModelJSON = localStorage.getItem("yadm-model");
 const localDEMOModel: DEMOModelJSON | null = localDEMOModelJSON
   ? JSON.parse(localDEMOModelJSON)
   : null;
@@ -597,7 +597,7 @@ export const saveModel = () => {
     version: "1.0.0",
     fileName,
   } satisfies DEMOModelJSON);
-  localStorage.setItem("demo-model", jsonModel);
+  localStorage.setItem("yadm-model", jsonModel);
 };
 
 export const setModel = (model: DEMOModelJSON) => {

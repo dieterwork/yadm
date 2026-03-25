@@ -16,7 +16,7 @@ const LoggedInMenu = () => {
     setEmail(null);
     setPassword(null);
     setAuthKey(null);
-    localStorage.removeItem("demo-model");
+    localStorage.removeItem("yadm-model");
     clearModel();
   };
 
