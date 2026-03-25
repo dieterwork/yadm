@@ -37,7 +37,7 @@ const ServerPasswordModal = ({
   };
 
   return (
-    <TopbarMenuModal {...restProps}>
+    <TopbarMenuModal {...restProps} title="Enter password">
       <form onSubmit={handleSubmit(onSubmit)}>
         <section className="flex items-center justify-between">
           <TextField className="grid grid-cols-[auto_1fr] items-center gap-2">
