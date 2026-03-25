@@ -93,39 +93,36 @@ const ServerModelsMenu = () => {
   });
 
   useEffect(() => {
-    const handleSharedModel = () => {
-      const modelName =
-        new URLSearchParams(window.location.search).get("model") ?? "";
+    const modelName =
+      new URLSearchParams(window.location.search).get("model") ?? "";
 
-      if (modelName !== "" && modelName.includes("/")) {
-        const piecesCount = modelName.split("/").length;
+    if (modelName !== "" && modelName.includes("/")) {
+      const piecesCount = modelName.split("/").length;
 
-        console.log(modelName);
+      console.log(modelName);
 
-        if (piecesCount === 3) {
-          // 3 slashes is my models
-          const [mymodels, , fileName] = modelName.split("/");
+      if (piecesCount === 3) {
+        // 3 slashes is my models
+        const [mymodels, , fileName] = modelName.split("/");
 
-          if (mymodels === "mymodels") {
-            serverModelMutation.mutate(fileName);
-            setSharedModel(true);
-          }
-        } else if (piecesCount === 2) {
-          // 2 slashes is a public model
-
-          const [company, fileName] = modelName.split("/");
-
-          publicModelMutation.mutate({ fileName, company });
-          setSharedModel(false);
-        } else {
-          setSharedModel(false);
+        if (mymodels === "mymodels") {
+          serverModelMutation.mutate(fileName);
+          setSharedModel(true);
         }
+      } else if (piecesCount === 2) {
+        // 2 slashes is a public model
+
+        const [company, fileName] = modelName.split("/");
+
+        publicModelMutation.mutate({ fileName, company });
+        setSharedModel(false);
       } else {
         setSharedModel(false);
       }
-    };
-    handleSharedModel();
-  }, [isSharedModel, setSharedModel, publicModelMutation, serverModelMutation]);
+    } else {
+      setSharedModel(false);
+    }
+  }, []);
 
   const label = t(($) => $["My models"]);
 
