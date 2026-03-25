@@ -2,6 +2,7 @@ import { AppError } from "$/shared/utils/AppError";
 import type { DEMOModelJSON } from "../../../shared/types/reactFlow.types";
 
 const saveServerModel = async (model: DEMOModelJSON) => {
+  console.log("model", model);
   const jsonModel = JSON.stringify(model);
 
   const email = localStorage.getItem("yadm-user-email") || "";
