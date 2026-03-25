@@ -601,6 +601,7 @@ export const saveModel = () => {
 };
 
 export const setModel = (model: DEMOModelJSON) => {
+  console.log(model, "new model to be set");
   setNodes(model.nodes.map((node) => ({ ...node, selected: false })));
   setEdges(model.edges.map((edge) => ({ ...edge, selected: false })));
   setFileName(model.fileName);
