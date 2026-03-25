@@ -70,10 +70,10 @@ const ServerModelsMenu = () => {
           <TopbarMenuItem
             key={model.fileName}
             onAction={() => {
+              setCurrentFileName(model.fileName);
               if (user.password) {
                 serverModelMutation.mutate(model.fileName);
               } else {
-                setCurrentFileName(model.fileName);
                 setPwdModalOpen(true);
               }
             }}
@@ -86,7 +86,6 @@ const ServerModelsMenu = () => {
         isOpen={isPwdModalOpen}
         onOpenChange={(isOpen) => setPwdModalOpen(isOpen)}
         onSubmitCallback={() => {
-          console.log("submit callback", currentFileName);
           if (currentFileName) {
             serverModelMutation.mutate(currentFileName);
           }
