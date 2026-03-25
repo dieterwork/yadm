@@ -192,7 +192,7 @@ export const updateEdgeData = <T extends DEMOEdge>(
 export const clearModel = () => {
   setEdges([]);
   setNodes([]);
-  setFileName(`DEMO Model`);
+  setFileName(`New model`);
 };
 
 export const onNodesChange: OnNodesChange<DEMONode> = (changes) => {

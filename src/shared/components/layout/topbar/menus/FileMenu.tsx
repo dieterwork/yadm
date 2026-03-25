@@ -18,6 +18,7 @@ import saveServerModel from "$/features/actions/save/saveServerModel";
 import { saveLocalModel } from "$/features/actions/save/saveLocalModel";
 import useUserStore from "$/features/auth/useUserStore";
 import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModal";
+import { useShallow } from "zustand/react/shallow";
 
 const FileMenu = () => {
   const { t } = useTranslation();
@@ -27,7 +28,7 @@ const FileMenu = () => {
   const { importJSON } = useImport();
   const { exportAsPNG, exportAsPDF, exportAsJSON } = useExport();
 
-  const model = useDEMOModelerStore(modelSelector);
+  const model = useDEMOModelerStore(useShallow(modelSelector));
 
   const { isAuthenticated } = useUserStore();
   const [isNewModalOpen, setNewModalOpen] = useState(false);
@@ -164,7 +165,6 @@ const FileMenu = () => {
         onOpenChange={(isOpen) => setNewModalOpen(isOpen)}
         onAction={() => {
           localStorage.removeItem("demo-model");
-          setFileName("New model");
           clearModel();
           setNewModalOpen(false);
         }}
