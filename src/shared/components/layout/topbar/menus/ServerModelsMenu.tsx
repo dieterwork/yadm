@@ -80,8 +80,8 @@ const ServerModelsMenu = () => {
               if (user.password) {
                 serverModelMutation.mutate(model.fileName);
               } else {
-                setPwdModalOpen(true);
                 setCurrentFileName(model.fileName);
+                setPwdModalOpen(true);
               }
             }}
           >
@@ -93,6 +93,7 @@ const ServerModelsMenu = () => {
         isOpen={isPwdModalOpen}
         onOpenChange={(isOpen) => setPwdModalOpen(isOpen)}
         onSubmitCallback={() => {
+          console.log("submit callback", currentFileName);
           if (currentFileName) {
             serverModelMutation.mutate(currentFileName);
           }
