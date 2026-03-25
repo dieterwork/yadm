@@ -585,21 +585,6 @@ export const onNodesDelete: OnNodesDelete<DEMONode> = () => {
   takeSnapshotAndSave();
 };
 
-export const saveModel = () => {
-  const DEMOInstance = useDEMOModelerStore.getState().DEMOInstance;
-  const isEnabled = useDEMOModelerStore.getState().isEnabled;
-  const fileName = useDEMOModelerStore.getState().fileName;
-
-  if (!DEMOInstance) return;
-  const jsonModel = JSON.stringify({
-    ...DEMOInstance.toObject(),
-    isEnabled,
-    version: "1.0.0",
-    fileName,
-  } satisfies DEMOModelJSON);
-  localStorage.setItem("yadm-model", jsonModel);
-};
-
 export const setModel = (model: DEMOModelJSON) => {
   console.log(model, "new model to be set");
   setNodes(model.nodes.map((node) => ({ ...node, selected: false })));
@@ -608,10 +593,6 @@ export const setModel = (model: DEMOModelJSON) => {
   setEnabled(model.isEnabled);
   setViewport(model.viewport);
 };
-
-export const autoSaveModel = debounce(() => {
-  saveModel();
-}, 3000);
 
 export const modelSelector = (state: DEMOModelerState) => ({
   nodes: state.nodes,
