@@ -15,9 +15,13 @@ import {
 import loadServerModels from "$/features/actions/load/actions/loadServerModels";
 import loadServerModel from "$/features/actions/load/actions/loadServerModel";
 import toast, { useToaster } from "react-hot-toast/headless";
+import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModal";
+import useUserStore from "$/features/auth/useUserStore";
 
-const ServerMenu = () => {
+const ServerModelsMenu = () => {
   const { t } = useTranslation();
+  const [isPwdModalOpen, setPwdModalOpen] = useState(false);
+  const [currentFileName, setCurrentFileName] = useState(null);
 
   const serverModelsQuery = useQuery({
     queryKey: ["server_models"],
@@ -25,6 +29,8 @@ const ServerMenu = () => {
   });
 
   const loadingId = useId();
+
+  const { user } = useUserStore();
 
   const serverModelMutation = useMutation({
     mutationKey: ["server_model"],
@@ -36,6 +42,7 @@ const ServerMenu = () => {
           fileName: data.fileName,
         })
       );
+      setCurrentFileName(null);
     },
     onMutate: () => {
       toast.loading(
@@ -43,26 +50,46 @@ const ServerMenu = () => {
         { id: loadingId }
       );
     },
-    onError: () => {
+    onError: (error) => {
+      if (error) {
+        console.log(error);
+      }
       toast.dismiss(loadingId);
       toast.error(t(($) => $["Error loading model"]));
     },
   });
 
   return (
-    <TopbarMenuButton label={t(($) => $["My models"])}>
-      {serverModelsQuery.data?.map((model) => (
-        <TopbarMenuItem
-          key={model.fileName}
-          onAction={() => {
-            serverModelMutation.mutate(model.fileName);
-          }}
-        >
-          {model.fileName}
-        </TopbarMenuItem>
-      ))}
-    </TopbarMenuButton>
+    <>
+      <TopbarMenuButton label={t(($) => $["My models"])}>
+        {serverModelsQuery.data?.map((model) => (
+          <TopbarMenuItem
+            key={model.fileName}
+            onAction={() => {
+              // if (user.password) {
+              serverModelMutation.mutate(model.fileName);
+              // } else {
+              //   setPwdModalOpen(true);
+              //   setCurrentFileName(model.fileName);
+              // }
+            }}
+          >
+            {model.fileName}
+          </TopbarMenuItem>
+        ))}
+      </TopbarMenuButton>
+      <ServerPasswordModal
+        isOpen={isPwdModalOpen}
+        onOpenChange={(isOpen) => setPwdModalOpen(isOpen)}
+        onSubmitCallback={() => {
+          if (currentFileName) {
+            serverModelMutation.mutate(currentFileName);
+          }
+        }}
+        isPending={serverModelMutation.isPending}
+      />
+    </>
   );
 };
 
-export default ServerMenu;
+export default ServerModelsMenu;

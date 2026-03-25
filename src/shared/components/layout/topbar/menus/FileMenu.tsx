@@ -3,6 +3,7 @@ import TopbarMenuItem from "../_components/TopbarMenuItem";
 import TopbarSubMenuButton from "../_components/TopbarSubMenuButton";
 import {
   clearModel,
+  modelSelector,
   setFileName,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
@@ -16,19 +17,17 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import saveServerModel from "$/features/actions/save/saveServerModel";
 import { saveLocalModel } from "$/features/actions/save/saveLocalModel";
 import useUserStore from "$/features/auth/useUserStore";
+import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModal";
 
 const FileMenu = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const [isPwdModalOpen, setPwdModalOpen] = useState(false);
 
   const { importJSON } = useImport();
   const { exportAsPNG, exportAsPDF, exportAsJSON } = useExport();
 
-  const nodes = useDEMOModelerStore((state) => state.nodes);
-  const edges = useDEMOModelerStore((state) => state.edges);
-  const fileName = useDEMOModelerStore((state) => state.fileName);
-  const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
-  const viewport = useDEMOModelerStore((state) => state.viewport);
+  const model = useDEMOModelerStore(modelSelector);
 
   const { isAuthenticated } = useUserStore();
   const [isNewModalOpen, setNewModalOpen] = useState(false);
@@ -47,7 +46,7 @@ const FileMenu = () => {
       queryClient.invalidateQueries({ queryKey: ["server_models"] });
       toast.success(
         t(($) => $["save_on_server_storage_toast"], {
-          fileName,
+          fileName: model.fileName,
         })
       );
     },
@@ -65,15 +64,10 @@ const FileMenu = () => {
         </TopbarMenuItem>
         <TopbarMenuItem
           onAction={() => {
-            saveLocalModel({
-              nodes,
-              edges,
-              fileName,
-              isEnabled,
-              version: "1.0.0",
-              viewport,
-            });
-            toast.success(t(($) => $["save_storage_toast"], { fileName }));
+            saveLocalModel({ ...model, version: "1.0.0" });
+            toast.success(
+              t(($) => $["save_storage_toast"], { fileName: model.fileName })
+            );
           }}
         >
           {t(($) => $[`Save` + (!isAuthenticated ? " (local)" : "")])}
@@ -82,14 +76,7 @@ const FileMenu = () => {
         {isAuthenticated && (
           <TopbarMenuItem
             onAction={() => {
-              mutation.mutate({
-                nodes,
-                edges,
-                fileName,
-                isEnabled,
-                viewport,
-                version: "1.0.0",
-              });
+              mutation.mutate({ ...model, version: "1.0.0" });
             }}
           >
             {t(($) => $["Save to my models"])}
@@ -198,6 +185,10 @@ const FileMenu = () => {
           <p>{t(($) => $["This action cannot be undone."])}</p>
         </div>
       </DEMOModal>
+      <ServerPasswordModal
+        isOpen={isPwdModalOpen}
+        onOpenChange={(isOpen) => setPwdModalOpen(isOpen)}
+      />
     </>
   );
 };

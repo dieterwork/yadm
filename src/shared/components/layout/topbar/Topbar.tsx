@@ -13,7 +13,7 @@ import LoggedInMenu from "$shared/components/layout/topbar/menus/LoggedInMenu.ts
 import PublicModelsMenu from "$shared/components/layout/topbar/menus/PublicModelsMenu.tsx";
 import toast, { useToasterStore } from "react-hot-toast/headless";
 import useUserStore from "$/features/auth/useUserStore";
-import ServerMenu from "$shared/components/layout/topbar/menus/ServerMenu.tsx";
+import ServerModelsMenu from "$/shared/components/layout/topbar/menus/ServerModelsMenu";
 
 const Topbar = () => {
   const { t } = useTranslation();
@@ -47,7 +47,7 @@ const Topbar = () => {
                   </li>
                   {isAuthenticated && (
                     <li>
-                      <ServerMenu />
+                      <ServerModelsMenu />
                     </li>
                   )}
                 </ul>

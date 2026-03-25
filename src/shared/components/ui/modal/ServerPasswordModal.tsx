@@ -3,19 +3,22 @@ import TopbarMenuModal, {
 } from "$/shared/components/layout/topbar/_components/TopbarMenuModal";
 import { Button, Input, Label, TextField } from "react-aria-components";
 import { useTranslation } from "react-i18next";
-import { sha256 } from "js-sha256";
-import useUserStore from "$/features/auth/useUserStore";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import useUserStore from "$/features/auth/useUserStore";
+import { sha256 } from "js-sha256";
+import { CircleNotchIcon } from "@phosphor-icons/react";
 
 interface FormInputs {
   password: string;
 }
 
 const ServerPasswordModal = ({
-  onSubmit = () => {},
+  onSubmitCallback,
+  isPending,
   ...restProps
 }: TopbarMenuModalProps & {
-  onSubmit?: SubmitHandler<FormInputs>;
+  onSubmitCallback?: () => void;
+  isPending?: boolean;
 }) => {
   const { t } = useTranslation();
   const {
@@ -23,6 +26,13 @@ const ServerPasswordModal = ({
     formState: { errors },
     handleSubmit,
   } = useForm<FormInputs>();
+
+  const { setPassword } = useUserStore;
+
+  const onSubmit: SubmitHandler<FormInputs> = (data) => {
+    setPassword(sha256(data.password));
+    onSubmitCallback?.();
+  };
 
   return (
     <TopbarMenuModal {...restProps}>
@@ -38,8 +48,12 @@ const ServerPasswordModal = ({
           />
           {errors.password && <p role="alert">{errors.password.message}</p>}
         </TextField>
-        <Button className="rounded bg-sky-600 px-4 py-2 text-sm text-white data-hover:bg-sky-500 data-hover:data-active:bg-sky-700">
+        <Button
+          type="submit"
+          className="inline-flex items-center gap-2 cursor-pointer rounded bg-sky-600 px-4 py-2 text-sm text-white data-hover:bg-sky-500 data-hover:data-active:bg-sky-700"
+        >
           Save
+          {isPending && <CircleNotchIcon className="animate-spin" />}
         </Button>
       </form>
     </TopbarMenuModal>
