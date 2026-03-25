@@ -98,6 +98,11 @@ const ServerModelsMenu = () => {
           }
         }}
         isPending={serverModelMutation.isPending}
+        errorMessage={
+          serverModelMutation.error?.httpCode === 401
+            ? "Invalid password"
+            : undefined
+        }
       />
     </>
   );
