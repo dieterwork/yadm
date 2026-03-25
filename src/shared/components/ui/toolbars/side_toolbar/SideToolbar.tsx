@@ -170,7 +170,11 @@ const SideToolbar = () => {
               isDisabled={!isEnabled}
             >
               <AlignLeftIcon
-                className={cn(!areHelperLinesEnabled && "opacity-30")}
+                color={
+                  areHelperLinesEnabled
+                    ? "var(--color-sky-500)"
+                    : "var(--color-slate-900)"
+                }
               />
             </DEMOModelerToolbarToggleButton>
           </TooltipTrigger>
@@ -227,7 +231,13 @@ const SideToolbar = () => {
               }
               isDisabled={!isEnabled}
             >
-              <GridFourIcon className={cn(!isGridVisible && "opacity-30")} />
+              <GridFourIcon
+                color={
+                  isGridVisible
+                    ? "var(--color-sky-500)"
+                    : "var(--color-slate-900)"
+                }
+              />
             </DEMOModelerToolbarToggleButton>
           </TooltipTrigger>
           <TooltipTrigger>
@@ -258,7 +268,11 @@ const SideToolbar = () => {
               }
             >
               <FlowArrowIcon
-                className={cn(!areHandlesVisible && "opacity-30")}
+                color={
+                  areHandlesVisible
+                    ? "var(--color-sky-500)"
+                    : "var(--color-slate-900)"
+                }
               />
             </DEMOModelerToolbarToggleButton>
           </TooltipTrigger>
@@ -290,7 +304,11 @@ const SideToolbar = () => {
               }
             >
               <PencilRulerIcon
-                className={cn(!isHandleEditModeEnabled && "opacity-30")}
+                color={
+                  isHandleEditModeEnabled
+                    ? "var(--color-sky-500)"
+                    : "var(--color-slate-900)"
+                }
               />
             </DEMOModelerToolbarToggleButton>
           </TooltipTrigger>
