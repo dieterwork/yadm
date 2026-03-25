@@ -30,11 +30,7 @@ const saveServerModel = async (model: DEMOModelJSON) => {
     }
   }
 
-  const text = await res.text();
-
-  console.log(text);
-
-  return text;
+  return true;
 };
 
 export default saveServerModel;
