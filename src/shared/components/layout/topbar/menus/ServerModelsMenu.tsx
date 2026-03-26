@@ -16,6 +16,8 @@ import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
 import useSharedServerModel from "$/features/modeler/useSharedServerModel";
 import loadPublicModel from "$/features/actions/load/actions/loadPublicModel";
 import { useReactFlow } from "@xyflow/react";
+import TopbarMenuButtonAutoComplete from "../_components/TopbarMenuButtonAutoComplete";
+import uuid from "$/shared/utils/uuid";
 
 const ServerModelsMenu = () => {
   const { t } = useTranslation();
@@ -27,6 +29,7 @@ const ServerModelsMenu = () => {
   const serverModelsQuery = useQuery({
     queryKey: ["server_models"],
     queryFn: loadServerModels,
+    select: (data) => data.map((m) => ({ id: uuid(), ...m })),
   });
 
   const loadingId = useId();
@@ -153,27 +156,27 @@ const ServerModelsMenu = () => {
 
   return (
     <>
-      <TopbarMenuButton label={label}>
-        {serverModelsQuery.data?.length === 0 && (
-          <TopbarMenuItem>You have no models available.</TopbarMenuItem>
+      <TopbarMenuButtonAutoComplete
+        label={label}
+        items={serverModelsQuery.data}
+        renderEmptyState={() => <div>You have no server models</div>}
+      >
+        {(model) => (
+          <TopbarMenuItem
+            key={model.fileName}
+            onAction={() => {
+              setCurrentFileName(model.fileName);
+              if (user.password) {
+                serverModelMutation.mutate(model.fileName);
+              } else {
+                setPwdModalOpen(true);
+              }
+            }}
+          >
+            {model.fileName}
+          </TopbarMenuItem>
         )}
-        {serverModelsQuery.data?.length > 0 &&
-          serverModelsQuery.data?.map((model) => (
-            <TopbarMenuItem
-              key={model.fileName}
-              onAction={() => {
-                setCurrentFileName(model.fileName);
-                if (user.password) {
-                  serverModelMutation.mutate(model.fileName);
-                } else {
-                  setPwdModalOpen(true);
-                }
-              }}
-            >
-              {model.fileName}
-            </TopbarMenuItem>
-          ))}
-      </TopbarMenuButton>
+      </TopbarMenuButtonAutoComplete>
       <ServerPasswordModal
         isOpen={isPwdModalOpen}
         onOpenChange={(isOpen) => setPwdModalOpen(isOpen)}
