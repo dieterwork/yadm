@@ -240,10 +240,10 @@ const DEMOModeler = () => {
     >
       <div className="react-flow-wrapper | h-full">
         <ReactFlow
+          ref={ref}
           zIndexMode="manual"
           elevateNodesOnSelect={false}
           data-action={action}
-          ref={ref}
           nodes={nodes}
           nodeTypes={nodeTypes}
           onNodeDragStart={() => {

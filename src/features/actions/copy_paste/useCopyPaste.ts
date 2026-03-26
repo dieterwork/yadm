@@ -21,8 +21,22 @@ import {
 } from "./useCopyPasteStore";
 import getChildNodes from "$/features/nodes/utils/getChildNodes";
 import { sortNodes } from "$/shared/utils/sortNodes";
+import {
+  createEdgeIdMap,
+  createNewHandles,
+  createNodeIdMap,
+  getMinCoords,
+  updateNodeWithNewHandleIds,
+} from "./utils";
 
 const preventDefault = (e: Event) => e.preventDefault();
+
+const canCopyParentIdList = [
+  "elementary_actor",
+  "several_actors",
+  "transactor",
+  "transaction_time",
+];
 
 const useCopyPaste = () => {
   const rfDomNode = useStore((state) => state.domNode);
@@ -61,16 +75,11 @@ const useCopyPaste = () => {
     const disabledNodes = nodes.filter((node) => {
       const parentNode = node.parentId ? getNode(node.parentId) : null;
 
-      if (
-        parentNode &&
-        (parentNode.type === "elementary_actor" ||
-          parentNode.type === "several_actors" ||
-          parentNode.type === "transactor" ||
-          parentNode.type === "transaction_time")
-      ) {
+      if (parentNode && canCopyParentIdList.includes(parentNode.type)) {
         return true;
+      } else {
+        return false;
       }
-      return false;
     });
 
     const filteredNodes = selectedNodes.filter(
@@ -79,7 +88,7 @@ const useCopyPaste = () => {
 
     const childNodes = getChildNodes(filteredNodes, nodes);
 
-    const combinedSelectedNodes = filteredNodes.concat(childNodes);
+    const combinedSelectedNodes = [...filteredNodes, ...childNodes];
 
     const selectedEdges = getConnectedEdges(filteredNodes, edges).filter(
       (edge) => {
@@ -119,236 +128,100 @@ const useCopyPaste = () => {
   const paste = (
     { x: pasteX, y: pasteY } = screenToFlowPosition(mousePosition.current)
   ) => {
-    const minX = Math.min(
-      ...bufferedNodes
-        .filter((node) => !node.parentId)
-        .map((node) => node.position.x)
-    );
-    const minY = Math.min(
-      ...bufferedNodes
-        .filter((node) => !node.parentId)
-        .map((node) => node.position.y)
-    );
-
     // create an old/new id map to keep track of old node ids
-    const nodeIdMap = new Map<string, string>();
-    for (const node of bufferedNodes) {
-      const newId = uuid();
-      nodeIdMap.set(node.id, newId);
-    }
+    const nodeIdMap = createNodeIdMap(bufferedNodes);
+    const [minX, minY] = getMinCoords(bufferedNodes);
 
     const newNodes = bufferedNodes.map((node) => {
-      // get new id
-      const newId = node.type + "_" + nodeIdMap.get(node.id)!;
+      // create new id
+      const newId = nodeIdMap.get(node.id)!;
 
-      // if has a parent id, fetch the id from the map, else it's undefined
+      // if has a parent id, fetch the id from the map
       const parentId = node.parentId ? nodeIdMap.get(node.parentId) : undefined;
 
       const x = pasteX + (node.position.x - minX);
       const y = pasteY + (node.position.y - minY);
       const position = node.parentId ? node.position : { x, y };
 
-      const nodeClone = structuredClone(node);
-
-      const baseNewNode = {
-        ...nodeClone,
+      const baseNewNode: DEMONode = {
+        ...node,
         id: newId,
         parentId,
         position,
-      } satisfies DEMONode;
-
-      if (!("handles" in node.data)) return baseNewNode;
-
-      return {
-        ...baseNewNode,
-        data: {
-          ...node.data,
-          handles: {
-            ...node.data.handles,
-            bottom: {
-              ...node.data.handles?.bottom,
-              handles: node.data.handles?.bottom?.handles?.map((handle) => ({
-                ...handle,
-                id: uuid(),
-              })),
-            },
-            top: {
-              ...node.data.handles?.top,
-              handles: node.data.handles?.top?.handles?.map((handle) => ({
-                ...handle,
-                id: uuid(),
-              })),
-            },
-            left: {
-              ...node.data.handles?.left,
-              handles: node.data.handles?.left?.handles?.map((handle) => ({
-                ...handle,
-                id: uuid(),
-              })),
-            },
-            right: {
-              ...node.data.handles?.right,
-              handles: node.data.handles?.right?.handles?.map((handle) => ({
-                ...handle,
-                id: uuid(),
-              })),
-            },
-          },
-        },
       };
-    }) satisfies DEMONode[];
+
+      const nodeWithNewHandles = updateNodeWithNewHandleIds(
+        baseNewNode
+      ) as DEMONode;
+
+      return nodeWithNewHandles;
+    });
 
     // create an old/new id map to keep track of old edge ids
-    const edgeIdMap = new Map<string, string>();
-    for (const edge of bufferedEdges) {
-      const newId = uuid();
-      edgeIdMap.set(edge.id, newId);
-    }
+    const edgeIdMap = createEdgeIdMap(bufferedEdges);
 
-    const newEdges = bufferedEdges
-      .map((edge) => {
-        // get new id
-        const newId = edgeIdMap.get(edge.id)!;
+    const newEdges = bufferedEdges.map((edge) => {
+      // get new id
+      const newId = edgeIdMap.get(edge.id)!;
 
-        const sourceNode = bufferedNodes.find(
-          (node) => node.id === edge.source
-        );
-        const targetNode = bufferedNodes.find(
-          (node) => node.id === edge.target
-        );
+      const oldSourceNode = bufferedNodes.find(
+        (node) => node.id === edge.source
+      );
+      const oldTargetNode = bufferedNodes.find(
+        (node) => node.id === edge.target
+      );
 
-        const newSource = nodeIdMap.get(edge.source)!;
-        const newTarget = nodeIdMap.get(edge.target)!;
+      const source = nodeIdMap.get(edge.source)!;
+      const target = nodeIdMap.get(edge.target)!;
 
-        const newSourceNode = newNodes.find((node) => node.id == newSource);
-        const newTargetNode = newNodes.find((node) => node.id == newTarget);
+      const newSourceNode = newNodes.find((node) => node.id == source);
+      const newTargetNode = newNodes.find((node) => node.id == target);
 
-        if (
-          !sourceNode ||
-          !targetNode ||
-          !sourceNode.data ||
-          !targetNode.data ||
-          !("handles" in sourceNode.data) ||
-          !("handles" in targetNode.data) ||
-          !newSourceNode ||
-          !newTargetNode ||
-          !newSourceNode.data ||
-          !newTargetNode.data ||
-          !("handles" in newSourceNode.data) ||
-          !("handles" in newTargetNode.data)
-        ) {
-          return null;
-        }
+      if (
+        !oldSourceNode ||
+        !oldTargetNode ||
+        !newSourceNode ||
+        !newTargetNode
+      ) {
+        return edge;
+      }
 
-        // get sourceHandle index
+      const { sourceHandle, targetHandle } = createNewHandles(
+        edge,
+        oldSourceNode,
+        oldTargetNode,
+        newSourceNode,
+        newTargetNode
+      );
 
-        const topSourceNodeHandle =
-          sourceNode.data.handles?.top?.handles?.findIndex(
-            (handle) => handle.id === edge.sourceHandle
-          ) ?? -1;
-        const bottomSourceNodeHandle =
-          sourceNode.data.handles?.bottom?.handles?.findIndex(
-            (handle) => handle.id === edge.sourceHandle
-          ) ?? -1;
-        const leftSourceNodeHandle =
-          sourceNode.data.handles?.left?.handles?.findIndex(
-            (handle) => handle.id === edge.sourceHandle
-          ) ?? -1;
-        const rightSourceNodeHandle =
-          sourceNode.data.handles?.right?.handles?.findIndex(
-            (handle) => handle.id === edge.sourceHandle
-          ) ?? -1;
+      return {
+        ...edge,
+        id: newId,
+        source,
+        target,
+        sourceHandle,
+        targetHandle,
+      };
+    });
 
-        const sourceNodeHandleSelections = [
-          topSourceNodeHandle,
-          bottomSourceNodeHandle,
-          leftSourceNodeHandle,
-          rightSourceNodeHandle,
-        ];
-
-        // get targetHandle index
-
-        const topTargetNodeHandle =
-          targetNode.data.handles?.top?.handles?.findIndex(
-            (handle) => handle.id === edge.targetHandle
-          ) ?? -1;
-        const bottomTargetNodeHandle =
-          targetNode.data.handles?.bottom?.handles?.findIndex(
-            (handle) => handle.id === edge.targetHandle
-          ) ?? -1;
-        const leftTargetNodeHandle =
-          targetNode.data.handles?.left?.handles?.findIndex(
-            (handle) => handle.id === edge.targetHandle
-          ) ?? -1;
-        const rightTargetNodeHandle =
-          targetNode.data.handles?.right?.handles?.findIndex(
-            (handle) => handle.id === edge.targetHandle
-          ) ?? -1;
-
-        const targetNodeHandleSelections = [
-          topTargetNodeHandle,
-          bottomTargetNodeHandle,
-          leftTargetNodeHandle,
-          rightTargetNodeHandle,
-        ];
-
-        const newSourceHandle =
-          newSourceNode?.data.handles?.top?.handles?.[
-            sourceNodeHandleSelections[0]
-          ]?.id ??
-          newSourceNode?.data.handles?.bottom?.handles?.[
-            sourceNodeHandleSelections[1]
-          ]?.id ??
-          newSourceNode?.data.handles?.left?.handles?.[
-            sourceNodeHandleSelections[2]
-          ]?.id ??
-          newSourceNode?.data.handles?.right?.handles?.[
-            sourceNodeHandleSelections[3]
-          ]?.id;
-
-        const newTargetHandle =
-          newTargetNode?.data.handles?.top?.handles?.[
-            targetNodeHandleSelections[0]
-          ]?.id ??
-          newTargetNode?.data.handles?.bottom?.handles?.[
-            targetNodeHandleSelections[1]
-          ]?.id ??
-          newTargetNode?.data.handles?.left?.handles?.[
-            targetNodeHandleSelections[2]
-          ]?.id ??
-          newTargetNode?.data.handles?.right?.handles?.[
-            targetNodeHandleSelections[3]
-          ]?.id;
-
-        const edgeClone = structuredClone(edge);
-
-        return {
-          ...edgeClone,
-          id: newId,
-          source: newSource,
-          target: newTarget,
-          sourceHandle: newSourceHandle,
-          targetHandle: newTargetHandle,
-        };
-      })
-      .filter((edge) => !!edge) satisfies DEMOEdge[];
-
-    const updatedNodes = [
+    const unsortedUpdatedNodes = [
       ...nodes.map((node) => ({ ...node, selected: false })),
       ...newNodes,
     ];
 
-    const sortedNodes = updatedNodes.sort((a, b) =>
-      sortNodes(a, b, updatedNodes)
+    const updatedNodes = unsortedUpdatedNodes.sort((a, b) =>
+      sortNodes(a, b, unsortedUpdatedNodes)
     );
 
-    setNodes(sortedNodes);
-
-    setEdges((edges) => [
+    const updatedEdges = [
       ...edges.map((edge) => ({ ...edge, selected: false })),
       ...newEdges,
-    ]);
+    ];
+
+    setNodes(updatedNodes);
+    setEdges(updatedEdges);
   };
+
   return { cut, copy, paste };
 };
 

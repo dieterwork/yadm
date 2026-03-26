@@ -105,16 +105,14 @@ export const getNode = (
 ) => {
   return useDEMOModelerStore
     .getState()
-    .nodes.filter(
+    .nodes.find(
       (node, index, array) =>
         node.id === id && (filter ? filter(node, index, array) : true)
-    )[0];
+    );
 };
 
 export const getEdge = (id: string) => {
-  return useDEMOModelerStore
-    .getState()
-    .edges.filter((edge) => edge.id === id)[0];
+  return useDEMOModelerStore.getState().edges.find((edge) => edge.id === id);
 };
 
 export const updateNodeData = <T extends DEMONode>(

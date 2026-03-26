@@ -1,9 +1,4 @@
-import {
-  Position,
-  useViewport,
-  type Align,
-  type XYPosition,
-} from "@xyflow/react";
+import { Position, type Align, type XYPosition } from "@xyflow/react";
 import type { CSSProperties, HTMLAttributes } from "react";
 import EdgeToolbarPortal from "./EdgeToolbarPortal";
 import { cn } from "@sglara/cn";
@@ -89,8 +84,9 @@ const EdgeToolbar = ({
   ...restProps
 }: EdgeToolbarProps) => {
   xyPosition = xyPosition ?? { x: 0, y: 0 };
+  const viewport = useDEMOModelerStore((state) => state.viewport);
+  const { x, y, zoom } = viewport;
 
-  const { x, y, zoom } = useViewport();
   const edges = useDEMOModelerStore((state) => {
     if (!edgeId) {
       return state.edges;

@@ -7,7 +7,7 @@ import {
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
 } from "@phosphor-icons/react";
-import { useReactFlow, useViewport } from "@xyflow/react";
+import { useReactFlow } from "@xyflow/react";
 import {
   modelSelector,
   toggleLock,
