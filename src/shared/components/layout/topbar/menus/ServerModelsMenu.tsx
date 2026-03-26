@@ -173,7 +173,7 @@ const ServerModelsMenu = () => {
               }
             }}
           >
-            {model.fileName}
+            {model.modelName}
           </TopbarMenuItem>
         )}
       </TopbarMenuButtonAutoComplete>
