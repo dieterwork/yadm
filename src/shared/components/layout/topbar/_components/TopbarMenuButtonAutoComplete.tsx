@@ -1,4 +1,4 @@
-import { SearchField } from "$/shared/components/ui/search/SearchField";
+import MenuSearchField from "$/shared/components/ui/search/SearchField";
 import { cn } from "@sglara/cn";
 import {
   Autocomplete,
@@ -6,7 +6,6 @@ import {
   Menu,
   MenuTrigger,
   Popover,
-  useFilter,
   type MenuProps,
   type MenuTriggerProps,
 } from "react-aria-components";
@@ -16,6 +15,8 @@ type TopbarMenuButtonProps<T> = MenuProps<T> &
     label?: string;
     searchValue?: string;
     onSearchValueChange?: (value: string) => void;
+    searchLabel?: string;
+    size?: "small" | "medium" | "large";
   };
 
 const TopbarMenuButtonAutoComplete = <T extends object>({
@@ -23,9 +24,10 @@ const TopbarMenuButtonAutoComplete = <T extends object>({
   children,
   searchValue,
   onSearchValueChange,
+  searchLabel,
+  size = "medium",
   ...restProps
 }: TopbarMenuButtonProps<T>) => {
-  const { contains } = useFilter({ sensitivity: "base" });
   return (
     <MenuTrigger {...restProps}>
       <Button
@@ -37,12 +39,22 @@ const TopbarMenuButtonAutoComplete = <T extends object>({
       </Button>
       <Popover
         className={cn(
-          "outline-hidden p-1 w-45 overflow-auto rounded-md bg-white shadow-xs border-1 border-slate-200 entering:animate-in entering:fade-in entering:zoom-in-95 exiting:animate-out exiting:fade-out exiting:zoom-out-95 fill-mode-forwards origin-top-left"
+          size === "small" && "w-35",
+          size === "medium" && "w-45",
+          size === "large" && "w-55",
+          "outline-hidden p-1 overflow-auto rounded-md bg-white shadow-xs border-1 border-slate-200 entering:animate-in entering:fade-in entering:zoom-in-95 exiting:animate-out exiting:fade-out exiting:zoom-out-95 fill-mode-forwards origin-top-left"
         )}
       >
-        <Autocomplete filter={contains}>
-          <SearchField onChange={onSearchValueChange} value={searchValue} />
-          <Menu {...restProps} className="outline-hidden">
+        <Autocomplete
+          onInputChange={onSearchValueChange}
+          inputValue={searchValue}
+        >
+          <MenuSearchField label={searchLabel} />
+          <Menu
+            {...restProps}
+            className="outline-hidden"
+            renderEmptyState={() => "No results found."}
+          >
             {children}
           </Menu>
         </Autocomplete>

@@ -1,7 +1,12 @@
 import type { PublicModel } from "../types/types";
 
-const getPublicModelsByCompany = (models: PublicModel[]) => {
-  const publicModelsByCompanyMap = new Map<string, PublicModel[]>();
+const getPublicModelsByCompany = (
+  models: Array<PublicModel & { id: string }>
+) => {
+  const publicModelsByCompanyMap = new Map<
+    string,
+    Array<PublicModel & { id: string }>
+  >();
 
   for (const model of models) {
     if (!publicModelsByCompanyMap.has(model.companyName)) {

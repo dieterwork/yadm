@@ -5,7 +5,7 @@ import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
 const useDeleteShortcut = () => {
   const { deleteNode, deleteEdge } = useDelete();
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
-  useShortcut(["Meta+d", "Control+d", "Delete", "Backspace"], () => {
+  useShortcut(["Meta+d", "Control+d", "Delete"], () => {
     if (!isEnabled) return;
     deleteNode();
     deleteEdge();

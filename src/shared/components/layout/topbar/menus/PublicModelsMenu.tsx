@@ -12,6 +12,7 @@ import loadPublicModel from "$/features/actions/load/actions/loadPublicModel";
 import toast from "react-hot-toast/headless";
 import { setModel } from "$/features/modeler/useDEMOModelerStore";
 import TopbarMenuButtonAutoComplete from "../_components/TopbarMenuButtonAutoComplete";
+import uuid from "$/shared/utils/uuid";
 
 const PublicModelsMenu = () => {
   const { t } = useTranslation();
@@ -19,6 +20,7 @@ const PublicModelsMenu = () => {
   const publicModelsQuery = useQuery({
     queryKey: ["public_models"],
     queryFn: loadPublicModels,
+    select: (data) => data.map((m) => ({ id: uuid(), ...m })),
   });
 
   const loadingId = useId();
@@ -72,20 +74,23 @@ const PublicModelsMenu = () => {
   const publicModelsByCompany = getPublicModelsByCompany(
     publicModelsQuery.data
   );
-  const companies = [...publicModelsByCompany.keys()].sort((a, b) =>
-    a.toLocaleLowerCase().localeCompare(b.toLocaleLowerCase())
-  );
 
-  return (
-    <TopbarMenuButtonAutoComplete
-      label={t(($) => $["Public models"])}
-      searchValue={searchValue}
-      onSearchValueChange={(value) => setSearchValue(value)}
-    >
-      {searchValue &&
-        publicModelsQuery.data.map((model) => (
+  const companyMenuItems = [...publicModelsByCompany.keys()]
+    .sort((a, b) => a.toLocaleLowerCase().localeCompare(b.toLocaleLowerCase()))
+    .map((c) => ({ id: uuid(), name: c }));
+
+  if (searchValue) {
+    return (
+      <TopbarMenuButtonAutoComplete
+        label={label}
+        searchValue={searchValue}
+        onSearchValueChange={(value) => setSearchValue(value)}
+        items={publicModelsQuery.data}
+        searchLabel="Search public models"
+        size="large"
+      >
+        {(model) => (
           <TopbarMenuItem
-            key={`${model.fileName}-${model.companyName}`}
             onAction={() => {
               publicModelMutation.mutate({
                 fileName: model.fileName,
@@ -95,34 +100,45 @@ const PublicModelsMenu = () => {
           >
             {model.modelName}
           </TopbarMenuItem>
-        ))}
-      {!searchValue &&
-        companies.map((company) => {
-          const publicModels = publicModelsByCompany
-            .get(company)
-            ?.sort((a, b) =>
-              a.modelName
-                .toLocaleLowerCase()
-                .localeCompare(b.modelName.toLocaleLowerCase())
-            );
-          return (
-            <TopbarSubMenuButton label={company}>
-              {publicModels?.map((model) => (
-                <TopbarMenuItem
-                  key={`${model.fileName}-${company}`}
-                  onAction={() => {
-                    publicModelMutation.mutate({
-                      fileName: model.fileName,
-                      company,
-                    });
-                  }}
-                >
-                  {model.modelName}
-                </TopbarMenuItem>
-              ))}
-            </TopbarSubMenuButton>
+        )}
+      </TopbarMenuButtonAutoComplete>
+    );
+  }
+
+  return (
+    <TopbarMenuButtonAutoComplete
+      label={label}
+      items={companyMenuItems}
+      searchValue={searchValue}
+      onSearchValueChange={(value) => setSearchValue(value)}
+      searchLabel="Search public models"
+      size="large"
+    >
+      {(company) => {
+        const publicModels = publicModelsByCompany
+          .get(company.name)
+          ?.sort((a, b) =>
+            a.modelName
+              .toLocaleLowerCase()
+              .localeCompare(b.modelName.toLocaleLowerCase())
           );
-        })}
+        return (
+          <TopbarSubMenuButton label={company.name} items={publicModels}>
+            {(model) => (
+              <TopbarMenuItem
+                onAction={() => {
+                  publicModelMutation.mutate({
+                    fileName: model.fileName,
+                    company: company.name,
+                  });
+                }}
+              >
+                {model.modelName}
+              </TopbarMenuItem>
+            )}
+          </TopbarSubMenuButton>
+        );
+      }}
     </TopbarMenuButtonAutoComplete>
   );
 };

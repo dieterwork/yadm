@@ -14,31 +14,40 @@ export interface SearchFieldProps extends AriaSearchFieldProps {
   placeholder?: string;
 }
 
-export function SearchField({
+const MenuSearchField = ({
   label,
   placeholder,
   ...props
-}: SearchFieldProps) {
+}: SearchFieldProps) => {
   return (
-    <AriaSearchField {...props} className={cn(props.className)}>
+    <AriaSearchField
+      {...props}
+      className={cn(
+        props.className,
+        "grid content-center px-2 h-[2.5rem] text-sm group"
+      )}
+    >
       {label && (
         <VisuallyHidden>
           <Label>{label}</Label>
         </VisuallyHidden>
       )}
-      <div className="grid grid-cols-[auto_1fr_auto] items-center">
+      <div className="relative grid grid-cols-[auto_1fr_auto] items-center">
         <MagnifyingGlassIcon
           aria-hidden
-          className="w-4 h-4 ml-2 text-neutral-500 dark:text-neutral-400 forced-colors:text-[ButtonText] group-disabled:text-neutral-200 dark:group-disabled:text-neutral-600 forced-colors:group-disabled:text-[GrayText]"
+          className="text-slate-500 mr-1"
+          size={18}
         />
         <Input
           placeholder={placeholder}
-          className="pl-2 [&::-webkit-search-cancel-button]:hidden w-full"
+          className="pl-1 pr-4.5 [&::-webkit-search-cancel-button]:hidden w-full border-1 border-slate-300 rounded-sm"
         />
-        <Button className="mr-1 w-6 group-empty:invisible">
-          <XIcon aria-hidden className="w-4 h-4" />
+        <Button className="block content-center absolute right-1 cursor-pointer group-empty:invisible">
+          <XIcon aria-hidden size={12} />
         </Button>
       </div>
     </AriaSearchField>
   );
-}
+};
+
+export default MenuSearchField;
