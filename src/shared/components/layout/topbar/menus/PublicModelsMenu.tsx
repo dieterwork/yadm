@@ -92,6 +92,7 @@ const PublicModelsMenu = () => {
         items={publicModelsQuery.data}
         searchLabel="Search public models"
         size="large"
+        renderEmptyState={() => <div>No public models exist</div>}
       >
         {(model) => (
           <TopbarMenuItem
