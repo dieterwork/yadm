@@ -1,11 +1,23 @@
-import { getNode, setNodes } from "../../modeler/useDEMOModelerStore";
+import {
+  getNode,
+  setNodes,
+  useDEMOModelerStore,
+} from "../../modeler/useDEMOModelerStore";
 import { sortNodes } from "../../../shared/utils/sortNodes";
 import convertAbsoluteToRelativePosition from "$/features/nodes/utils/convertAbsoluteToRelativePosition";
 import convertRelativeToAbsolutePosition from "$/features/nodes/utils/convertRelativeToAbsolutePosition";
+import type { DEMONode } from "$/features/nodes/nodes.types";
+import { resetAttach, useAttachStore } from "./useAttachStore";
+import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast/headless";
 
 /** Attach node as a child to another node */
 
 export const useAttachNode = () => {
+  const action = useDEMOModelerStore((state) => state.action);
+  const childNodeId = useAttachStore((state) => state.childNodeId);
+  const { t } = useTranslation();
+
   const attachNode = (
     nodeIds: string[],
     parentNodeId: string,
@@ -15,7 +27,11 @@ export const useAttachNode = () => {
       const nextNodes = nodes.map((node) => {
         if (!nodeIds.includes(node.id)) return node;
 
+        if (!parentNodeId) return node;
+
         const parentNode = getNode(parentNodeId);
+        if (!parentNode) return node;
+
         const newPosition = convertAbsoluteToRelativePosition(
           node.position,
           parentNode,
@@ -59,7 +75,46 @@ export const useAttachNode = () => {
     });
   };
 
-  return { attachNode, detachNode };
+  const handleNodeAttach = (node: DEMONode) => {
+    if (action !== "attach" || !childNodeId) return;
+    if (!childNodeId) {
+      return console.error("Could not find child node");
+    }
+    if (node.parentId && node.type !== "transaction_kind") {
+      return console.warn("Cannot attach to a node with an existing parent");
+    }
+    let parentNodeId = node.id;
+    if (node.type === "transaction_kind" && node.parentId) {
+      // get parent node
+      const transactionTimeNode = getNode(node.parentId);
+      if (!transactionTimeNode)
+        throw new Error("Transaction kind does not have parent");
+      parentNodeId = transactionTimeNode.id;
+    }
+
+    attachNode([childNodeId], parentNodeId);
+    const childNode = getNode(childNodeId);
+    if (!childNode) {
+      return console.error("Could not find child node");
+    }
+    const parentNode = getNode(parentNodeId);
+    const parentNodeLabel = t(($) => $[parentNode.ariaLabel]);
+    const childNodeLabel = t(($) => $[childNode.ariaLabel]);
+    toast(
+      t(($) => $["attached_toast"], {
+        childNode: childNodeLabel,
+        parentNode: parentNodeLabel,
+      }),
+      {
+        icon: "link",
+      }
+    );
+
+    resetAttach();
+    toast.dismiss(childNode.id);
+  };
+
+  return { attachNode, detachNode, handleNodeAttach };
 };
 
 export default useAttachNode;

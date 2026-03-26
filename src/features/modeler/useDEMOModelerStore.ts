@@ -74,7 +74,7 @@ export const useDEMOModelerStore = create<DEMOModelerState>()((set, get) => ({
   isEnabled: localDEMOModel?.isEnabled ?? true,
   isExportEnabled: false,
   isHandleEditModeEnabled: false,
-  viewport: { x: 0, y: 0, zoom: 1 },
+  viewport: localDEMOModel?.viewport ?? { x: 0, y: 0, zoom: 1 },
 }));
 
 export const setNodes = (newNodes: ReactStyleStateSetter<DEMONode[]>) => {

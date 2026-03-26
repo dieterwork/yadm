@@ -1,0 +1,114 @@
+import type { Connection } from "@xyflow/react";
+import type { DEMOEdge } from "../../edges/edges.types";
+import { getNode } from "../useDEMOModelerStore";
+import type { DEMONode } from "../../nodes/nodes.types";
+
+const allowedConnectionMap = {
+  // cooperation model
+  actor: [
+    "actor",
+    "transaction",
+    "transactor",
+    "self_activation",
+    "composite",
+    "elementary_actor",
+    "several_actors",
+    "ghost",
+  ],
+  transaction: [
+    "actor",
+    "self_activation",
+    "composite",
+    "elementary_actor",
+    "ghost",
+  ],
+  transactor: [
+    "actor",
+    "transaction",
+    "self_activation",
+    "composite",
+    "elementary_actor",
+    "several_actors",
+    "ghost",
+  ],
+  self_activation: [
+    "actor",
+    "transaction",
+    "transactor",
+    "self_activation",
+    "composite",
+    "elementary_actor",
+    "several_actors",
+    "ghost",
+  ],
+  composite: [
+    "actor",
+    "transaction",
+    "transactor",
+    "self_activation",
+    "composite",
+    "elementary_actor",
+    "several_actors",
+    "ghost",
+  ],
+  elementary_actor: ["transaction", "self_activation", "composite", "ghost"],
+  several_actors: ["actor", "self_activation", "composite", "ghost"],
+  // psd
+  transaction_time: [
+    "transaction_time",
+    "initiation_fact",
+    "c_fact",
+    "c_act",
+    "tk_execution",
+    "ghost",
+  ],
+  initiation_fact: ["initiation_fact", "c_fact", "c_act", "ghost"],
+  c_fact: ["initiation_fact", "c_fact", "c_act", "tk_execution", "ghost"],
+  c_act: ["initiation_fact", "c_fact", "tk_execution", "ghost"],
+  tk_execution: ["c_fact", "c_act", "ghost"],
+  // ofd
+  production_event: ["entity_class", "derived_entity", "ghost"],
+  entity_class: ["entity_class", "derived_entity", "production_event", "ghost"],
+  derived_entity: [
+    "entity_class",
+    "derived_entity",
+    "production_event",
+    "ghost",
+  ],
+  ghost: [
+    "actor",
+    "c_act",
+    "c_fact",
+    "composite",
+    "derived_entity",
+    "elementary_actor",
+    "entity_class",
+    "initiation_fact",
+    "production_event",
+    "self_activation",
+    "several_actors",
+    "tk_execution",
+    "transaction_time",
+    "transactor",
+  ],
+} satisfies Omit<
+  Record<DEMONode["type"], DEMONode["type"][]>,
+  "text" | "transaction_kind"
+>;
+
+const isValidConnection = (connection: DEMOEdge | Connection) => {
+  const sourceNode = getNode(connection.source);
+  const targetNode = getNode(connection.target);
+  if (
+    !sourceNode ||
+    !targetNode ||
+    sourceNode.type === "transaction_kind" ||
+    sourceNode.type === "text"
+  )
+    return false;
+  const allowedConnections = allowedConnectionMap[sourceNode?.type];
+  if (!allowedConnections.includes(targetNode?.type)) return false;
+  return true;
+};
+
+export default isValidConnection;

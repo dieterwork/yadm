@@ -5,13 +5,13 @@ import { getHelperLines } from "./utils/getHelperLines";
 import convertAbsoluteToRelativePosition from "../nodes/utils/convertAbsoluteToRelativePosition";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
 
-export interface DEMOModelerState {
+export interface HelperLinesState {
   isEnabled: boolean;
   horizontal: number | undefined;
   vertical: number | undefined;
 }
 
-export const useHelperLinesStore = create<DEMOModelerState>()(() => ({
+export const useHelperLinesStore = create<HelperLinesState>()(() => ({
   isEnabled: true,
   horizontal: undefined,
   vertical: undefined,
@@ -74,3 +74,9 @@ export const updateHelperLines = (
   }
   return changes;
 };
+
+export const helperLinesSelector = (state: HelperLinesState) => ({
+  isEnabled: state.isEnabled,
+  horizontal: state.horizontal,
+  vertical: state.vertical,
+});
