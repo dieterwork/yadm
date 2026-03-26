@@ -1,4 +1,4 @@
-import type { PublicModel } from "../../../../shared/types/types";
+import type { PublicModel } from "../../../shared/types/types";
 
 const loadPublicModels = async (): Promise<PublicModel[]> => {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/public-files`);
