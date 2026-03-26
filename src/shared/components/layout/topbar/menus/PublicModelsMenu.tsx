@@ -118,6 +118,7 @@ const PublicModelsMenu = () => {
       onSearchValueChange={(value) => setSearchValue(value)}
       searchLabel="Search public models"
       size="large"
+      renderEmptyState={() => <div>No public models exist</div>}
     >
       {(company) => {
         const publicModels = publicModelsByCompany
