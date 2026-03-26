@@ -160,6 +160,7 @@ const ServerModelsMenu = () => {
         label={label}
         items={serverModelsQuery.data}
         renderEmptyState={() => <div>You have no server models</div>}
+        size="large"
       >
         {(model) => (
           <TopbarMenuItem
