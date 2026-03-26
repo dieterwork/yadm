@@ -170,7 +170,6 @@ const ServerModelsMenu = () => {
       >
         {(model) => (
           <TopbarMenuItem
-            key={model.fileName}
             onAction={() => {
               setCurrentFileName(model.fileName);
               if (user.password) {
