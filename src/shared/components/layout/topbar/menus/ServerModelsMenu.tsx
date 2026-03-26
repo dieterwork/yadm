@@ -36,6 +36,8 @@ const ServerModelsMenu = () => {
 
   const { user } = useUserStore();
 
+  const [searchValue, setSearchValue] = useState("");
+
   const serverModelMutation = useMutation<
     DEMOModelJSON,
     AppError,
@@ -57,6 +59,7 @@ const ServerModelsMenu = () => {
       setCurrentFileName(null);
       setModel(data);
       fitView();
+      setSearchValue("");
     },
     onMutate: () => {
       toast.loading(
@@ -161,6 +164,9 @@ const ServerModelsMenu = () => {
         items={serverModelsQuery.data}
         renderEmptyState={() => <div>You have no server models</div>}
         size="large"
+        searchLabel="Search my models"
+        searchValue={searchValue}
+        onSearchValueChange={(value) => setSearchValue(value)}
       >
         {(model) => (
           <TopbarMenuItem
@@ -174,8 +180,7 @@ const ServerModelsMenu = () => {
               }
             }}
           >
-            {console.log(model)}
-            {model.modelName}
+            {model.fileName}
           </TopbarMenuItem>
         )}
       </TopbarMenuButtonAutoComplete>
