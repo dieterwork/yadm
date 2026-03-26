@@ -173,6 +173,7 @@ const ServerModelsMenu = () => {
               }
             }}
           >
+            {console.log(model)}
             {model.modelName}
           </TopbarMenuItem>
         )}
