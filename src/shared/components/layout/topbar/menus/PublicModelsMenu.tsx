@@ -13,9 +13,12 @@ import toast from "react-hot-toast/headless";
 import { setModel } from "$/features/modeler/useDEMOModelerStore";
 import TopbarMenuButtonAutoComplete from "../_components/TopbarMenuButtonAutoComplete";
 import uuid from "$/shared/utils/uuid";
+import { useReactFlow } from "@xyflow/react";
 
 const PublicModelsMenu = () => {
   const { t } = useTranslation();
+
+  const { fitView } = useReactFlow();
 
   const publicModelsQuery = useQuery({
     queryKey: ["public_models"],
@@ -38,6 +41,7 @@ const PublicModelsMenu = () => {
         })
       );
       setModel({ ...data, isEnabled: false });
+      fitView();
     },
     onMutate: () => {
       toast.loading(

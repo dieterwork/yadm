@@ -15,12 +15,14 @@ import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingStat
 import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
 import useSharedServerModel from "$/features/modeler/useSharedServerModel";
 import loadPublicModel from "$/features/actions/load/actions/loadPublicModel";
+import { useReactFlow } from "@xyflow/react";
 
 const ServerModelsMenu = () => {
   const { t } = useTranslation();
   const [isPwdModalOpen, setPwdModalOpen] = useState(false);
   const [currentFileName, setCurrentFileName] = useState(null);
   const [isSharedModel, setSharedModel] = useSharedServerModel();
+  const { fitView } = useReactFlow();
 
   const serverModelsQuery = useQuery({
     queryKey: ["server_models"],
@@ -51,6 +53,7 @@ const ServerModelsMenu = () => {
       );
       setCurrentFileName(null);
       setModel(data);
+      fitView();
     },
     onMutate: () => {
       toast.loading(
@@ -79,6 +82,7 @@ const ServerModelsMenu = () => {
         })
       );
       setModel({ ...data, isEnabled: false });
+      fitView();
     },
     onMutate: () => {
       toast.loading(
