@@ -49,7 +49,6 @@ export interface DEMOModelerState {
   isExportEnabled: boolean;
   isGridVisible: boolean;
   isGridSnapEnabled: boolean;
-  DEMOInstance: null | ReactFlowInstance<DEMONode, DEMOEdge>;
   isHandleEditModeEnabled: boolean;
   viewport: Viewport;
 }
@@ -69,7 +68,6 @@ export const useDEMOModelerStore = create<DEMOModelerState>()((set, get) => ({
   fileName: localDEMOModel?.fileName ?? `New Model`,
   nodes: localDEMOModel?.nodes ?? [],
   edges: localDEMOModel?.edges ?? [],
-  DEMOInstance: null,
   action: null,
   isGridVisible: true,
   isGridSnapEnabled: true,
@@ -208,12 +206,6 @@ export const onEdgesChange: OnEdgesChange<DEMOEdge> = (changes) => {
   useDEMOModelerStore.setState((state) => ({
     edges: applyEdgeChanges(changes, state.edges),
   }));
-};
-
-export const setDEMOInstance = (
-  DEMOInstance: ReactFlowInstance<DEMONode, DEMOEdge>
-) => {
-  useDEMOModelerStore.setState(() => ({ DEMOInstance }));
 };
 
 export const onReconnectEnd = (

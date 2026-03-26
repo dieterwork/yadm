@@ -25,7 +25,6 @@ import {
   onReconnect,
   onReconnectEnd,
   onReconnectStart,
-  setDEMOInstance,
   setNodes,
   setViewport,
   useDEMOModelerStore,
@@ -153,7 +152,6 @@ const DEMOModeler = () => {
         nodes: state.nodes,
         edges: state.edges,
         action: state.action,
-        DEMOInstance: state.DEMOInstance,
         isGridVisible: state.isGridVisible,
         isGridSnapEnabled: state.isGridSnapEnabled,
       }))
@@ -297,7 +295,6 @@ const DEMOModeler = () => {
           onNodeClick={(e, node) => {
             handleNodeAttach(node);
           }}
-          onInit={(instance) => setDEMOInstance(instance)}
           connectionLineComponent={(props) => <ConnectionLine {...props} />}
           connectionMode={ConnectionMode.Loose}
           snapToGrid={isGridSnapEnabled}

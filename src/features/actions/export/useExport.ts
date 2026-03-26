@@ -1,4 +1,5 @@
 import {
+  modelSelector,
   setExportEnabled,
   useDEMOModelerStore,
 } from "$/features/modeler/useDEMOModelerStore";
@@ -10,14 +11,14 @@ import { z } from "zod";
 import toast from "react-hot-toast/headless";
 import formatDate from "$/shared/utils/formatDate";
 import { useTranslation } from "react-i18next";
+import { useShallow } from "zustand/react/shallow";
 
 const useExport = () => {
+  const { getNodesBounds } = useReactFlow();
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const fileName = useDEMOModelerStore((state) => state.fileName);
-  const DEMOInstance = useDEMOModelerStore((state) => state.DEMOInstance);
-  const { getNodesBounds } = useReactFlow();
   const nodesBounds = getNodesBounds(nodes);
-  const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
+  const model = useDEMOModelerStore(useShallow(modelSelector));
 
   const { t } = useTranslation();
 
@@ -84,14 +85,11 @@ const useExport = () => {
   };
 
   const exportAsJSON = () => {
-    if (!DEMOInstance) return;
     try {
       const parsedFileName = fileNameSchema.parse(fileName);
       const jsModel: DEMOModelJSON = {
-        ...DEMOInstance.toObject(),
-        isEnabled,
+        ...model,
         version: "1.0.0",
-        fileName,
       };
       const jsonModel = JSON.stringify(jsModel);
       const file = new Blob([jsonModel], { type: "application/json" });
