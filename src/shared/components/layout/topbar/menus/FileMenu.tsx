@@ -79,22 +79,36 @@ const FileMenu = () => {
         >
           {t(($) => $["New"])}
         </TopbarMenuItem>
-        {!isSharedModel && (
-          <TopbarMenuItem
-            onAction={() => {
+        <TopbarMenuItem
+          onAction={() => {
+            if (!isSharedModel) {
               setLocalModel({ ...model, version: "1.0.0" });
               toast.success(
                 t(($) => $["save_storage_toast"], { fileName: model.fileName })
               );
-            }}
-          >
-            {t(($) => $[`Save` + (!isAuthenticated ? " (local)" : "")])}
-          </TopbarMenuItem>
-        )}
-        {isAuthenticated && !isSharedModel && (
+            } else {
+              toast.error(
+                t(($) => $["You cannot save shared models"], {
+                  fileName: model.fileName,
+                })
+              );
+            }
+          }}
+        >
+          {t(($) => $[`Save` + (!isAuthenticated ? " (local)" : "")])}
+        </TopbarMenuItem>
+        {isAuthenticated && (
           <TopbarMenuItem
             onAction={() => {
-              mutation.mutate({ ...model, version: "1.0.0" });
+              if (!isSharedModel) {
+                mutation.mutate({ ...model, version: "1.0.0" });
+              } else {
+                toast.error(
+                  t(($) => $["You cannot save shared models"], {
+                    fileName: model.fileName,
+                  })
+                );
+              }
             }}
           >
             {t(($) => $["Save to my models"])}

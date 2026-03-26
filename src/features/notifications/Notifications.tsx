@@ -1,5 +1,7 @@
 import {
   CheckCircleIcon,
+  CircleNotch,
+  CircleNotchIcon,
   LinkBreakIcon,
   LinkIcon,
   XCircleIcon,
@@ -58,6 +60,13 @@ const Notifications = () => {
                     size={24}
                     color="var(--color-rose-500)"
                     weight="fill"
+                  />
+                )}
+                {toast.type === "loading" && (
+                  <CircleNotchIcon
+                    size={24}
+                    color="var(--color-sky-500)"
+                    className="animate-spin"
                   />
                 )}
                 {toast.type === "success" && (
