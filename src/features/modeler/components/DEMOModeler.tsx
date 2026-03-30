@@ -28,12 +28,7 @@ import {
 import { useShallow } from "zustand/react/shallow";
 import ConnectionLine from "../../connection_line/ConnectionLine";
 import HelperLines from "../../helper_lines/HelperLines";
-import {
-  helperLinesSelector,
-  useHelperLinesStore,
-} from "../../helper_lines/useHelperLinesStore";
 import { cn } from "@sglara/cn";
-import SideMenu from "../../../shared/components/ui/toolbars/side_toolbar/SideToolbar";
 import BottomToolbar from "../../../shared/components/ui/toolbars/bottom_toolbar/BottomToolbar";
 import { resetAttach } from "../../actions/attach/useAttachStore";
 import { usePreviewNode } from "../../preview_node/usePreviewNode";
@@ -47,6 +42,9 @@ import takeSnapshotAndSave from "../../actions/undo/takeSnapshotAndSave";
 import isValidConnection from "../utils/isValidConnection";
 import onSelectionChange from "../utils/onSelectionChange";
 import onViewportChange from "../utils/onViewportChange";
+import DrawTool from "$/features/draw/components/DrawTool";
+import SideToolbar from "../../../shared/components/ui/toolbars/side_toolbar/SideToolbar";
+import DrawToolbar from "$/features/draw/components/DrawToolbar";
 
 const reactFlowSelector = (state: DEMOModelerState) => ({
   isEnabled: state.isEnabled,
@@ -144,9 +142,11 @@ const DEMOModeler = () => {
             bgColor="var(--color-white)"
             maskColor="var(--color-slate-100)"
           />
-          <SideMenu />
+          <SideToolbar />
           <BottomToolbar />
+          <DrawToolbar />
           <HelperLines />
+          <DrawTool />
           <Notifications />
           <ViewportPortal>
             <DiamondMarker />

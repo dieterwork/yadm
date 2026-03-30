@@ -2,7 +2,6 @@ import type { DEMOEdge } from "$/features/edges/edges.types";
 import {
   setEdges,
   setNodes,
-  useDEMOModelerStore,
 } from "$/features/modeler/store/useDEMOModelerStore";
 import type { DEMONode } from "$/features/nodes/nodes.types";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
@@ -13,6 +12,7 @@ type HistoryItem = {
   nodes: DEMONode[];
   edges: DEMOEdge[];
 };
+
 interface UndoRedoState {
   action: "undo" | "redo" | null;
   past: HistoryItem[];

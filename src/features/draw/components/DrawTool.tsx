@@ -1,12 +1,20 @@
 import { type PointerEventHandler } from "react";
 import { useStore } from "@xyflow/react";
 import { getStroke } from "perfect-freehand";
-import { setPoints, useDrawStore } from "../store/useDrawStore";
+import {
+  setPoints,
+  takePointsSnapshot,
+  useDrawStore,
+} from "../store/useDrawStore";
 import getSvgPathFromStroke from "../utils/getSvgPathFromStroke";
+import { cn } from "@sglara/cn";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 
 const DrawTool = () => {
   const points = useDrawStore((state) => state.points);
-  const isEnabled = useDrawStore((state) => state.isEnabled);
+  const action = useDEMOModelerStore((state) => state.action);
+  const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
+  const isDrawToolEnabled = action === "draw";
 
   const { width, height, transform } = useStore((state) => ({
     width: state.width,
@@ -15,7 +23,7 @@ const DrawTool = () => {
   }));
 
   const handlePointerDown: PointerEventHandler<SVGSVGElement> = (e) => {
-    if (!isEnabled) return;
+    if (!isEnabled || !isDrawToolEnabled) return;
     if (e.target instanceof HTMLElement) {
       e.target.setPointerCapture(e.pointerId);
       setPoints([[e.pageX, e.pageY, e.pressure]]);
@@ -23,9 +31,14 @@ const DrawTool = () => {
   };
 
   const handlePointerMove: PointerEventHandler<SVGSVGElement> = (e) => {
-    if (!isEnabled) return;
+    if (!isEnabled || !isDrawToolEnabled) return;
     if (e.buttons !== 1) return;
     setPoints([...points, [e.pageX, e.pageY, e.pressure]]);
+  };
+
+  const handlePointerUp: PointerEventHandler<SVGSVGElement> = (e) => {
+    if (!isEnabled || !isDrawToolEnabled) return;
+    takePointsSnapshot(points);
   };
 
   const stroke = getStroke(points, {
@@ -38,11 +51,15 @@ const DrawTool = () => {
   const pathData = getSvgPathFromStroke(stroke);
 
   return (
-    <div className="draw-tool-container">
+    <div className="draw-tool-container | w-full h-full absolute z-20">
       <svg
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
-        className="touch-none w-full h-full absolute z-10"
+        onPointerUp={handlePointerUp}
+        className={cn(
+          "touch-none w-full h-full",
+          (!isEnabled || !isDrawToolEnabled) && "pointer-events-none"
+        )}
       >
         {points && <path d={pathData} />}
       </svg>

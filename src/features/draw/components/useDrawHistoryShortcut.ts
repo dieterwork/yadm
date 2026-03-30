@@ -1,42 +1,42 @@
 import { useEffect } from "react";
-import {
-  redo,
-  setUndoAction,
-  undo,
-  useUndoRedoStore,
-} from "./useUndoRedoStore";
-import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 
-const useUndoShortcut = () => {
-  const undoAction = useUndoRedoStore((state) => state.action);
-  const pastHistory = useUndoRedoStore((state) => state.past);
-  const futureHistory = useUndoRedoStore((state) => state.future);
-  const nodes = useDEMOModelerStore((state) => state.nodes);
-  const edges = useDEMOModelerStore((state) => state.edges);
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
+import {
+  redoPoints,
+  setHistoryAction,
+  undoPoints,
+  useDrawStore,
+} from "../store/useDrawStore";
+
+const useDrawHistoryShortcut = () => {
+  const undoAction = useDrawStore((state) => state.historyAction);
+  const pastHistory = useDrawStore((state) => state.pastPoints);
+  const futureHistory = useDrawStore((state) => state.futurePoints);
+  const points = useDrawStore((state) => state.points);
   const action = useDEMOModelerStore((state) => state.action);
 
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
-      if (action === "draw" || action === "edit") return;
+      if (action !== "draw") return;
       if (
         event.key?.toLowerCase() === "y" &&
         (event.ctrlKey || event.metaKey) &&
         futureHistory.length > 0
       ) {
-        redo(nodes, edges);
-        setUndoAction("redo");
+        redoPoints(points);
+        setHistoryAction("redo");
       } else if (
         event.key?.toLowerCase() === "z" &&
         (event.ctrlKey || event.metaKey) &&
         pastHistory.length > 0
       ) {
-        undo(nodes, edges);
-        setUndoAction("undo");
+        undoPoints(points);
+        setHistoryAction("undo");
       }
     };
 
     const keyUpHandler = (e: KeyboardEvent) => {
-      if (action === "draw" || action === "edit") return;
+      if (action !== "draw") return;
       if (undoAction) return;
       if (!e.key) return;
       if (
@@ -45,7 +45,7 @@ const useUndoShortcut = () => {
         e.key.toLowerCase() === "control" ||
         e.key.toLowerCase() === "meta"
       ) {
-        setUndoAction(null);
+        setHistoryAction(null);
       }
     };
 
@@ -56,7 +56,7 @@ const useUndoShortcut = () => {
       document.removeEventListener("keydown", keyDownHandler);
       document.addEventListener("keydown", keyUpHandler);
     };
-  }, [undo, redo, setUndoAction, undoAction, pastHistory, futureHistory]);
+  }, [setHistoryAction, undoAction, pastHistory, futureHistory]);
 };
 
-export default useUndoShortcut;
+export default useDrawHistoryShortcut;

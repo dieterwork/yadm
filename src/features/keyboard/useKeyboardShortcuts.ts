@@ -4,6 +4,7 @@ import useLockShortcut from "../actions/lock/useLockShortcut";
 import useSaveShortcut from "../actions/save/useSaveShortcut";
 import useUndoShortcut from "../actions/undo/useUndoShortcut";
 import useZoomShortcut from "../actions/zoom/useZoomShortcut";
+import useDrawHistoryShortcut from "../draw/components/useDrawHistoryShortcut";
 import useEditShortcut from "../editable_content/useEditableContentShortcut";
 import usePreviewNodeShortcut from "../preview_node/usePreviewNodeShortcut";
 
@@ -17,6 +18,7 @@ const useKeyboardShortcuts = () => {
   useLockShortcut();
   useZoomShortcut();
   usePreviewNodeShortcut();
+  useDrawHistoryShortcut();
 };
 
 export default useKeyboardShortcuts;

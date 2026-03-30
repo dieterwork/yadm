@@ -8,6 +8,7 @@ import {
   HandIcon,
   LineVerticalIcon,
   PencilRulerIcon,
+  ScribbleIcon,
   SelectionPlusIcon,
   SquareIcon,
 } from "@phosphor-icons/react";
@@ -20,6 +21,7 @@ import {
   setHandleEditModeEnabled,
   setNodesHandlesVisibility,
   useDEMOModelerStore,
+  type DEMOModelerState,
 } from "$/features/modeler/store/useDEMOModelerStore";
 import {
   resetPreviewNode,
@@ -42,6 +44,18 @@ import {
   resetAttach,
   useAttachStore,
 } from "$/features/actions/attach/useAttachStore";
+import { useDrawStore } from "$/features/draw/store/useDrawStore";
+
+const sideToolbarSelector = (state: DEMOModelerState) => ({
+  nodes: state.nodes,
+  action: state.action,
+  isGridSnapEnabled: state.isGridSnapEnabled,
+  isGridVisible: state.isGridVisible,
+  isEnabled: state.isEnabled,
+  isHandleEditModeEnabled: state.isHandleEditModeEnabled,
+});
+
+const orientation = "vertical";
 
 const SideToolbar = () => {
   const {
@@ -51,21 +65,12 @@ const SideToolbar = () => {
     nodes,
     isEnabled,
     isHandleEditModeEnabled,
-  } = useDEMOModelerStore(
-    useShallow((state) => ({
-      nodes: state.nodes,
-      action: state.action,
-      isGridSnapEnabled: state.isGridSnapEnabled,
-      isGridVisible: state.isGridVisible,
-      isEnabled: state.isEnabled,
-      isHandleEditModeEnabled: state.isHandleEditModeEnabled,
-    }))
-  );
+  } = useDEMOModelerStore(useShallow(sideToolbarSelector));
 
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
   const areHelperLinesEnabled = useHelperLinesStore((state) => state.isEnabled);
-
-  const orientation = "vertical";
+  const { t } = useTranslation();
+  const childNodeId = useAttachStore((state) => state.childNodeId);
 
   const areHandlesVisible = nodes.some((node) => {
     if (
@@ -77,10 +82,6 @@ const SideToolbar = () => {
     if (!node.data.handles.isVisible) return false;
     return true;
   });
-
-  const { t } = useTranslation();
-
-  const childNodeId = useAttachStore((state) => state.childNodeId);
 
   return (
     <div
@@ -138,6 +139,29 @@ const SideToolbar = () => {
               <SelectionPlusIcon
                 color={
                   action === "select"
+                    ? "var(--color-sky-500)"
+                    : "var(--color-slate-900)"
+                }
+              />
+            </DEMOModelerToolbarButton>
+          </TooltipTrigger>
+          <TooltipTrigger>
+            <DEMOModelerToolbarTooltip
+              orientation="vertical"
+              label={t(($) => $["Activate draw tool"])}
+            />
+            <DEMOModelerToolbarButton
+              onPress={() => {
+                if (previewNode) resetPreviewNode();
+                if (childNodeId) resetAttach();
+                setAction("draw");
+              }}
+              aria-label={t(($) => $["Activate draw tool"])}
+              isDisabled={!isEnabled}
+            >
+              <ScribbleIcon
+                color={
+                  action === "draw"
                     ? "var(--color-sky-500)"
                     : "var(--color-slate-900)"
                 }

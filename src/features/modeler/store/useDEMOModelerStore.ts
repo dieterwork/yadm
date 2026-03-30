@@ -12,7 +12,6 @@ import {
   type OnNodesDelete,
   type OnReconnect,
   Position,
-  type ReactFlowInstance,
   reconnectEdge,
   type Viewport,
 } from "@xyflow/react";
@@ -27,7 +26,6 @@ import getEdgeData from "../utils/getEdgeData";
 import { sortNodes } from "$/shared/utils/sortNodes";
 import { updateHelperLines } from "../../helper_lines/useHelperLinesStore";
 import type { CooperationModelNode } from "../../nodes/cooperation_model/cooperationModel.types";
-import debounce from "$/shared/utils/debounce";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import takeSnapshotAndSave from "../../actions/undo/takeSnapshotAndSave";
 
@@ -37,6 +35,7 @@ export type ModelerAction =
   | "select"
   | "pan"
   | "edit"
+  | "draw"
   | null;
 
 export interface DEMOModelerState {
