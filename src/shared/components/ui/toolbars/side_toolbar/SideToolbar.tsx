@@ -44,7 +44,6 @@ import {
   resetAttach,
   useAttachStore,
 } from "$/features/actions/attach/useAttachStore";
-import { useDrawStore } from "$/features/draw/store/useDrawStore";
 
 const sideToolbarSelector = (state: DEMOModelerState) => ({
   nodes: state.nodes,

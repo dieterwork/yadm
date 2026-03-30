@@ -45,6 +45,9 @@ import onViewportChange from "../utils/onViewportChange";
 import DrawTool from "$/features/draw/components/DrawTool";
 import SideToolbar from "../../../shared/components/ui/toolbars/side_toolbar/SideToolbar";
 import DrawToolbar from "$/features/draw/components/DrawToolbar";
+import uuid from "$/shared/utils/uuid";
+
+const id = uuid();
 
 const reactFlowSelector = (state: DEMOModelerState) => ({
   isEnabled: state.isEnabled,
@@ -69,11 +72,12 @@ const DEMOModeler = () => {
 
   return (
     <div
-      className="DEMO-modeler | [grid-area:modeler] h-full relative"
+      className="DEMO-modeler | [grid-area:modeler] h-full relative z-10"
       data-action={action}
     >
       <div className="react-flow-wrapper | h-full">
         <ReactFlow
+          id={id}
           zIndexMode="manual"
           elevateNodesOnSelect={false}
           data-action={action}
@@ -122,6 +126,7 @@ const DEMOModeler = () => {
           selectionMode={SelectionMode.Partial}
           proOptions={{ hideAttribution: true }}
         >
+          <DrawTool />
           <Background
             bgColor="var(--color-white)"
             color="var(--color-slate-500)"
@@ -146,7 +151,6 @@ const DEMOModeler = () => {
           <BottomToolbar />
           <DrawToolbar />
           <HelperLines />
-          <DrawTool />
           <Notifications />
           <ViewportPortal>
             <DiamondMarker />

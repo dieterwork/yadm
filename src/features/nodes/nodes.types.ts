@@ -15,16 +15,20 @@ import CActNode from "./object_fact_diagram/c_act/CActNode";
 import TKExecutionNode from "./object_fact_diagram/tk_execution/TKExecutionNode";
 import TransactionTimeNode from "./object_fact_diagram/transaction_time/TransactionTimeNode";
 import TextNode from "./text/TextNode";
+import OrganizationNodeComponent from "./organization/OrganizationNode";
+import ShapeNodeComponent from "./shape/ShapeNode";
+import GhostNode from "./ghost/GhostNode";
+
 import type { ObjectFactDiagramNode } from "./object_fact_diagram/objectFactDiagram.types";
 import type { ProcessStructureDiagramNode } from "./process_structure_diagram/processStructureDiagram.types";
 import type { TextNode as TextNodeType } from "./text/textNode.types";
 import type { CSSProperties } from "react";
 import type { Node, Position } from "@xyflow/react";
 import type { GhostNode as GhostNodeType } from "./ghost/ghost.types";
-import GhostNode from "./ghost/GhostNode";
 import type { CooperationModelNode } from "./cooperation_model/cooperationModel.types";
 import type { NodeToolbarAction } from "./DEMONodeBase";
-import OrganizationNodeComponent from "./organization/OrganizationNode";
+
+import type { Vec2 } from "perfect-freehand";
 
 export const nodeTypes = {
   // cooperation model
@@ -54,6 +58,7 @@ export const nodeTypes = {
   text: TextNode,
   ghost: GhostNode,
   organization: OrganizationNodeComponent,
+  shape: ShapeNodeComponent,
 };
 
 export type DEMONode =
@@ -116,3 +121,5 @@ export type OrganizationNode = Node<
   },
   "organization"
 >;
+
+export type ShapeNode = Node<{ points: Vec2[]; color: string }>;

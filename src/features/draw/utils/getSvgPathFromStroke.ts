@@ -1,9 +1,7 @@
 import getAverage from "$/shared/utils/getAverage";
+import type { Vec2 } from "perfect-freehand";
 
-const getSvgPathFromStroke = (
-  points: Array<[number, number]>,
-  closed: boolean = true
-) => {
+const getSvgPathFromStroke = (points: Vec2[], closed: boolean = true) => {
   const len = points.length;
 
   if (len < 4) {

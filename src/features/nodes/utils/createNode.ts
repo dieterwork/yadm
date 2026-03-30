@@ -28,6 +28,8 @@ interface CreateNodeParams {
   zIndex?: number;
   textAlign?: CSSProperties["textAlign"];
   translateFn: TFunction;
+  data?: DEMONode["data"];
+  style: CSSProperties;
 }
 
 export const createNode = ({
@@ -41,6 +43,8 @@ export const createNode = ({
   selected,
   textAlign,
   translateFn: t,
+  data,
+  style,
 }: CreateNodeParams): DEMONode | DEMONode[] => {
   if (!id) id = uuid();
   switch (type) {
@@ -1142,6 +1146,27 @@ export const createNode = ({
             height: X_SMALL_NODE_SIZE,
             fill: NODE_BACKGROUND_COLOR_MAP["transparent"],
             stroke: NODE_BORDER_COLOR_MAP["red"],
+          },
+          selected: selected ?? true,
+          zIndex: 210,
+        },
+      ];
+    }
+    case "shape": {
+      return [
+        {
+          id,
+          type,
+          position,
+          data: { points: [], ...data },
+          ariaLabel: t(($) => $["Shape"]),
+          deletable: true,
+          style: {
+            width: width ?? 100,
+            height: height ?? 100,
+            stroke: "#000",
+            strokeWidth: 16,
+            ...style,
           },
           selected: selected ?? true,
           zIndex: 210,

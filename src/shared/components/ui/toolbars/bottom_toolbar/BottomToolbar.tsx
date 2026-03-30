@@ -46,6 +46,8 @@ const BottomToolbar = () => {
   const undoAction = useUndoRedoStore((state) => state.action);
   const pastHistory = useUndoRedoStore((state) => state.past);
   const futureHistory = useUndoRedoStore((state) => state.future);
+  const nodes = useDEMOModelerStore((state) => state.nodes);
+  const edges = useDEMOModelerStore((state) => state.edges);
 
   const model = useDEMOModelerStore(useShallow(modelSelector));
 
@@ -195,7 +197,7 @@ const BottomToolbar = () => {
               onPress={() => {
                 if (previewNode) resetPreviewNode();
                 if (childNodeId) resetAttach();
-                undo();
+                undo(nodes, edges);
               }}
             >
               <ArrowCounterClockwiseIcon
@@ -221,7 +223,7 @@ const BottomToolbar = () => {
               onPress={() => {
                 if (previewNode) resetPreviewNode();
                 if (childNodeId) resetAttach();
-                redo();
+                redo(nodes, edges);
               }}
             >
               <ArrowClockwiseIcon

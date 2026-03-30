@@ -4,16 +4,16 @@ import DEMOModelerToolbarButton from "$/shared/components/ui/toolbars/_component
 import DEMOModelerToolbarGroup from "$/shared/components/ui/toolbars/_components/DEMOModelerToolbarGroup";
 import DEMOModelerToolbarSeparator from "$/shared/components/ui/toolbars/_components/DEMOModelerToolbarSeparator";
 import DEMOModelerToolbarTooltip from "$/shared/components/ui/toolbars/_components/DEMOModelerToolbarTooltip";
-import { TrashIcon } from "@phosphor-icons/react";
+import {
+  ArrowClockwiseIcon,
+  ArrowCounterClockwiseIcon,
+  PaintBucketIcon,
+  TrashIcon,
+} from "@phosphor-icons/react";
 import { TooltipTrigger } from "react-aria-components";
 import { useTranslation } from "react-i18next";
-import {
-  redoPoints,
-  setPoints,
-  undoPoints,
-  useDrawStore,
-} from "../store/useDrawStore";
 import { cn } from "@sglara/cn";
+import { useDrawUndoRedoStore } from "../store/useDrawUndoRedoStore";
 
 const orientation = "horizontal";
 
@@ -22,7 +22,9 @@ const DrawToolbar = () => {
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const action = useDEMOModelerStore((state) => state.action);
   const isDrawModeActive = action === "draw";
-  const points = useDrawStore((state) => state.points);
+  const historyAction = useDrawUndoRedoStore((state) => state.action);
+  const pastHistory = useDrawUndoRedoStore((state) => state.past);
+  const futureHistory = useDrawUndoRedoStore((state) => state.future);
   return (
     <div
       className={cn(
@@ -43,16 +45,40 @@ const DrawToolbar = () => {
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation={orientation}
+              label={t(($) => $["Color select"])}
+            />
+            <DEMOModelerToolbarButton
+              onPress={() => {}}
+              aria-label={t(($) => $["Color select"])}
+              isDisabled={!isEnabled}
+            >
+              <PaintBucketIcon color="var(--color-slate-900)" weight="fill" />
+            </DEMOModelerToolbarButton>
+          </TooltipTrigger>
+        </DEMOModelerToolbarGroup>
+        <DEMOModelerToolbarSeparator orientation={orientation} />
+        <DEMOModelerToolbarGroup
+          aria-label={t(($) => $["History options"])}
+          aria-orientation={orientation}
+        >
+          <TooltipTrigger>
+            <DEMOModelerToolbarTooltip
+              orientation={orientation}
               label={t(($) => $["Undo board"])}
             />
             <DEMOModelerToolbarButton
-              onPress={() => {
-                undoPoints(points);
-              }}
+              onPress={() => {}}
               aria-label={t(($) => $["Undo board"])}
               isDisabled={!isEnabled}
             >
-              <TrashIcon color="var(--color-slate-900)" />
+              <ArrowCounterClockwiseIcon
+                color={
+                  historyAction === "undo"
+                    ? "var(--color-sky-500)"
+                    : "var(--color-slate-900)"
+                }
+                opacity={pastHistory.length === 0 ? 0.5 : 1}
+              />
             </DEMOModelerToolbarButton>
           </TooltipTrigger>
           <TooltipTrigger>
@@ -61,13 +87,18 @@ const DrawToolbar = () => {
               label={t(($) => $["Redo board"])}
             />
             <DEMOModelerToolbarButton
-              onPress={() => {
-                redoPoints(points);
-              }}
+              onPress={() => {}}
               aria-label={t(($) => $["Redo board"])}
               isDisabled={!isEnabled}
             >
-              <TrashIcon color="var(--color-slate-900)" />
+              <ArrowClockwiseIcon
+                color={
+                  historyAction === "redo"
+                    ? "var(--color-sky-500)"
+                    : "var(--color-slate-900)"
+                }
+                opacity={futureHistory.length === 0 ? 0.5 : 1}
+              />
             </DEMOModelerToolbarButton>
           </TooltipTrigger>
           <TooltipTrigger>
@@ -76,9 +107,7 @@ const DrawToolbar = () => {
               label={t(($) => $["Clear board"])}
             />
             <DEMOModelerToolbarButton
-              onPress={() => {
-                setPoints([]);
-              }}
+              onPress={() => {}}
               aria-label={t(($) => $["Clear board"])}
               isDisabled={!isEnabled}
             >
@@ -86,7 +115,6 @@ const DrawToolbar = () => {
             </DEMOModelerToolbarButton>
           </TooltipTrigger>
         </DEMOModelerToolbarGroup>
-        <DEMOModelerToolbarSeparator orientation={orientation} />
       </DEMOModelerToolbar>
     </div>
   );
