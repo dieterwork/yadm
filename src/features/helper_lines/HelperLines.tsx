@@ -1,27 +1,26 @@
 import { useEffect, useRef } from "react";
 import { useStore } from "@xyflow/react";
+import {
+  helperLinesSelector,
+  useHelperLinesStore,
+} from "./useHelperLinesStore";
+import { useShallow } from "zustand/react/shallow";
 
-export type HelperLinesProps = {
-  horizontal?: number;
-  vertical?: number;
-  isDisabled: boolean;
-};
-
-const HelperLines = ({
-  horizontal,
-  vertical,
-  isDisabled,
-}: HelperLinesProps) => {
+const HelperLines = () => {
   const { width, height, transform } = useStore((state) => ({
     width: state.width,
     height: state.height,
     transform: state.transform,
   }));
 
+  const { horizontal, vertical, isEnabled } = useHelperLinesStore(
+    useShallow(helperLinesSelector)
+  );
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (!isDisabled) {
+    if (isEnabled) {
       const canvas = canvasRef.current;
       const ctx = canvas?.getContext("2d");
 
@@ -47,7 +46,7 @@ const HelperLines = ({
         }
       }
     }
-  }, [width, height, transform, horizontal, vertical, isDisabled]);
+  }, [width, height, transform, horizontal, vertical, isEnabled]);
 
   return (
     <canvas

@@ -61,8 +61,6 @@ const DEMOModeler = () => {
   const { isEnabled, nodes, edges, action, isGridVisible, isGridSnapEnabled } =
     useDEMOModelerStore(useShallow(reactFlowSelector));
 
-  const helperLines = useHelperLinesStore(useShallow(helperLinesSelector));
-
   const onConnectEnd = useIncompleteEdge();
 
   const { handleNodeAttach } = useAttachNode();
@@ -148,11 +146,7 @@ const DEMOModeler = () => {
           />
           <SideMenu />
           <BottomToolbar />
-          <HelperLines
-            isDisabled={!helperLines.isEnabled}
-            horizontal={helperLines.horizontal}
-            vertical={helperLines.vertical}
-          />
+          <HelperLines />
           <Notifications />
           <ViewportPortal>
             <DiamondMarker />
