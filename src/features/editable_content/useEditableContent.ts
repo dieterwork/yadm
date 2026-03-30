@@ -11,7 +11,7 @@ import {
   setAction,
   updateNode,
   updateNodeEditable,
-} from "../modeler/useDEMOModelerStore";
+} from "../modeler/store/useDEMOModelerStore";
 import { setMaxLines } from "./utils/setMaxLines";
 import useClickOutside from "$/shared/hooks/useClickOutside";
 

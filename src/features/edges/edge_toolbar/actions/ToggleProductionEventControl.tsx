@@ -1,6 +1,9 @@
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
-import { getEdge, updateEdge } from "$/features/modeler/useDEMOModelerStore";
+import {
+  getEdge,
+  updateEdge,
+} from "$/features/modeler/store/useDEMOModelerStore";
 import DEMOElementToolbarToggleButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarToggleButton";
 import { MinusIcon, PlusIcon } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";

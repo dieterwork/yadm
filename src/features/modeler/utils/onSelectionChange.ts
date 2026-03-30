@@ -1,7 +1,7 @@
 import type { OnSelectionChangeFunc } from "@xyflow/react";
 import type { DEMONode } from "../../nodes/nodes.types";
 import type { DEMOEdge } from "../../edges/edges.types";
-import { setNodes } from "../useDEMOModelerStore";
+import { setNodes } from "../store/useDEMOModelerStore";
 
 const onSelectionChange: OnSelectionChangeFunc<DEMONode, DEMOEdge> = ({
   nodes,

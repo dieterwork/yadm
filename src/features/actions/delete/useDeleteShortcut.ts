@@ -1,6 +1,6 @@
 import useDelete from "./useDelete";
 import useShortcut from "../../keyboard/useShortcut";
-import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 
 const useDeleteShortcut = () => {
   const { deleteNode, deleteEdge } = useDelete();

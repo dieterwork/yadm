@@ -4,7 +4,7 @@ import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEM
 import {
   getEdge,
   updateEdgeData,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 

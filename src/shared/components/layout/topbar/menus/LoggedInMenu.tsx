@@ -2,8 +2,8 @@ import { useTranslation } from "react-i18next";
 import TopbarMenuButton from "$shared/components/layout/topbar/_components/TopbarMenuButton.tsx";
 import TopbarMenuItem from "$shared/components/layout/topbar/_components/TopbarMenuItem.tsx";
 import useUserStore from "$/features/auth/useUserStore";
-import { clearModel } from "$/features/modeler/useDEMOModelerStore";
-import useLocalModel from "$/features/modeler/useLocalModel";
+import { clearModel } from "$/features/modeler/store/useDEMOModelerStore";
+import useLocalModel from "$/features/modeler/hooks/useLocalModel";
 
 const LoggedInMenu = () => {
   const { t } = useTranslation();

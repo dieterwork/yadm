@@ -2,7 +2,7 @@ import {
   getEdge,
   setEdges,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import type { DEMONode } from "$/features/nodes/nodes.types";
 import { reconnectEdge, useInternalNode } from "@xyflow/react";
 import type { DEMOEdge } from "../edges.types";

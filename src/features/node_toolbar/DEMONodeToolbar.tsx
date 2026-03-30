@@ -1,5 +1,8 @@
 import { NodeToolbar, Position, type NodeToolbarProps } from "@xyflow/react";
-import { getNode, useDEMOModelerStore } from "../modeler/useDEMOModelerStore";
+import {
+  getNode,
+  useDEMOModelerStore,
+} from "../modeler/store/useDEMOModelerStore";
 import ChangeFontSizeControl from "./actions/ChangeFontSizeControl";
 import AddHandleControl from "./actions/AddHandleControl";
 import ChangeStateControl from "./actions/ChangeStateControl";

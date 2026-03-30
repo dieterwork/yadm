@@ -2,7 +2,7 @@ import {
   getEdge,
   updateEdgeData,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import {
   ArrowElbowUpRightIcon,
   ArrowRightIcon,

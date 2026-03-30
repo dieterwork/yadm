@@ -1,7 +1,7 @@
 import {
   getEdge,
   updateEdgeData,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import {
   FlowArrowIcon,
   RectangleDashedIcon,

@@ -12,7 +12,7 @@ import {
   modelSelector,
   toggleLock,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import DEMOModelerToolbar from "../_components/DEMOModelerToolbar";
 import DEMOModelerToolbarGroup from "../_components/DEMOModelerToolbarGroup";
 import DEMOModelerToolbarToggleButton from "../_components/DEMOModelerToolbarToggleButton";
@@ -34,7 +34,7 @@ import {
   useAttachStore,
 } from "$/features/actions/attach/useAttachStore";
 import { useShallow } from "zustand/react/shallow";
-import useLocalModel from "$/features/modeler/useLocalModel";
+import useLocalModel from "$/features/modeler/hooks/useLocalModel";
 
 const orientation = "horizontal";
 

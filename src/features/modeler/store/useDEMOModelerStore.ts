@@ -17,19 +17,19 @@ import {
   type Viewport,
 } from "@xyflow/react";
 
-import type { DEMOHandle, DEMONode, NodeScope } from "../nodes/nodes.types";
-import uuid from "../../shared/utils/uuid";
-import type { DEMOEdge } from "../edges/edges.types";
-import getEdgeType from "./utils/getEdgeType";
-import getMarkerType from "./utils/getMarkerType";
+import type { DEMOHandle, DEMONode, NodeScope } from "../../nodes/nodes.types";
+import uuid from "../../../shared/utils/uuid";
+import type { DEMOEdge } from "../../edges/edges.types";
+import getEdgeType from "../utils/getEdgeType";
+import getMarkerType from "../utils/getMarkerType";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
-import getEdgeData from "./utils/getEdgeData";
+import getEdgeData from "../utils/getEdgeData";
 import { sortNodes } from "$/shared/utils/sortNodes";
-import { updateHelperLines } from "../helper_lines/useHelperLinesStore";
-import type { CooperationModelNode } from "../nodes/cooperation_model/cooperationModel.types";
+import { updateHelperLines } from "../../helper_lines/useHelperLinesStore";
+import type { CooperationModelNode } from "../../nodes/cooperation_model/cooperationModel.types";
 import debounce from "$/shared/utils/debounce";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
-import takeSnapshotAndSave from "../actions/undo/takeSnapshotAndSave";
+import takeSnapshotAndSave from "../../actions/undo/takeSnapshotAndSave";
 
 export type ModelerAction =
   | "attach"

@@ -19,7 +19,7 @@ import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
   updateEdge,
   updateEdgeData,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import { getCenterEdgePoints } from "../utils/smoothStep";
 import getInteractiveCenterEdgeDirection from "../utils/getInteractiveCenterEdgeDirection";
 import getArrowDirection from "../utils/getArrowDirection";

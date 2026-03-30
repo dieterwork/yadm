@@ -4,7 +4,7 @@ import {
   setEdges,
   setNodes,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import type { DEMONode } from "$/features/nodes/nodes.types";
 import uuid from "$/shared/utils/uuid";
 import {

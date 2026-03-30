@@ -12,7 +12,7 @@ import {
   getNode,
   updateNode,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 
 const SelfActivationNode = ({
   id,

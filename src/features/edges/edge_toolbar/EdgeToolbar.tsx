@@ -2,7 +2,7 @@ import { Position, type Align, type XYPosition } from "@xyflow/react";
 import type { CSSProperties, HTMLAttributes } from "react";
 import EdgeToolbarPortal from "./EdgeToolbarPortal";
 import { cn } from "@sglara/cn";
-import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 import { getEdgeToolbarTransform } from "./utils/getEdgeToolbarTransform";
 
 /**

@@ -5,7 +5,7 @@ import HelpMenu from "./menus/HelpMenu";
 import {
   setFileName,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import { useTranslation } from "react-i18next";
 import ChangeLanguageMenu from "./menus/ChangeLanguageMenu";
 import LoginMenu from "$shared/components/layout/topbar/menus/LoginMenu.tsx";

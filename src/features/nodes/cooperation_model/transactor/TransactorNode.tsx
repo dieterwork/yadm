@@ -6,7 +6,7 @@ import {
   getNode,
   updateNode,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import getChildNodes from "../../utils/getChildNodes";
 
 const TransactorNode = ({

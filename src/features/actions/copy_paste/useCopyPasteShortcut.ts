@@ -1,6 +1,6 @@
 import useCopyPaste from "./useCopyPaste";
 import useShortcut from "../../keyboard/useShortcut";
-import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 
 const useCopyPasteShortcut = () => {
   const { copy, paste, cut } = useCopyPaste();

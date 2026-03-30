@@ -13,7 +13,7 @@ import {
   DEFAULT_SIZE_MAP,
 } from "$/features/nodes/utils/consts";
 import { useEffect, useId, useState } from "react";
-import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 
 const SidebarSelect = ({
   menuItem,

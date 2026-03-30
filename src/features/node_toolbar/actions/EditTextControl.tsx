@@ -3,7 +3,7 @@ import {
   setAction,
   updateNode,
   updateNodeEditable,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import { PencilIcon } from "@phosphor-icons/react";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";

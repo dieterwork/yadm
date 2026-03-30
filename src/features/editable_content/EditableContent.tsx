@@ -9,7 +9,7 @@ import {
 import {
   updateNodeContent,
   useDEMOModelerStore,
-} from "../modeler/useDEMOModelerStore";
+} from "../modeler/store/useDEMOModelerStore";
 import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
 import { debounceTakeSnapshot } from "../actions/undo/useUndoRedoStore";

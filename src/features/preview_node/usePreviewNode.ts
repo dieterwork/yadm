@@ -7,7 +7,7 @@ import {
 import { useReactFlow, useStore } from "@xyflow/react";
 import uuid from "$/shared/utils/uuid";
 import { createNode } from "../nodes/utils/createNode";
-import { addNode } from "../modeler/useDEMOModelerStore";
+import { addNode } from "../modeler/store/useDEMOModelerStore";
 import { X_SMALL_NODE_SIZE } from "../nodes/utils/consts";
 import { resetAttach, useAttachStore } from "../actions/attach/useAttachStore";
 import { useTranslation } from "react-i18next";

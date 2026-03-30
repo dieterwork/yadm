@@ -2,7 +2,7 @@ import {
   modelSelector,
   setExportEnabled,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import jsPDF from "jspdf";
 import { downloadFile, generatePNG } from "./utils";
 import { useReactFlow } from "@xyflow/react";

@@ -10,7 +10,7 @@ import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingStat
 import loadPublicModels from "$/features/actions/load/loadPublicModels";
 import loadPublicModel from "$/features/actions/load/loadPublicModel";
 import toast from "react-hot-toast/headless";
-import { setModel } from "$/features/modeler/useDEMOModelerStore";
+import { setModel } from "$/features/modeler/store/useDEMOModelerStore";
 import TopbarMenuButtonAutoComplete from "../_components/TopbarMenuButtonAutoComplete";
 import uuid from "$/shared/utils/uuid";
 import { useReactFlow } from "@xyflow/react";

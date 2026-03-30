@@ -3,10 +3,10 @@ import toast from "react-hot-toast/headless";
 import {
   modelSelector,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import { useTranslation } from "react-i18next";
-import useLocalModel from "$/features/modeler/useLocalModel";
-import useSharedServerModel from "$/features/modeler/useSharedServerModel";
+import useLocalModel from "$/features/modeler/hooks/useLocalModel";
+import useSharedServerModel from "$/features/modeler/hooks/useSharedServerModel";
 import { useShallow } from "zustand/react/shallow";
 
 const useSaveShortcut = () => {

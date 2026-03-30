@@ -1,7 +1,7 @@
 import {
   getNode,
   updateNodeHandles,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import { assertIsPosition } from "$/shared/utils/typeAssertions";
 import uuid from "$/shared/utils/uuid";
 import {

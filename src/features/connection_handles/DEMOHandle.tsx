@@ -14,7 +14,7 @@ import {
   updateNodeHandleOffset,
   updateNodeHandles,
   useDEMOModelerStore,
-} from "../modeler/useDEMOModelerStore";
+} from "../modeler/store/useDEMOModelerStore";
 import { useGesture } from "@use-gesture/react";
 import { cn } from "@sglara/cn";
 import clamp from "$/shared/utils/clamp";

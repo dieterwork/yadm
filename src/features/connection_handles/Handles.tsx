@@ -2,7 +2,7 @@ import { Position, useUpdateNodeInternals } from "@xyflow/react";
 import type { DEMOHandlesData } from "../nodes/nodes.types";
 import DEMOHandle from "./DEMOHandle";
 import { cn } from "@sglara/cn";
-import { getNode } from "../modeler/useDEMOModelerStore";
+import { getNode } from "../modeler/store/useDEMOModelerStore";
 import { useEffect } from "react";
 
 interface HandlesProps {

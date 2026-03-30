@@ -1,4 +1,4 @@
-import { setAction } from "$/features/modeler/useDEMOModelerStore";
+import { setAction } from "$/features/modeler/store/useDEMOModelerStore";
 import { create } from "zustand";
 import toast from "react-hot-toast/headless";
 

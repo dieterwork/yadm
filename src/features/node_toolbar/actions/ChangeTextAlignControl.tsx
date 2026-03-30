@@ -1,5 +1,5 @@
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
-import { updateNodeTextAlign } from "$/features/modeler/useDEMOModelerStore";
+import { updateNodeTextAlign } from "$/features/modeler/store/useDEMOModelerStore";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";

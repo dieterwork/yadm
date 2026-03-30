@@ -1,5 +1,5 @@
-import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
-import { SHARED_MODEL_STORAGE_KEY } from "$/features/modeler/useSharedServerModel";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
+import { SHARED_MODEL_STORAGE_KEY } from "$/features/modeler/hooks/useSharedServerModel";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import saveLocalModel from "../save/saveLocalModel";
 import { takeSnapshot } from "./useUndoRedoStore";

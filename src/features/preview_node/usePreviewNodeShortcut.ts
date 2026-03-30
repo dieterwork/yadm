@@ -1,6 +1,6 @@
 import { resetPreviewNode } from "./usePreviewNodeStore";
 import useShortcut from "../keyboard/useShortcut";
-import { useDEMOModelerStore } from "../modeler/useDEMOModelerStore";
+import { useDEMOModelerStore } from "../modeler/store/useDEMOModelerStore";
 
 export default function usePreviewNodeShortcut() {
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);

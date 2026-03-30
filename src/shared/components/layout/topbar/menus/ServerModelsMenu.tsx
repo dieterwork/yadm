@@ -10,10 +10,10 @@ import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModa
 import useUserStore from "$/features/auth/useUserStore";
 import type { AppError } from "$/shared/utils/AppError";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
-import { setModel } from "$/features/modeler/useDEMOModelerStore";
+import { setModel } from "$/features/modeler/store/useDEMOModelerStore";
 import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingState";
 import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
-import useSharedServerModel from "$/features/modeler/useSharedServerModel";
+import useSharedServerModel from "$/features/modeler/hooks/useSharedServerModel";
 import loadPublicModel from "$/features/actions/load/loadPublicModel";
 import { useReactFlow } from "@xyflow/react";
 import TopbarMenuButtonAutoComplete from "../_components/TopbarMenuButtonAutoComplete";

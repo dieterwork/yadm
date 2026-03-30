@@ -9,8 +9,8 @@ import {
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
-import { edgeTypes } from "../edges/edges.types";
-import { nodeTypes } from "../nodes/nodes.types";
+import { edgeTypes } from "../../edges/edges.types";
+import { nodeTypes } from "../../nodes/nodes.types";
 
 import {
   onConnect,
@@ -24,29 +24,29 @@ import {
   onReconnectStart,
   useDEMOModelerStore,
   type DEMOModelerState,
-} from "./useDEMOModelerStore";
+} from "../store/useDEMOModelerStore";
 import { useShallow } from "zustand/react/shallow";
-import ConnectionLine from "../connection_line/ConnectionLine";
-import HelperLines from "../helper_lines/HelperLines";
+import ConnectionLine from "../../connection_line/ConnectionLine";
+import HelperLines from "../../helper_lines/HelperLines";
 import {
   helperLinesSelector,
   useHelperLinesStore,
-} from "../helper_lines/useHelperLinesStore";
+} from "../../helper_lines/useHelperLinesStore";
 import { cn } from "@sglara/cn";
-import SideMenu from "../../shared/components/ui/toolbars/side_toolbar/SideToolbar";
-import BottomToolbar from "../../shared/components/ui/toolbars/bottom_toolbar/BottomToolbar";
-import { resetAttach } from "../actions/attach/useAttachStore";
-import { usePreviewNode } from "../preview_node/usePreviewNode";
-import { useIncompleteEdge } from "../edges/incomplete/useIncompleteEdge";
-import useKeyboardShortcuts from "../keyboard/useKeyboardShortcuts";
-import useAttachNode from "../actions/attach/useAttachNode";
+import SideMenu from "../../../shared/components/ui/toolbars/side_toolbar/SideToolbar";
+import BottomToolbar from "../../../shared/components/ui/toolbars/bottom_toolbar/BottomToolbar";
+import { resetAttach } from "../../actions/attach/useAttachStore";
+import { usePreviewNode } from "../../preview_node/usePreviewNode";
+import { useIncompleteEdge } from "../../edges/incomplete/useIncompleteEdge";
+import useKeyboardShortcuts from "../../keyboard/useKeyboardShortcuts";
+import useAttachNode from "../../actions/attach/useAttachNode";
 import useTitleTranslate from "$/shared/hooks/useTitleTranslate";
-import Notifications from "../notifications/Notifications";
+import Notifications from "../../notifications/Notifications";
 import DiamondMarker from "$/shared/components/ui/markers/DiamondMarker";
-import takeSnapshotAndSave from "../actions/undo/takeSnapshotAndSave";
-import isValidConnection from "./utils/isValidConnection";
-import onSelectionChange from "./utils/onSelectionChange";
-import onViewportChange from "./utils/onViewportChange";
+import takeSnapshotAndSave from "../../actions/undo/takeSnapshotAndSave";
+import isValidConnection from "../utils/isValidConnection";
+import onSelectionChange from "../utils/onSelectionChange";
+import onViewportChange from "../utils/onViewportChange";
 
 const reactFlowSelector = (state: DEMOModelerState) => ({
   isEnabled: state.isEnabled,

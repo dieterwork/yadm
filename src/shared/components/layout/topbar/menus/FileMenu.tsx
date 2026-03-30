@@ -5,7 +5,7 @@ import {
   clearModel,
   modelSelector,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import useExport from "$/features/actions/export/useExport";
 import useImport from "$/features/actions/import/useImport";
 import { useTranslation } from "react-i18next";
@@ -19,8 +19,8 @@ import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModa
 import { useShallow } from "zustand/react/shallow";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import type { AppError } from "$/shared/utils/AppError";
-import useLocalModel from "$/features/modeler/useLocalModel";
-import useSharedServerModel from "$/features/modeler/useSharedServerModel";
+import useLocalModel from "$/features/modeler/hooks/useLocalModel";
+import useSharedServerModel from "$/features/modeler/hooks/useSharedServerModel";
 
 const FileMenu = () => {
   const { t } = useTranslation();

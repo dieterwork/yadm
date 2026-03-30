@@ -4,7 +4,7 @@ import type { TextNode as TextNodeType } from "./textNode.types";
 import { cn } from "@sglara/cn";
 import NodeToolbar from "../../node_toolbar/DEMONodeToolbar";
 import { MIN_SIZE_MAP } from "../utils/consts";
-import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 
 const TextNode = ({
   selected,

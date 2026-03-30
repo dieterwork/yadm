@@ -1,4 +1,4 @@
-import DEMOModeler from "$/features/modeler/DEMOModeler";
+import DEMOModeler from "$/features/modeler/components/DEMOModeler";
 import Sidebar from "./sidebar/Sidebar";
 import Topbar from "./topbar/Topbar";
 

@@ -11,7 +11,10 @@ import { MIN_SIZE_MAP } from "./utils/consts";
 import type { DEMONode } from "./nodes.types";
 import DEMONodeResizer from "../resize/NodeResizer";
 import Handles from "../connection_handles/Handles";
-import { getNode, useDEMOModelerStore } from "../modeler/useDEMOModelerStore";
+import {
+  getNode,
+  useDEMOModelerStore,
+} from "../modeler/store/useDEMOModelerStore";
 import { CornersOutIcon } from "@phosphor-icons/react";
 import getChildNodes from "./utils/getChildNodes";
 

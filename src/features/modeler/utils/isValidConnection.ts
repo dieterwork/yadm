@@ -1,6 +1,6 @@
 import type { Connection } from "@xyflow/react";
 import type { DEMOEdge } from "../../edges/edges.types";
-import { getNode } from "../useDEMOModelerStore";
+import { getNode } from "../store/useDEMOModelerStore";
 import type { DEMONode } from "../../nodes/nodes.types";
 
 const allowedConnectionMap = {

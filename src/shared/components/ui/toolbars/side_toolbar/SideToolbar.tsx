@@ -20,7 +20,7 @@ import {
   setHandleEditModeEnabled,
   setNodesHandlesVisibility,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import {
   resetPreviewNode,
   setPreviewNode,

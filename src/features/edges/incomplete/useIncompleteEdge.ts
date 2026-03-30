@@ -12,7 +12,7 @@ import {
   addNode,
   getNode,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import type { GhostNode } from "$/features/nodes/ghost/ghost.types";
 import getEdgeType from "$/features/modeler/utils/getEdgeType";
 import getMarkerType from "$/features/modeler/utils/getMarkerType";

@@ -24,7 +24,7 @@ import type { DEMONode } from "$/features/nodes/nodes.types";
 import { useId, useState } from "react";
 import SidebarToggleButton from "./SidebarToggleButton";
 import { cn } from "@sglara/cn";
-import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 import { useTranslation } from "react-i18next";
 import {
   resetAttach,

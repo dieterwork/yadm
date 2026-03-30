@@ -3,7 +3,7 @@ import {
   setEdges,
   setNodes,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import type { DEMONode } from "$/features/nodes/nodes.types";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
 import debounce from "$/shared/utils/debounce";

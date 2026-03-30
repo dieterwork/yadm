@@ -1,4 +1,4 @@
-import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import { useEffect, useRef } from "react";
 

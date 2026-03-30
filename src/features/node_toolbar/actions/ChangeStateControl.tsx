@@ -2,7 +2,7 @@ import {
   getNode,
   updateNode,
   updateNodeState,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import {
   CopySimpleIcon,
   QuestionMarkIcon,

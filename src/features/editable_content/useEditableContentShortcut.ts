@@ -3,7 +3,7 @@ import {
   updateNode,
   updateNodeEditable,
   useDEMOModelerStore,
-} from "../modeler/useDEMOModelerStore";
+} from "../modeler/store/useDEMOModelerStore";
 import { useEffect } from "react";
 
 const useEditableContentShortcut = () => {

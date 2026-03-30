@@ -1,7 +1,7 @@
 import {
   getNode,
   updateNodeHandlesVisibility,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import DEMOElementToolbarToggleButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarToggleButton";
 import { EyeClosedIcon, EyeIcon } from "@phosphor-icons/react";
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";

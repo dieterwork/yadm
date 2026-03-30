@@ -1,5 +1,5 @@
 import useShortcut from "$/features/keyboard/useShortcut";
-import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 import { resetAttach } from "./useAttachStore";
 
 export default function usePreviewNodeShortcut() {

@@ -2,7 +2,7 @@ import {
   setEdges,
   setNodes,
   useDEMOModelerStore,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import { useShallow } from "zustand/react/shallow";
 import { getConnectedEdges } from "@xyflow/react";
 import getChildNodes from "$/features/nodes/utils/getChildNodes";

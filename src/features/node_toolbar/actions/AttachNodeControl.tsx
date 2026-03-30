@@ -5,7 +5,7 @@ import {
   getNode,
   setAction,
   updateNode,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import { LinkBreakIcon, LinkIcon } from "@phosphor-icons/react";
 import toast from "react-hot-toast/headless";

@@ -5,7 +5,7 @@ import {
   undo,
   useUndoRedoStore,
 } from "./useUndoRedoStore";
-import { useDEMOModelerStore } from "$/features/modeler/useDEMOModelerStore";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 
 const useUndoShortcut = () => {
   const undoAction = useUndoRedoStore((state) => state.action);

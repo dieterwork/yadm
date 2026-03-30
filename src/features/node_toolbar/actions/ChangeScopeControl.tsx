@@ -1,7 +1,7 @@
 import {
   getNode,
   updateNodeScope,
-} from "$/features/modeler/useDEMOModelerStore";
+} from "$/features/modeler/store/useDEMOModelerStore";
 import { isNodeScope } from "$/features/nodes/utils/isNodeScope";
 import type { NodeScope } from "$/features/nodes/nodes.types";
 import {
