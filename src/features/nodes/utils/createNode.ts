@@ -1152,14 +1152,14 @@ export const createNode = ({
         },
       ];
     }
-    case "shape": {
+    case "whiteboard": {
       return [
         {
           id,
           type,
           position,
           data: { points: [], ...data },
-          ariaLabel: t(($) => $["Shape"]),
+          ariaLabel: t(($) => $["Whiteboard"]),
           deletable: true,
           style: {
             width: width ?? 100,

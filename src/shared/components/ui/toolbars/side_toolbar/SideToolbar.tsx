@@ -19,7 +19,9 @@ import {
   setGridSnapEnabled,
   setGridVisible,
   setHandleEditModeEnabled,
+  setNodes,
   setNodesHandlesVisibility,
+  setWhiteboardEnabled,
   useDEMOModelerStore,
   type DEMOModelerState,
 } from "$/features/modeler/store/useDEMOModelerStore";
@@ -81,6 +83,10 @@ const SideToolbar = () => {
     if (!node.data.handles.isVisible) return false;
     return true;
   });
+
+  const isWhiteboardEnabled = useDEMOModelerStore(
+    (state) => state.isWhiteboardEnabled
+  );
 
   return (
     <div
@@ -153,14 +159,18 @@ const SideToolbar = () => {
               onPress={() => {
                 if (previewNode) resetPreviewNode();
                 if (childNodeId) resetAttach();
-                setAction("draw");
+                setAction(isWhiteboardEnabled ? "pan" : "draw");
+                setWhiteboardEnabled((isEnabled) => !isEnabled);
+                setNodes((nodes) =>
+                  nodes.map((node) => ({ ...node, selected: false }))
+                );
               }}
               aria-label={t(($) => $["Activate draw tool"])}
               isDisabled={!isEnabled}
             >
               <ScribbleIcon
                 color={
-                  action === "draw"
+                  isWhiteboardEnabled
                     ? "var(--color-sky-500)"
                     : "var(--color-slate-900)"
                 }

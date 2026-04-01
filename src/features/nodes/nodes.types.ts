@@ -16,7 +16,7 @@ import TKExecutionNode from "./object_fact_diagram/tk_execution/TKExecutionNode"
 import TransactionTimeNode from "./object_fact_diagram/transaction_time/TransactionTimeNode";
 import TextNode from "./text/TextNode";
 import OrganizationNodeComponent from "./organization/OrganizationNode";
-import ShapeNodeComponent from "./shape/ShapeNode";
+import WhiteboardNodeComponent from "./whiteboard/WhiteboardNode";
 import GhostNode from "./ghost/GhostNode";
 
 import type { ObjectFactDiagramNode } from "./object_fact_diagram/objectFactDiagram.types";
@@ -29,6 +29,7 @@ import type { CooperationModelNode } from "./cooperation_model/cooperationModel.
 import type { NodeToolbarAction } from "./DEMONodeBase";
 
 import type { Vec2 } from "perfect-freehand";
+import type { Points } from "../whiteboard/types/whiteboard.types";
 
 export const nodeTypes = {
   // cooperation model
@@ -58,7 +59,7 @@ export const nodeTypes = {
   text: TextNode,
   ghost: GhostNode,
   organization: OrganizationNodeComponent,
-  shape: ShapeNodeComponent,
+  whiteboard: WhiteboardNodeComponent,
 };
 
 export type DEMONode =
@@ -67,7 +68,8 @@ export type DEMONode =
   | ProcessStructureDiagramNode
   | TextNodeType
   | GhostNodeType
-  | OrganizationNode;
+  | OrganizationNode
+  | WhiteboardNodeType;
 
 export type DEMOHandle = {
   id: string;
@@ -122,4 +124,8 @@ export type OrganizationNode = Node<
   "organization"
 >;
 
-export type ShapeNode = Node<{ points: Vec2[]; color: string }>;
+export type WhiteboardNodeType = Node<{
+  points: Points;
+  color: string;
+  initialSize: { width: number; height: number };
+}>;

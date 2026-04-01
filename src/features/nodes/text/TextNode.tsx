@@ -12,6 +12,7 @@ const TextNode = ({
   height,
   data,
   id,
+  dragging,
 }: NodeProps<TextNodeType>) => {
   const { content, textAlign, alignContent, fontSize, color, isEditable } =
     data;
@@ -44,7 +45,7 @@ const TextNode = ({
         />
         <NodeResizer
           nodeId={id}
-          isVisible={selected && isEnabled && !isExportEnabled}
+          isVisible={selected && isEnabled && !isExportEnabled && !dragging}
           minHeight={MIN_SIZE_MAP["text"].height}
           minWidth={MIN_SIZE_MAP["text"].width}
         />

@@ -1,4 +1,4 @@
-import { ToggleButton, type ToggleButtonProps } from "react-aria-components";
+import { Button, type ButtonProps } from "react-aria-components";
 import DEMOToolbarButtonClasses from "./DEMOModelerToolbarButtonClasses";
 import type { CSSProperties } from "react";
 
@@ -6,12 +6,12 @@ const DEMOModelerToolbarButton = ({
   width,
   isActive,
   ...restProps
-}: ToggleButtonProps & {
+}: ButtonProps & {
   width?: CSSProperties["width"];
   isActive?: boolean;
 }) => {
   return (
-    <ToggleButton
+    <Button
       {...restProps}
       className={({ isHovered, isPressed, isDisabled }) =>
         DEMOToolbarButtonClasses(isHovered, isPressed, isActive, isDisabled)

@@ -28,6 +28,7 @@ import { updateHelperLines } from "../../helper_lines/useHelperLinesStore";
 import type { CooperationModelNode } from "../../nodes/cooperation_model/cooperationModel.types";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import takeSnapshotAndSave from "../../actions/undo/takeSnapshotAndSave";
+import takeWhiteboardSnapshotAndSave from "$/features/whiteboard/utils/takeWhiteboardSnapshotAndSave";
 
 export type ModelerAction =
   | "attach"
@@ -49,6 +50,7 @@ export interface DEMOModelerState {
   isGridVisible: boolean;
   isGridSnapEnabled: boolean;
   isHandleEditModeEnabled: boolean;
+  isWhiteboardEnabled: boolean;
   viewport: Viewport;
 }
 
@@ -73,6 +75,7 @@ export const useDEMOModelerStore = create<DEMOModelerState>()((set, get) => ({
   isEnabled: localDEMOModel?.isEnabled ?? true,
   isExportEnabled: false,
   isHandleEditModeEnabled: false,
+  isWhiteboardEnabled: false,
   viewport: localDEMOModel?.viewport ?? { x: 0, y: 0, zoom: 1 },
 }));
 
@@ -570,8 +573,16 @@ export const onConnectStart = () => {
 
 export const onReconnectStart = () => {};
 
-export const onNodesDelete: OnNodesDelete<DEMONode> = () => {
-  takeSnapshotAndSave();
+export const onNodesDelete: OnNodesDelete<DEMONode> = (nodes) => {
+  if (nodes.every((node) => node.type === "whiteboard")) {
+    takeWhiteboardSnapshotAndSave();
+  } else if (nodes.some((node) => node.type === "whiteboard")) {
+    // saves twice... TODO
+    takeWhiteboardSnapshotAndSave();
+    takeSnapshotAndSave();
+  } else {
+    takeSnapshotAndSave();
+  }
 };
 
 export const setModel = (model: DEMOModelJSON) => {
@@ -580,6 +591,39 @@ export const setModel = (model: DEMOModelJSON) => {
   setFileName(model.fileName);
   setEnabled(model.isEnabled ?? true);
   setViewport(model.viewport ?? { x: 0, y: 0, zoom: 1 });
+};
+
+export const setWhiteboardVisible = (
+  isWhiteboardVisible: ReactStyleStateSetter<boolean>
+) => {
+  useDEMOModelerStore.setState((state) => ({
+    nodes: state.nodes.map((node) => {
+      if (node.type === "whiteboard") {
+        console.log(node);
+        return {
+          ...node,
+          selected: false,
+          hidden:
+            typeof isWhiteboardVisible === "boolean"
+              ? isWhiteboardVisible
+              : isWhiteboardVisible(node.hidden),
+        };
+      } else {
+        return node;
+      }
+    }),
+  }));
+};
+
+export const setWhiteboardEnabled = (
+  isWhiteboardEnabled: ReactStyleStateSetter<boolean>
+) => {
+  useDEMOModelerStore.setState((state) => ({
+    isWhiteboardEnabled:
+      typeof isWhiteboardEnabled === "boolean"
+        ? isWhiteboardEnabled
+        : isWhiteboardEnabled(state.isWhiteboardEnabled),
+  }));
 };
 
 export const modelSelector = (state: DEMOModelerState) => ({

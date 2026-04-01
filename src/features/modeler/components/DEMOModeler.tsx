@@ -42,10 +42,11 @@ import takeSnapshotAndSave from "../../actions/undo/takeSnapshotAndSave";
 import isValidConnection from "../utils/isValidConnection";
 import onSelectionChange from "../utils/onSelectionChange";
 import onViewportChange from "../utils/onViewportChange";
-import DrawTool from "$/features/draw/components/DrawTool";
 import SideToolbar from "../../../shared/components/ui/toolbars/side_toolbar/SideToolbar";
-import DrawToolbar from "$/features/draw/components/DrawToolbar";
+import WhiteboardToolbar from "$/features/whiteboard/components/WhiteboardToolbar";
 import uuid from "$/shared/utils/uuid";
+import Whiteboard from "$/features/whiteboard/components/Whiteboard";
+import takeWhiteboardSnapshotAndSave from "$/features/whiteboard/utils/takeWhiteboardSnapshotAndSave";
 
 const id = uuid();
 
@@ -83,8 +84,12 @@ const DEMOModeler = () => {
           data-action={action}
           nodes={nodes}
           nodeTypes={nodeTypes}
-          onNodeDragStart={() => {
-            takeSnapshotAndSave();
+          onNodeDragStart={(e, node) => {
+            if (node.type === "whiteboard") {
+              takeWhiteboardSnapshotAndSave();
+            } else {
+              takeSnapshotAndSave();
+            }
           }}
           onNodesChange={onNodesChange}
           deleteKeyCode={null}
@@ -114,7 +119,7 @@ const DEMOModeler = () => {
           }}
           connectionLineComponent={(props) => <ConnectionLine {...props} />}
           connectionMode={ConnectionMode.Loose}
-          snapToGrid={isGridSnapEnabled}
+          snapToGrid={action !== "draw" ? isGridSnapEnabled : false}
           snapGrid={[10, 10]}
           edgesReconnectable={isEnabled}
           nodesDraggable={isEnabled}
@@ -126,7 +131,7 @@ const DEMOModeler = () => {
           selectionMode={SelectionMode.Partial}
           proOptions={{ hideAttribution: true }}
         >
-          <DrawTool />
+          <Whiteboard />
           <Background
             bgColor="var(--color-white)"
             color="var(--color-slate-500)"
@@ -149,7 +154,7 @@ const DEMOModeler = () => {
           />
           <SideToolbar />
           <BottomToolbar />
-          <DrawToolbar />
+          <WhiteboardToolbar />
           <HelperLines />
           <Notifications />
           <ViewportPortal>

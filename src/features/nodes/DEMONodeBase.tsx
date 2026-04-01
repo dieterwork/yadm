@@ -57,6 +57,7 @@ const DEMONodeBase = ({
   ],
   resizerProps,
   draggable,
+  dragging,
 }: DEMONodeBaseProps) => {
   if (type === "text")
     throw new Error("Cannot render node primitive with text node");
@@ -98,7 +99,7 @@ const DEMONodeBase = ({
             {...resizerProps}
             nodeId={id}
             keepAspectRatio={keepAspectRatio}
-            isVisible={selected}
+            isVisible={selected && !dragging}
             minHeight={MIN_SIZE_MAP[type]?.height}
             minWidth={MIN_SIZE_MAP[type]?.width}
             lineClassName="node-resizer-line"

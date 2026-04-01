@@ -129,6 +129,14 @@ body,
   }
 }
 
+.react-flow {
+  .react-flow__panel {
+    &.react-flow__minimap {
+      z-index: 30;
+    }
+  }
+}
+
 @theme {
   --font-app: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
