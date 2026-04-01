@@ -20,8 +20,9 @@ import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 
 const ChangeScopeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const { t } = useTranslation();
-  const node = getNode(nodeId);
   if (!nodeId) return null;
+  const node = getNode(nodeId);
+  if (!node) return null;
   if (!("scope" in node.data)) return null;
 
   const scopeOptions = [

@@ -84,7 +84,7 @@ const DEMOModeler = () => {
           data-action={action}
           nodes={nodes}
           nodeTypes={nodeTypes}
-          onNodeDragStop={(e, node) => {
+          onNodeDragStart={(e, node) => {
             if (node.type === "whiteboard") {
               takeWhiteboardSnapshotAndSave();
             } else {

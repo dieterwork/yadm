@@ -6,6 +6,7 @@ import useUndoShortcut from "../actions/undo/useUndoShortcut";
 import useZoomShortcut from "../actions/zoom/useZoomShortcut";
 import useEditShortcut from "../editable_content/useEditableContentShortcut";
 import usePreviewNodeShortcut from "../preview_node/usePreviewNodeShortcut";
+import useUndoWhiteboardShortcut from "../whiteboard/hooks/useUndoWhiteboardShortcut";
 
 const useKeyboardShortcuts = () => {
   useCopyPasteShortcut();
@@ -17,6 +18,7 @@ const useKeyboardShortcuts = () => {
   useLockShortcut();
   useZoomShortcut();
   usePreviewNodeShortcut();
+  useUndoWhiteboardShortcut();
 };
 
 export default useKeyboardShortcuts;

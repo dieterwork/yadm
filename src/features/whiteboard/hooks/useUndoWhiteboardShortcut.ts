@@ -1,45 +1,45 @@
 import { useEffect } from "react";
-import {
-  redo,
-  setUndoAction,
-  undo,
-  useUndoRedoStore,
-} from "./useUndoRedoStore";
-import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 
-const useUndoShortcut = () => {
-  const undoAction = useUndoRedoStore((state) => state.action);
-  const pastHistory = useUndoRedoStore((state) => state.past);
-  const futureHistory = useUndoRedoStore((state) => state.future);
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
+import {
+  redoWhiteboard,
+  setUndoAction,
+  undoWhiteboard,
+  useWhiteboardUndoRedoStore,
+} from "../store/useWhiteboardUndoRedoStore";
+
+const useUndoWhiteboardShortcut = () => {
+  const undoAction = useWhiteboardUndoRedoStore((state) => state.action);
+  const pastHistory = useWhiteboardUndoRedoStore((state) => state.past);
+  const futureHistory = useWhiteboardUndoRedoStore((state) => state.future);
   const nodes = useDEMOModelerStore((state) => state.nodes);
-  const edges = useDEMOModelerStore((state) => state.edges);
-  const action = useDEMOModelerStore((state) => state.action);
+  const whiteboardNodes = nodes.filter((n) => n.type === "whiteboard");
   const isWhiteboardEnabled = useDEMOModelerStore(
     (state) => state.isWhiteboardEnabled
   );
 
   useEffect(() => {
     const undoRedoKeyDownHandler = (event: KeyboardEvent) => {
-      if (isWhiteboardEnabled || action == "edit") return;
+      if (!isWhiteboardEnabled) return;
       if (
         event.key?.toLowerCase() === "y" &&
         (event.ctrlKey || event.metaKey) &&
         futureHistory.length > 0
       ) {
-        redo(nodes, edges);
+        redoWhiteboard(whiteboardNodes);
         setUndoAction("redo");
       } else if (
         event.key?.toLowerCase() === "z" &&
         (event.ctrlKey || event.metaKey) &&
         pastHistory.length > 0
       ) {
-        undo(nodes, edges);
-        setUndoAction("undo");
+        undoWhiteboard(whiteboardNodes);
+        setUndoAction("redo");
       }
     };
 
     const undoRedoKeyUpHandler = (e: KeyboardEvent) => {
-      if (isWhiteboardEnabled || action === "edit") return;
+      if (!isWhiteboardEnabled) return;
       if (undoAction) return;
       if (!e.key) return;
       if (
@@ -60,15 +60,14 @@ const useUndoShortcut = () => {
       document.addEventListener("keydown", undoRedoKeyUpHandler);
     };
   }, [
-    undo,
-    redo,
+    isWhiteboardEnabled,
+    undoWhiteboard,
+    redoWhiteboard,
     setUndoAction,
     undoAction,
     pastHistory,
     futureHistory,
-    action,
-    isWhiteboardEnabled,
   ]);
 };
 
-export default useUndoShortcut;
+export default useUndoWhiteboardShortcut;

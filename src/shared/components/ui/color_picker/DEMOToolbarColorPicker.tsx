@@ -26,7 +26,7 @@ function DEMOToolbarColorPicker({
   return (
     <AriaColorPicker {...props}>
       <DialogTrigger>
-        <ColorSwatchButton {...props} />
+        <ColorSwatchButton color={props.value} />
         <ColorPickerPopover popoverProps={popoverProps}>
           {children}
         </ColorPickerPopover>

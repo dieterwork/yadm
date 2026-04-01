@@ -69,7 +69,7 @@ export const useDEMOModelerStore = create<DEMOModelerState>()((set, get) => ({
   fileName: localDEMOModel?.fileName ?? `New Model`,
   nodes: localDEMOModel?.nodes ?? [],
   edges: localDEMOModel?.edges ?? [],
-  action: null,
+  action: "pan",
   isGridVisible: true,
   isGridSnapEnabled: true,
   isEnabled: localDEMOModel?.isEnabled ?? true,

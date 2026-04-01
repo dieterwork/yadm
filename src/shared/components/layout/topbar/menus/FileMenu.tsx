@@ -21,6 +21,11 @@ import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import type { AppError } from "$/shared/utils/AppError";
 import useLocalModel from "$/features/modeler/hooks/useLocalModel";
 import useSharedServerModel from "$/features/modeler/hooks/useSharedServerModel";
+import { setFuture, setPast } from "$/features/actions/undo/useUndoRedoStore";
+import {
+  setFutureWhiteboardHistory,
+  setPastWhiteboardHistory,
+} from "$/features/whiteboard/store/useWhiteboardUndoRedoStore";
 
 const FileMenu = () => {
   const { t } = useTranslation();
@@ -199,6 +204,10 @@ const FileMenu = () => {
           clearModel();
           setNewModalOpen(false);
           setSharedModel(false);
+          setPast([]);
+          setFuture([]);
+          setPastWhiteboardHistory([]);
+          setFutureWhiteboardHistory([]);
         }}
         title={t(($) => $["Create new model?"])}
         actionLabel={t(($) => $["Yes, create new model"])}

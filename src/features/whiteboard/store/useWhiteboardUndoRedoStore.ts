@@ -1,8 +1,5 @@
 import { setNodes } from "$/features/modeler/store/useDEMOModelerStore";
-import type {
-  DEMONode,
-  WhiteboardNodeType,
-} from "$/features/nodes/nodes.types";
+import type { WhiteboardNodeType } from "$/features/nodes/nodes.types";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
 import debounce from "$/shared/utils/debounce";
 import { create } from "zustand";
@@ -23,13 +20,17 @@ export const useWhiteboardUndoRedoStore = create<UndoRedoState>()(() => ({
   future: [],
 }));
 
-export const setPast = (past: ReactStyleStateSetter<HistoryItem[]>) => {
+export const setPastWhiteboardHistory = (
+  past: ReactStyleStateSetter<HistoryItem[]>
+) => {
   useWhiteboardUndoRedoStore.setState((state) => ({
     past: Array.isArray(past) ? past : past(state.past),
   }));
 };
 
-export const setFuture = (future: ReactStyleStateSetter<HistoryItem[]>) => {
+export const setFutureWhiteboardHistory = (
+  future: ReactStyleStateSetter<HistoryItem[]>
+) => {
   useWhiteboardUndoRedoStore.setState((state) => ({
     future: Array.isArray(future) ? future : future(state.future),
   }));
@@ -40,7 +41,7 @@ export const takeWhiteboardSnapshot = (
 ) => {
   const maxHistorySize = useWhiteboardUndoRedoStore.getState().maxHistorySize;
   // push the current graph to the past state
-  setPast((past) => [
+  setPastWhiteboardHistory((past) => [
     ...past.slice(
       past.length - (maxHistorySize ?? past.length - 1) + 1,
       past.length
@@ -49,7 +50,7 @@ export const takeWhiteboardSnapshot = (
   ]);
 
   // whenever we take a new snapshot, the redo operations need to be cleared to avoid state mismatches
-  setFuture([]);
+  setFutureWhiteboardHistory([]);
 };
 
 export const debounceTakeSnapshot = debounce(takeWhiteboardSnapshot, 3000);
@@ -61,9 +62,9 @@ export const undoWhiteboard = (whiteboardNodes: WhiteboardNodeType[]) => {
 
   if (pastState) {
     // first we remove the state from the history
-    setPast((past) => past.slice(0, past.length - 1));
+    setPastWhiteboardHistory((past) => past.slice(0, past.length - 1));
     // we store the current graph for the redo operation
-    setFuture((future) => [...future, whiteboardNodes]);
+    setFutureWhiteboardHistory((future) => [...future, whiteboardNodes]);
     // now we can set the graph to the past state
     setNodes((nodes) => {
       const nonWhiteboardNodes = nodes.filter((n) => n.type !== "whiteboard");
@@ -77,8 +78,8 @@ export const redoWhiteboard = (whiteboardNodes: WhiteboardNodeType[]) => {
   const futureState = future[future.length - 1];
 
   if (futureState) {
-    setFuture((future) => future.slice(0, future.length - 1));
-    setPast((past) => [...past, whiteboardNodes]);
+    setFutureWhiteboardHistory((future) => future.slice(0, future.length - 1));
+    setPastWhiteboardHistory((past) => [...past, whiteboardNodes]);
     setNodes((nodes) => {
       const nonWhiteboardNodes = nodes.filter((n) => n.type !== "whiteboard");
       return [...nonWhiteboardNodes, ...futureState];
