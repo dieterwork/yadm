@@ -83,13 +83,13 @@ const Whiteboard = () => {
       width,
       position,
       deletable: true,
+      zIndex: 1000,
     };
 
+    takeWhiteboardSnapshotAndSave();
     addNode(newNode);
 
     setPoints([]);
-
-    takeWhiteboardSnapshotAndSave();
   };
 
   return (

@@ -5,8 +5,10 @@ import {
   DialogTrigger,
   type PopoverProps,
 } from "react-aria-components";
-import ColorSwatchButton from "./ColorSwatchToolbarButton";
+import type { AriaPopoverProps, Placement } from "react-aria";
 import ColorPickerPopover from "./ColorPickerPopover";
+import DEMOElementToolbarButton from "../element_toolbar/DEMOElementToolbarButton";
+import { PaintBrushHouseholdIcon } from "@phosphor-icons/react";
 
 export interface ColorPickerProps extends Omit<
   AriaColorPickerProps,
@@ -17,7 +19,7 @@ export interface ColorPickerProps extends Omit<
   popoverProps?: PopoverProps;
 }
 
-function DEMOToolbarColorPicker({
+function DEMOElementToolbarColorPicker({
   label,
   children,
   popoverProps,
@@ -26,7 +28,11 @@ function DEMOToolbarColorPicker({
   return (
     <AriaColorPicker {...props}>
       <DialogTrigger>
-        <ColorSwatchButton {...props} />
+        <DEMOElementToolbarButton
+          label={label}
+          icon={(iconProps) => <PaintBrushHouseholdIcon {...iconProps} />}
+          menuTrigger
+        />
         <ColorPickerPopover popoverProps={popoverProps}>
           {children}
         </ColorPickerPopover>
@@ -35,4 +41,4 @@ function DEMOToolbarColorPicker({
   );
 }
 
-export default DEMOToolbarColorPicker;
+export default DEMOElementToolbarColorPicker;

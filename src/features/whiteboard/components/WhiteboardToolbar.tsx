@@ -27,7 +27,7 @@ import {
 import useWhiteboardStore, { setColor } from "../store/useWhiteboardStore";
 import { TooltipTrigger } from "react-aria-components";
 import DEMOToolbarColorPicker from "$/shared/components/ui/color_picker/DEMOToolbarColorPicker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const orientation = "horizontal";
 
@@ -63,6 +63,10 @@ const WhiteboardToolbar = () => {
   const color = useWhiteboardStore((state) => state.color);
 
   const [initialColor] = useState(() => color);
+
+  useEffect(() => {
+    console.log(pastHistory, futureHistory);
+  }, [pastHistory, futureHistory]);
   return (
     <div
       className={cn(

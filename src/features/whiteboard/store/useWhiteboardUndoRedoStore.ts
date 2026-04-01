@@ -65,25 +65,10 @@ export const undoWhiteboard = (whiteboardNodes: WhiteboardNodeType[]) => {
     // we store the current graph for the redo operation
     setFuture((future) => [...future, whiteboardNodes]);
     // now we can set the graph to the past state
-    const newNodes: DEMONode[] = [];
-    setNodes((nodes) =>
-      nodes.reduce((acc, current) => {
-        if (current.type !== "whiteboard") {
-          acc.push(current);
-          return acc;
-        } else {
-          // see if current node exists in history state
-          const newWhiteboardNode = pastState.find(
-            (whiteboard) => whiteboard.id === current.id
-          );
-
-          if (newWhiteboardNode) {
-            acc.push(newWhiteboardNode);
-          }
-          return acc;
-        }
-      }, newNodes)
-    );
+    setNodes((nodes) => {
+      const nonWhiteboardNodes = nodes.filter((n) => n.type !== "whiteboard");
+      return [...nonWhiteboardNodes, ...pastState];
+    });
   }
 };
 
@@ -94,25 +79,10 @@ export const redoWhiteboard = (whiteboardNodes: WhiteboardNodeType[]) => {
   if (futureState) {
     setFuture((future) => future.slice(0, future.length - 1));
     setPast((past) => [...past, whiteboardNodes]);
-    const newNodes: DEMONode[] = [];
-    setNodes((nodes) =>
-      nodes.reduce((acc, current) => {
-        if (current.type !== "whiteboard") {
-          acc.push(current);
-          return acc;
-        } else {
-          // see if current node exists in history state
-          const newWhiteboardNode = futureState.find(
-            (whiteboard) => whiteboard.id === current.id
-          );
-
-          if (newWhiteboardNode) {
-            acc.push(newWhiteboardNode);
-          }
-          return acc;
-        }
-      }, newNodes)
-    );
+    setNodes((nodes) => {
+      const nonWhiteboardNodes = nodes.filter((n) => n.type !== "whiteboard");
+      return [...nonWhiteboardNodes, ...futureState];
+    });
   }
 };
 

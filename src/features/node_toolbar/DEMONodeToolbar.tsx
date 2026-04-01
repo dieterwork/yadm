@@ -18,6 +18,7 @@ import DEMOElementToolbarGroup from "$/shared/components/ui/element_toolbar/DEMO
 import DeleteControl from "./actions/DeleteControl";
 import DEMOElementToolbar from "$/shared/components/ui/element_toolbar/DEMOElementToolbar";
 import { useTranslation } from "react-i18next";
+import ChangeWhiteboardColorControl from "./actions/ChangeWhiteboardColorControl";
 
 const DEMONodeToolbar = ({
   nodeId,
@@ -64,9 +65,12 @@ const DEMONodeToolbar = ({
         {actions?.indexOf("changeScope") !== -1 && (
           <ChangeScopeControl nodeId={nodeId} />
         )}
-        {actions?.indexOf("changeColor") !== -1 && (
-          <ChangeColorControl nodeId={nodeId} />
-        )}
+        {actions?.indexOf("changeColor") !== -1 &&
+          node.type !== "whiteboard" && <ChangeColorControl nodeId={nodeId} />}
+        {actions?.indexOf("changeColor") !== -1 &&
+          node.type === "whiteboard" && (
+            <ChangeWhiteboardColorControl nodeId={nodeId} />
+          )}
         {actions?.indexOf("toggleHandlesVisibility") !== -1 && (
           <ToggleHandlesVisibilityControl nodeId={nodeId} />
         )}

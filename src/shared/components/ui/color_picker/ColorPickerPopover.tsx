@@ -1,14 +1,13 @@
 import type { ReactNode } from "react";
 
 import { ColorArea } from "./ColorArea";
-import type { AriaPopoverProps } from "react-aria";
 import ColorSlider from "./ColorSlider";
 import ColorField from "./ColorField";
-import { Dialog, Popover } from "react-aria-components";
+import { Dialog, Popover, type PopoverProps } from "react-aria-components";
 
 type Props = {
   children?: ReactNode;
-  popoverProps?: AriaPopoverProps;
+  popoverProps?: PopoverProps;
 };
 const ColorPickerPopover = ({ popoverProps, children }: Props) => {
   return (

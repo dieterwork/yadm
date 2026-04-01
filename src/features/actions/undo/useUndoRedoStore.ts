@@ -49,6 +49,9 @@ export const setFuture = (future: ReactStyleStateSetter<HistoryItem[]>) => {
 export const takeSnapshot = (nodes: DEMONode[], edges: DEMOEdge[]) => {
   const maxHistorySize = useUndoRedoStore.getState().maxHistorySize;
   const filters = useUndoRedoStore.getState().filters;
+  const nonFilteredNodes = nodes.filter(
+    (node) => !filters?.nodes?.includes(node.type)
+  );
   // push the current graph to the past state
   setPast((past) => [
     ...past.slice(
@@ -56,7 +59,7 @@ export const takeSnapshot = (nodes: DEMONode[], edges: DEMOEdge[]) => {
       past.length
     ),
     {
-      nodes: nodes.filter((node) => !filters?.nodes?.includes(node.type)),
+      nodes: nonFilteredNodes,
       edges,
     },
   ]);
@@ -73,31 +76,25 @@ export const undo = (nodes: DEMONode[], edges: DEMOEdge[]) => {
   // get the last state that we want to go back to
   const pastState = past[past.length - 1];
 
+  const nonFilteredNodes = nodes.filter(
+    (n) => !filters?.nodes?.includes(n.type)
+  );
+
   if (pastState) {
     // first we remove the state from the history
     setPast((past) => past.slice(0, past.length - 1));
     // we store the current graph for the redo operation
-    setFuture((future) => [...future, { nodes: nodes, edges: edges }]);
+    setFuture((future) => [
+      ...future,
+      { nodes: nonFilteredNodes, edges: edges },
+    ]);
     // now we can set the graph to the past state
-    const newNodes: DEMONode[] = [];
-    setNodes((nodes) =>
-      nodes.reduce((acc, current) => {
-        if (!filters?.nodes?.includes(current.type)) {
-          acc.push(current);
-          return acc;
-        } else {
-          // see if current node exists in history state
-          const newWhiteboardNode = pastState.nodes.find(
-            (whiteboard) => whiteboard.id === current.id
-          );
-
-          if (newWhiteboardNode) {
-            acc.push(newWhiteboardNode);
-          }
-          return acc;
-        }
-      }, newNodes)
-    );
+    setNodes((nodes) => {
+      const filteredNodes = nodes.filter((n) =>
+        filters?.nodes?.includes(n.type)
+      );
+      return [...filteredNodes, ...pastState.nodes];
+    });
     setEdges(pastState.edges);
   }
 };
@@ -107,28 +104,19 @@ export const redo = (nodes: DEMONode[], edges: DEMOEdge[]) => {
   const future = useUndoRedoStore.getState().future;
   const futureState = future[future.length - 1];
 
+  const nonFilteredNodes = nodes.filter(
+    (n) => !filters?.nodes?.includes(n.type)
+  );
+
   if (futureState) {
     setFuture((future) => future.slice(0, future.length - 1));
-    setPast((past) => [...past, { nodes: nodes, edges: edges }]);
-    const newNodes: DEMONode[] = [];
-    setNodes((nodes) =>
-      nodes.reduce((acc, current) => {
-        if (!filters?.nodes?.includes(current.type)) {
-          acc.push(current);
-          return acc;
-        } else {
-          // see if current node exists in history state
-          const newWhiteboardNode = futureState.nodes.find(
-            (whiteboard) => whiteboard.id === current.id
-          );
-
-          if (newWhiteboardNode) {
-            acc.push(newWhiteboardNode);
-          }
-          return acc;
-        }
-      }, newNodes)
-    );
+    setPast((past) => [...past, { nodes: nonFilteredNodes, edges: edges }]);
+    setNodes((nodes) => {
+      const filteredNodes = nodes.filter((n) =>
+        filters?.nodes?.includes(n.type)
+      );
+      return [...filteredNodes, ...futureState.nodes];
+    });
     setEdges(futureState.edges);
   }
 };

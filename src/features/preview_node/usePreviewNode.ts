@@ -38,8 +38,8 @@ export const usePreviewNode = () => {
       translateFn: t,
     });
 
-    addNode(newNode);
     takeSnapshotAndSave();
+    addNode(newNode);
 
     if (ofdNodes.includes(previewNode.type)) {
       // create text node
@@ -57,7 +57,6 @@ export const usePreviewNode = () => {
         translateFn: t,
       });
       addNode(textNode);
-      takeSnapshotAndSave();
     }
 
     resetPreviewNode();
