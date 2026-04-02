@@ -14,8 +14,12 @@ import PublicModelsMenu from "$shared/components/layout/topbar/menus/PublicModel
 import toast, { useToasterStore } from "react-hot-toast/headless";
 import useUserStore from "$/features/auth/useUserStore";
 import ServerModelsMenu from "$/shared/components/layout/topbar/menus/ServerModelsMenu";
+import type { Ref } from "react";
 
-const Topbar = () => {
+type Props = {
+  ref: Ref<HTMLDivElement>;
+};
+const Topbar = ({ ref }: Props) => {
   const { t } = useTranslation();
   const fileName = useDEMOModelerStore((state) => state.fileName);
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
@@ -23,7 +27,10 @@ const Topbar = () => {
   const { isAuthenticated } = useUserStore();
 
   return (
-    <div className="topbar | [grid-area:topbar] relative border-b border-gray-200 py-4 content-center md:h-12 md:p-0">
+    <div
+      ref={ref}
+      className="topbar | [grid-area:topbar] relative border-b border-gray-200 py-4 content-center md:h-12 md:p-0"
+    >
       <div className="topbar-inner | flex flex-col items-start content-center px-4 md:grid md:grid-cols-[auto_1fr] md:items-center">
         <h1 className="text-md font-semibold text-slate-900 leading-none">
           {t(($) => $["YADM"])}

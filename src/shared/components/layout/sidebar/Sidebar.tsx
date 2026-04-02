@@ -227,7 +227,7 @@ const Sidebar = () => {
     <>
       <div
         className={cn(
-          "sidebar | [grid-area:sidebar] transition-all border-r border-gray-200 overflow-hidden relative h-[calc(100svh-3rem)]",
+          "sidebar | [grid-area:sidebar] transition-all border-r border-gray-200 overflow-hidden relative h-[calc(100svh-var(--topbar-height,3rem))]",
           isEnabled && isOpen ? "w-[300px]" : "w-[calc(34px)]"
         )}
         style={{ container: "sidebar / size" }}
