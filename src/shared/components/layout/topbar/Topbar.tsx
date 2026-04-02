@@ -23,14 +23,14 @@ const Topbar = () => {
   const { isAuthenticated } = useUserStore();
 
   return (
-    <div className="topbar | [grid-area:topbar] relative border-b border-gray-200 py-4 content-center md:h-12 md:p-0">
-      <div className="topbar-inner | flex flex-col items-start content-center px-4 md:grid md:grid-cols-[auto_1fr] md:items-center">
+    <div className="topbar | [grid-area:topbar] relative border-b border-gray-200 py-4 content-center lg:h-12 lg:p-0">
+      <div className="topbar-inner | flex flex-col items-start content-center px-4 lg:grid lg:grid-cols-[auto_1fr] lg:items-center">
         <h1 className="text-md font-semibold text-slate-900 leading-none">
           {t(($) => $["YADM"])}
         </h1>
-        <div className="nav-wrapper | flex flex-col mt-2 md:flex-row md:ml-4 md:mt-0">
+        <div className="nav-wrapper | flex flex-col mt-2 lg:flex-row lg:ml-4 lg:mt-0">
           <nav className="nav | w-full">
-            <ul className="flex flex-col justify-between items-start gap-2 md:flex-row md:items-center md:gap-0">
+            <ul className="flex flex-col justify-between items-start gap-2 lg:flex-row lg:items-center lg:gap-0">
               <li>
                 <ul className="flex items-center gap-1">
                   <li>
@@ -52,7 +52,7 @@ const Topbar = () => {
                   )}
                 </ul>
               </li>
-              <li className="w-fit content-center md:absolute md:inset-0 md:m-auto">
+              <li className="w-fit content-center lg:absolute lg:inset-0 lg:m-auto">
                 {isEnabled && (
                   <TextField
                     className="grid grid-cols-[auto_1fr] items-center gap-2"

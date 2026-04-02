@@ -26,6 +26,7 @@ const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const node = getNode(nodeId);
   if (!node || !("handles" in node.data) || !node.data.handles) return null;
   const handles = node.data?.handles;
+
   const handleOptions = [
     {
       id: Position.Top,
@@ -44,6 +45,7 @@ const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
       label: t(($) => $["Left"]),
     },
   ] satisfies { id: Position; label: string }[];
+
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton
