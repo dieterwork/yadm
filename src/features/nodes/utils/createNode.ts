@@ -192,7 +192,7 @@ export const createNode = ({
             [0, DEFAULT_SIZE_MAP["transaction"].height],
             [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
           ],
-          zIndex: 170,
+          zIndex: 191,
         },
         {
           id: transactionId,
@@ -246,7 +246,7 @@ export const createNode = ({
               DEFAULT_SIZE_MAP["transaction"].height,
             ],
           ],
-          zIndex: 180,
+          zIndex: 192,
           draggable: false,
         },
         {
@@ -319,7 +319,7 @@ export const createNode = ({
                 DEFAULT_SIZE_MAP["transaction"].height / 2,
             ],
           ],
-          zIndex: 180,
+          zIndex: 191,
           draggable: false,
         },
         {
@@ -461,7 +461,7 @@ export const createNode = ({
             [0, DEFAULT_SIZE_MAP["transaction"].height],
             [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
           ],
-          zIndex: 170,
+          zIndex: 191,
         },
         {
           id: transactionId,
@@ -516,7 +516,7 @@ export const createNode = ({
             ],
           ],
           draggable: false,
-          zIndex: 180,
+          zIndex: 192,
         },
         {
           id: id,
@@ -602,7 +602,7 @@ export const createNode = ({
             [0, DEFAULT_SIZE_MAP["transaction"].height],
             [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
           ],
-          zIndex: 170,
+          zIndex: 191,
         },
         {
           id: transactionId,
@@ -658,7 +658,7 @@ export const createNode = ({
               transactionSize.height,
             ],
           ],
-          zIndex: 180,
+          zIndex: 192,
           draggable: false,
         },
         {
