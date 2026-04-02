@@ -14,6 +14,7 @@ import {
   ArrowCounterClockwiseIcon,
   EyeClosedIcon,
   EyeIcon,
+  HandIcon,
   PaintBrushIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
@@ -57,6 +58,7 @@ const WhiteboardToolbar = () => {
   const redoLabel = t(($) => $["Redo"]);
   const clearLabel = t(($) => $["Clear whiteboard"]);
   const drawLabel = t(($) => $["Draw"]);
+  const panLabel = t(($) => $["Pan"]);
 
   const color = useWhiteboardStore((state) => state.color);
 
@@ -96,6 +98,28 @@ const WhiteboardToolbar = () => {
               <PaintBrushIcon
                 color={
                   isDrawModeActive
+                    ? "var(--color-sky-500)"
+                    : "var(--color-slate-900)"
+                }
+              />
+            </DEMOModelerToolbarButton>
+          </TooltipTrigger>
+          {/* Activate pan */}
+          <TooltipTrigger>
+            <DEMOModelerToolbarTooltip
+              orientation={orientation}
+              label={panLabel}
+            />
+            <DEMOModelerToolbarButton
+              onPress={() => {
+                setAction("pan");
+              }}
+              aria-label={panLabel}
+              isDisabled={!isEnabled}
+            >
+              <HandIcon
+                color={
+                  action === "pan"
                     ? "var(--color-sky-500)"
                     : "var(--color-slate-900)"
                 }
