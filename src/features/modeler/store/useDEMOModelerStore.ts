@@ -599,14 +599,13 @@ export const setWhiteboardVisible = (
   useDEMOModelerStore.setState((state) => ({
     nodes: state.nodes.map((node) => {
       if (node.type === "whiteboard") {
-        console.log(node);
         return {
           ...node,
           selected: false,
           hidden:
             typeof isWhiteboardVisible === "boolean"
-              ? isWhiteboardVisible
-              : isWhiteboardVisible(node.hidden),
+              ? !isWhiteboardVisible
+              : isWhiteboardVisible(!node.hidden),
         };
       } else {
         return node;

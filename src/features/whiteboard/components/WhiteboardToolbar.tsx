@@ -28,6 +28,7 @@ import useWhiteboardStore, { setColor } from "../store/useWhiteboardStore";
 import { TooltipTrigger } from "react-aria-components";
 import DEMOToolbarColorPicker from "$/shared/components/ui/color_picker/DEMOToolbarColorPicker";
 import { useEffect, useState } from "react";
+import DEMOModelerToolbarToggleButton from "$/shared/components/ui/toolbars/_components/DEMOModelerToolbarToggleButton";
 
 const orientation = "horizontal";
 
@@ -37,9 +38,8 @@ const WhiteboardToolbar = () => {
   const action = useDEMOModelerStore((state) => state.action);
   const isDrawModeActive = action === "draw";
   const nodes = useDEMOModelerStore((state) => state.nodes);
-  const isWhiteboardVisible = nodes
-    .filter((node) => node.type === "whiteboard")
-    .every((node) => !node.hidden);
+  const whiteboardNodes = nodes.filter((node) => node.type === "whiteboard");
+  const isWhiteboardVisible = whiteboardNodes.every((node) => !node.hidden);
   const isWhiteboardEnabled = useDEMOModelerStore(
     (state) => state.isWhiteboardEnabled
   );
@@ -58,15 +58,10 @@ const WhiteboardToolbar = () => {
   const clearLabel = t(($) => $["Clear whiteboard"]);
   const drawLabel = t(($) => $["Draw"]);
 
-  const whiteboardNodes = nodes.filter((node) => node.type === "whiteboard");
-
   const color = useWhiteboardStore((state) => state.color);
 
   const [initialColor] = useState(() => color);
 
-  useEffect(() => {
-    console.log(pastHistory, futureHistory);
-  }, [pastHistory, futureHistory]);
   return (
     <div
       className={cn(
@@ -90,6 +85,7 @@ const WhiteboardToolbar = () => {
             <DEMOModelerToolbarButton
               onPress={() => {
                 setAction("draw");
+                setWhiteboardVisible(true);
                 setNodes((nodes) =>
                   nodes.map((node) => ({ ...node, selected: false }))
                 );
@@ -125,9 +121,15 @@ const WhiteboardToolbar = () => {
               orientation={orientation}
               label={whiteBoardVisibilityLabel}
             />
-            <DEMOModelerToolbarButton
-              onPress={() => {
-                setWhiteboardVisible((isVisible) => !isVisible);
+            <DEMOModelerToolbarToggleButton
+              isSelected={isWhiteboardVisible}
+              onChange={(isVisible) => {
+                setWhiteboardVisible(isVisible);
+                if (isVisible) {
+                  setAction("draw");
+                } else {
+                  setAction("pan");
+                }
               }}
               aria-label={whiteBoardVisibilityLabel}
               isDisabled={!isEnabled}
@@ -137,7 +139,7 @@ const WhiteboardToolbar = () => {
               ) : (
                 <EyeClosedIcon color="var(--color-slate-900)" />
               )}
-            </DEMOModelerToolbarButton>
+            </DEMOModelerToolbarToggleButton>
           </TooltipTrigger>
         </DEMOModelerToolbarGroup>
         <DEMOModelerToolbarSeparator orientation={orientation} />

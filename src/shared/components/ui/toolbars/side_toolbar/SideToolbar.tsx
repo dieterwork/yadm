@@ -153,7 +153,11 @@ const SideToolbar = () => {
           <TooltipTrigger>
             <DEMOModelerToolbarTooltip
               orientation="vertical"
-              label={t(($) => $["Activate draw tool"])}
+              label={
+                isWhiteboardEnabled
+                  ? t(($) => $["Enable whiteboard"])
+                  : t(($) => $["Disable whiteboard"])
+              }
             />
             <DEMOModelerToolbarButton
               onPress={() => {
@@ -165,7 +169,11 @@ const SideToolbar = () => {
                   nodes.map((node) => ({ ...node, selected: false }))
                 );
               }}
-              aria-label={t(($) => $["Activate draw tool"])}
+              aria-label={
+                isWhiteboardEnabled
+                  ? t(($) => $["Enable whiteboard"])
+                  : t(($) => $["Disable whiteboard"])
+              }
               isDisabled={!isEnabled}
             >
               <ScribbleIcon
