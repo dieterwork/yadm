@@ -164,6 +164,9 @@ const SideToolbar = () => {
                 if (previewNode) resetPreviewNode();
                 if (childNodeId) resetAttach();
                 setAction(isWhiteboardEnabled ? "pan" : "draw");
+                setHandleEditModeEnabled((isEnabled) =>
+                  isWhiteboardEnabled ? isEnabled : false
+                );
                 setWhiteboardEnabled((isEnabled) => !isEnabled);
                 setNodes((nodes) =>
                   nodes.map((node) => ({ ...node, selected: false }))
