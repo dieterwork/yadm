@@ -46,8 +46,8 @@ const TopbarMenuButtonAutoComplete = <T extends object>({
         )}
       >
         <Autocomplete
-          onInputChange={onSearchValueChange}
           inputValue={searchValue}
+          onInputChange={onSearchValueChange}
         >
           <MenuSearchField label={searchLabel} />
           <Menu

@@ -157,16 +157,20 @@ const ServerModelsMenu = () => {
     );
   }
 
+  useEffect(() => {
+    console.log(searchValue);
+  }, [searchValue]);
+
   return (
     <>
       <TopbarMenuButtonAutoComplete
         label={label}
         items={serverModelsQuery.data}
-        renderEmptyState={() => <div>You have no server models</div>}
-        size="large"
-        searchLabel="Search my models"
         searchValue={searchValue}
         onSearchValueChange={(value) => setSearchValue(value)}
+        searchLabel="Search my models"
+        size="large"
+        renderEmptyState={() => <div>You have no server models</div>}
       >
         {(model) => (
           <TopbarMenuItem
