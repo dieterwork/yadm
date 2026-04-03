@@ -7,11 +7,13 @@ import {
   MenuTrigger,
   Popover,
   useFilter,
+  type AutocompleteProps,
   type MenuProps,
   type MenuTriggerProps,
 } from "react-aria-components";
 
 type TopbarMenuButtonProps<T> = MenuProps<T> &
+  AutocompleteProps<T> &
   Omit<MenuTriggerProps, "children"> & {
     label?: string;
     searchValue?: string;
@@ -48,6 +50,7 @@ const TopbarMenuButtonAutoComplete = <T extends object>({
         )}
       >
         <Autocomplete
+          {...restProps}
           filter={contains}
           inputValue={searchValue}
           onInputChange={onSearchValueChange}
