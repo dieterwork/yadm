@@ -52,7 +52,7 @@ const WhiteboardToolbar = () => {
   const displayOptionsLabel = t(($) => $["Display options"]);
   const showLabel = t(($) => $["Show whiteboard"]);
   const hideLabel = t(($) => $["Hide whiteboard"]);
-  const whiteBoardVisibilityLabel = isWhiteboardVisible ? showLabel : hideLabel;
+  const whiteBoardVisibilityLabel = isWhiteboardVisible ? hideLabel : showLabel;
   const colorSelectLabel = t(($) => $["Select color"]);
   const undoLabel = t(($) => $["Undo"]);
   const redoLabel = t(($) => $["Redo"]);
@@ -159,7 +159,7 @@ const WhiteboardToolbar = () => {
               isDisabled={!isEnabled}
             >
               {isWhiteboardVisible ? (
-                <EyeIcon color="var(--color-slate-900)" />
+                <EyeIcon color="var(--color-sky-500)" />
               ) : (
                 <EyeClosedIcon color="var(--color-slate-900)" />
               )}

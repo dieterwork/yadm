@@ -12,8 +12,11 @@ import {
   DEFAULT_CONTENT_MAP,
   DEFAULT_SIZE_MAP,
 } from "$/features/nodes/utils/consts";
-import { useEffect, useId, useState } from "react";
-import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
+import { useId, useState } from "react";
+import {
+  setAction,
+  useDEMOModelerStore,
+} from "$/features/modeler/store/useDEMOModelerStore";
 
 const SidebarSelect = ({
   menuItem,
@@ -23,27 +26,30 @@ const SidebarSelect = ({
   isDisabled?: boolean;
 }) => {
   const previewNode = usePreviewNodeStore((state) => state.previewNode);
+  const [prevPreviewNode, setPrevPreviewNode] = useState(previewNode);
   const [isOpen, setOpen] = useState(false);
   const buttonId = useId();
+
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
 
   const [selected, setSelected] = useState<Key | null>(
     menuItem.sections[0].items[0].id
   );
 
-  useEffect(() => {
-    if (previewNode === null) setSelected(null);
-  }, [previewNode]);
+  if (previewNode !== prevPreviewNode) {
+    setPrevPreviewNode(previewNode);
+    if (previewNode === null) {
+      setSelected(null);
+    }
+  }
 
   return (
     <div className="select-wrapper">
       <Select
         className="outline-hidden"
         aria-labelledby={buttonId}
-        selectedKey={selected}
-        onSelectionChange={(selected) => {
-          setSelected(selected);
-        }}
+        value={selected}
+        onChange={(val) => setSelected(val)}
         isDisabled={isDisabled}
       >
         <SidebarMenuButton
@@ -72,6 +78,9 @@ const SidebarSelect = ({
                         position: { x: e.clientX, y: e.clientY },
                         content: DEFAULT_CONTENT_MAP[item.type] ?? "",
                       });
+                    }}
+                    onAction={() => {
+                      setAction("pan");
                     }}
                     key={item.id}
                     label={item.label}

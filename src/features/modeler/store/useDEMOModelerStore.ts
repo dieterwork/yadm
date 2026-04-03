@@ -284,8 +284,9 @@ export const onConnect: OnConnect = (connection) => {
     zIndex: 110,
     deletable: true,
   } satisfies DEMOEdge;
-  addEdge(newEdge);
+
   takeSnapshotAndSave();
+  addEdge(newEdge);
 };
 
 export const onReconnect: OnReconnect = (oldEdge, newConnection) => {

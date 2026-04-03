@@ -57,6 +57,10 @@ const BottomToolbar = () => {
 
   const [_, setLocalModel] = useLocalModel();
 
+  const isWhiteboardEnabled = useDEMOModelerStore(
+    (state) => state.isWhiteboardEnabled
+  );
+
   return (
     <div className="bottom-toolbar-wrapper | absolute bottom-4 left-[50%] translate-x-[-50%] z-9999">
       <DEMOModelerToolbar
@@ -193,7 +197,9 @@ const BottomToolbar = () => {
             />
             <DEMOModelerToolbarButton
               aria-label={t(($) => $["Undo"])}
-              isDisabled={!isEnabled || pastHistory.length === 0}
+              isDisabled={
+                !isEnabled || pastHistory.length === 0 || isWhiteboardEnabled
+              }
               onPress={() => {
                 if (previewNode) resetPreviewNode();
                 if (childNodeId) resetAttach();
@@ -206,7 +212,6 @@ const BottomToolbar = () => {
                     ? "var(--color-sky-500)"
                     : "var(--color-slate-900)"
                 }
-                opacity={pastHistory.length === 0 ? 0.5 : 1}
               />
             </DEMOModelerToolbarButton>
           </TooltipTrigger>
@@ -219,7 +224,9 @@ const BottomToolbar = () => {
             />
             <DEMOModelerToolbarButton
               aria-label={t(($) => $["Redo"])}
-              isDisabled={!isEnabled || futureHistory.length === 0}
+              isDisabled={
+                !isEnabled || futureHistory.length === 0 || isWhiteboardEnabled
+              }
               onPress={() => {
                 if (previewNode) resetPreviewNode();
                 if (childNodeId) resetAttach();
@@ -232,7 +239,6 @@ const BottomToolbar = () => {
                     ? "var(--color-sky-500)"
                     : "var(--color-slate-900)"
                 }
-                opacity={futureHistory.length === 0 ? 0.5 : 1}
               />
             </DEMOModelerToolbarButton>
           </TooltipTrigger>

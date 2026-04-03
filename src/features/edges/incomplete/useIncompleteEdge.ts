@@ -132,9 +132,9 @@ export const useIncompleteEdge = () => {
       ...newEdgeMarker,
     } satisfies DEMOEdge;
 
+    takeSnapshotAndSave();
     addNode(ghostNode);
     addEdge(newEdge);
-    takeSnapshotAndSave();
   };
   return onConnectEnd;
 };

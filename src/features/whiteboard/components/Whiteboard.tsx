@@ -1,4 +1,4 @@
-import { useRef, useState, type PointerEventHandler } from "react";
+import { useEffect, useRef, useState, type PointerEventHandler } from "react";
 import { cn } from "@sglara/cn";
 import {
   addNode,

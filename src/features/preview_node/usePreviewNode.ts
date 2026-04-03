@@ -39,6 +39,7 @@ export const usePreviewNode = () => {
     });
 
     takeSnapshotAndSave();
+
     addNode(newNode);
 
     if (ofdNodes.includes(previewNode.type)) {
