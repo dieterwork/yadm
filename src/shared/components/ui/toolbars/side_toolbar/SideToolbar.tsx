@@ -338,8 +338,14 @@ const SideToolbar = () => {
                 if (childNodeId) resetAttach();
                 setHandleEditModeEnabled(isEnabled);
 
-                if (isEnabled && !areHandlesVisible) {
-                  setNodesHandlesVisibility(true);
+                if (isEnabled) {
+                  if (isWhiteboardEnabled) {
+                    setWhiteboardEnabled(false);
+                    setAction("pan");
+                  }
+                  if (!areHandlesVisible) {
+                    setNodesHandlesVisibility(true);
+                  }
                 }
               }}
               aria-label={
