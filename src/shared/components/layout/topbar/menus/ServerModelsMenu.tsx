@@ -159,7 +159,7 @@ const ServerModelsMenu = () => {
 
   useEffect(() => {
     console.log(searchValue, serverModelsQuery.data);
-  }, [searchValue, serverModelsQuery]);
+  }, [searchValue, serverModelsQuery.data]);
 
   return (
     <>
