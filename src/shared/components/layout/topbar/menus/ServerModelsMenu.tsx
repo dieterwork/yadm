@@ -139,6 +139,10 @@ const ServerModelsMenu = () => {
 
   const label = t(($) => $["My models"]);
 
+  useEffect(() => {
+    console.log(searchValue, serverModelsQuery.data);
+  }, [searchValue, serverModelsQuery.data]);
+
   if (serverModelsQuery.isError || !serverModelsQuery.data) {
     return (
       <TopbarMenuButton label={label}>
@@ -156,10 +160,6 @@ const ServerModelsMenu = () => {
       </TopbarMenuButton>
     );
   }
-
-  useEffect(() => {
-    console.log(searchValue, serverModelsQuery.data);
-  }, [searchValue, serverModelsQuery.data]);
 
   return (
     <>
