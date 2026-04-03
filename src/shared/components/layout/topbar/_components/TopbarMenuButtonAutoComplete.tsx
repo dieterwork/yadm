@@ -7,13 +7,11 @@ import {
   MenuTrigger,
   Popover,
   useFilter,
-  type AutocompleteProps,
   type MenuProps,
   type MenuTriggerProps,
 } from "react-aria-components";
 
 type TopbarMenuButtonProps<T> = MenuProps<T> &
-  AutocompleteProps<T> &
   Omit<MenuTriggerProps, "children"> & {
     label?: string;
     searchValue?: string;
@@ -51,15 +49,19 @@ const TopbarMenuButtonAutoComplete = <T extends object>({
       >
         <Autocomplete
           {...restProps}
-          filter={contains}
-          inputValue={searchValue}
           onInputChange={onSearchValueChange}
+          inputValue={searchValue}
+          filter={contains}
         >
           <MenuSearchField label={searchLabel} />
           <Menu
             {...restProps}
             className="outline-hidden"
-            renderEmptyState={() => "No results found."}
+            renderEmptyState={() => (
+              <div className="px-2 h-[2rem] content-center">
+                <p className="text-sm text-slate-900">No results found</p>
+              </div>
+            )}
           >
             {children}
           </Menu>

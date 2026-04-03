@@ -170,7 +170,11 @@ const ServerModelsMenu = () => {
         onSearchValueChange={(value) => setSearchValue(value)}
         searchLabel="Search my models"
         size="large"
-        renderEmptyState={() => <div>You have no server models</div>}
+        renderEmptyState={() => (
+          <div className="px-2 h-[2rem] content-center">
+            <p className="text-sm text-slate-900">No server models found</p>
+          </div>
+        )}
       >
         {(model) => (
           <TopbarMenuItem
@@ -182,6 +186,7 @@ const ServerModelsMenu = () => {
                 setPwdModalOpen(true);
               }
             }}
+            textValue={model.fileName}
           >
             {model.fileName}
           </TopbarMenuItem>

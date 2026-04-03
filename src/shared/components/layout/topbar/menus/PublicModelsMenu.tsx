@@ -102,6 +102,7 @@ const PublicModelsMenu = () => {
                 company: model.companyName,
               });
             }}
+            textValue={model.modelName}
           >
             {model.modelName}
           </TopbarMenuItem>
@@ -118,7 +119,11 @@ const PublicModelsMenu = () => {
       onSearchValueChange={(value) => setSearchValue(value)}
       searchLabel="Search public models"
       size="large"
-      renderEmptyState={() => <div>No public models exist</div>}
+      renderEmptyState={() => (
+        <div className="px-2 h-[2rem] content-center">
+          <p className="text-sm text-slate-900">No public models found</p>
+        </div>
+      )}
     >
       {(company) => {
         const publicModels = publicModelsByCompany
@@ -138,6 +143,7 @@ const PublicModelsMenu = () => {
                     company: company.name,
                   });
                 }}
+                textValue={model.modelName}
               >
                 {model.modelName}
               </TopbarMenuItem>
