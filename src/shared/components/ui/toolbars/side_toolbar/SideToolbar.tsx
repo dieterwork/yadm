@@ -155,8 +155,8 @@ const SideToolbar = () => {
               orientation="vertical"
               label={
                 isWhiteboardEnabled
-                  ? t(($) => $["Enable whiteboard"])
-                  : t(($) => $["Disable whiteboard"])
+                  ? t(($) => $["Disable whiteboard"])
+                  : t(($) => $["Enable whiteboard"])
               }
             />
             <DEMOModelerToolbarButton
@@ -174,8 +174,8 @@ const SideToolbar = () => {
               }}
               aria-label={
                 isWhiteboardEnabled
-                  ? t(($) => $["Enable whiteboard"])
-                  : t(($) => $["Disable whiteboard"])
+                  ? t(($) => $["Disable whiteboard"])
+                  : t(($) => $["Enable whiteboard"])
               }
               isDisabled={!isEnabled}
             >
