@@ -171,7 +171,7 @@ export function EditableEdgeComponent({
         targetX={targetCenterPosition?.x ?? 0}
         sourceY={sourceCenterPosition?.y ?? 0}
         targetY={targetCenterPosition?.y ?? 0}
-        active={isDraggable && isEnabled}
+        active={isEnabled}
         direction={interactiveEdgeDirection}
         onDragStart={({ event }) => {
           event.stopPropagation();
