@@ -57,10 +57,11 @@ const InteractiveCenterEdge = ({
       strokeOpacity={1}
       strokeWidth={20}
       className={cn(
-        "react-flow__edge-interaction nopan nodrag",
+        "react-flow__edge-interaction nodrag",
         direction === "horizontal" && active && "cursor-col-resize",
         direction === "vertical" && active && "cursor-row-resize",
-        !direction && "cursor-auto"
+        !direction && "cursor-auto",
+        active && "nopan"
       )}
       tabIndex={0}
       style={{ pointerEvents: "all", touchAction: "none" }}
