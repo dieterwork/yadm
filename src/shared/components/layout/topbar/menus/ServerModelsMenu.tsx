@@ -102,7 +102,7 @@ const ServerModelsMenu = () => {
         label={label}
         items={serverModelsQuery.data}
         searchValue={searchValue}
-        onSearchValueChange={(value) => setSearchValue(value)}
+        onSearchValueChange={(value) => setSearchValue(value.trim().replace(/[^a-zA-Z0-9_\-\s]/g, ""))}
         searchLabel="Search my models"
         size="large"
         renderEmptyState={() => (
