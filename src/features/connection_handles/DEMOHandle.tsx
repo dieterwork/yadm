@@ -142,7 +142,7 @@ const DEMOHandle = ({
             (position === Position.Right || position === Position.Left) &&
             "cursor-row-resize!",
           isEnabled && !canDrag && "cursor-not-allowed",
-          !isEnabled && "nopan nodrag pointer-events-none invisible"
+          !isEnabled && "nodrag pointer-events-none invisible"
         )}
         id={id}
         position={position}
