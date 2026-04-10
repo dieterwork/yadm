@@ -19,7 +19,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
 
   useEffect(() => {
     updateNodeInternals(nodeId);
-  }, [nodeId]);
+  }, [updateNodeInternals, nodeId]);
 
   if (
     !node ||

@@ -7,6 +7,7 @@ import {
   SelectionMode,
   ViewportPortal,
   useReactFlow,
+  useUpdateNodeInternals,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
@@ -188,10 +189,6 @@ const DEMOModeler = () => {
       }
     }
   }, []);
-
-  useEffect(() => {
-    console.log(nodes, edges);
-  }, [nodes, edges]);
 
   return (
     <>
