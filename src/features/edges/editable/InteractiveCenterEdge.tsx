@@ -21,6 +21,7 @@ interface InteractiveCenterEdgeProps {
     PointerEvent | MouseEvent | TouchEvent | KeyboardEvent
   >;
   direction?: "horizontal" | "vertical";
+  isDisabled?: boolean;
 }
 
 const InteractiveCenterEdge = ({
@@ -32,15 +33,19 @@ const InteractiveCenterEdge = ({
   onDrag,
   onDragEnd,
   direction,
+  isDisabled,
 }: InteractiveCenterEdgeProps) => {
   const bind = useGesture({
     onDragStart: (params) => {
+      if (isDisabled) return;
       if (onDragStart) onDragStart(params);
     },
     onDrag: (params) => {
+      if (isDisabled) return;
       if (onDrag) onDrag(params);
     },
     onDragEnd: (params) => {
+      if (isDisabled) return;
       if (onDragEnd) onDragEnd(params);
     },
   });
@@ -54,8 +59,8 @@ const InteractiveCenterEdge = ({
       strokeWidth={20}
       className={cn(
         "react-flow__edge-interaction nopan nodrag",
-        direction === "horizontal" && "cursor-col-resize",
-        direction === "vertical" && "cursor-row-resize",
+        direction === "horizontal" && !isDisabled && "cursor-col-resize",
+        direction === "vertical" && !isDisabled && "cursor-row-resize",
         !direction && "cursor-auto"
       )}
       tabIndex={0}

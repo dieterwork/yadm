@@ -19,6 +19,7 @@ import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
   updateEdge,
   updateEdgeData,
+  useDEMOModelerStore,
 } from "$/features/modeler/store/useDEMOModelerStore";
 import { getCenterEdgePoints } from "../utils/smoothStep";
 import getInteractiveCenterEdgeDirection from "../utils/getInteractiveCenterEdgeDirection";
@@ -35,11 +36,9 @@ export function EditableEdgeComponent({
   id,
   sourceX,
   sourceY,
-  source,
   sourcePosition,
   targetX,
   targetY,
-  target,
   targetPosition,
   isDraggable,
   markerEnd,
@@ -61,6 +60,7 @@ export function EditableEdgeComponent({
   isDraggable?: boolean;
   linePath?: "step" | "straight";
 }) {
+  const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const { screenToFlowPosition } = useReactFlow();
 
   const offset = 30;
@@ -167,6 +167,7 @@ export function EditableEdgeComponent({
         markerStart={markerStart}
       />
       <InteractiveCenterEdge
+        isDisabled={!isEnabled}
         sourceX={sourceCenterPosition?.x ?? 0}
         targetX={targetCenterPosition?.x ?? 0}
         sourceY={sourceCenterPosition?.y ?? 0}
