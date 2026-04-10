@@ -100,6 +100,7 @@ const DEMOModeler = () => {
           fileName: data.fileName,
         })
       );
+      console.log(data);
       setModel({ ...data, isEnabled: false });
       fitView();
     },
@@ -133,7 +134,8 @@ const DEMOModeler = () => {
           fileName: data.fileName,
         })
       );
-      setModel(data);
+      console.log(data);
+      setModel({ ...data, isEnabled: false });
       fitView();
     },
     onMutate: () => {
