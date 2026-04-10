@@ -188,7 +188,7 @@ const DEMOModeler = () => {
     } else {
       setSharedModel(false);
     }
-  }, [publicModelMutation, serverModelMutation]);
+  }, []);
 
   return (
     <>
