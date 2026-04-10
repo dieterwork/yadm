@@ -59,6 +59,7 @@ const ServerModelsMenu = () => {
       setModel(data);
       fitView();
       setSearchValue("");
+      setSharedModel(false);
     },
     onMutate: () => {
       toast.loading(
@@ -102,7 +103,9 @@ const ServerModelsMenu = () => {
         label={label}
         items={serverModelsQuery.data}
         searchValue={searchValue}
-        onSearchValueChange={(value) => setSearchValue(value.trimStart().replace(/[^a-zA-Z0-9_\-\s]/g, ""))}
+        onSearchValueChange={(value) =>
+          setSearchValue(value.trimStart().replace(/[^a-zA-Z0-9_\-\s]/g, ""))
+        }
         searchLabel="Search my models"
         size="large"
         renderEmptyState={() => (
