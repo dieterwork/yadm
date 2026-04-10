@@ -188,11 +188,7 @@ const DEMOModeler = () => {
     } else {
       setSharedModel(false);
     }
-  }, []);
-
-  useEffect(() => {
-    console.log(nodes, edges);
-  }, [nodes, edges]);
+  }, [publicModelMutation, serverModelMutation]);
 
   return (
     <>
