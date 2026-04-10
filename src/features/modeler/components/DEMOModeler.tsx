@@ -189,7 +189,7 @@ const DEMOModeler = () => {
         }
       }
     }
-  });
+  }, []);
 
   return (
     <>
