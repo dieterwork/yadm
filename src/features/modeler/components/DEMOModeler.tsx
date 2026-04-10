@@ -156,35 +156,33 @@ const DEMOModeler = () => {
     },
   });
 
-  useEffect(() => {
-    const modelName =
-      new URLSearchParams(window.location.search).get("model") ?? "";
+  const modelName =
+    new URLSearchParams(window.location.search).get("model") ?? "";
 
-    if (modelName !== "" && modelName.includes("/")) {
-      const piecesCount = modelName.split("/").length;
+  if (modelName !== "" && modelName.includes("/")) {
+    const piecesCount = modelName.split("/").length;
 
-      console.log(modelName);
+    console.log(modelName);
 
-      if (piecesCount === 3) {
-        // 3 slashes is my models
-        const [mymodels, , fileName] = modelName.split("/");
+    if (piecesCount === 3 && !serverModelMutation.data) {
+      // 3 slashes is my models
+      const [mymodels, , fileName] = modelName.split("/");
 
-        if (mymodels === "mymodels") {
-          console.log("my models");
-          setCurrentFileName(fileName);
-          serverModelMutation.mutate(fileName);
-        }
-      } else if (piecesCount === 2) {
-        // 2 slashes is a public model
-
-        console.log("public model");
-
-        const [company, fileName] = modelName.split("/");
-
-        publicModelMutation.mutate({ fileName, company });
+      if (mymodels === "mymodels") {
+        console.log("my models");
+        setCurrentFileName(fileName);
+        serverModelMutation.mutate(fileName);
       }
+    } else if (piecesCount === 2 && !publicModelMutation.data) {
+      // 2 slashes is a public model
+
+      console.log("public model");
+
+      const [company, fileName] = modelName.split("/");
+
+      publicModelMutation.mutate({ fileName, company });
     }
-  }, []);
+  }
 
   return (
     <>
