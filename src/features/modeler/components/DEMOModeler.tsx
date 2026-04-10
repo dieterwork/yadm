@@ -159,7 +159,11 @@ const DEMOModeler = () => {
     },
   });
 
-  if (modelName !== "" && modelName.includes("/")) {
+  if (
+    modelName !== "" &&
+    modelName.includes("/") &&
+    (!serverModelMutation.isPending || !publicModelMutation.isPending)
+  ) {
     const piecesCount = modelName.split("/").length;
 
     console.log(modelName);
