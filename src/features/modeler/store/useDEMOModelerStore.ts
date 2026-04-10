@@ -595,7 +595,7 @@ export const setModel = (model: DEMOModelJSON) => {
   setEdges(model.edges);
   setFileName(model.fileName);
   setViewport(model.viewport ?? { x: 0, y: 0, zoom: 1 });
-  toggleLock(model.isEnabled ?? true);
+  setEnabled(model.isEnabled ?? true);
 };
 
 export const setWhiteboardVisible = (
