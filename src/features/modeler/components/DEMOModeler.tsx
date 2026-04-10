@@ -72,9 +72,6 @@ const reactFlowSelector = (state: DEMOModelerState) => ({
 });
 
 const DEMOModeler = () => {
-  const modelName =
-    new URLSearchParams(window.location.search).get("model") ?? "";
-
   const { isEnabled, nodes, edges, action, isGridVisible, isGridSnapEnabled } =
     useDEMOModelerStore(useShallow(reactFlowSelector));
 
@@ -159,34 +156,35 @@ const DEMOModeler = () => {
     },
   });
 
-  if (
-    modelName !== "" &&
-    modelName.includes("/") &&
-    (!serverModelMutation.isPending || !publicModelMutation.isPending)
-  ) {
-    const piecesCount = modelName.split("/").length;
+  useEffect(() => {
+    const modelName =
+      new URLSearchParams(window.location.search).get("model") ?? "";
 
-    console.log(modelName);
+    if (modelName !== "" && modelName.includes("/")) {
+      const piecesCount = modelName.split("/").length;
 
-    if (piecesCount === 3 && !serverModelMutation.data) {
-      // 3 slashes is my models
-      const [mymodels, , fileName] = modelName.split("/");
+      console.log(modelName);
 
-      if (mymodels === "mymodels") {
-        console.log("my models");
-        setCurrentFileName(fileName);
-        serverModelMutation.mutate(fileName);
+      if (piecesCount === 3) {
+        // 3 slashes is my models
+        const [mymodels, , fileName] = modelName.split("/");
+
+        if (mymodels === "mymodels") {
+          console.log("my models");
+          setCurrentFileName(fileName);
+          serverModelMutation.mutate(fileName);
+        }
+      } else if (piecesCount === 2) {
+        // 2 slashes is a public model
+
+        console.log("public model");
+
+        const [company, fileName] = modelName.split("/");
+
+        publicModelMutation.mutate({ fileName, company });
       }
-    } else if (piecesCount === 2 && !publicModelMutation.data) {
-      // 2 slashes is a public model
-
-      console.log("public model");
-
-      const [company, fileName] = modelName.split("/");
-
-      publicModelMutation.mutate({ fileName, company });
     }
-  }
+  }, []);
 
   return (
     <>
