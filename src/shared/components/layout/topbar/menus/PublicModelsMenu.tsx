@@ -88,7 +88,7 @@ const PublicModelsMenu = () => {
       <TopbarMenuButtonAutoComplete
         label={label}
         searchValue={searchValue}
-        onSearchValueChange={(value) => setSearchValue(value.trim().replace(/[^a-zA-Z0-9_\-\s]/g, ""))}
+        onSearchValueChange={(value) => setSearchValue(value.trimStart().replace(/[^a-zA-Z0-9_\-\s]/g, ""))}
         items={publicModelsQuery.data}
         searchLabel="Search public models"
         size="large"
@@ -116,7 +116,7 @@ const PublicModelsMenu = () => {
       label={label}
       items={companyMenuItems}
       searchValue={searchValue}
-      onSearchValueChange={(value) => setSearchValue(value)}
+      onSearchValueChange={(value) => setSearchValue(value.trimStart().replace(/[^a-zA-Z0-9_\-\s]/g, ""))}
       searchLabel="Search public models"
       size="large"
       renderEmptyState={() => (
