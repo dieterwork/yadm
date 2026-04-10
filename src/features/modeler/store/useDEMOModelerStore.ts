@@ -392,10 +392,14 @@ export const toggleLock = (isEnabled: ReactStyleStateSetter<boolean>) => {
         typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
       selected:
         typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
+      selectable:
+        typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
     })),
     edges: state.edges.map((edge) => ({
       ...edge,
       selected:
+        typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
+      selectable:
         typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
     })),
   }));
