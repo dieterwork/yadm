@@ -72,6 +72,9 @@ const reactFlowSelector = (state: DEMOModelerState) => ({
 });
 
 const DEMOModeler = () => {
+  const modelName =
+    new URLSearchParams(window.location.search).get("model") ?? "";
+
   const { isEnabled, nodes, edges, action, isGridVisible, isGridSnapEnabled } =
     useDEMOModelerStore(useShallow(reactFlowSelector));
 
@@ -155,9 +158,6 @@ const DEMOModeler = () => {
       }
     },
   });
-
-  const modelName =
-    new URLSearchParams(window.location.search).get("model") ?? "";
 
   if (modelName !== "" && modelName.includes("/")) {
     const piecesCount = modelName.split("/").length;
