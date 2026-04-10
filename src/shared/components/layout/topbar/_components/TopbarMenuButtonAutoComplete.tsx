@@ -10,6 +10,7 @@ import {
   type MenuProps,
   type MenuTriggerProps,
 } from "react-aria-components";
+import type {Filter} from "react-aria";
 
 type TopbarMenuButtonProps<T> = MenuProps<T> &
   Omit<MenuTriggerProps, "children"> & {
@@ -29,7 +30,17 @@ const TopbarMenuButtonAutoComplete = <T extends object>({
   size = "medium",
   ...restProps
 }: TopbarMenuButtonProps<T>) => {
-  const { contains } = useFilter({ sensitivity: "base" });
+
+    const modelFilter = (textValue: string, inputValue: string): boolean => {
+
+        const trimmedInputValue = inputValue?.trim()?.toLowerCase() ?? '';
+
+        if(trimmedInputValue === '') return true;
+
+        return textValue.toLowerCase().includes(trimmedInputValue);
+
+    }
+
   return (
     <MenuTrigger {...restProps}>
       <Button
@@ -50,8 +61,8 @@ const TopbarMenuButtonAutoComplete = <T extends object>({
         <Autocomplete
           {...restProps}
           onInputChange={onSearchValueChange}
-          inputValue={searchValue?.trim()}
-          filter={contains}
+          inputValue={searchValue}
+          filter={modelFilter}
         >
           <MenuSearchField label={searchLabel} />
           <Menu
