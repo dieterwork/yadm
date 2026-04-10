@@ -86,6 +86,7 @@ export const setNodes = (newNodes: ReactStyleStateSetter<DEMONode[]>) => {
 };
 
 export const setEdges = (newEdges: ReactStyleStateSetter<DEMOEdge[]>) => {
+  console.log(newEdges);
   useDEMOModelerStore.setState((state) => ({
     edges: Array.isArray(newEdges) ? newEdges : newEdges(state.edges),
   }));
@@ -587,6 +588,7 @@ export const onNodesDelete: OnNodesDelete<DEMONode> = (nodes) => {
 };
 
 export const setModel = (model: DEMOModelJSON) => {
+  console.log(model);
   setNodes(model.nodes.map((node) => ({ ...node, selected: false })));
   setEdges(model.edges.map((edge) => ({ ...edge, selected: false })));
   setFileName(model.fileName);
