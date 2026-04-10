@@ -1,5 +1,6 @@
 import {
   useConnection,
+  useUpdateNodeInternals,
   type NodeProps,
   type NodeResizerProps,
 } from "@xyflow/react";
@@ -107,7 +108,7 @@ const DEMONodeBase = ({
             type={type}
           />
         )}
-        {"handles" in data && data.handles && isEnabled && !isExportEnabled && (
+        {"handles" in data && data.handles && !isExportEnabled && (
           <Handles
             nodeId={id}
             handles={data?.handles}

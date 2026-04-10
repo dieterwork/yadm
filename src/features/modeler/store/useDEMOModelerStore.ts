@@ -391,7 +391,13 @@ export const toggleLock = (isEnabled: ReactStyleStateSetter<boolean>) => {
       draggable:
         typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
       selected:
-        typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
+        typeof isEnabled === "boolean"
+          ? isEnabled
+            ? node.selected
+            : false
+          : isEnabled(state.isEnabled)
+            ? node.selected
+            : false,
       selectable:
         typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
     })),
@@ -400,7 +406,13 @@ export const toggleLock = (isEnabled: ReactStyleStateSetter<boolean>) => {
       draggable:
         typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
       selected:
-        typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
+        typeof isEnabled === "boolean"
+          ? isEnabled
+            ? edge.selected
+            : false
+          : isEnabled(state.isEnabled)
+            ? edge.selected
+            : false,
       selectable:
         typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
     })),
@@ -596,9 +608,7 @@ export const onNodesDelete: OnNodesDelete<DEMONode> = (nodes) => {
 
 export const setModel = (model: DEMOModelJSON) => {
   setNodes(model.nodes);
-  setTimeout(() => {
-    setEdges(model.edges);
-  }, 0);
+  setEdges(model.edges);
   setFileName(model.fileName);
   setViewport(model.viewport ?? { x: 0, y: 0, zoom: 1 });
   toggleLock(model.isEnabled);

@@ -141,7 +141,8 @@ const DEMOHandle = ({
             canDrag &&
             (position === Position.Right || position === Position.Left) &&
             "cursor-row-resize!",
-          isEnabled && !canDrag && "cursor-not-allowed"
+          isEnabled && !canDrag && "cursor-not-allowed",
+          !isEnabled && "nopan nodrag pointer-events-none invisible"
         )}
         id={id}
         position={position}
@@ -153,7 +154,10 @@ const DEMOHandle = ({
     <Handle
       {...restProps}
       style={style}
-      className="demo-handle"
+      className={cn(
+        "demo-handle",
+        !isEnabled && "nopan nodrag pointer-events-none invisible"
+      )}
       id={id}
       position={position}
       onContextMenu={onContextMenu}
