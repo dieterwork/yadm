@@ -102,6 +102,7 @@ const DEMOModeler = () => {
       );
       console.log(data);
       setModel({ ...data, isEnabled: false });
+      setSharedModel(true);
       fitView();
     },
     onMutate: () => {
@@ -136,6 +137,7 @@ const DEMOModeler = () => {
       );
       console.log(data);
       setModel({ ...data, isEnabled: false });
+      setSharedModel(true);
       fitView();
     },
     onMutate: () => {
@@ -171,7 +173,6 @@ const DEMOModeler = () => {
           console.log("my models");
           setCurrentFileName(fileName);
           serverModelMutation.mutate(fileName);
-          setSharedModel(true);
         }
       } else if (piecesCount === 2) {
         // 2 slashes is a public model
@@ -181,12 +182,7 @@ const DEMOModeler = () => {
         const [company, fileName] = modelName.split("/");
 
         publicModelMutation.mutate({ fileName, company });
-        setSharedModel(true);
-      } else {
-        setSharedModel(false);
       }
-    } else {
-      setSharedModel(false);
     }
   }, []);
 
