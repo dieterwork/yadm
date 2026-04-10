@@ -167,12 +167,11 @@ export function EditableEdgeComponent({
         markerStart={markerStart}
       />
       <InteractiveCenterEdge
-        isDisabled={!isEnabled}
         sourceX={sourceCenterPosition?.x ?? 0}
         targetX={targetCenterPosition?.x ?? 0}
         sourceY={sourceCenterPosition?.y ?? 0}
         targetY={targetCenterPosition?.y ?? 0}
-        active={isDraggable}
+        active={isDraggable && isEnabled}
         direction={interactiveEdgeDirection}
         onDragStart={({ event }) => {
           event.stopPropagation();
