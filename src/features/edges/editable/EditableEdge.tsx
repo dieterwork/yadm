@@ -61,12 +61,6 @@ export function EditableEdgeComponent({
   isDraggable?: boolean;
   linePath?: "step" | "straight";
 }) {
-  const sourceNode = useInternalNode<DEMONode>(source);
-  const targetNode = useInternalNode<DEMONode>(target);
-  if (!sourceNode || !targetNode) {
-    return null;
-  }
-
   const { screenToFlowPosition } = useReactFlow();
 
   const offset = 30;
