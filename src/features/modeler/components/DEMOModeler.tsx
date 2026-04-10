@@ -102,7 +102,6 @@ const DEMOModeler = () => {
           fileName: data.fileName,
         })
       );
-      console.log(data);
       setModel({ ...data, isEnabled: false });
       setSharedModel(true);
       fitView();
@@ -137,7 +136,6 @@ const DEMOModeler = () => {
           fileName: data.fileName,
         })
       );
-      console.log(data);
       setModel({ ...data, isEnabled: false });
       setSharedModel(true);
       fitView();

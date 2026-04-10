@@ -86,7 +86,6 @@ export const setNodes = (newNodes: ReactStyleStateSetter<DEMONode[]>) => {
 };
 
 export const setEdges = (newEdges: ReactStyleStateSetter<DEMOEdge[]>) => {
-  console.log(newEdges);
   useDEMOModelerStore.setState((state) => ({
     edges: Array.isArray(newEdges) ? newEdges : newEdges(state.edges),
   }));
@@ -592,11 +591,11 @@ export const onNodesDelete: OnNodesDelete<DEMONode> = (nodes) => {
 };
 
 export const setModel = (model: DEMOModelJSON) => {
-  // toggleLock(model.isEnabled ?? true);
   setNodes(model.nodes);
   setEdges(model.edges);
   setFileName(model.fileName);
   setViewport(model.viewport ?? { x: 0, y: 0, zoom: 1 });
+  toggleLock(model.isEnabled ?? true);
 };
 
 export const setWhiteboardVisible = (
