@@ -190,6 +190,10 @@ const DEMOModeler = () => {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(nodes, edges);
+  }, [nodes, edges]);
+
   return (
     <>
       <ServerPasswordModal
