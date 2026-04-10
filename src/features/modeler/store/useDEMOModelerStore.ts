@@ -596,7 +596,9 @@ export const onNodesDelete: OnNodesDelete<DEMONode> = (nodes) => {
 
 export const setModel = (model: DEMOModelJSON) => {
   setNodes(model.nodes);
-  setEdges(model.edges);
+  setTimeout(() => {
+    setEdges(model.edges);
+  }, 0);
   setFileName(model.fileName);
   setViewport(model.viewport ?? { x: 0, y: 0, zoom: 1 });
   toggleLock(model.isEnabled);
