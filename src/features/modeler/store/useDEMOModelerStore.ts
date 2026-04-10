@@ -395,8 +395,6 @@ export const toggleLock = (isEnabled: ReactStyleStateSetter<boolean>) => {
     })),
     edges: state.edges.map((edge) => ({
       ...edge,
-      draggable:
-        typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
       selected:
         typeof isEnabled === "boolean" ? isEnabled : isEnabled(state.isEnabled),
     })),
@@ -591,8 +589,10 @@ export const onNodesDelete: OnNodesDelete<DEMONode> = (nodes) => {
 };
 
 export const setModel = (model: DEMOModelJSON) => {
-  setNodes(model.nodes);
-  setEdges(model.edges);
+  setNodes(
+    model.nodes.map((node) => ({ ...node, selected: false, draggable: false }))
+  );
+  setEdges(model.edges.map((edge) => ({ ...edge, selected: false })));
   setFileName(model.fileName);
   setViewport(model.viewport ?? { x: 0, y: 0, zoom: 1 });
   setEnabled(model.isEnabled ?? true);
