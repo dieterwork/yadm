@@ -593,7 +593,7 @@ export const setModel = (model: DEMOModelJSON) => {
   setEdges(model.edges);
   setFileName(model.fileName);
   setViewport(model.viewport ?? { x: 0, y: 0, zoom: 1 });
-  setEnabled(model.isEnabled ?? true);
+  setEnabled(model.isEnabled);
 };
 
 export const setWhiteboardVisible = (

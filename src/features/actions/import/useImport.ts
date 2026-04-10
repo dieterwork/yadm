@@ -1,4 +1,7 @@
-import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
+import {
+  setModel,
+  useDEMOModelerStore,
+} from "$/features/modeler/store/useDEMOModelerStore";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import { useEffect, useRef } from "react";
 
@@ -20,19 +23,7 @@ const useImport = () => {
         const demoModel: DEMOModelJSON = JSON.parse(reader.result);
         if (!demoModel.nodes || !demoModel.edges || !demoModel.version)
           throw new Error("Invalid DEMO Model file");
-        useDEMOModelerStore.setState({
-          isEnabled: demoModel.isEnabled,
-          nodes: demoModel.nodes.map((node) => ({
-            ...node,
-            draggable: demoModel.isEnabled,
-          })),
-          edges: demoModel.edges.map((edge) => ({
-            ...edge,
-            draggable: demoModel.isEnabled,
-          })),
-          action: "pan",
-          fileName: demoModel.fileName,
-        });
+        setModel(demoModel);
       };
       reader.onerror = () => {
         throw new Error("Error reading file");
