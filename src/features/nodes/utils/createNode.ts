@@ -548,7 +548,7 @@ export const createNode = ({
       const transactionId = uuid();
       const actorId = uuid();
       const transactionSize = calculateDoubleDiamondInCircleDimensions(
-        DEFAULT_SIZE_MAP["transaction"].width
+        DEFAULT_SIZE_MAP["transaction"].width,
       );
       transactionSize.width = transactionSize.width + 4;
       return [
@@ -729,7 +729,7 @@ export const createNode = ({
           stroke: NODE_BORDER_COLOR_MAP["default"],
         },
         selected: true,
-        zIndex: 190,
+        zIndex: 193,
       };
     }
 
