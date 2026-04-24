@@ -137,8 +137,8 @@ const DEMOModeler = () => {
           fileName: data.fileName,
         })
       );
-      setModel({ ...data, isEnabled: false });
-      setSharedModel(true);
+      setModel({ ...data, isEnabled: true });
+      setSharedModel(false);
       fitView();
     },
     onMutate: () => {
