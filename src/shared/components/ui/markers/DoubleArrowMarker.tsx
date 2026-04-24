@@ -32,18 +32,7 @@ const DoubleArrowMarker = ({
             strokeLinecap: "round",
             strokeLinejoin: "round",
           }}
-          points="1,1 6,6 1,11"
-        ></polyline>
-        <polyline
-          className="double-arrow-marker"
-          style={{
-            stroke: "var(--color-slate-900)",
-            fill: "transparent",
-            strokeWidth: 2,
-            strokeLinecap: "round",
-            strokeLinejoin: "round",
-          }}
-          points="6,1 11,6 6,11"
+          points="3.25,1 9.25,6.25 3.25,11.5"
         ></polyline>
       </svg>
     </EdgeLabelRenderer>
