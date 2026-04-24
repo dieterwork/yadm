@@ -14,11 +14,14 @@ import { setModel } from "$/features/modeler/store/useDEMOModelerStore";
 import TopbarMenuButtonAutoComplete from "../_components/TopbarMenuButtonAutoComplete";
 import uuid from "$/shared/utils/uuid";
 import { useReactFlow } from "@xyflow/react";
+import useSharedServerModel from "$features/modeler/hooks/useSharedServerModel.ts";
 
 const PublicModelsMenu = () => {
   const { t } = useTranslation();
 
   const { fitView } = useReactFlow();
+
+  const [, setSharedModel] = useSharedServerModel();
 
   const publicModelsQuery = useQuery({
     queryKey: ["public_models"],
@@ -41,6 +44,7 @@ const PublicModelsMenu = () => {
         })
       );
       setModel({ ...data, isEnabled: false });
+      setSharedModel(true);
       fitView();
     },
     onMutate: () => {

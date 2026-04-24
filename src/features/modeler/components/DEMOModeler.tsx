@@ -88,7 +88,7 @@ const DEMOModeler = () => {
 
   const { fitView } = useReactFlow();
   const [currentFileName, setCurrentFileName] = useState("");
-  const [isSharedModel, setSharedModel] = useSharedServerModel();
+  const [, setSharedModel] = useSharedServerModel();
   const [isPwdModalOpen, setPwdModalOpen] = useState(false);
   const loadingId = useId();
   const { t } = useTranslation();
@@ -186,6 +186,9 @@ const DEMOModeler = () => {
 
           publicModelMutation.mutate({ fileName, company });
         }
+
+        window.history.pushState({}, "YADM", window.location.origin + '/');
+
       }
     }
   }, []);
