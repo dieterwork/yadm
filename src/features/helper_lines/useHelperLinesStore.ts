@@ -104,7 +104,6 @@ export const updateHelperLinesFromHandleChanges = (
       vertical: helperLines.vertical,
     }));
   }
-  console.log(change.offset);
   return change.offset;
 };
 
