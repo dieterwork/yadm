@@ -7,7 +7,6 @@ import {
   SelectionMode,
   ViewportPortal,
   useReactFlow,
-  useUpdateNodeInternals,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
@@ -101,7 +100,7 @@ const DEMOModeler = () => {
       toast.success(
         t(($) => $["Loaded model"], {
           fileName: data.fileName,
-        })
+        }),
       );
       setModel({ ...data, isEnabled: false });
       setSharedModel(true);
@@ -110,7 +109,7 @@ const DEMOModeler = () => {
     onMutate: () => {
       toast.loading(
         t(($) => $["Loading model"]),
-        { id: loadingId }
+        { id: loadingId },
       );
     },
     onError: () => {
@@ -135,7 +134,7 @@ const DEMOModeler = () => {
       toast.success(
         t(($) => $["Loaded model"], {
           fileName: data.fileName,
-        })
+        }),
       );
       setModel({ ...data, isEnabled: true });
       setSharedModel(false);
@@ -144,7 +143,7 @@ const DEMOModeler = () => {
     onMutate: () => {
       toast.loading(
         t(($) => $["Loading model"]),
-        { id: loadingId }
+        { id: loadingId },
       );
     },
     onError: (error) => {
@@ -187,8 +186,7 @@ const DEMOModeler = () => {
           publicModelMutation.mutate({ fileName, company });
         }
 
-        window.history.pushState({}, "YADM", window.location.origin + '/');
-
+        window.history.pushState({}, "YADM", window.location.origin + "/");
       }
     }
   }, []);
@@ -283,7 +281,7 @@ const DEMOModeler = () => {
                 "transition-opacity",
                 isEnabled
                   ? "opacity-100 pointer-events-auto"
-                  : "opacity-0 pointer-events-none"
+                  : "opacity-0 pointer-events-none",
               )}
               bgColor="var(--color-white)"
               maskColor="var(--color-slate-100)"

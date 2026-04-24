@@ -18,7 +18,8 @@ import {
 import { useGesture } from "@use-gesture/react";
 import { cn } from "@sglara/cn";
 import clamp from "$/shared/utils/clamp";
-import { type CSSProperties, type MouseEventHandler } from "react";
+import { useState, type CSSProperties, type MouseEventHandler } from "react";
+import { updateHelperLinesFromHandleChanges } from "../helper_lines/useHelperLinesStore";
 
 const DEMOHandle = ({
   id,
@@ -33,21 +34,48 @@ const DEMOHandle = ({
   canDrag?: boolean;
 }) => {
   const isHandleEditModeEnabled = useDEMOModelerStore(
-    (state) => state.isHandleEditModeEnabled
+    (state) => state.isHandleEditModeEnabled,
   );
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
+  const nodes = useDEMOModelerStore((state) => state.nodes);
+  const edges = useDEMOModelerStore((state) => state.edges);
+
   const { screenToFlowPosition } = useReactFlow();
   const updateNodeInternals = useUpdateNodeInternals();
   const internalNode = useInternalNode(nodeId);
-  const edges = useDEMOModelerStore((state) => state.edges);
+  const [changedOffset, setChangedOffset] = useState(offset);
 
   const bind = useGesture({
+    onDragStart: () => {
+      setNodes((nodes) =>
+        nodes.map((node) =>
+          node.id === nodeId ? { ...node, selected: false } : node,
+        ),
+      );
+    },
+    onDragEnd: () => {
+      setNodes((nodes) =>
+        nodes.map((node) =>
+          node.id === nodeId ? { ...node, selected: !node.selected } : node,
+        ),
+      );
+      updateHelperLinesFromHandleChanges(
+        {
+          nodeId,
+          offset: changedOffset,
+          position,
+          isDragging: false,
+        },
+        nodes,
+      );
+    },
     onDrag: ({ event, xy }) => {
       if (!isHandleEditModeEnabled || !isEnabled || !id || !canDrag) return;
 
       event.preventDefault();
 
       const xyPosition = screenToFlowPosition({ x: xy[0], y: xy[1] });
+      let changedOffset;
       if (position === Position.Top || position === Position.Bottom) {
         // x movement
 
@@ -60,9 +88,7 @@ const DEMOHandle = ({
         const offsetClamp = clamp(minX, xPosition, maxX);
 
         // Divide offset by total width to get percentage
-        const _offset = offsetClamp / (internalNode?.measured.width ?? 0);
-
-        updateNodeHandleOffset(nodeId, id, position, _offset);
+        changedOffset = offsetClamp / (internalNode?.measured.width ?? 0);
       } else {
         // y movement
         const minY = 0;
@@ -74,10 +100,19 @@ const DEMOHandle = ({
         const offsetClamp = clamp(minY, yPosition, maxY);
 
         // Divide offset by total width to get percentage
-        const _offset = offsetClamp / (internalNode?.measured.height ?? 0);
-
-        updateNodeHandleOffset(nodeId, id, position, _offset);
+        changedOffset = offsetClamp / (internalNode?.measured.height ?? 0);
       }
+      changedOffset = updateHelperLinesFromHandleChanges(
+        {
+          nodeId,
+          offset: changedOffset,
+          position,
+          isDragging: true,
+        },
+        nodes,
+      );
+      setChangedOffset(changedOffset);
+      updateNodeHandleOffset(nodeId, id, position, changedOffset);
       updateNodeInternals(nodeId);
     },
   });
@@ -95,20 +130,20 @@ const DEMOHandle = ({
 
     if (connectedEdges) {
       setEdges((edges) =>
-        edges.filter((edge) => !connectedEdges.includes(edge))
+        edges.filter((edge) => !connectedEdges.includes(edge)),
       );
     }
 
     if (targetNodes) {
       setNodes((nodes) =>
         nodes.filter(
-          (node) => !targetNodes.includes(node.id) && node.type !== "ghost"
-        )
+          (node) => !targetNodes.includes(node.id) && node.type !== "ghost",
+        ),
       );
     }
 
     updateNodeHandles(nodeId, position, (handles) =>
-      handles.filter((handle) => handle.id !== id)
+      handles.filter((handle) => handle.id !== id),
     );
     updateNodeInternals(nodeId);
   };
@@ -142,7 +177,7 @@ const DEMOHandle = ({
             (position === Position.Right || position === Position.Left) &&
             "cursor-row-resize!",
           isEnabled && !canDrag && "cursor-not-allowed",
-          !isEnabled && "nodrag pointer-events-none invisible"
+          !isEnabled && "nodrag pointer-events-none invisible",
         )}
         id={id}
         position={position}
@@ -156,7 +191,7 @@ const DEMOHandle = ({
       style={style}
       className={cn(
         "demo-handle",
-        !isEnabled && "nopan nodrag pointer-events-none invisible"
+        !isEnabled && "nopan nodrag pointer-events-none invisible",
       )}
       id={id}
       position={position}

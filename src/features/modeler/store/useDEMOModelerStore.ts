@@ -24,7 +24,7 @@ import getMarkerType from "../utils/getMarkerType";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
 import getEdgeData from "../utils/getEdgeData";
 import { sortNodes } from "$/shared/utils/sortNodes";
-import { updateHelperLines } from "../../helper_lines/useHelperLinesStore";
+import { updateHelperLinesFromNodeChanges } from "../../helper_lines/useHelperLinesStore";
 import type { CooperationModelNode } from "../../nodes/cooperation_model/cooperationModel.types";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import takeSnapshotAndSave from "../../actions/undo/takeSnapshotAndSave";
@@ -61,7 +61,7 @@ const localDEMOModel: DEMOModelJSON | null = localDEMOModelJSON
 console.log(
   localDEMOModel
     ? `[Loaded version ${localDEMOModel?.version}]`
-    : "[Loaded version 1.0]"
+    : "[Loaded version 1.0]",
 );
 
 export const useDEMOModelerStore = create<DEMOModelerState>()((set, get) => ({
@@ -103,13 +103,13 @@ export const setViewport = (newViewport: ReactStyleStateSetter<Viewport>) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getNode = (
   id: string,
-  filter?: (node: DEMONode, index: number, array: DEMONode[]) => boolean
+  filter?: (node: DEMONode, index: number, array: DEMONode[]) => boolean,
 ) => {
   return useDEMOModelerStore
     .getState()
     .nodes.find(
       (node, index, array) =>
-        node.id === id && (filter ? filter(node, index, array) : true)
+        node.id === id && (filter ? filter(node, index, array) : true),
     );
 };
 
@@ -119,7 +119,7 @@ export const getEdge = (id: string) => {
 
 export const updateNodeData = <T extends DEMONode>(
   id: string,
-  newData: ReactStyleStateSetter<Partial<T["data"]>>
+  newData: ReactStyleStateSetter<Partial<T["data"]>>,
 ) => {
   setNodes((nodes) =>
     nodes.map((node) => {
@@ -133,13 +133,13 @@ export const updateNodeData = <T extends DEMONode>(
             ? newData(node.data)
             : undefined;
       return { ...node, data: { ...node.data, ...data } };
-    })
+    }),
   );
 };
 
 export const updateNode = <T extends DEMONode>(
   id: string,
-  newNode: ReactStyleStateSetter<Partial<T>>
+  newNode: ReactStyleStateSetter<Partial<T>>,
 ) => {
   setNodes((nodes) =>
     nodes.map((node) => {
@@ -148,13 +148,13 @@ export const updateNode = <T extends DEMONode>(
       if (!isTypedNode) return node;
       const _newNode = typeof newNode === "object" ? newNode : newNode(node);
       return { ...node, ..._newNode };
-    })
+    }),
   );
 };
 
 export const updateEdge = <T extends DEMOEdge>(
   id: string,
-  newEdge: ReactStyleStateSetter<Partial<T>>
+  newEdge: ReactStyleStateSetter<Partial<T>>,
 ) => {
   setEdges((edges) =>
     edges.map((edge) => {
@@ -163,13 +163,13 @@ export const updateEdge = <T extends DEMOEdge>(
       if (!isTypedEdge) return edge;
       const _newEdge = typeof newEdge === "object" ? newEdge : newEdge(edge);
       return { ...edge, ..._newEdge };
-    })
+    }),
   );
 };
 
 export const updateEdgeData = <T extends DEMOEdge>(
   id: string,
-  newEdgeData: ReactStyleStateSetter<Partial<T["data"]>>
+  newEdgeData: ReactStyleStateSetter<Partial<T["data"]>>,
 ) => {
   setEdges((edges) =>
     edges.map((edge) => {
@@ -183,7 +183,7 @@ export const updateEdgeData = <T extends DEMOEdge>(
             ? newEdgeData(edge.data)
             : undefined;
       return { ...edge, data: { ...edge.data, ...data } };
-    })
+    }),
   );
 };
 
@@ -195,7 +195,10 @@ export const clearModel = () => {
 
 export const onNodesChange: OnNodesChange<DEMONode> = (changes) => {
   useDEMOModelerStore.setState((state) => {
-    const updatedChanges = updateHelperLines(changes, state.nodes);
+    const updatedChanges = updateHelperLinesFromNodeChanges(
+      changes,
+      state.nodes,
+    );
     return {
       nodes: applyNodeChanges(updatedChanges, state.nodes),
     };
@@ -211,7 +214,7 @@ export const onEdgesChange: OnEdgesChange<DEMOEdge> = (changes) => {
 export const onReconnectEnd = (
   event: MouseEvent | TouchEvent,
   edge: DEMOEdge,
-  handleType: HandleType
+  handleType: HandleType,
 ) => {
   if (handleType === "source") {
     setNodes((nodes) => {
@@ -238,7 +241,7 @@ export const onEdgesDelete = (deletedEdges: DEMOEdge[]) => {
 
           return !(isGhost && isSourceOrTarget);
         }),
-      nodes
+      nodes,
     );
   });
   takeSnapshotAndSave();
@@ -295,12 +298,12 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
   const reconnectedEdges = reconnectEdge<DEMOEdge>(
     oldEdge as DEMOEdge,
     newConnection,
-    useDEMOModelerStore.getState().edges
+    useDEMOModelerStore.getState().edges,
   );
   const newEdge = reconnectedEdges.find(
     (edge) =>
       edge.source === newConnection.source &&
-      edge.target === newConnection.target
+      edge.target === newConnection.target,
   );
   const newEdges = reconnectedEdges.map((edge) => {
     if (newEdge?.id !== edge.id) return edge;
@@ -337,7 +340,7 @@ export const updateNodeColor = (id: string, color: string) => {
 
 export const updateNodeState = (
   id: string,
-  state: CooperationModelNode["data"]["state"]
+  state: CooperationModelNode["data"]["state"],
 ) => {
   updateNodeData(id, { state });
 };
@@ -348,14 +351,14 @@ export const updateNodeScope = (id: string, scope: NodeScope) => {
 
 export const updateNodeBorderVisibility = (
   id: string,
-  isBorderVisible: ReactStyleStateSetter<boolean>
+  isBorderVisible: ReactStyleStateSetter<boolean>,
 ) => {
   updateNodeData(id, { isBorderVisible });
 };
 
 export const updateNodeTextAlign = (
   id: string,
-  textAlign: "start" | "center" | "end"
+  textAlign: "start" | "center" | "end",
 ) => {
   updateNodeData(id, { textAlign });
 };
@@ -422,7 +425,7 @@ export const toggleLock = (isEnabled: ReactStyleStateSetter<boolean>) => {
 
 export const updateNodeHandlesVisibility = (
   id: string,
-  isVisible: ReactStyleStateSetter<boolean>
+  isVisible: ReactStyleStateSetter<boolean>,
 ) => {
   updateNodeData(id, (data) => ({
     handles: {
@@ -445,7 +448,7 @@ export const setGridVisible = (isVisible: ReactStyleStateSetter<boolean>) => {
 };
 
 export const setGridSnapEnabled = (
-  isSnapEnabled: ReactStyleStateSetter<boolean>
+  isSnapEnabled: ReactStyleStateSetter<boolean>,
 ) => {
   useDEMOModelerStore.setState((state) => ({
     isGridSnapEnabled:
@@ -458,7 +461,7 @@ export const setGridSnapEnabled = (
 export const updateNodeHandles = (
   id: string,
   position: Position,
-  newHandles: ReactStyleStateSetter<DEMOHandle[]>
+  newHandles: ReactStyleStateSetter<DEMOHandle[]>,
 ) => {
   updateNodeData(id, (data) => {
     return {
@@ -480,7 +483,7 @@ export const updateNodeHandle = (
   id: string,
   handleId: string,
   position: Position,
-  newHandle: ReactStyleStateSetter<DEMOHandle>
+  newHandle: ReactStyleStateSetter<DEMOHandle>,
 ) => {
   updateNodeData(id, (data) => {
     if (!("handles" in data) || !data?.handles) return data;
@@ -495,7 +498,7 @@ export const updateNodeHandle = (
               ? typeof newHandle === "object"
                 ? newHandle
                 : newHandle(handle)
-              : handle
+              : handle,
           ),
         },
       },
@@ -507,7 +510,7 @@ export const updateNodeHandleOffset = (
   id: string,
   handleId: string,
   position: Position,
-  offset: number
+  offset: number,
 ) => {
   updateNodeHandle(id, handleId, position, (handle) => ({
     ...handle,
@@ -517,7 +520,7 @@ export const updateNodeHandleOffset = (
 
 export const updateNodeEditable = (
   id: string,
-  isEditable: ReactStyleStateSetter<boolean>
+  isEditable: ReactStyleStateSetter<boolean>,
 ) => {
   updateNodeData(id, (data) => ({
     isEditable:
@@ -529,7 +532,7 @@ export const updateNodeEditable = (
 
 export const updateNodeDraggable = (
   id: string,
-  isDraggable: ReactStyleStateSetter<boolean>
+  isDraggable: ReactStyleStateSetter<boolean>,
 ) => {
   updateNode(id, (node) => ({
     draggable:
@@ -541,7 +544,7 @@ export const updateNodeDraggable = (
 };
 
 export const setNodesHandlesVisibility = (
-  isVisible: ReactStyleStateSetter<boolean>
+  isVisible: ReactStyleStateSetter<boolean>,
 ) => {
   setNodes((nodes) =>
     nodes.map((node) => {
@@ -560,12 +563,12 @@ export const setNodesHandlesVisibility = (
         },
       };
       return newNode;
-    })
+    }),
   );
 };
 
 export const setExportEnabled = (
-  isExportEnabled: ReactStyleStateSetter<boolean>
+  isExportEnabled: ReactStyleStateSetter<boolean>,
 ) => {
   useDEMOModelerStore.setState((state) => ({
     isExportEnabled:
@@ -576,7 +579,7 @@ export const setExportEnabled = (
 };
 
 export const setHandleEditModeEnabled = (
-  isHandleEditModeEnabled: ReactStyleStateSetter<boolean>
+  isHandleEditModeEnabled: ReactStyleStateSetter<boolean>,
 ) => {
   useDEMOModelerStore.setState((state) => ({
     isHandleEditModeEnabled:
@@ -615,7 +618,7 @@ export const setModel = (model: DEMOModelJSON) => {
 };
 
 export const setWhiteboardVisible = (
-  isWhiteboardVisible: ReactStyleStateSetter<boolean>
+  isWhiteboardVisible: ReactStyleStateSetter<boolean>,
 ) => {
   useDEMOModelerStore.setState((state) => ({
     nodes: state.nodes.map((node) => {
@@ -636,7 +639,7 @@ export const setWhiteboardVisible = (
 };
 
 export const setWhiteboardEnabled = (
-  isWhiteboardEnabled: ReactStyleStateSetter<boolean>
+  isWhiteboardEnabled: ReactStyleStateSetter<boolean>,
 ) => {
   useDEMOModelerStore.setState((state) => ({
     isWhiteboardEnabled:

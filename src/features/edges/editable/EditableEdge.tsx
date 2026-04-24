@@ -13,10 +13,11 @@ import { type DEMONode } from "../../nodes/nodes.types";
 import DEMOEdgeToolbar, {
   type EdgeToolbarAction,
 } from "../edge_toolbar/DEMOEdgeToolbar";
-import { type CSSProperties } from "react";
+import { useEffect, type CSSProperties } from "react";
 import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
+  getEdge,
   updateEdge,
   updateEdgeData,
   useDEMOModelerStore,
@@ -133,7 +134,7 @@ export function EditableEdgeComponent({
 
   const interactiveEdgeMidpoint = calcEdgeMidpoint(
     sourceCenterPosition ?? { x: labelX ?? centerX, y: labelY ?? centerY },
-    targetCenterPosition ?? { x: labelX ?? centerX, y: labelY ?? centerY }
+    targetCenterPosition ?? { x: labelX ?? centerX, y: labelY ?? centerY },
   );
 
   const arrowRotation = getArrowRotation({

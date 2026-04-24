@@ -1,9 +1,12 @@
 import { create } from "zustand";
 import type { DEMONode } from "../nodes/nodes.types";
 import type { NodeChange } from "@xyflow/react";
-import { getHelperLines } from "./utils/getHelperLines";
+import { getNodeHelperLines } from "./utils/getNodeHelperLines";
 import convertAbsoluteToRelativePosition from "../nodes/utils/convertAbsoluteToRelativePosition";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
+import type { HandleChange } from "./types/types";
+import { getNodeHandleHelperLines } from "./utils/getNodeHandleHelperLines";
+// import { getEdgeHelperLines } from "./utils/getEdgeHelperLines";
 
 export interface HelperLinesState {
   isEnabled: boolean;
@@ -18,7 +21,7 @@ export const useHelperLinesStore = create<HelperLinesState>()(() => ({
 }));
 
 export const toggleHelperLines = (
-  isEnabled: ReactStyleStateSetter<boolean>
+  isEnabled: ReactStyleStateSetter<boolean>,
 ) => {
   useHelperLinesStore.setState((state) => ({
     isEnabled:
@@ -26,9 +29,9 @@ export const toggleHelperLines = (
   }));
 };
 
-export const updateHelperLines = (
+export const updateHelperLinesFromNodeChanges = (
   changes: NodeChange<DEMONode>[],
-  nodes: DEMONode[]
+  nodes: DEMONode[],
 ) => {
   // reset the helper lines (clear existing lines, if any)
   useHelperLinesStore.setState(() => ({
@@ -50,7 +53,7 @@ export const updateHelperLines = (
     change.position
   ) {
     const changedNode = nodes.find((node) => node.id === change.id);
-    const helperLines = getHelperLines({
+    const helperLines = getNodeHelperLines({
       change,
       nodes,
     });
@@ -60,7 +63,7 @@ export const updateHelperLines = (
       convertAbsoluteToRelativePosition(
         helperLines.snapPosition,
         changedNode,
-        nodes
+        nodes,
       );
 
     change.position.x = helperLinesPosition?.x ?? change.position.x;
@@ -73,6 +76,36 @@ export const updateHelperLines = (
     }));
   }
   return changes;
+};
+
+export const updateHelperLinesFromHandleChanges = (
+  change: HandleChange,
+  nodes: DEMONode[],
+) => {
+  // reset the helper lines (clear existing lines, if any)
+  useHelperLinesStore.setState(() => ({
+    horizontal: undefined,
+    vertical: undefined,
+  }));
+
+  const isEnabled = useHelperLinesStore.getState().isEnabled;
+
+  if (isEnabled && change.isDragging) {
+    const helperLines = getNodeHandleHelperLines({
+      change,
+      nodes,
+    });
+
+    change.offset = helperLines.snapOffset ?? change.offset;
+
+    // if helper lines are returned, we set them so that they can be displayed
+    useHelperLinesStore.setState(() => ({
+      horizontal: helperLines.horizontal,
+      vertical: helperLines.vertical,
+    }));
+  }
+  console.log(change.offset);
+  return change.offset;
 };
 
 export const helperLinesSelector = (state: HelperLinesState) => ({

@@ -3,24 +3,25 @@ import type { NodePositionChange, XYPosition } from "@xyflow/react";
 import filterNodesAvailableForHelperLines from "./filterNodesAvailableForHelperLines";
 import convertRelativeToAbsolutePosition from "$/features/nodes/utils/convertRelativeToAbsolutePosition";
 
-type GetHelperLinesResult = {
+// this utility function can be called with a position change (inside onNodesChange)
+// it checks all other nodes and calculated the helper line positions and the position where the current node should snap to
+interface GetNodeHelperLinesParams {
+  change: NodePositionChange;
+  nodes: DEMONode[];
+  distance?: number;
+}
+
+export type GetHelperLinesResult = {
   horizontal?: number;
   vertical?: number;
   snapPosition: Partial<XYPosition>;
 };
 
-// this utility function can be called with a position change (inside onNodesChange)
-// it checks all other nodes and calculated the helper line positions and the position where the current node should snap to
-interface GetHelperLinesParams {
-  change: NodePositionChange;
-  nodes: DEMONode[];
-  distance?: number;
-}
-export function getHelperLines({
+export function getNodeHelperLines({
   change,
   nodes,
   distance = 5,
-}: GetHelperLinesParams): GetHelperLinesResult {
+}: GetNodeHelperLinesParams): GetHelperLinesResult {
   const defaultResult = {
     horizontal: undefined,
     vertical: undefined,
@@ -35,7 +36,7 @@ export function getHelperLines({
   const absoluteCoordinates = convertRelativeToAbsolutePosition(
     change.position,
     nodeA,
-    nodes
+    nodes,
   );
 
   const nodeABounds = {
@@ -53,13 +54,13 @@ export function getHelperLines({
   return nodes
     .filter(
       (node) =>
-        node.id !== nodeA.id && filterNodesAvailableForHelperLines(nodeA, node)
+        node.id !== nodeA.id && filterNodesAvailableForHelperLines(nodeA, node),
     )
     .reduce<GetHelperLinesResult>((result, nodeB) => {
       const absoluteCoordinates = convertRelativeToAbsolutePosition(
         nodeB.position,
         nodeB,
-        nodes
+        nodes,
       );
       const nodeBBounds = {
         left: absoluteCoordinates.x ?? 0,
@@ -95,7 +96,7 @@ export function getHelperLines({
       //  |     B     |
       //  |___________|
       const distanceRightRight = Math.abs(
-        nodeABounds.right - nodeBBounds.right
+        nodeABounds.right - nodeBBounds.right,
       );
 
       if (distanceRightRight < verticalDistance) {
@@ -165,7 +166,7 @@ export function getHelperLines({
       //  |     A     |     |     B     |
       //  |___________|_____|___________|
       const distanceBottomBottom = Math.abs(
-        nodeABounds.bottom - nodeBBounds.bottom
+        nodeABounds.bottom - nodeBBounds.bottom,
       );
 
       if (distanceBottomBottom < horizontalDistance) {
@@ -199,7 +200,7 @@ export function getHelperLines({
       const distanceCenterVertical = Math.abs(
         nodeABounds.left +
           nodeABounds.width / 2 -
-          (nodeBBounds.left + nodeBBounds.width / 2)
+          (nodeBBounds.left + nodeBBounds.width / 2),
       );
 
       if (distanceCenterVertical < verticalDistance) {
@@ -216,7 +217,7 @@ export function getHelperLines({
       const distanceCenterHorizontal = Math.abs(
         nodeABounds.top +
           nodeABounds.height / 2 -
-          (nodeBBounds.top + nodeBBounds.height / 2)
+          (nodeBBounds.top + nodeBBounds.height / 2),
       );
 
       if (distanceCenterHorizontal < horizontalDistance) {
@@ -232,7 +233,7 @@ export function getHelperLines({
       //                  |_________|
 
       const distanceCenterTopHorizontal = Math.abs(
-        nodeABounds.top + nodeABounds.height / 2 - nodeBBounds.top
+        nodeABounds.top + nodeABounds.height / 2 - nodeBBounds.top,
       );
 
       if (distanceCenterTopHorizontal < horizontalDistance) {
@@ -247,7 +248,7 @@ export function getHelperLines({
       //  |_________|
 
       const distanceCenterBottomHorizontal = Math.abs(
-        nodeABounds.top + nodeABounds.height / 2 - nodeBBounds.bottom
+        nodeABounds.top + nodeABounds.height / 2 - nodeBBounds.bottom,
       );
 
       if (distanceCenterBottomHorizontal < horizontalDistance) {
@@ -265,7 +266,7 @@ export function getHelperLines({
       //         |     B     |
       //         |___________|
       const distanceCenterLeftVertical = Math.abs(
-        nodeABounds.left + nodeABounds.width / 2 - nodeBBounds.left
+        nodeABounds.left + nodeABounds.width / 2 - nodeBBounds.left,
       );
 
       if (distanceCenterLeftVertical < verticalDistance) {
@@ -283,7 +284,7 @@ export function getHelperLines({
       //         |     B     |
       //         |___________|
       const distanceCenterRightVertical = Math.abs(
-        nodeABounds.left + nodeABounds.width / 2 - nodeBBounds.right
+        nodeABounds.left + nodeABounds.width / 2 - nodeBBounds.right,
       );
 
       if (distanceCenterRightVertical < verticalDistance) {
