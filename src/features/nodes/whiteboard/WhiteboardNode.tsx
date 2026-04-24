@@ -42,7 +42,10 @@ const WhiteboardNode = ({
   return (
     <div
       className={cn(
-        !isExportEnabled && isEnabled && selected && "outline-1 outline-sky-500"
+        !isExportEnabled &&
+          isEnabled &&
+          selected &&
+          "outline-1 outline-sky-500",
       )}
       style={{ width, height }}
     >
@@ -62,14 +65,14 @@ const WhiteboardNode = ({
         nodeId={id}
         isVisible={selected && isEnabled && !isExportEnabled && !dragging}
         keepAspectRatio={isCornerResizeControl}
-        onResizeStart={(e, params) => {
+        onResizeStart={(e) => {
           const isCornerResizeControl = cornerResizeControlClasses.some(
             (classes) =>
               classes.every((c) => {
                 return (e.sourceEvent.target as HTMLElement).classList.contains(
-                  c
+                  c,
                 );
-              })
+              }),
           );
 
           setCornerSizeControl(isCornerResizeControl);

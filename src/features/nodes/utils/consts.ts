@@ -4,7 +4,8 @@ export const X_SMALL_NODE_SIZE = 25 as const;
 export const SMALL_NODE_SIZE = 50 as const;
 export const MEDIUM_NODE_SIZE = 100 as const;
 export const LARGE_NODE_SIZE = 200 as const;
-export const TRANSACTION_TIME_SIZE = 300 as const;
+export const TRANSACTION_TIME_HEIGHT = SMALL_NODE_SIZE + 4;
+export const TRANSACTION_TIME_WIDTH = 300 as const;
 export const TRANSACTION_TIME_MIN_SIZE = 100 as const;
 
 export const DEFAULT_SIZE_MAP = {
@@ -36,7 +37,6 @@ export const DEFAULT_SIZE_MAP = {
     width: 200,
     height: 300,
   },
-
   organization: {
     width: 200,
     height: 200,
@@ -44,8 +44,8 @@ export const DEFAULT_SIZE_MAP = {
 
   // transaction pattern diagram
   transaction_time: {
-    width: TRANSACTION_TIME_SIZE,
-    height: SMALL_NODE_SIZE,
+    width: TRANSACTION_TIME_WIDTH,
+    height: TRANSACTION_TIME_HEIGHT,
   },
   transaction_kind: {
     width: SMALL_NODE_SIZE,

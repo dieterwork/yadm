@@ -6,7 +6,6 @@ import {
   type XYPosition,
 } from "@xyflow/react";
 import type { DEMOEdge } from "../edges.types";
-import { SMALL_NODE_SIZE } from "$/features/nodes/utils/consts";
 import {
   addEdge,
   addNode,
@@ -39,7 +38,7 @@ const getPosition = (fromPosition: Position | null) => {
 const getTransactionTimeGhostNodePositionX = (
   position: Position | null,
   relativeParentCoordinates: Partial<XYPosition>,
-  fromNodeWidth: number | undefined
+  fromNodeWidth: number | undefined,
 ) => {
   if (position === Position.Right) {
     if ((relativeParentCoordinates.x ?? 0) > (fromNodeWidth ?? 0)) {
@@ -58,7 +57,7 @@ export const useIncompleteEdge = () => {
   const { screenToFlowPosition } = useReactFlow();
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const isHandleEditModeEnabled = useDEMOModelerStore(
-    (state) => state.isHandleEditModeEnabled
+    (state) => state.isHandleEditModeEnabled,
   );
   const onConnectEnd: OnConnectEnd = (event, connectionState) => {
     if (isHandleEditModeEnabled) return;
@@ -86,14 +85,14 @@ export const useIncompleteEdge = () => {
       position,
       parentNode,
       nodes,
-      true
+      true,
     );
 
     const transactionTimeGhostNodePositionX =
       getTransactionTimeGhostNodePositionX(
         fromPosition,
         relativeParentCoordinates,
-        fromNode.measured.width
+        fromNode.measured.width,
       );
 
     const ghostNode = {
@@ -103,7 +102,7 @@ export const useIncompleteEdge = () => {
         fromNode?.type === "transaction_time"
           ? {
               x: transactionTimeGhostNodePositionX,
-              y: SMALL_NODE_SIZE / 2 - 0.5,
+              y: (fromNode.measured.height ?? 0) / 2 - 0.5,
             }
           : position,
       data: { handlePosition: getPosition(fromPosition) },
@@ -113,11 +112,11 @@ export const useIncompleteEdge = () => {
 
     const newEdgeType = getEdgeType(
       fromNode?.type as DEMONode["type"],
-      "ghost"
+      "ghost",
     );
     const newEdgeMarker = getMarkerType(
       fromNode?.type as DEMONode["type"],
-      "ghost"
+      "ghost",
     );
     const data = getEdgeData(newEdgeType);
     const newEdge = {
