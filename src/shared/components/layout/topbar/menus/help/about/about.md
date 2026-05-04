@@ -7,4 +7,4 @@ With a paid YADM account, you support the project and gain online storage for yo
 For ideas or feedback, please [contact us.](https://www.yadm.app/contact)
 
 You are currently using YADM version 1.0.0
-[Privacy policy](https://www.yadm.app/pp-23-12-25.html) - [Terms and Conditions](https://www.yadm.app/tac-23-12-25.html) 
+[Privacy policy](https://yadm.app/pp.html) - [Terms and Conditions](https://yadm.app/tos.html) 
