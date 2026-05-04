@@ -4,7 +4,7 @@ YADM provides a modern and intuitive environment to explore the modelling langua
 
 With a paid YADM account, you support the project and gain online storage for your models. You can publish models publicly or share them via a link. Organizations can invite users under their account. All data is end-to-end encrypted — not even we can decrypt your models.
 
-For ideas or feedback, please contact us at ![](https://yadm.app/them.png).
+For ideas or feedback, please contact us at ![](https://yadm.app/them.png)
 
 You are currently using YADM version 1.0.0
 [Privacy policy](https://yadm.app/pp.html) - [Terms and Conditions](https://yadm.app/tos.html)
