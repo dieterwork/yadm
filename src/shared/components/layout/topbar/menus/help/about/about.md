@@ -6,7 +6,7 @@ With a paid YADM account, you support the project and gain online storage for yo
 
 For ideas or feedback, please [contact us.](mailto:info\@yadm.app?Subject=#YADMContactus#)
 
-<a href="mailto:info\@yadm.app?Subject=#YADMContactus#">contact us.</a>
+![](https://yadm.app/them.png)
 
 You are currently using YADM version 1.0.0
 [Privacy policy](https://yadm.app/pp.html) - [Terms and Conditions](https://yadm.app/tos.html)
