@@ -21,7 +21,7 @@ export const useAttachNode = () => {
   const attachNode = (
     nodeIds: string[],
     parentNodeId: string,
-    extant?: "parent" | [[number, number], [number, number]]
+    extant?: "parent" | [[number, number], [number, number]],
   ) => {
     setNodes((nodes) => {
       const nextNodes = nodes.map((node) => {
@@ -36,7 +36,7 @@ export const useAttachNode = () => {
           node.position,
           parentNode,
           nodes,
-          true
+          true,
         );
 
         return {
@@ -59,7 +59,7 @@ export const useAttachNode = () => {
           const newPosition = convertRelativeToAbsolutePosition(
             node.position,
             node,
-            nodes
+            nodes,
           );
           return {
             ...node,
@@ -92,14 +92,29 @@ export const useAttachNode = () => {
       parentNodeId = transactionTimeNode.id;
     }
 
-    attachNode([childNodeId], parentNodeId);
     const childNode = getNode(childNodeId);
-    if (!childNode) {
-      return console.error("Could not find child node");
-    }
     const parentNode = getNode(parentNodeId);
     const parentNodeLabel = t(($) => $[parentNode.ariaLabel]);
     const childNodeLabel = t(($) => $[childNode.ariaLabel]);
+
+    if (parentNode && "subModel" in parentNode.data) {
+      if (childNode && "subModel" in childNode.data) {
+        if (parentNode.data.subModel !== childNode.data.subModel) {
+          toast.error(
+            t(($) => $["wrong_model_attach"], {
+              childNode: childNodeLabel,
+              parentNode: parentNodeLabel,
+            }),
+          );
+          return console.error("Attaching to wrong model");
+        }
+      }
+    }
+
+    attachNode([childNodeId], parentNodeId);
+    if (!childNode) {
+      return console.error("Could not find child node");
+    }
     toast(
       t(($) => $["attached_toast"], {
         childNode: childNodeLabel,
@@ -107,7 +122,7 @@ export const useAttachNode = () => {
       }),
       {
         icon: "link",
-      }
+      },
     );
 
     resetAttach();

@@ -162,6 +162,7 @@
   "View controls": "View controls",
   "Whiteboard": "Whiteboard",
   "Whiteboard options": "Whiteboard options",
+  "wrong_model_attach": "Cannot attach {{childNode}} node to {{parentNode}} node since they are part of different model types.",
   "YADM": "YADM",
   "Yellow": "Yellow",
   "Yes, create new model": "Yes, create new model",

@@ -11,6 +11,7 @@ import {
   ScribbleIcon,
   SelectionPlusIcon,
   SquareIcon,
+  TextTIcon,
 } from "@phosphor-icons/react";
 import { cn } from "@sglara/cn";
 import { useShallow } from "zustand/react/shallow";
@@ -85,7 +86,7 @@ const SideToolbar = () => {
   });
 
   const isWhiteboardEnabled = useDEMOModelerStore(
-    (state) => state.isWhiteboardEnabled
+    (state) => state.isWhiteboardEnabled,
   );
 
   return (
@@ -94,7 +95,7 @@ const SideToolbar = () => {
         "side-toolbar-wrapper | absolute top-[50%] left-4 translate-y-[-50%] z-9999 transition-opacity",
         isEnabled
           ? "opacity-100 pointer-events-auto"
-          : "opacity-0 pointer-events-none"
+          : "opacity-0 pointer-events-none",
       )}
     >
       <DEMOModelerToolbar
@@ -165,11 +166,11 @@ const SideToolbar = () => {
                 if (childNodeId) resetAttach();
                 setAction(isWhiteboardEnabled ? "pan" : "draw");
                 setHandleEditModeEnabled((isEnabled) =>
-                  isWhiteboardEnabled ? isEnabled : false
+                  isWhiteboardEnabled ? isEnabled : false,
                 );
                 setWhiteboardEnabled((isEnabled) => !isEnabled);
                 setNodes((nodes) =>
-                  nodes.map((node) => ({ ...node, selected: false }))
+                  nodes.map((node) => ({ ...node, selected: false })),
                 );
               }}
               aria-label={
@@ -393,7 +394,7 @@ const SideToolbar = () => {
               }}
               isDisabled={!isEnabled}
             >
-              <FilePlusIcon
+              <TextTIcon
                 color={
                   previewNode?.type === "text"
                     ? "var(--color-sky-500)"
@@ -426,7 +427,7 @@ const SideToolbar = () => {
                 color={
                   previewNode?.type === "organization"
                     ? "var(--color-sky-500)"
-                    : "var(--color-slate-900)"
+                    : "var(--color-rose-500)"
                 }
               />
             </DEMOModelerToolbarButton>

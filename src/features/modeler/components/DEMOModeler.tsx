@@ -24,6 +24,7 @@ import {
   onReconnectEnd,
   onReconnectStart,
   setModel,
+  updateNode,
   useDEMOModelerStore,
   type DEMOModelerState,
 } from "../store/useDEMOModelerStore";
@@ -264,6 +265,16 @@ const DEMOModeler = () => {
             panOnDrag={action === "pan"}
             selectionMode={SelectionMode.Partial}
             proOptions={{ hideAttribution: true }}
+            onNodeMouseEnter={(_, node) => {
+              if (action === "attach") {
+                updateNode(node.id, (node) => ({ ...node, selected: true }));
+              }
+            }}
+            onNodeMouseLeave={(_, node) => {
+              if (action === "attach") {
+                updateNode(node.id, (node) => ({ ...node, selected: false }));
+              }
+            }}
           >
             <Whiteboard />
             <Background

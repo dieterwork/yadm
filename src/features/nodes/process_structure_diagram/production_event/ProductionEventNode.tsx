@@ -31,7 +31,8 @@ const ProductionEventNode = ({
         "changeFontSize",
         "editText",
         "toggleHandlesVisibility",
-      ].concat(parentId ? "attachNode" : [])}
+        "attachNode",
+      ]}
     >
       <EditableContent
         isSelected={selected}
