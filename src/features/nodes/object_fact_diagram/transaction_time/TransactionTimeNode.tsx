@@ -3,6 +3,7 @@ import {
   type CoordinateExtent,
   type NodeProps,
   type OnResize,
+  type OnResizeEnd,
   type OnResizeStart,
   type XYPosition,
 } from "@xyflow/react";
@@ -10,7 +11,7 @@ import {
 import DEMONodeBase from "../../DEMONodeBase";
 import type { TransactionTimeNode as TransactionTimeNodeType } from "./transactionTime.types";
 import { TRANSACTION_TIME_HEIGHT } from "../../utils/consts";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import getChildNodes from "../../utils/getChildNodes";
 import {
   getNode,
@@ -32,40 +33,51 @@ const TransactionTimeNode = ({
   const [isHorizontalResizeControl, setIsHorizontalResizeControl] =
     useState(false);
   const nodes = useDEMOModelerStore((state) => state.nodes);
-
-  const { screenToFlowPosition } = useReactFlow();
-
   const node = getNode(id);
+
   if (!node) return null;
+
+  const transactionKindNode = getChildNodes([node], nodes).find(
+    (node) => node.type === "transaction_kind",
+  );
+
+  if (!transactionKindNode) return null;
 
   const onResize: OnResize = (
     params,
     { width: newWidth, height: newHeight },
   ) => {
-    if (isHorizontalResizeControl) return;
+    if (newHeight < TRANSACTION_TIME_HEIGHT) return;
 
-    const childNodes = getChildNodes([node], nodes);
-    const transactionKind = childNodes.find(
-      (node) => node.type === "transaction_kind",
-    );
+    const extent: CoordinateExtent = [
+      [2, 2],
+      [newWidth - 2, newHeight - 2],
+    ];
 
-    if (!transactionKind) return;
+    if (isHorizontalResizeControl) {
+      updateNode(transactionKindNode.id, {
+        extent,
+      });
+    } else {
+      const newSize = newHeight - 4;
 
-    const newSize = newHeight - 4;
+      // find percentage of width current position is
+      const scaledXPosition =
+        (transactionKindNode?.position.x ?? 0) / (width ?? 0);
 
-    // find percentage of width current position is
-    const scaledXPosition = (transactionKind?.position.x ?? 0) / (width ?? 0);
+      const position: XYPosition = {
+        x: newWidth * scaledXPosition,
+        y: newHeight / 2 - newSize / 2,
+      };
+      console.log(position, newSize);
 
-    const position: XYPosition = {
-      x: newWidth * scaledXPosition,
-      y: newHeight / 2 - newSize / 2,
-    };
-
-    updateNode(transactionKind.id, {
-      position,
-      width: newSize,
-      height: newSize,
-    });
+      updateNode(transactionKindNode.id, {
+        position,
+        width: newSize,
+        height: newSize,
+        extent,
+      });
+    }
   };
 
   const onResizeStart: OnResizeStart = (e) => {
@@ -76,6 +88,17 @@ const TransactionTimeNode = ({
         !(e.sourceEvent.target as HTMLElement).classList.contains("bottom"),
     );
     setIsHorizontalResizeControl(isHorizontalResizeControl);
+  };
+
+  const onResizeEnd: OnResizeEnd = (_, { height: newHeight }) => {
+    // resolves bug where resizing quickly prevents transaction kind node from properly resizing
+    const newSize = newHeight - 4;
+    if (
+      transactionKindNode.height === newSize &&
+      transactionKindNode.width === newSize
+    )
+      return;
+    updateNode(transactionKindNode.id, { width: newSize, height: newSize });
   };
 
   return (
@@ -94,6 +117,7 @@ const TransactionTimeNode = ({
         minHeight: TRANSACTION_TIME_HEIGHT,
         onResize,
         onResizeStart,
+        onResizeEnd,
       }}
       keepAspectRatio={!isHorizontalResizeControl}
     />

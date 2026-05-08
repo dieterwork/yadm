@@ -869,7 +869,13 @@ export const createNode = ({
             strokeWidth: 2,
             stroke: NODE_BORDER_COLOR_MAP["default"],
           },
-          extent: "parent",
+          extent: [
+            [2, 2],
+            [
+              DEFAULT_SIZE_MAP["transaction_time"].width - 2,
+              DEFAULT_SIZE_MAP["transaction_time"].height - 2,
+            ],
+          ],
           selected: false,
           connectable: false,
           zIndex: 180,
