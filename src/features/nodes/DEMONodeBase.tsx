@@ -60,19 +60,22 @@ const DEMONodeBase = ({
   draggable,
   dragging,
 }: DEMONodeBaseProps) => {
-  if (type === "text")
-    throw new Error("Cannot render node primitive with text node");
-
-  const DEMOShape = shapeMap[type];
-  const shapeRef = useRef<SVGSVGElement>(null!);
-
   const { inProgress: isConnectionInProgress } = useConnection();
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const isExportEnabled = useDEMOModelerStore((state) => state.isExportEnabled);
   const nodes = useDEMOModelerStore((state) => state.nodes);
+  const action = useDEMOModelerStore((state) => state.action);
+
+  const shapeRef = useRef<SVGSVGElement>(null!);
   const node = getNode(id);
+  const DEMOShape = shapeMap[type];
 
   if (!node) return;
+
+  if (type === "text") {
+    throw new Error("Cannot render node primitive with text node");
+  }
+
   const areNodeHandlesVisible = getChildNodes([node], nodes).every((node) => {
     if (!("handles" in node.data) || !node.data.handles) return false;
     return !!node.data.handles.isVisible;
@@ -92,9 +95,10 @@ const DEMONodeBase = ({
         )}
       <div className="isolate" style={{ width, height }}>
         {/* Controls */}
-        {!isConnectionInProgress && isEnabled && !isExportEnabled && (
-          <NodeToolbar nodeId={id} actions={actions} />
-        )}
+        {!isConnectionInProgress &&
+          isEnabled &&
+          !isExportEnabled &&
+          action !== "attach" && <NodeToolbar nodeId={id} actions={actions} />}
         {resizable && isEnabled && !isExportEnabled && (
           <DEMONodeResizer
             {...resizerProps}

@@ -18,6 +18,7 @@ const TextNode = ({
     data;
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const isExportEnabled = useDEMOModelerStore((state) => state.isExportEnabled);
+  const action = useDEMOModelerStore((state) => state.action);
   return (
     <>
       <div
@@ -27,22 +28,24 @@ const TextNode = ({
           !isExportEnabled &&
             isEnabled &&
             selected &&
-            "outline-1 outline-sky-500"
+            "outline-1 outline-sky-500",
         )}
         style={{ width, height }}
       >
-        <NodeToolbar
-          nodeId={id}
-          actions={[
-            "changeFontSize",
-            "showBorder",
-            "changeColor",
-            "showBorder",
-            "editText",
-            "attachNode",
-          ]}
-          isVisible={isEnabled && !isExportEnabled}
-        />
+        {action !== "attach" && (
+          <NodeToolbar
+            nodeId={id}
+            actions={[
+              "changeFontSize",
+              "showBorder",
+              "changeColor",
+              "showBorder",
+              "editText",
+              "attachNode",
+            ]}
+            isVisible={isEnabled && !isExportEnabled}
+          />
+        )}
         <NodeResizer
           nodeId={id}
           isVisible={selected && isEnabled && !isExportEnabled && !dragging}
