@@ -67,7 +67,12 @@ const allowedConnectionMap = {
   c_act: ["initiation_fact", "c_fact", "tk_execution", "ghost"],
   tk_execution: ["c_fact", "c_act", "ghost"],
   // ofd
-  production_event: ["entity_class", "derived_entity", "ghost"],
+  production_event: [
+    "entity_class",
+    "derived_entity",
+    "production_event",
+    "ghost",
+  ],
   entity_class: ["entity_class", "derived_entity", "production_event", "ghost"],
   derived_entity: [
     "entity_class",
