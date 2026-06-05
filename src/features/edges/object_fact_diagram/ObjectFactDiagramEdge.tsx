@@ -13,7 +13,11 @@ const ObjectFactDiagramEdge = ({
       centerY={data?.center?.y}
       isDraggable={data?.center?.active}
       markerMid={data?.markerMid}
-      style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
+      style={{
+        stroke: "var(--color-slate-900)",
+        strokeWidth: 2,
+        strokeDasharray: data?.lineType === "solid" ? "0" : "5",
+      }}
       actions={[
         "swapConnection",
         "resetEdgeCenter",
