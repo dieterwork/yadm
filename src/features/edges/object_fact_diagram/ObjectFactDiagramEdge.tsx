@@ -14,7 +14,12 @@ const ObjectFactDiagramEdge = ({
       isDraggable={data?.center?.active}
       markerMid={data?.markerMid}
       style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
-      actions={["swapConnection", "resetEdgeCenter", "changeLinePath"]}
+      actions={[
+        "swapConnection",
+        "resetEdgeCenter",
+        "changeLinePath",
+        "changeLineType",
+      ]}
       linePath={data?.linePath}
     />
   );

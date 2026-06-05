@@ -27,7 +27,12 @@ export type CooperationModelEdge = Edge<
 >;
 
 export type ObjectFactDiagramEdge = Edge<
-  { center?: CenterData; markerMid?: MarkerType; linePath: LinePath },
+  {
+    center?: CenterData;
+    markerMid?: MarkerType;
+    linePath: LinePath;
+    lineType: LineType;
+  },
   "object_fact_diagram_edge"
 >;
 
