@@ -7,7 +7,7 @@ import type {
 
 const getEdgeData = <T extends DEMOEdge>(
   edgeType: T["type"],
-  data?: T["data"]
+  data?: T["data"],
 ): T["data"] => {
   if (!edgeType) return undefined;
   switch (edgeType) {
@@ -29,6 +29,10 @@ const getEdgeData = <T extends DEMOEdge>(
           data && "linePath" in data && !!data.linePath
             ? data.linePath
             : "step",
+        lineType:
+          data && "lineType" in data && !!data.lineType
+            ? data.lineType
+            : "solid",
       } satisfies ObjectFactDiagramEdge["data"];
     }
     case "process_structure_diagram_edge": {
