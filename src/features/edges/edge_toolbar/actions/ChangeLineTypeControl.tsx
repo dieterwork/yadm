@@ -16,13 +16,17 @@ import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types
 import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
-import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 
 const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const { t } = useTranslation();
   const edge = getEdge(edgeId);
-  if (!edge || edge.type !== "cooperation_model_edge" || !edge.data?.lineType)
+  if (
+    !edge ||
+    (edge.type !== "cooperation_model_edge" &&
+      edge.type !== "object_fact_diagram_edge") ||
+    !edge.data?.lineType
+  )
     return null;
 
   const options = [
@@ -31,7 +35,7 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   ];
 
   const [selected, setSelected] = useState<Selection>(
-    new Set([edge.data.lineType])
+    new Set([edge.data.lineType]),
   );
 
   return (
