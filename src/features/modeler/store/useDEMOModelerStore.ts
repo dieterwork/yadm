@@ -198,6 +198,7 @@ export const onNodesChange: OnNodesChange<DEMONode> = (changes) => {
     const updatedChanges = updateHelperLinesFromNodeChanges(
       changes,
       state.nodes,
+      state.edges,
     );
     return {
       nodes: applyNodeChanges(updatedChanges, state.nodes),

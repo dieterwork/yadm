@@ -6,6 +6,7 @@ import convertAbsoluteToRelativePosition from "../nodes/utils/convertAbsoluteToR
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
 import type { HandleChange } from "./types/types";
 import { getNodeHandleHelperLines } from "./utils/getNodeHandleHelperLines";
+import type { DEMOEdge } from "../edges/edges.types";
 // import { getEdgeHelperLines } from "./utils/getEdgeHelperLines";
 
 export interface HelperLinesState {
@@ -32,6 +33,7 @@ export const toggleHelperLines = (
 export const updateHelperLinesFromNodeChanges = (
   changes: NodeChange<DEMONode>[],
   nodes: DEMONode[],
+  edges: DEMOEdge[],
 ) => {
   // reset the helper lines (clear existing lines, if any)
   useHelperLinesStore.setState(() => ({
@@ -56,6 +58,7 @@ export const updateHelperLinesFromNodeChanges = (
     const helperLines = getNodeHelperLines({
       change,
       nodes,
+      edges,
     });
 
     const helperLinesPosition =

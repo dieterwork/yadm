@@ -1,10 +1,10 @@
 import type { DEMONode } from "../nodes.types";
 
 export const X_SMALL_NODE_SIZE = 25 as const;
-export const SMALL_NODE_SIZE = 50 as const;
+export const SMALL_NODE_SIZE = 60 as const;
 export const MEDIUM_NODE_SIZE = 100 as const;
 export const LARGE_NODE_SIZE = 200 as const;
-export const TRANSACTION_TIME_HEIGHT = SMALL_NODE_SIZE + 4;
+export const TRANSACTION_TIME_HEIGHT = SMALL_NODE_SIZE;
 export const TRANSACTION_TIME_WIDTH = 300 as const;
 export const TRANSACTION_TIME_MIN_SIZE = 100 as const;
 
@@ -48,8 +48,8 @@ export const DEFAULT_SIZE_MAP = {
     height: TRANSACTION_TIME_HEIGHT,
   },
   transaction_kind: {
-    width: SMALL_NODE_SIZE,
-    height: SMALL_NODE_SIZE,
+    width: SMALL_NODE_SIZE - 4,
+    height: SMALL_NODE_SIZE - 4,
   },
   initiation_fact: {
     width: X_SMALL_NODE_SIZE,
@@ -70,8 +70,8 @@ export const DEFAULT_SIZE_MAP = {
 
   // object fact diagram
   production_event: {
-    width: 50,
-    height: 50,
+    width: SMALL_NODE_SIZE,
+    height: SMALL_NODE_SIZE,
   },
   entity_class: {
     width: 100,
@@ -124,11 +124,11 @@ export const MIN_SIZE_MAP = {
   // transaction pattern diagram
   transaction_time: {
     width: TRANSACTION_TIME_MIN_SIZE,
-    height: SMALL_NODE_SIZE,
+    height: TRANSACTION_TIME_HEIGHT,
   },
   transaction_kind: {
-    width: SMALL_NODE_SIZE,
-    height: SMALL_NODE_SIZE,
+    width: SMALL_NODE_SIZE - 4,
+    height: SMALL_NODE_SIZE - 4,
   },
   initiation_fact: {
     width: X_SMALL_NODE_SIZE,
@@ -149,8 +149,8 @@ export const MIN_SIZE_MAP = {
 
   // object fact diagram
   production_event: {
-    width: 50,
-    height: 50,
+    width: SMALL_NODE_SIZE,
+    height: SMALL_NODE_SIZE,
   },
   entity_class: {
     width: 100,

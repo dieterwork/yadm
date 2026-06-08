@@ -2,12 +2,15 @@ import type { DEMONode } from "$/features/nodes/nodes.types";
 import type { NodePositionChange, XYPosition } from "@xyflow/react";
 import filterNodesAvailableForHelperLines from "./filterNodesAvailableForHelperLines";
 import convertRelativeToAbsolutePosition from "$/features/nodes/utils/convertRelativeToAbsolutePosition";
+import nodeHelperLinesReducerForConnectedHandles from "./nodeHelperLinesReducerForConnectedHandles";
+import type { DEMOEdge } from "$/features/edges/edges.types";
 
 // this utility function can be called with a position change (inside onNodesChange)
 // it checks all other nodes and calculated the helper line positions and the position where the current node should snap to
 interface GetNodeHelperLinesParams {
   change: NodePositionChange;
   nodes: DEMONode[];
+  edges: DEMOEdge[];
   distance?: number;
 }
 
@@ -20,6 +23,7 @@ export type GetHelperLinesResult = {
 export function getNodeHelperLines({
   change,
   nodes,
+  edges,
   distance = 5,
 }: GetNodeHelperLinesParams): GetHelperLinesResult {
   const defaultResult = {
@@ -33,17 +37,17 @@ export function getNodeHelperLines({
     return defaultResult;
   }
 
-  const absoluteCoordinates = convertRelativeToAbsolutePosition(
+  const nodeAAbsolutePosition = convertRelativeToAbsolutePosition(
     change.position,
     nodeA,
     nodes,
   );
 
   const nodeABounds = {
-    left: absoluteCoordinates.x ?? 0,
-    right: (absoluteCoordinates.x ?? 0) + (nodeA.measured?.width ?? 0),
-    top: absoluteCoordinates.y ?? 0,
-    bottom: (absoluteCoordinates.y ?? 0) + (nodeA.measured?.height ?? 0),
+    left: nodeAAbsolutePosition.x ?? 0,
+    right: (nodeAAbsolutePosition.x ?? 0) + (nodeA.measured?.width ?? 0),
+    top: nodeAAbsolutePosition.y ?? 0,
+    bottom: (nodeAAbsolutePosition.y ?? 0) + (nodeA.measured?.height ?? 0),
     width: nodeA.measured?.width ?? 0,
     height: nodeA.measured?.height ?? 0,
   };
@@ -57,16 +61,16 @@ export function getNodeHelperLines({
         node.id !== nodeA.id && filterNodesAvailableForHelperLines(nodeA, node),
     )
     .reduce<GetHelperLinesResult>((result, nodeB) => {
-      const absoluteCoordinates = convertRelativeToAbsolutePosition(
+      const nodeBAbsolutePosition = convertRelativeToAbsolutePosition(
         nodeB.position,
         nodeB,
         nodes,
       );
       const nodeBBounds = {
-        left: absoluteCoordinates.x ?? 0,
-        right: (absoluteCoordinates.x ?? 0) + (nodeB.measured?.width ?? 0),
-        top: absoluteCoordinates.y ?? 0,
-        bottom: (absoluteCoordinates.y ?? 0) + (nodeB.measured?.height ?? 0),
+        left: nodeBAbsolutePosition.x ?? 0,
+        right: (nodeBAbsolutePosition.x ?? 0) + (nodeB.measured?.width ?? 0),
+        top: nodeBAbsolutePosition.y ?? 0,
+        bottom: (nodeBAbsolutePosition.y ?? 0) + (nodeB.measured?.height ?? 0),
         width: nodeB.measured?.width ?? 0,
         height: nodeB.measured?.height ?? 0,
       };
@@ -293,6 +297,16 @@ export function getNodeHelperLines({
         verticalDistance = distanceCenterRightVertical;
       }
 
-      return result;
+      // get source and target node
+      return nodeHelperLinesReducerForConnectedHandles({
+        result,
+        nodeA,
+        nodeB,
+        nodeAAbsolutePosition,
+        nodes,
+        edges,
+        verticalDistance,
+        horizontalDistance,
+      });
     }, defaultResult);
 }

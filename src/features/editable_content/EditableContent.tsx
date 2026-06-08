@@ -23,6 +23,7 @@ interface EditableContentProps extends Omit<
   height?: number;
   content?: string;
   isEditable?: boolean;
+  isSelected?: boolean;
   fontSize?: number;
   color?: string;
   maxLines?: number;
@@ -66,6 +67,7 @@ const EditableContent = ({
   height,
   content,
   isEditable,
+  isSelected: _isSelected,
   fontSize = 14,
   color = "var(--color-slate-900)",
   maxLines = 3,
