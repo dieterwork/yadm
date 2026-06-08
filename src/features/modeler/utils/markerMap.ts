@@ -53,7 +53,7 @@ const markerMap: Partial<
   production_event: [
     { id: "entity_class", markerMid: "url(#diamond)" },
     { id: "derived_entity", markerMid: "url(#diamond)" },
-    { id: "production_event", markerMid: "url(#diamond)" },
+    { id: "production_event", markerEnd: closedMarker },
     { id: "ghost", markerEnd: closedMarker },
   ],
   entity_class: [
