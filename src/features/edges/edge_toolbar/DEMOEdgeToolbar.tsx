@@ -15,13 +15,19 @@ import SwapConnectionControl from "./actions/SwapConnectionControl";
 import { useTranslation } from "react-i18next";
 import ResetEdgeCenter from "./actions/ResetEdgeCenter";
 import ChangeLinePathControl from "./actions/ChangeLinePath";
+import ToggleMarkerStartControl from "./actions/ToggleMarkerStartControl";
+import ToggleMarkerMidControl from "./actions/ToggleMarkerMidControl";
+import ToggleMarkerEndControl from "./actions/ToggleMarkerEndControl";
 
 export type EdgeToolbarAction =
   | "toggleProductionEvent"
   | "swapConnection"
   | "changeLineType"
   | "resetEdgeCenter"
-  | "changeLinePath";
+  | "changeLinePath"
+  | "toggleMarkerStart"
+  | "toggleMarkerMid"
+  | "toggleMarkerEnd";
 interface DEMOEdgeToolbarProps {
   edgeId?: string;
   position?: XYPosition;
@@ -66,11 +72,20 @@ const DEMOEdgeToolbar = ({
             <ToggleProductionEventMenuItem edgeId={edgeId} />
           )}
           {actions?.indexOf("swapConnection") !== -1 &&
-            targetNode.type !== "ghost" && (
+            targetNode?.type !== "ghost" && (
               <SwapConnectionControl edgeId={edgeId} />
             )}
           {actions?.indexOf("resetEdgeCenter") !== -1 && (
             <ResetEdgeCenter edgeId={edgeId} />
+          )}
+          {actions?.indexOf("toggleMarkerStart") !== -1 && (
+            <ToggleMarkerStartControl edgeId={edgeId} />
+          )}
+          {actions?.indexOf("toggleMarkerMid") !== -1 && (
+            <ToggleMarkerMidControl edgeId={edgeId} />
+          )}
+          {actions?.indexOf("toggleMarkerEnd") !== -1 && (
+            <ToggleMarkerEndControl edgeId={edgeId} />
           )}
         </DEMOElementToolbarGroup>
         {!!edge.deletable && (
