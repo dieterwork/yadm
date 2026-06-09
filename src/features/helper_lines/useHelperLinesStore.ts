@@ -59,6 +59,7 @@ export const updateHelperLinesFromNodeChanges = (
       change,
       nodes,
       edges,
+      distance: 6,
     });
 
     const helperLinesPosition =
@@ -97,6 +98,7 @@ export const updateHelperLinesFromHandleChanges = (
     const helperLines = getNodeHandleHelperLines({
       change,
       nodes,
+      distance: 6,
     });
 
     change.offset = helperLines.snapOffset ?? change.offset;
