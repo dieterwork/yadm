@@ -17,10 +17,6 @@ const ToggleMarkerEndControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
     return edge?.markerEnd;
   });
 
-  useEffect(() => {
-    console.log(markerEnd);
-  }, [markerEnd]);
-
   const edge = getEdge(edgeId);
   if (!edge) return null;
 

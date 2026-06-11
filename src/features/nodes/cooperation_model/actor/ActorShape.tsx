@@ -18,7 +18,6 @@ const ActorShape = ({ state, scope, color }: ActorShapeProps) => {
   const { width, height, ...restSvgAttributes } = svgAttributes;
   const fill = getScopeFill(scope, color);
 
-  console.log(fill);
   switch (state) {
     case "missing":
       return (

@@ -69,7 +69,6 @@ const TransactionTimeNode = ({
         x: newWidth * scaledXPosition,
         y: newHeight / 2 - newSize / 2,
       };
-      console.log(position, newSize);
 
       updateNode(transactionKindNode.id, {
         position,
