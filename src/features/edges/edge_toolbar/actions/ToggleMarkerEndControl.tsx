@@ -1,15 +1,13 @@
-import { ClockClockwiseIcon } from "@phosphor-icons/react";
 import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import {
   getEdge,
   updateEdge,
-  updateEdgeData,
 } from "$/features/modeler/store/useDEMOModelerStore";
 import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 import { useEffect, useState } from "react";
-import type { EdgeMarkerType, MarkerType } from "@xyflow/react";
+import type { EdgeMarkerType } from "@xyflow/react";
 import { EyeClosedIcon, EyeIcon } from "@phosphor-icons/react/dist/ssr";
 
 const ToggleMarkerEndControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {

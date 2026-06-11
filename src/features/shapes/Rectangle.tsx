@@ -1,9 +1,11 @@
+import { NODE_BACKGROUND_COLOR_MAP } from "$/shared/components/ui/colors/colors.consts";
 import type { ShapeProps } from "./shapes.types";
 
 const Rectangle = ({
   width,
   height,
   transparent,
+  fill,
   ...svgAttributes
 }: ShapeProps) => {
   if (!width || !height)
@@ -14,13 +16,13 @@ const Rectangle = ({
         {...svgAttributes}
         width={width}
         height={height}
-        fill={transparent ? "none" : "var(--color-white)"}
+        fill={NODE_BACKGROUND_COLOR_MAP["default"]}
       />
       <rect
         {...svgAttributes}
         width={width}
         height={height}
-        fill={transparent ? "none" : "var(--color-white)"}
+        fill={transparent ? "none" : fill}
       />
     </g>
   );
