@@ -1,11 +1,10 @@
 import { ArrowsLeftRightIcon } from "@phosphor-icons/react";
-import useSwapConnection from "../../hooks/useSwapConnection";
 import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import { getEdge } from "$/features/modeler/store/useDEMOModelerStore";
 import { useTranslation } from "react-i18next";
-import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
+import useSwapConnection from "$/features/edges/hooks/useSwapConnection";
 
 const SwapConnectionControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const edge = getEdge(edgeId);

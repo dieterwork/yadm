@@ -1,6 +1,6 @@
 import { BaseEdge, getStraightPath, type EdgeProps } from "@xyflow/react";
 import type { DEMOEdge } from "../edges.types";
-import DEMOEdgeToolbar from "../edge_toolbar/DEMOEdgeToolbar";
+import DEMOEdgeToolbar from "../../edge_toolbar/DEMOEdgeToolbar";
 
 const TransactionTimeEdge = ({
   sourceX,

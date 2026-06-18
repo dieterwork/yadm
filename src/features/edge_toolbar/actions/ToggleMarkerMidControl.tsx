@@ -1,4 +1,3 @@
-import { ClockClockwiseIcon } from "@phosphor-icons/react";
 import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import {

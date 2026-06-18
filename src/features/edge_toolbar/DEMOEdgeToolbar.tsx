@@ -3,7 +3,7 @@ import {
   getEdge,
   getNode,
   useDEMOModelerStore,
-} from "../../modeler/store/useDEMOModelerStore";
+} from "$features/modeler/store/useDEMOModelerStore";
 import EdgeToolbar from "./EdgeToolbar";
 import DeleteMenuItem from "./actions/DeleteEdgeControl";
 import DEMOElementToolbar from "$/shared/components/ui/element_toolbar/DEMOElementToolbar";

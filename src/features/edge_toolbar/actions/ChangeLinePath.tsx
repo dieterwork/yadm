@@ -1,7 +1,6 @@
 import {
   getEdge,
   updateEdgeData,
-  useDEMOModelerStore,
 } from "$/features/modeler/store/useDEMOModelerStore";
 import {
   ArrowElbowUpRightIcon,
@@ -30,7 +29,7 @@ const ChangeLinePathControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   ];
 
   const [selected, setSelected] = useState<Selection>(
-    new Set([edge.data.linePath])
+    new Set([edge.data.linePath]),
   );
 
   return (

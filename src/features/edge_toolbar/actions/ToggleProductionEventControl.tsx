@@ -1,5 +1,4 @@
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
-import { takeSnapshot } from "$/features/actions/undo/useUndoRedoStore";
 import {
   getEdge,
   updateEdge,

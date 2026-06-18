@@ -12,8 +12,8 @@ import type { CenterData, DEMOEdge, LinePath } from "../edges.types";
 import { type DEMONode } from "../../nodes/nodes.types";
 import DEMOEdgeToolbar, {
   type EdgeToolbarAction,
-} from "../edge_toolbar/DEMOEdgeToolbar";
-import { useEffect, type CSSProperties } from "react";
+} from "../../edge_toolbar/DEMOEdgeToolbar";
+import { type CSSProperties } from "react";
 import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {

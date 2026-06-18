@@ -6,26 +6,25 @@ import {
 } from "$/features/modeler/store/useDEMOModelerStore";
 import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { EdgeMarkerType } from "@xyflow/react";
 import { EyeClosedIcon, EyeIcon } from "@phosphor-icons/react/dist/ssr";
 
-const ToggleMarkerEndControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
+const ToggleMarkerStartControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const { t } = useTranslation();
-  const [markerEnd] = useState<EdgeMarkerType | undefined>(() => {
+  const [markerStart] = useState<EdgeMarkerType | undefined>(() => {
     const edge = getEdge(edgeId);
-    return edge?.markerEnd;
+    return edge?.markerStart;
   });
 
   const edge = getEdge(edgeId);
   if (!edge) return null;
-
-  const label = t(($) => $[edge.markerEnd ? "Hide marker" : "Show marker"]);
+  const label = t(($) => $[edge.markerStart ? "Hide marker" : "Show marker"]);
 
   return (
     <DEMOElementToolbarButton
       icon={(iconProps) =>
-        edge.markerEnd ? (
+        edge.markerStart ? (
           <EyeIcon {...iconProps} />
         ) : (
           <EyeClosedIcon {...iconProps} />
@@ -34,7 +33,7 @@ const ToggleMarkerEndControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
       label={label}
       onPress={() => {
         updateEdge(edgeId, {
-          markerEnd: edge.markerEnd ? undefined : markerEnd,
+          markerStart: edge.markerStart ? undefined : markerStart,
         });
         takeSnapshotAndSave();
       }}
@@ -42,4 +41,4 @@ const ToggleMarkerEndControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   );
 };
 
-export default ToggleMarkerEndControl;
+export default ToggleMarkerStartControl;
