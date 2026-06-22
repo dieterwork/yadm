@@ -1,12 +1,11 @@
 import {
   useConnection,
-  useUpdateNodeInternals,
   type NodeProps,
   type NodeResizerProps,
 } from "@xyflow/react";
 import { shapeMap } from "../shapes/shapeMap";
 import Shape from "../shapes/Shape";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import NodeToolbar from "../node_toolbar/DEMONodeToolbar";
 import { MIN_SIZE_MAP } from "./utils/consts";
 import type { DEMONode } from "./nodes.types";

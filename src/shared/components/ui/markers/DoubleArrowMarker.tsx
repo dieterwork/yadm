@@ -16,10 +16,10 @@ const DoubleArrowMarker = ({
         width={12.5}
         height={12.5}
         viewBox="0 0 12.5 12.5"
-        className="absolute"
+        className="double-arrow-marker absolute"
         style={{
           transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px) rotate(${
-            (rotation ?? 0) * (180 / Math.PI)
+            (Math.round((rotation ?? 0) * 1000) / 1000) * (180 / Math.PI)
           }deg)`,
         }}
       >

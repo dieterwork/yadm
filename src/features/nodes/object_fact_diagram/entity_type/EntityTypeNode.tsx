@@ -2,7 +2,7 @@ import { type NodeProps } from "@xyflow/react";
 
 import DEMONodeBase from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
-import type { EntityTypeNode as EntityTypeNodeType } from "./entityType.types";
+import type { EntityTypeNode as EntityTypeNodeType } from "../objectFactDiagram.types";
 
 const EntityTypeNode = ({
   id,
@@ -35,9 +35,19 @@ const EntityTypeNode = ({
       <EditableContent
         isSelected={selected}
         isEditable={isEditable}
-        content={content}
+        content={content?.body}
         width={width}
-        height={height}
+        height={height && height / 2}
+        alignContent="center"
+        fontSize={fontSize}
+        maxLength={60}
+      />
+      <EditableContent
+        isSelected={selected}
+        isEditable={isEditable}
+        content={content?.body}
+        width={width}
+        height={height && height / 2}
         alignContent="center"
         fontSize={fontSize}
         maxLength={60}

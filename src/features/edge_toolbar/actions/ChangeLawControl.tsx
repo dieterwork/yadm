@@ -1,5 +1,7 @@
 import {
   getEdge,
+  getNode,
+  updateEdge,
   updateEdgeData,
 } from "$/features/modeler/store/useDEMOModelerStore";
 import {
@@ -10,7 +12,6 @@ import {
   XIcon,
 } from "@phosphor-icons/react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
-import type { CooperationModelEdge } from "../../edges.types";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
@@ -20,8 +21,9 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 import type { ObjectFactDiagramEdge } from "$/features/edges/edges.types";
+import getMarkerType from "$/features/modeler/utils/getMarkerType";
 
-const ChangeLaw = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
+const ChangeLawControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const { t } = useTranslation();
   const edge = getEdge(edgeId);
   if (!edge || !edge.data || !("law" in edge.data)) return null;
@@ -32,6 +34,11 @@ const ChangeLaw = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   ];
 
   const [selected, setSelected] = useState<Selection>(new Set([edge.data.law]));
+
+  const sourceNode = getNode(edge.source);
+  const targetNode = getNode(edge.target);
+
+  const marker = getMarkerType(sourceNode?.type, targetNode?.type, "default");
 
   return (
     <MenuTrigger>
@@ -58,10 +65,36 @@ const ChangeLaw = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
             if (!(selection instanceof Set)) return;
             for (const entry of selection) {
               if (entry !== "exclusion" && entry !== "precedence") return;
+
               updateEdgeData<ObjectFactDiagramEdge>(edgeId, (data) => ({
                 ...data,
                 law: entry,
               }));
+
+              if (marker.markerStart) {
+                updateEdge(edgeId, (edge) => ({
+                  ...edge,
+                  markerStart:
+                    entry === "exclusion" ? undefined : marker.markerStart,
+                }));
+              }
+
+              if (marker.markerEnd) {
+                updateEdge(edgeId, (edge) => ({
+                  ...edge,
+                  markerEnd:
+                    entry === "exclusion" ? undefined : marker.markerEnd,
+                }));
+              }
+
+              if (marker.markerMid) {
+                updateEdgeData<ObjectFactDiagramEdge>(edgeId, (data) => ({
+                  ...data,
+                  markerMid:
+                    entry === "exclusion" ? undefined : marker.markerMid,
+                }));
+              }
+
               takeSnapshotAndSave();
             }
           }}
@@ -84,4 +117,4 @@ const ChangeLaw = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   );
 };
 
-export default ChangeLaw;
+export default ChangeLawControl;

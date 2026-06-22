@@ -21,7 +21,7 @@ const SidebarMenuSectionItem = ({
           isSelected
             ? "border-sky-500 bg-sky-500 text-white"
             : "hover:bg-slate-100 border-slate-200 text-slate-900 bg-white",
-          "outline-hidden flex items-center border-1 px-4 py-4 not-first:mt-2 rounded-md"
+          "outline-hidden flex items-center border px-4 py-4 not-first:mt-2 rounded-md",
         )
       }
     >

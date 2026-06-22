@@ -42,7 +42,7 @@ const CompositeNode = ({
       <EditableContent
         isSelected={selected}
         isEditable={isEditable}
-        content={content}
+        content={content?.body}
         width={width}
         height={height}
         fontSize={fontSize}

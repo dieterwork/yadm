@@ -29,7 +29,7 @@ const TransactionKindNode = ({
       <EditableContent
         isSelected={selected}
         isEditable={isEditable}
-        content={content}
+        content={content?.body}
         width={width}
         height={height}
         maxLines={1}

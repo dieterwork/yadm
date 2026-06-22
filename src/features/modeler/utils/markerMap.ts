@@ -1,5 +1,5 @@
 import type { DEMONode } from "$/features/nodes/nodes.types";
-import { MarkerType, type EdgeMarkerType } from "@xyflow/react";
+import { type EdgeMarkerType } from "@xyflow/react";
 import closedMarker from "./closedMarker";
 
 // Todo make an object

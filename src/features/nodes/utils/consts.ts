@@ -1,4 +1,4 @@
-import type { DEMONode } from "../nodes.types";
+import type { DEMONode, DEMONodeContent } from "../nodes.types";
 
 export const X_SMALL_NODE_SIZE = 25 as const;
 export const SMALL_NODE_SIZE = 60 as const;
@@ -175,25 +175,60 @@ export const MIN_SIZE_MAP = {
 
 export const DEFAULT_CONTENT_MAP = {
   // cooperation model
-  actor: "A",
-  transaction: "01",
-  transactor: "A",
-  self_activation: "A",
-  composite: "CT",
-  elementary_actor: "01",
-  several_actors: "01",
+  actor: {
+    body: "A",
+  },
+  transaction: {
+    body: "01",
+  },
+  transactor: {
+    body: "A",
+  },
+  self_activation: {
+    body: "A",
+  },
+  composite: {
+    body: "CT",
+  },
+  elementary_actor: {
+    body: "01",
+  },
+  several_actors: {
+    body: "01",
+  },
   // transaction pattern diagram
-  transaction_kind: "A1",
-  initiation_fact: "A",
-  c_fact: "A",
-  c_act: "A",
-  tk_execution: "A",
+  transaction_kind: {
+    body: "A",
+  },
+  initiation_fact: {
+    body: "A",
+  },
+  c_act: {
+    body: "A",
+  },
+  c_fact: {
+    body: "A",
+  },
+  tk_execution: {
+    body: "A",
+  },
   // object fact diagram
-  production_event: "01",
-  set: "A",
-  entity_type: "A",
-  text: "Insert text here",
+  production_event: {
+    body: "A",
+  },
+  set: {
+    body: "A",
+  },
+  entity_type: {
+    body: "A",
+  },
+  // misc
+  text: {
+    body: "Insert text here",
+  },
   transaction_time: null,
   ghost: null,
-  organization: null,
-} satisfies Record<DEMONode["type"], string | null>;
+  organization: {
+    body: "",
+  },
+} satisfies Record<DEMONode["type"], Partial<DEMONodeContent> | null>;

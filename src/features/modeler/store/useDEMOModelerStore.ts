@@ -16,7 +16,12 @@ import {
   type Viewport,
 } from "@xyflow/react";
 
-import type { DEMOHandle, DEMONode, NodeScope } from "../../nodes/nodes.types";
+import type {
+  DEMOHandle,
+  DEMONode,
+  DEMONodeContent,
+  NodeScope,
+} from "../../nodes/nodes.types";
 import uuid from "../../../shared/utils/uuid";
 import type { DEMOEdge } from "../../edges/edges.types";
 import getEdgeType from "../utils/getEdgeType";
@@ -308,8 +313,8 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
   );
   const newEdges = reconnectedEdges.map((edge) => {
     if (newEdge?.id !== edge.id) return edge;
-    const marker = getMarkerType(sourceNode.type, targetNode.type);
-    const type = getEdgeType(sourceNode.type, targetNode.type);
+    const marker = getMarkerType(sourceNode?.type, targetNode?.type, "initial");
+    const type = getEdgeType(sourceNode?.type, targetNode?.type);
     const data = getEdgeData(type, edge.data);
 
     return {
@@ -367,7 +372,11 @@ export const updateNodeTextAlign = (
 export const updateNodeFontSize = (id: string, fontSize: number) => {
   updateNodeData(id, { fontSize });
 };
-export const updateNodeContent = (id: string, content: string) => {
+
+export const updateNodeContent = (
+  id: string,
+  content: Partial<DEMONodeContent>,
+) => {
   updateNodeData(id, { content });
 };
 

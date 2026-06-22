@@ -96,7 +96,7 @@ const TransactionNode = ({
       <EditableContent
         isSelected={selected}
         isEditable={isEditable && data.state !== "unclear"}
-        content={content}
+        content={content?.body}
         width={data.state === "double" ? height : width}
         height={height}
         fontSize={fontSize}

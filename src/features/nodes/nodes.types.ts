@@ -28,6 +28,7 @@ import type { NodeToolbarAction } from "./DEMONodeBase";
 import type { Points } from "../whiteboard/types/whiteboard.types";
 import SetNode from "./object_fact_diagram/set/SetNode";
 import EntityTypeNode from "./object_fact_diagram/entity_type/EntityTypeNode";
+import AttributeNode from "./object_fact_diagram/attribute/AttributeNode";
 
 export const nodeTypes = {
   // cooperation model
@@ -51,6 +52,7 @@ export const nodeTypes = {
   production_event: ProductionEventNode,
   set: SetNode,
   entity_type: EntityTypeNode,
+  attribute: AttributeNode,
 
   // misc
   text: TextNode,
@@ -78,6 +80,11 @@ export type DEMOHandle = {
 
 export type DEMOHandlePosition = Position;
 
+export type DEMONodeContent = {
+  header: string;
+  body: string;
+};
+
 export type SubModel =
   | "cooperation_model"
   | "object_fact_diagram"
@@ -102,7 +109,7 @@ export type DEMONodeBaseData<T extends SubModel> = {
   subModel: T;
   fontSize?: string;
   color?: string;
-  content?: string;
+  content?: Partial<DEMONodeContent>;
   isEditable?: boolean;
   actions?: NodeToolbarAction[];
 };

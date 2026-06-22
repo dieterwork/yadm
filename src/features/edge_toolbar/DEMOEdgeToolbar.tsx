@@ -18,6 +18,7 @@ import ChangeLinePathControl from "./actions/ChangeLinePath";
 import ToggleMarkerStartControl from "./actions/ToggleMarkerStartControl";
 import ToggleMarkerMidControl from "./actions/ToggleMarkerMidControl";
 import ToggleMarkerEndControl from "./actions/ToggleMarkerEndControl";
+import ChangeLawControl from "./actions/ChangeLawControl";
 
 export type EdgeToolbarAction =
   | "toggleProductionEvent"
@@ -27,7 +28,8 @@ export type EdgeToolbarAction =
   | "changeLinePath"
   | "toggleMarkerStart"
   | "toggleMarkerMid"
-  | "toggleMarkerEnd";
+  | "toggleMarkerEnd"
+  | "changeLaw";
 interface DEMOEdgeToolbarProps {
   edgeId?: string;
   position?: XYPosition;
@@ -49,6 +51,7 @@ const DEMOEdgeToolbar = ({
   const edge = getEdge(edgeId);
   if (!edge) return null;
 
+  const sourceNode = getNode(edge.source);
   const targetNode = getNode(edge.target);
 
   const hasTwoOrMoreEdgesSelected =
@@ -72,7 +75,7 @@ const DEMOEdgeToolbar = ({
             <ToggleProductionEventMenuItem edgeId={edgeId} />
           )}
           {actions?.indexOf("swapConnection") !== -1 &&
-            targetNode?.type !== "ghost" && (
+            (targetNode?.type !== "ghost" || sourceNode?.type === "ghost") && (
               <SwapConnectionControl edgeId={edgeId} />
             )}
           {actions?.indexOf("resetEdgeCenter") !== -1 && (
@@ -86,6 +89,9 @@ const DEMOEdgeToolbar = ({
           )}
           {actions?.indexOf("toggleMarkerEnd") !== -1 && (
             <ToggleMarkerEndControl edgeId={edgeId} />
+          )}
+          {actions?.indexOf("changeLaw") !== -1 && (
+            <ChangeLawControl edgeId={edgeId} />
           )}
         </DEMOElementToolbarGroup>
         {!!edge.deletable && (

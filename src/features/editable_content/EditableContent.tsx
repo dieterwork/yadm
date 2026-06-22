@@ -12,7 +12,6 @@ import {
 } from "../modeler/store/useDEMOModelerStore";
 import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
-import { debounceTakeSnapshot } from "../actions/undo/useUndoRedoStore";
 import takeSnapshotAndSave from "../actions/undo/takeSnapshotAndSave";
 
 interface EditableContentProps extends Omit<
@@ -34,6 +33,7 @@ interface EditableContentProps extends Omit<
   maxLength?: number;
   leading?: number;
   padding?: number;
+  contentLocation?: "header" | "body";
 }
 
 const getPadding = (fontSize: number) => {
@@ -67,7 +67,6 @@ const EditableContent = ({
   height,
   content,
   isEditable,
-  isSelected: _isSelected,
   fontSize = 14,
   color = "var(--color-slate-900)",
   maxLines = 3,
@@ -78,6 +77,7 @@ const EditableContent = ({
   textAlign = "center",
   alignContent = "center",
   padding,
+  contentLocation = "body",
   ...restProps
 }: EditableContentProps) => {
   const nodeId = useNodeId();
@@ -89,7 +89,9 @@ const EditableContent = ({
     content,
     ref,
     onContentUpdate: (content) => {
-      updateNodeContent(nodeId, content);
+      updateNodeContent(nodeId, {
+        [contentLocation]: content,
+      });
       takeSnapshotAndSave();
     },
     maxLines,
@@ -115,7 +117,8 @@ const EditableContent = ({
           { "w-full": !width, "h-full": !height },
           !padding && getPadding(fontSize),
           hide && "hidden",
-          restProps.className
+          isEditable && "outline outline-sky-500 -outline-offset-4",
+          restProps.className,
         )}
         style={{
           ...restProps.style,

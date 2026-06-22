@@ -11,7 +11,7 @@ import type { CenterData, DEMOEdge, LinePath } from "../edges.types";
 import DEMOEdgeToolbar, {
   type EdgeToolbarAction,
 } from "../../edge_toolbar/DEMOEdgeToolbar";
-import { type CSSProperties, type ReactNode } from "react";
+import { useEffect, type CSSProperties, type ReactNode } from "react";
 import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
@@ -24,6 +24,8 @@ import getInteractiveCenterEdgeDirection from "../utils/getInteractiveCenterEdge
 import getArrowDirection from "../utils/getArrowDirection";
 import { calcEdgeMidpoint } from "../utils/calcEdgeMidpoint";
 import getArrowRotation from "../utils/getArrowRotation";
+import { ExcludeIcon } from "@phosphor-icons/react/dist/ssr";
+import ExclusionLawMarker from "../object_fact_diagram/ExclusionLawMarker";
 
 export type EditableEdge = Edge<{
   center: CenterData;
@@ -38,7 +40,6 @@ export function EditableEdgeComponent({
   targetX,
   targetY,
   targetPosition,
-  isDraggable,
   markerEnd,
   markerStart,
   markerMid,
@@ -48,8 +49,8 @@ export function EditableEdgeComponent({
   actions,
   style,
   linePath,
-  children,
-}: EdgeProps<EditableEdge> & {
+  law,
+}: Omit<EdgeProps<EditableEdge>, "data"> & {
   markerMid?: MarkerType;
   type?: DEMOEdge["type"];
   actions?: EdgeToolbarAction[];
@@ -59,6 +60,7 @@ export function EditableEdgeComponent({
   isDraggable?: boolean;
   linePath?: "step" | "straight";
   children?: ReactNode;
+  law?: "exclusion" | "precedence";
 }) {
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const { screenToFlowPosition } = useReactFlow();
@@ -243,6 +245,12 @@ export function EditableEdgeComponent({
           labelY={interactiveEdgeMidpoint.y}
           rotation={arrowRotation}
           direction={arrowDirection}
+        />
+      )}
+      {law === "exclusion" && (
+        <ExclusionLawMarker
+          labelX={interactiveEdgeMidpoint.x}
+          labelY={interactiveEdgeMidpoint.y}
         />
       )}
     </>

@@ -41,9 +41,8 @@ const ObjectFactDiagramEdge = ({
         markerType.markerEnd ? ["toggleMarkerEnd"] : [],
       )}
       linePath={data?.linePath}
-    >
-      {data?.law === "exclusion" && <EdgeLabelRenderer></EdgeLabelRenderer>}
-    </EditableEdgeComponent>
+      law={data?.law}
+    />
   );
 };
 

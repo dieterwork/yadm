@@ -2,9 +2,9 @@ import { type NodeProps } from "@xyflow/react";
 
 import DEMONodeBase from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
-import type { SetNode as SetNodeType } from "../objectFactDiagram.types";
+import type { AttributeNode as AttributeNodeType } from "../objectFactDiagram.types";
 
-const SetNode = ({
+const AttributeNode = ({
   id,
   data,
   selected,
@@ -12,7 +12,7 @@ const SetNode = ({
   height,
   draggable,
   parentId,
-}: NodeProps<SetNodeType>) => {
+}: NodeProps<AttributeNodeType>) => {
   const { content, fontSize, isEditable } = data;
 
   return (
@@ -22,7 +22,7 @@ const SetNode = ({
       selected={selected}
       width={width}
       height={height}
-      type="set"
+      type="attribute"
       draggable={draggable}
       actions={[
         "addHandle",
@@ -35,15 +35,25 @@ const SetNode = ({
       <EditableContent
         isSelected={selected}
         isEditable={isEditable}
-        content={content?.body}
-        width={width! * 0.75}
-        height={height! * 0.75}
-        fontSize={fontSize}
+        content={content?.header}
+        width={width}
+        height={height}
         alignContent="center"
+        fontSize={fontSize}
+        maxLength={60}
+      />
+      <EditableContent
+        isSelected={selected}
+        isEditable={isEditable}
+        content={content?.body}
+        width={width}
+        height={height}
+        alignContent="center"
+        fontSize={fontSize}
         maxLength={60}
       />
     </DEMONodeBase>
   );
 };
 
-export default SetNode;
+export default AttributeNode;

@@ -2,7 +2,7 @@ import { type NodeProps } from "@xyflow/react";
 
 import DEMONodeBase from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
-import type { ProductionEventNode as ProductionEventNodeType } from "./productionEvent.types";
+import type { ProductionEventNode as ProductionEventNodeType } from "../objectFactDiagram.types";
 
 const ProductionEventNode = ({
   id,
@@ -11,7 +11,6 @@ const ProductionEventNode = ({
   width,
   height,
   draggable,
-  parentId,
 }: NodeProps<ProductionEventNodeType>) => {
   const { content, fontSize, isEditable } = data;
 
@@ -37,7 +36,7 @@ const ProductionEventNode = ({
       <EditableContent
         isSelected={selected}
         isEditable={isEditable}
-        content={content}
+        content={content?.body}
         width={width}
         height={height}
         fontSize={fontSize}
