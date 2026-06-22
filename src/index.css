@@ -86,31 +86,70 @@ body,
       }
       &.react-flow__handle-left {
         left: 2px;
+        & svg {
+          translate: calc(-26px) -50%;
+        }
         &::before {
           top: 50%;
           left: 50%;
           left: calc(50% - 3px);
         }
+        &:has(svg) {
+          left: 0;
+          &::before {
+            top: 50%;
+            left: calc(50% - 25px);
+          }
+        }
       }
       &.react-flow__handle-right {
         right: 2px;
+        & svg {
+          translate: calc(-4px) -50%;
+        }
         &::before {
           top: 50%;
           left: calc(50% + 2px);
         }
+        &:has(svg) {
+          right: 0;
+          &::before {
+            top: 50%;
+            left: 24px;
+          }
+        }
       }
       &.react-flow__handle-top {
         top: 2px;
+        & svg {
+          translate: -50% calc(-50% - 12px);
+        }
         &::before {
           top: calc(50% - 3px);
           left: 50%;
         }
+        &:has(svg) {
+          top: 0;
+          &::before {
+            top: calc(50% - 24px);
+          }
+        }
       }
       &.react-flow__handle-bottom {
         bottom: 2px;
+        & svg {
+          translate: -50% calc(-50% + 14px);
+        }
         &::before {
           top: calc(50% + 2px);
           left: 50%;
+        }
+        &:has(svg) {
+          bottom: 0;
+          &::before {
+            top: calc(50% + 25px);
+            left: calc(50%);
+          }
         }
       }
     }

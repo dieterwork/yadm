@@ -31,6 +31,8 @@ import {
   useAttachStore,
 } from "$/features/actions/attach/useAttachStore";
 
+import attributeIcon from "$assets/Attribute.svg";
+
 export type SidebarMenuSectionItemType = {
   id: string;
   name: string;
@@ -216,6 +218,13 @@ const Sidebar = () => {
               label: t(($) => $["Entity Type"]),
               icon: entityTypeIcon,
               type: "entity_type",
+            },
+            {
+              id: "attribute",
+              name: "attribute",
+              label: t(($) => $["Attribute"]),
+              icon: attributeIcon,
+              type: "attribute",
             },
           ],
         },

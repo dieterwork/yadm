@@ -176,6 +176,11 @@ const markerMap: Partial<
       initial: { markerMid: "url(#diamond)" },
     },
     {
+      id: "attribute",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: "url(#diamond)" },
+    },
+    {
       id: "production_event",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
@@ -198,6 +203,11 @@ const markerMap: Partial<
       initial: { markerMid: "url(#diamond)" },
     },
     {
+      id: "attribute",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: "url(#diamond)" },
+    },
+    {
       id: "production_event",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: undefined },
@@ -216,6 +226,38 @@ const markerMap: Partial<
     },
     {
       id: "entity_type",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: "url(#diamond)" },
+    },
+    {
+      id: "attribute",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: "url(#diamond)" },
+    },
+    {
+      id: "production_event",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: undefined },
+    },
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+  ],
+  attribute: [
+    {
+      id: "set",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: "url(#diamond)" },
+    },
+    {
+      id: "entity_type",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: "url(#diamond)" },
+    },
+    {
+      id: "attribute",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
     },

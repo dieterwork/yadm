@@ -72,7 +72,12 @@ const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
 
             updateNodeHandles(nodeId, key, (handles) => [
               ...handles,
-              { id: uuid(), offset: (leastOffsetHandle?.offset ?? 0.5) / 2 },
+              {
+                id: uuid(),
+                offset:
+                  (leastOffsetHandle?.offset ?? 0.5) *
+                  (handles.length > 1 ? 0.5 : 1),
+              },
             ]);
             updateNodeInternals(nodeId);
             takeSnapshotAndSave();

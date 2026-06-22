@@ -20,6 +20,7 @@ import {
   onEdgesDelete,
   onNodesChange,
   onNodesDelete,
+  onPaneClick,
   onReconnect,
   onReconnectEnd,
   onReconnectStart,
@@ -241,6 +242,7 @@ const DEMOModeler = () => {
             onSelectionChange={onSelectionChange}
             onPaneClick={() => {
               resetAttach();
+              onPaneClick();
             }}
             onReconnectStart={onReconnectStart}
             onReconnect={onReconnect}

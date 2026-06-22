@@ -81,6 +81,10 @@ export const DEFAULT_SIZE_MAP = {
     width: 100,
     height: 200,
   },
+  attribute: {
+    width: 100,
+    height: 100,
+  },
 
   // misc
 
@@ -221,6 +225,10 @@ export const DEFAULT_CONTENT_MAP = {
   },
   entity_type: {
     body: "A",
+  },
+  attribute: {
+    header: "Entity Type",
+    body: "Group [value type]",
   },
   // misc
   text: {

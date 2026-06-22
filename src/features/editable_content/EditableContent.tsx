@@ -4,6 +4,7 @@ import {
   useRef,
   type CSSProperties,
   type HTMLAttributes,
+  type Ref,
   type RefObject,
 } from "react";
 import {
@@ -18,15 +19,15 @@ interface EditableContentProps extends Omit<
   HTMLAttributes<HTMLSpanElement>,
   "content"
 > {
-  width?: number;
-  height?: number;
+  width?: CSSProperties["width"];
+  height?: CSSProperties["height"];
   content?: string;
   isEditable?: boolean;
   isSelected?: boolean;
   fontSize?: number;
   color?: string;
   maxLines?: number;
-  ref?: RefObject<HTMLSpanElement>;
+  ref?: Ref<HTMLSpanElement>;
   hide?: boolean;
   textAlign?: CSSProperties["textAlign"];
   alignContent?: string;
@@ -34,6 +35,7 @@ interface EditableContentProps extends Omit<
   leading?: number;
   padding?: number;
   contentLocation?: "header" | "body";
+  fitContent?: boolean;
 }
 
 const getPadding = (fontSize: number) => {
@@ -78,6 +80,7 @@ const EditableContent = ({
   alignContent = "center",
   padding,
   contentLocation = "body",
+  fitContent,
   ...restProps
 }: EditableContentProps) => {
   const nodeId = useNodeId();
@@ -134,7 +137,10 @@ const EditableContent = ({
           spellCheck={false}
           suppressContentEditableWarning={true}
           contentEditable={isContentEditable}
-          className="editable-content | inline-block w-full h-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none empty:caret-transparent before:absolute before:inset-0 before:m-auto before:w-full before:h-full before:content-['...'] before:grid before:place-items-center before:hidden before:pointer-events-none empty:before:grid before:text-slate-500 [&[contenteditable=false]::before]:hidden"
+          className={cn(
+            "editable-content | inline-block w-full break-all overflow-hidden focus-visible:outline-none whitespace-pre-wrap content-not-editable:select-none empty:caret-transparent before:absolute before:inset-0 before:m-auto before:w-full before:h-full before:content-['...'] before:place-items-center before:hidden before:pointer-events-none empty:before:grid before:text-slate-500 [&[contenteditable=false]::before]:hidden",
+            fitContent ? "h-fit" : "h-full",
+          )}
           style={{
             alignContent,
             color,

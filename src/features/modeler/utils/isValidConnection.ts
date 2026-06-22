@@ -67,9 +67,17 @@ const allowedConnectionMap = {
   c_act: ["initiation_fact", "c_fact", "tk_execution", "ghost"],
   tk_execution: ["c_fact", "c_act", "ghost"],
   // ofd
-  production_event: ["set", "entity_type", "production_event", "ghost"],
-  set: ["set", "entity_type", "production_event", "ghost"],
-  entity_type: ["set", "entity_type", "production_event", "ghost"],
+  production_event: [
+    "set",
+    "entity_type",
+    "production_event",
+    "attribute",
+    "ghost",
+  ],
+  set: ["set", "entity_type", "production_event", "attribute", "ghost"],
+  entity_type: ["set", "entity_type", "production_event", "attribute", "ghost"],
+  attribute: ["set", "entity_type", "production_event", "attribute", "ghost"],
+  // misc
   ghost: [
     "actor",
     "c_act",
@@ -85,6 +93,7 @@ const allowedConnectionMap = {
     "tk_execution",
     "transaction_time",
     "transactor",
+    "attribute",
   ],
 } satisfies Omit<
   Record<DEMONode["type"], DEMONode["type"][]>,

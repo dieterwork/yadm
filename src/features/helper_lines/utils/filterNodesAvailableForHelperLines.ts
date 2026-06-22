@@ -28,7 +28,7 @@ const transactionTimeAvailableNodes: DEMONode["type"][] = [
   "entity_type",
 ];
 
-const objectFactDiagramAvailableNodes: DEMONode["type"][] = [
+const processStructureDiagramAvailableNodes: DEMONode["type"][] = [
   "tk_execution",
   "c_fact",
   "c_act",
@@ -37,7 +37,7 @@ const objectFactDiagramAvailableNodes: DEMONode["type"][] = [
   "transaction_time",
 ];
 
-const processStructureDiagramAvailableNodes: DEMONode["type"][] = [
+const objectFactDiagramAvailableNodes: DEMONode["type"][] = [
   "actor",
   "transaction",
   "transactor",
@@ -49,6 +49,7 @@ const processStructureDiagramAvailableNodes: DEMONode["type"][] = [
   "production_event",
   "set",
   "entity_type",
+  "attribute",
 ];
 
 const textAvailableNodes: DEMONode["type"][] = [
@@ -69,6 +70,7 @@ const textAvailableNodes: DEMONode["type"][] = [
   "c_act",
   "initiation_fact",
   "tk_execution",
+  "attribute",
 ];
 
 const organizationAvailableNodes: DEMONode["type"][] = [
@@ -91,6 +93,7 @@ const organizationAvailableNodes: DEMONode["type"][] = [
   "tk_execution",
   "transaction_time",
   "organization",
+  "attribute",
 ];
 
 type NodesMapType = Record<DEMONode["type"], DEMONode["type"][] | null>;
@@ -103,14 +106,15 @@ const availableNodesMap: NodesMapType = {
   composite: cooperationModelAvailableNodes,
   elementary_actor: cooperationModelAvailableNodes,
   several_actors: cooperationModelAvailableNodes,
-  transaction_time: transactionTimeAvailableNodes,
-  initiation_fact: objectFactDiagramAvailableNodes,
-  c_act: objectFactDiagramAvailableNodes,
-  c_fact: objectFactDiagramAvailableNodes,
-  tk_execution: objectFactDiagramAvailableNodes,
-  production_event: processStructureDiagramAvailableNodes,
-  set: processStructureDiagramAvailableNodes,
-  entity_type: processStructureDiagramAvailableNodes,
+  transaction_time: processStructureDiagramAvailableNodes,
+  initiation_fact: processStructureDiagramAvailableNodes,
+  c_act: processStructureDiagramAvailableNodes,
+  c_fact: processStructureDiagramAvailableNodes,
+  tk_execution: processStructureDiagramAvailableNodes,
+  production_event: objectFactDiagramAvailableNodes,
+  set: objectFactDiagramAvailableNodes,
+  entity_type: objectFactDiagramAvailableNodes,
+  attribute: objectFactDiagramAvailableNodes,
   text: textAvailableNodes,
   transaction_kind: null,
   ghost: null,

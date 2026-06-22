@@ -15,6 +15,7 @@ import OrganizationShape from "../nodes/organization/OrganizationShape";
 import EntityTypeShape from "../nodes/object_fact_diagram/entity_type/EntityTypeShape";
 import SetShape from "../nodes/object_fact_diagram/set/SetShape";
 import ProductionEventShape from "../nodes/object_fact_diagram/production_event/ProductionEventShape";
+import AttributeNodeShape from "../nodes/object_fact_diagram/attribute/AttributeNodeShape";
 
 export const shapeMap = {
   // cooperation model
@@ -36,5 +37,6 @@ export const shapeMap = {
   production_event: ProductionEventShape,
   set: SetShape,
   entity_type: EntityTypeShape,
+  attribute: AttributeNodeShape,
   organization: OrganizationShape,
 };

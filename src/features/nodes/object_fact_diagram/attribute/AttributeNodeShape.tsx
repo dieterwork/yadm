@@ -6,14 +6,14 @@ import { DEFAULT_BORDER_RADIUS } from "../objectFactDiagramConsts";
 import { getScopeFill } from "../../../../shared/utils/utils";
 import type { NodeScope } from "../../nodes.types";
 
-type EntityTypeShapeProps = {
+type AttributeNodeShapeProps = {
   width: number;
   height: number;
   scope: NodeScope;
   color?: NodeColor;
 };
 
-const EntityTypeShape = ({ scope, color }: EntityTypeShapeProps) => {
+const AttributeNodeShape = ({ scope, color }: AttributeNodeShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) throw new Error("No shape context found");
 
@@ -28,11 +28,11 @@ const EntityTypeShape = ({ scope, color }: EntityTypeShapeProps) => {
         width={width}
         height={height}
         fill={fill}
-        rx={DEFAULT_BORDER_RADIUS}
-        ry={DEFAULT_BORDER_RADIUS}
+        rx={8}
+        ry={8}
       />
     </>
   );
 };
 
-export default EntityTypeShape;
+export default AttributeNodeShape;

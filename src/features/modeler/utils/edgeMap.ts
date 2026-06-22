@@ -102,18 +102,28 @@ const edgeMap: Partial<
     { id: "set", type: "object_fact_diagram_edge" },
     { id: "entity_type", type: "object_fact_diagram_edge" },
     { id: "production_event", type: "object_fact_diagram_edge" },
+    { id: "attribute", type: "object_fact_diagram_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
   set: [
     { id: "set", type: "object_fact_diagram_edge" },
     { id: "entity_type", type: "object_fact_diagram_edge" },
     { id: "production_event", type: "object_fact_diagram_edge" },
+    { id: "attribute", type: "object_fact_diagram_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
   entity_type: [
     { id: "set", type: "object_fact_diagram_edge" },
     { id: "entity_type", type: "object_fact_diagram_edge" },
     { id: "production_event", type: "object_fact_diagram_edge" },
+    { id: "attribute", type: "object_fact_diagram_edge" },
+    { id: "ghost", type: "ghost_edge" },
+  ],
+  attribute: [
+    { id: "set", type: "object_fact_diagram_edge" },
+    { id: "entity_type", type: "object_fact_diagram_edge" },
+    { id: "production_event", type: "object_fact_diagram_edge" },
+    { id: "attribute", type: "object_fact_diagram_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
 };

@@ -9,17 +9,29 @@ import {
 } from "@xyflow/react";
 import {
   getNode,
-  setEdges,
   setNodes,
+  updateNode,
   updateNodeHandleOffset,
-  updateNodeHandles,
   useDEMOModelerStore,
 } from "../modeler/store/useDEMOModelerStore";
 import { useGesture } from "@use-gesture/react";
 import { cn } from "@sglara/cn";
 import clamp from "$/shared/utils/clamp";
-import { useState, type CSSProperties, type MouseEventHandler } from "react";
+import {
+  useEffect,
+  useState,
+  type CSSProperties,
+  type MouseEventHandler,
+} from "react";
 import { updateHelperLinesFromHandleChanges } from "../helper_lines/useHelperLinesStore";
+import deleteHandle from "./utils/deleteHandle";
+import DEMOHandleToolbar from "../handle_toolbar/DEMOHandleToolbar";
+import AggregationHandle from "./AggregationHandle";
+import GeneralisationHandle from "./GeneralisationHandle";
+import useHandleSelectionStore, {
+  setSelectedHandleId,
+} from "../handle_toolbar/useHandleSelectionStore";
+import getDEMOHandleToolbarPosition from "./utils/getDEMOHandleToolbarPosition";
 
 const DEMOHandle = ({
   id,
@@ -27,11 +39,13 @@ const DEMOHandle = ({
   position,
   offset,
   canDrag = true,
+  derivation,
   ...restProps
 }: Omit<HandleProps, "onDragStart" | "onDrag" | "onDragEnd"> & {
   nodeId: string;
   offset: number;
   canDrag?: boolean;
+  derivation?: "aggregation" | "generalisation" | "none";
 }) => {
   const isHandleEditModeEnabled = useDEMOModelerStore(
     (state) => state.isHandleEditModeEnabled,
@@ -44,6 +58,9 @@ const DEMOHandle = ({
   const updateNodeInternals = useUpdateNodeInternals();
   const internalNode = useInternalNode(nodeId);
   const [changedOffset, setChangedOffset] = useState(offset);
+  const selectedHandleId = useHandleSelectionStore(
+    (state) => state.selectedHandleId,
+  );
 
   const bind = useGesture({
     onDragStart: () => {
@@ -122,30 +139,14 @@ const DEMOHandle = ({
 
   const onContextMenu: MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
-    const connectedEdges = getConnectedEdges([node], edges).filter((edge) => {
-      return edge.sourceHandle === id || edge.targetHandle === id;
-    });
+    if (!id) return;
 
-    const targetNodes = connectedEdges.map((edge) => edge.target);
-
-    if (connectedEdges) {
-      setEdges((edges) =>
-        edges.filter((edge) => !connectedEdges.includes(edge)),
-      );
+    if (e.ctrlKey || e.metaKey) {
+      deleteHandle(id, position, nodeId, edges, updateNodeInternals);
+    } else {
+      setSelectedHandleId(id);
+      updateNode(nodeId, (node) => ({ ...node, selected: false }));
     }
-
-    if (targetNodes) {
-      setNodes((nodes) =>
-        nodes.filter(
-          (node) => !targetNodes.includes(node.id) && node.type !== "ghost",
-        ),
-      );
-    }
-
-    updateNodeHandles(nodeId, position, (handles) =>
-      handles.filter((handle) => handle.id !== id),
-    );
-    updateNodeInternals(nodeId);
   };
 
   const style: CSSProperties = {
@@ -161,42 +162,72 @@ const DEMOHandle = ({
 
   if (isHandleEditModeEnabled)
     return (
+      <>
+        <Handle
+          {...restProps}
+          {...bind()}
+          style={style}
+          className={cn(
+            "demo-handle",
+            "touch-none",
+            isEnabled &&
+              canDrag &&
+              (position === Position.Top || position === Position.Bottom) &&
+              "cursor-col-resize!",
+            isEnabled &&
+              canDrag &&
+              (position === Position.Right || position === Position.Left) &&
+              "cursor-row-resize!",
+            isEnabled && !canDrag && "cursor-not-allowed",
+            !isEnabled && "nodrag pointer-events-none",
+          )}
+          id={id}
+          position={position}
+          onContextMenu={onContextMenu}
+        >
+          {derivation === "aggregation" && (
+            <AggregationHandle position={position} />
+          )}
+          {derivation === "generalisation" && (
+            <GeneralisationHandle position={position} />
+          )}
+        </Handle>
+        <DEMOHandleToolbar
+          nodeId={nodeId}
+          handleId={id}
+          position={position}
+          isVisible={selectedHandleId === id}
+        />
+      </>
+    );
+
+  return (
+    <>
       <Handle
         {...restProps}
-        {...bind()}
         style={style}
         className={cn(
           "demo-handle",
-          "touch-none",
-          isEnabled &&
-            canDrag &&
-            (position === Position.Top || position === Position.Bottom) &&
-            "cursor-col-resize!",
-          isEnabled &&
-            canDrag &&
-            (position === Position.Right || position === Position.Left) &&
-            "cursor-row-resize!",
-          isEnabled && !canDrag && "cursor-not-allowed",
-          !isEnabled && "nodrag pointer-events-none invisible",
+          !isEnabled && "nopan nodrag pointer-events-none",
         )}
         id={id}
         position={position}
         onContextMenu={onContextMenu}
+      >
+        {derivation === "aggregation" && (
+          <AggregationHandle position={position} />
+        )}
+        {derivation === "generalisation" && (
+          <GeneralisationHandle position={position} />
+        )}
+      </Handle>
+      <DEMOHandleToolbar
+        nodeId={nodeId}
+        handleId={id}
+        position={position}
+        isVisible={selectedHandleId === id}
       />
-    );
-
-  return (
-    <Handle
-      {...restProps}
-      style={style}
-      className={cn(
-        "demo-handle",
-        !isEnabled && "nopan nodrag pointer-events-none invisible",
-      )}
-      id={id}
-      position={position}
-      onContextMenu={onContextMenu}
-    />
+    </>
   );
 };
 

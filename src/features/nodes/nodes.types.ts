@@ -76,6 +76,7 @@ export type DEMOHandle = {
   type?: string;
   style?: CSSProperties;
   canDrag?: boolean;
+  derivation?: "aggregation" | "generalisation" | "none";
 };
 
 export type DEMOHandlePosition = Position;
@@ -102,6 +103,8 @@ export type DEMOHandlesData = {
   left?: DEMOHandlesPositionData;
   right?: DEMOHandlesPositionData;
   isVisible?: boolean;
+  // for objectFactDiagram
+  derivation?: "aggregation" | "generalisation" | "none";
 };
 
 export type DEMONodeBaseData<T extends SubModel> = {

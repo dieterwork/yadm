@@ -771,12 +771,12 @@ export const createNode = ({
       };
     }
 
-    case "entity_type": {
+    case "attribute": {
       return {
         id,
         type: type,
         position,
-        ariaLabel: t(($) => $["Derived Entity"]),
+        ariaLabel: t(($) => $["Attribute"]),
         deletable: true,
         data: {
           subModel: "object_fact_diagram",
@@ -794,6 +794,72 @@ export const createNode = ({
             },
             right: {
               handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+            },
+          },
+        },
+        style: {
+          width: DEFAULT_SIZE_MAP[type].width,
+          height: DEFAULT_SIZE_MAP[type].height,
+          fill: NODE_BACKGROUND_COLOR_MAP["default"],
+          strokeWidth: 2,
+          stroke: NODE_BORDER_COLOR_MAP["default"],
+        },
+        selected: true,
+        zIndex: 190,
+      };
+    }
+
+    case "entity_type": {
+      return {
+        id,
+        type: type,
+        position,
+        ariaLabel: t(($) => $["Derived Entity"]),
+        deletable: true,
+        data: {
+          subModel: "object_fact_diagram",
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            isVisible: true,
+            top: {
+              handles: [
+                {
+                  id: uuid(),
+                  type: "source",
+                  offset: 0.5,
+                  derivation: "none",
+                },
+              ],
+            },
+            bottom: {
+              handles: [
+                {
+                  id: uuid(),
+                  type: "source",
+                  offset: 0.5,
+                  derivation: "none",
+                },
+              ],
+            },
+            left: {
+              handles: [
+                {
+                  id: uuid(),
+                  type: "source",
+                  offset: 0.5,
+                  derivation: "none",
+                },
+              ],
+            },
+            right: {
+              handles: [
+                {
+                  id: uuid(),
+                  type: "source",
+                  offset: 0.5,
+                  derivation: "none",
+                },
+              ],
             },
           },
         },

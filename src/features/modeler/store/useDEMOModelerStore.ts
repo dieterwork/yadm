@@ -34,6 +34,7 @@ import type { CooperationModelNode } from "../../nodes/cooperation_model/coopera
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import takeSnapshotAndSave from "../../actions/undo/takeSnapshotAndSave";
 import takeWhiteboardSnapshotAndSave from "$/features/whiteboard/utils/takeWhiteboardSnapshotAndSave";
+import { setSelectedHandleId } from "$/features/handle_toolbar/useHandleSelectionStore";
 
 export type ModelerAction =
   | "attach"
@@ -57,6 +58,7 @@ export interface DEMOModelerState {
   isHandleEditModeEnabled: boolean;
   isWhiteboardEnabled: boolean;
   viewport: Viewport;
+  selectedHandleId: string | null;
 }
 
 const localDEMOModelJSON = localStorage.getItem("yadm-model");
@@ -438,14 +440,42 @@ export const updateNodeHandlesVisibility = (
   isVisible: ReactStyleStateSetter<boolean>,
 ) => {
   updateNodeData(id, (data) => ({
-    handles: {
-      ...data?.handles,
-      isVisible:
-        typeof isVisible === "boolean"
-          ? isVisible
-          : isVisible(data.handles.isVisible),
-    },
+    handles:
+      "handles" in data
+        ? {
+            ...data?.handles,
+            isVisible:
+              typeof isVisible === "boolean"
+                ? isVisible
+                : isVisible(data.handles?.isVisible),
+          }
+        : undefined,
   }));
+};
+
+export const updateNodeHandlesDerivation = (
+  id: string,
+  handleId: string,
+  position: Position,
+  newDerivation: ReactStyleStateSetter<
+    "aggregation" | "generalisation" | "none"
+  >,
+) => {
+  console.log(id, handleId, position, newDerivation);
+  updateNodeHandles(id, position, (handles) =>
+    handles.map((handle) =>
+      handle.id === handleId
+        ? {
+            ...handle,
+            derivation:
+              typeof newDerivation === "string"
+                ? newDerivation
+                : newDerivation(data.handles.derivation),
+          }
+        : handle,
+    ),
+  );
+  console.log(useDEMOModelerStore.getState().nodes.find((n) => n.id === id));
 };
 
 export const setGridVisible = (isVisible: ReactStyleStateSetter<boolean>) => {
@@ -666,3 +696,7 @@ export const modelSelector = (state: DEMOModelerState) => ({
   isEnabled: state.isEnabled,
   viewport: state.viewport,
 });
+
+export const onPaneClick = () => {
+  setSelectedHandleId(null);
+};
