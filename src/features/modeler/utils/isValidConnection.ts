@@ -69,7 +69,7 @@ const allowedConnectionMap = {
   // ofd
   production_event: ["set", "entity_type", "production_event", "ghost"],
   set: ["set", "entity_type", "production_event", "ghost"],
-  derived_entity: ["set", "entity_type", "production_event", "ghost"],
+  entity_type: ["set", "entity_type", "production_event", "ghost"],
   ghost: [
     "actor",
     "c_act",
