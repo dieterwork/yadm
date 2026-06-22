@@ -67,15 +67,15 @@ const allowedConnectionMap = {
   c_act: ["initiation_fact", "c_fact", "tk_execution", "ghost"],
   tk_execution: ["c_fact", "c_act", "ghost"],
   // ofd
-  production_event: ["set", "derived_entity", "production_event", "ghost"],
-  set: ["set", "derived_entity", "production_event", "ghost"],
-  derived_entity: ["set", "derived_entity", "production_event", "ghost"],
+  production_event: ["set", "entity_type", "production_event", "ghost"],
+  set: ["set", "entity_type", "production_event", "ghost"],
+  derived_entity: ["set", "entity_type", "production_event", "ghost"],
   ghost: [
     "actor",
     "c_act",
     "c_fact",
     "composite",
-    "derived_entity",
+    "entity_type",
     "elementary_actor",
     "set",
     "initiation_fact",
@@ -102,7 +102,7 @@ const isValidConnection = (connection: DEMOEdge | Connection) => {
   )
     return false;
   const allowedConnections = allowedConnectionMap[sourceNode?.type];
-  if (!allowedConnections.includes(targetNode?.type)) return false;
+  if (!allowedConnections?.includes(targetNode?.type)) return false;
   return true;
 };
 

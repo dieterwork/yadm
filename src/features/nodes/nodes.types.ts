@@ -6,7 +6,6 @@ import CompositeNode from "./cooperation_model/composite/CompositeNode";
 import ElementaryActorNode from "./cooperation_model/elementary_actor/ElementaryActorNode";
 import SeveralActorsNode from "./cooperation_model/several_actors/SeveralActorsNode";
 import ProductionEventNode from "./object_fact_diagram/production_event/ProductionEventNode";
-import DerivedEntityNode from "./object_fact_diagram/entity_type/DerivedEntityNode";
 import TransactionKindNode from "./process_structure_diagram/transaction_kind/TransactionKindNode";
 import CFactNode from "./process_structure_diagram/c_fact/CFactNode";
 import InitiationFactNode from "./process_structure_diagram/initiation_fact/InitiationFactNode";
@@ -28,6 +27,7 @@ import type { CooperationModelNode } from "./cooperation_model/cooperationModel.
 import type { NodeToolbarAction } from "./DEMONodeBase";
 import type { Points } from "../whiteboard/types/whiteboard.types";
 import SetNode from "./object_fact_diagram/set/SetNode";
+import EntityTypeNode from "./object_fact_diagram/entity_type/EntityTypeNode";
 
 export const nodeTypes = {
   // cooperation model
@@ -50,7 +50,7 @@ export const nodeTypes = {
   // object fact diagram
   production_event: ProductionEventNode,
   set: SetNode,
-  derived_entity: DerivedEntityNode,
+  entity_type: EntityTypeNode,
 
   // misc
   text: TextNode,

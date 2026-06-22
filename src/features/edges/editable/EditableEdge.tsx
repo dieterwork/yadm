@@ -1,16 +1,13 @@
 import {
-  EdgeLabelRenderer,
   getSmoothStepPath,
   getStraightPath,
   MarkerType,
-  useInternalNode,
   useReactFlow,
   type Edge,
   type EdgeProps,
 } from "@xyflow/react";
 
 import type { CenterData, DEMOEdge, LinePath } from "../edges.types";
-import { type DEMONode } from "../../nodes/nodes.types";
 import DEMOEdgeToolbar, {
   type EdgeToolbarAction,
 } from "../../edge_toolbar/DEMOEdgeToolbar";
@@ -18,7 +15,6 @@ import { type CSSProperties, type ReactNode } from "react";
 import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
-  getEdge,
   updateEdge,
   updateEdgeData,
   useDEMOModelerStore,

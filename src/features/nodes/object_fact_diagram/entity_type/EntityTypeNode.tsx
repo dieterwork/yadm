@@ -22,7 +22,7 @@ const EntityTypeNode = ({
       selected={selected}
       width={width}
       height={height}
-      type="derived_entity"
+      type="entity_type"
       draggable={draggable}
       actions={[
         "addHandle",

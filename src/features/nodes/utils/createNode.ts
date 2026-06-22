@@ -771,7 +771,7 @@ export const createNode = ({
       };
     }
 
-    case "derived_entity": {
+    case "entity_type": {
       return {
         id,
         type: type,

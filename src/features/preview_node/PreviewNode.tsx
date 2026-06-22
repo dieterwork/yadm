@@ -14,7 +14,7 @@ import cFactIcon from "$assets/C-Fact.svg";
 import tkExecutionIcon from "$assets/TK Execution.svg";
 import productionEventIcon from "$assets/Production Event.svg";
 import setIcon from "$assets/Set.svg";
-import derivedEntityIcon from "$assets/Derived Entity.svg";
+import entityTypeIcon from "$assets/Entity Type.svg";
 import textIcon from "$assets/Text.svg";
 import organizationIcon from "$assets/Organization.svg";
 import type { DEMONode } from "../nodes/nodes.types";
@@ -34,7 +34,7 @@ const previewNodeMap = {
   tk_execution: tkExecutionIcon,
   production_event: productionEventIcon,
   set: setIcon,
-  derived_entity: derivedEntityIcon,
+  entity_type: entityTypeIcon,
   transaction_kind: null,
   ghost: null,
   text: textIcon,

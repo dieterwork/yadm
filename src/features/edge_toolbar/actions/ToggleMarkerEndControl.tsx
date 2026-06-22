@@ -2,23 +2,27 @@ import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import {
   getEdge,
+  getNode,
   updateEdge,
 } from "$/features/modeler/store/useDEMOModelerStore";
 import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
-import { useState } from "react";
-import type { EdgeMarkerType } from "@xyflow/react";
 import { EyeClosedIcon, EyeIcon } from "@phosphor-icons/react/dist/ssr";
+import getMarkerType from "$/features/modeler/utils/getMarkerType";
 
 const ToggleMarkerEndControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const { t } = useTranslation();
-  const [markerEnd] = useState<EdgeMarkerType | undefined>(() => {
-    const edge = getEdge(edgeId);
-    return edge?.markerEnd;
-  });
 
   const edge = getEdge(edgeId);
   if (!edge) return null;
+
+  const sourceNode = getNode(edge.source);
+  const targetNode = getNode(edge.target);
+  const markerType = getMarkerType(
+    sourceNode?.type,
+    targetNode?.type,
+    "default",
+  );
 
   const label = t(($) => $[edge.markerEnd ? "Hide marker" : "Show marker"]);
 
@@ -34,7 +38,7 @@ const ToggleMarkerEndControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
       label={label}
       onPress={() => {
         updateEdge(edgeId, {
-          markerEnd: edge.markerEnd ? undefined : markerEnd,
+          markerEnd: edge.markerEnd ? undefined : markerType.markerEnd,
         });
         takeSnapshotAndSave();
       }}

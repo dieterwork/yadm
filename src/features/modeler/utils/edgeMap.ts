@@ -100,19 +100,19 @@ const edgeMap: Partial<
   // ofd
   production_event: [
     { id: "set", type: "object_fact_diagram_edge" },
-    { id: "derived_entity", type: "object_fact_diagram_edge" },
+    { id: "entity_type", type: "object_fact_diagram_edge" },
     { id: "production_event", type: "object_fact_diagram_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
   set: [
     { id: "set", type: "object_fact_diagram_edge" },
-    { id: "derived_entity", type: "object_fact_diagram_edge" },
+    { id: "entity_type", type: "object_fact_diagram_edge" },
     { id: "production_event", type: "object_fact_diagram_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
-  derived_entity: [
+  entity_type: [
     { id: "set", type: "object_fact_diagram_edge" },
-    { id: "derived_entity", type: "object_fact_diagram_edge" },
+    { id: "entity_type", type: "object_fact_diagram_edge" },
     { id: "production_event", type: "object_fact_diagram_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],

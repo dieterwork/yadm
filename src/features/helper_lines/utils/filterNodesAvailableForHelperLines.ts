@@ -11,7 +11,7 @@ const cooperationModelAvailableNodes: DEMONode["type"][] = [
   "transaction_time",
   "production_event",
   "set",
-  "derived_entity",
+  "entity_type",
 ];
 
 const transactionTimeAvailableNodes: DEMONode["type"][] = [
@@ -25,7 +25,7 @@ const transactionTimeAvailableNodes: DEMONode["type"][] = [
   "transaction_time",
   "production_event",
   "set",
-  "derived_entity",
+  "entity_type",
 ];
 
 const objectFactDiagramAvailableNodes: DEMONode["type"][] = [
@@ -48,7 +48,7 @@ const processStructureDiagramAvailableNodes: DEMONode["type"][] = [
   "transaction_time",
   "production_event",
   "set",
-  "derived_entity",
+  "entity_type",
 ];
 
 const textAvailableNodes: DEMONode["type"][] = [
@@ -62,7 +62,7 @@ const textAvailableNodes: DEMONode["type"][] = [
   "transaction_time",
   "production_event",
   "set",
-  "derived_entity",
+  "entity_type",
   "tk_execution",
   "text",
   "c_fact",
@@ -82,7 +82,7 @@ const organizationAvailableNodes: DEMONode["type"][] = [
   "transaction_time",
   "production_event",
   "set",
-  "derived_entity",
+  "entity_type",
   "tk_execution",
   "text",
   "c_fact",
@@ -110,7 +110,7 @@ const availableNodesMap: NodesMapType = {
   tk_execution: objectFactDiagramAvailableNodes,
   production_event: processStructureDiagramAvailableNodes,
   set: processStructureDiagramAvailableNodes,
-  derived_entity: processStructureDiagramAvailableNodes,
+  entity_type: processStructureDiagramAvailableNodes,
   text: textAvailableNodes,
   transaction_kind: null,
   ghost: null,

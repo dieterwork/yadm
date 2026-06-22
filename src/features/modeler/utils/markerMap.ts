@@ -171,7 +171,7 @@ const markerMap: Partial<
       initial: { markerMid: "url(#diamond)" },
     },
     {
-      id: "derived_entity",
+      id: "entity_type",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
     },
@@ -193,9 +193,14 @@ const markerMap: Partial<
       initial: { markerMid: "url(#diamond)" },
     },
     {
-      id: "derived_entity",
+      id: "entity_type",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+    },
+    {
+      id: "production_event",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: undefined },
     },
     {
       id: "ghost",
@@ -203,16 +208,21 @@ const markerMap: Partial<
       initial: { markerEnd: closedMarker },
     },
   ],
-  derived_entity: [
+  entity_type: [
     {
       id: "set",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
     },
     {
-      id: "derived_entity",
+      id: "entity_type",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+    },
+    {
+      id: "production_event",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: undefined },
     },
     {
       id: "ghost",

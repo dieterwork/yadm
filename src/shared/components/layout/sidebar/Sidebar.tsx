@@ -13,7 +13,7 @@ import cFactIcon from "$assets/C-Fact.svg";
 import tkExecutionIcon from "$assets/TK Execution.svg";
 import productionEventIcon from "$assets/Production Event.svg";
 import setIcon from "$assets/Set.svg";
-import derivedEntityIcon from "$assets/Derived Entity.svg";
+import entityTypeIcon from "$assets/Entity Type.svg";
 import SidebarSelect from "./menu/SidebarSelect";
 import {
   resetPreviewNode,
@@ -211,11 +211,11 @@ const Sidebar = () => {
               type: "set",
             },
             {
-              id: "derived_entity",
-              name: "derived_entity",
-              label: t(($) => $["Derived Entity"]),
-              icon: derivedEntityIcon,
-              type: "derived_entity",
+              id: "entity_type",
+              name: "entity_type",
+              label: t(($) => $["Entity Type"]),
+              icon: entityTypeIcon,
+              type: "entity_type",
             },
           ],
         },

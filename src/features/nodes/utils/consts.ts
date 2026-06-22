@@ -77,7 +77,7 @@ export const DEFAULT_SIZE_MAP = {
     width: 100,
     height: 200,
   },
-  derived_entity: {
+  entity_type: {
     width: 100,
     height: 200,
   },
@@ -156,7 +156,7 @@ export const MIN_SIZE_MAP = {
     width: 100,
     height: 100,
   },
-  derived_entity: {
+  entity_type: {
     width: 100,
     height: 100,
   },
@@ -191,7 +191,7 @@ export const DEFAULT_CONTENT_MAP = {
   // object fact diagram
   production_event: "01",
   set: "A",
-  derived_entity: "A",
+  entity_type: "A",
   text: "Insert text here",
   transaction_time: null,
   ghost: null,

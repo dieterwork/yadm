@@ -8,7 +8,7 @@ const getMarkerType = (
 ) => {
   const markerType = markerMap[sourceNodeType]?.find(
     (marker) => marker.id === targetNodeType,
-  )[state];
+  )?.[state];
   return {
     markerEnd: markerType?.markerEnd,
     markerStart: markerType?.markerStart,
