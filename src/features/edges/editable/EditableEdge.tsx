@@ -231,8 +231,8 @@ export function EditableEdgeComponent({
         <DEMOEdgeToolbar
           edgeId={id}
           position={{
-            x: interactiveEdgeMidpoint?.x ?? centerX,
-            y: interactiveEdgeMidpoint?.y ?? centerY,
+            x: interactiveEdgeMidpoint?.x,
+            y: interactiveEdgeMidpoint?.y,
           }}
           actions={actions}
         />
