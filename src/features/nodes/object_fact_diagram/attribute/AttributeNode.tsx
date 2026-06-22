@@ -54,7 +54,7 @@ const AttributeNode = ({
         "toggleHandlesVisibility",
       ].concat(parentId ? "attachNode" : [])}
     >
-      <div className="grid grid-rows-2">
+      <div className="grid grid-rows-2 absolute inset-0 m-auto w-full h-full overflow-hidden">
         <EditableContent
           isSelected={selected}
           isEditable={isEditable}
@@ -63,10 +63,12 @@ const AttributeNode = ({
           alignContent="center"
           fontSize={fontSize}
           maxLength={60}
-          className="bottom-auto"
+          className="bottom-auto after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-[calc(100%-4px)] after:border-b after:border-dashed after:border-black
+"
           contentLocation="header"
           ref={headerRef}
           fitContent
+          relative
         />
         <EditableContent
           isSelected={selected}
@@ -79,6 +81,7 @@ const AttributeNode = ({
           className="top-auto"
           contentLocation="body"
           ref={bodyRef}
+          relative
         />
       </div>
     </DEMONodeBase>

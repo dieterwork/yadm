@@ -71,6 +71,7 @@ body,
 .react-flow {
   .handles {
     .react-flow__handle {
+      z-index: 400;
       &::before {
         content: "";
         display: block;

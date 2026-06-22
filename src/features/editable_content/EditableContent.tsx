@@ -36,6 +36,7 @@ interface EditableContentProps extends Omit<
   padding?: number;
   contentLocation?: "header" | "body";
   fitContent?: boolean;
+  relative?: boolean;
 }
 
 const getPadding = (fontSize: number) => {
@@ -81,6 +82,7 @@ const EditableContent = ({
   padding,
   contentLocation = "body",
   fitContent,
+  relative,
   ...restProps
 }: EditableContentProps) => {
   const nodeId = useNodeId();
@@ -116,11 +118,12 @@ const EditableContent = ({
       <div
         {...restProps}
         className={cn(
-          "editable-content-wrapper | absolute inset-0 m-auto overflow-hidden",
+          "editable-content-wrapper | inset-0 m-auto overflow-hidden",
           { "w-full": !width, "h-full": !height },
           !padding && getPadding(fontSize),
           hide && "hidden",
           isEditable && "outline outline-sky-500 -outline-offset-4",
+          relative ? "relative" : "absolute",
           restProps.className,
         )}
         style={{

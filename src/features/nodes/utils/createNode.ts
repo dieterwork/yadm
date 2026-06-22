@@ -781,6 +781,7 @@ export const createNode = ({
         data: {
           subModel: "object_fact_diagram",
           content: DEFAULT_CONTENT_MAP[type],
+          fontSize: 12,
           handles: {
             isVisible: true,
             top: {

@@ -19,8 +19,8 @@ const AggregationHandle = ({ position, size = 32 }: Props) => {
         points="16,3 29,27 3,27"
         fill="white"
         stroke="var(--color-black)"
-        stroke-width="2"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinejoin="round"
       />
       <path
         d="M16 14 L16 22 M12.5 16 L19.5 20 M19.5 16 L12.5 20"

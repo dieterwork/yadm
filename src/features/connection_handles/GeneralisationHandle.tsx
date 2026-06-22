@@ -18,8 +18,8 @@ const GeneralisationHandle = ({ position, size = 32 }: Props) => {
         points="16,3 29,27 3,27"
         fill="white"
         stroke="var(--color-black)"
-        stroke-width="2"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinejoin="round"
       />
       <path
         d="M16 14 L16 22 M12 18 L20 18"
