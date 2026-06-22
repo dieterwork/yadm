@@ -239,8 +239,8 @@ export function EditableEdgeComponent({
       )}
       {markerMid && (
         <DoubleArrowMarker
-          labelX={interactiveEdgeMidpoint.x ?? centerX}
-          labelY={interactiveEdgeMidpoint.y ?? centerY}
+          labelX={interactiveEdgeMidpoint.x}
+          labelY={interactiveEdgeMidpoint.y}
           rotation={arrowRotation}
           direction={arrowDirection}
         />
