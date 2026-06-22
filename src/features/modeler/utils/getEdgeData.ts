@@ -33,6 +33,8 @@ const getEdgeData = <T extends DEMOEdge>(
           data && "lineType" in data && !!data.lineType
             ? data.lineType
             : "solid",
+
+        law: "precedence",
       } satisfies ObjectFactDiagramEdge["data"];
     }
     case "process_structure_diagram_edge": {

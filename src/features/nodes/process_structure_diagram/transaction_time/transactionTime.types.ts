@@ -1,7 +1,7 @@
 import type { Node } from "@xyflow/react";
 import type { DEMONodeBaseData } from "../../nodes.types";
 
-export type DerivedEntityNode = Node<
+export type TransactionTimeNode = Node<
   DEMONodeBaseData<"process_structure_diagram">,
-  "derived_entity"
+  "transaction_time"
 >;

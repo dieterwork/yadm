@@ -32,6 +32,7 @@ export type ObjectFactDiagramEdge = Edge<
     markerMid?: MarkerType;
     linePath: LinePath;
     lineType: LineType;
+    law: "exclusion" | "precedence";
   },
   "object_fact_diagram_edge"
 >;

@@ -1,7 +1,7 @@
 import type { Node } from "@xyflow/react";
 import type { DEMONodeBaseData } from "../../nodes.types";
 
-export type EntityClassNode = Node<
+export type InitiationFactNode = Node<
   DEMONodeBaseData<"process_structure_diagram">,
-  "entity_class"
+  "initiation_fact"
 >;

@@ -12,7 +12,7 @@ import cActIcon from "$assets/C-Act.svg";
 import cFactIcon from "$assets/C-Fact.svg";
 import tkExecutionIcon from "$assets/TK Execution.svg";
 import productionEventIcon from "$assets/Production Event.svg";
-import entityClassIcon from "$assets/Entity Class.svg";
+import setIcon from "$assets/Set.svg";
 import derivedEntityIcon from "$assets/Derived Entity.svg";
 import SidebarSelect from "./menu/SidebarSelect";
 import {
@@ -204,11 +204,11 @@ const Sidebar = () => {
               type: "production_event",
             },
             {
-              id: "entity_class",
-              name: "entity_class",
-              label: t(($) => $["Entity Class"]),
-              icon: entityClassIcon,
-              type: "entity_class",
+              id: "set",
+              name: "set",
+              label: t(($) => $["Set"]),
+              icon: setIcon,
+              type: "set",
             },
             {
               id: "derived_entity",
@@ -228,14 +228,14 @@ const Sidebar = () => {
       <div
         className={cn(
           "sidebar | [grid-area:sidebar] transition-all border-r border-gray-200 overflow-hidden relative h-[calc(100svh-var(--topbar-height,3rem))]",
-          isEnabled && isOpen ? "w-[300px]" : "w-[calc(34px)]"
+          isEnabled && isOpen ? "w-[300px]" : "w-[calc(34px)]",
         )}
         style={{ container: "sidebar / size" }}
       >
         <div
           className={cn(
             "w-[300px] px-4 h-[100cqh] transition-opacity overflow-y-auto no-scrollbar",
-            isEnabled && isOpen ? "opacity-100" : "opacity-0"
+            isEnabled && isOpen ? "opacity-100" : "opacity-0",
           )}
         >
           <div className="flex flex-col mb-6 outline-hidden">

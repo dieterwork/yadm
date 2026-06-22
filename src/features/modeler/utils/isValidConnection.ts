@@ -67,19 +67,9 @@ const allowedConnectionMap = {
   c_act: ["initiation_fact", "c_fact", "tk_execution", "ghost"],
   tk_execution: ["c_fact", "c_act", "ghost"],
   // ofd
-  production_event: [
-    "entity_class",
-    "derived_entity",
-    "production_event",
-    "ghost",
-  ],
-  entity_class: ["entity_class", "derived_entity", "production_event", "ghost"],
-  derived_entity: [
-    "entity_class",
-    "derived_entity",
-    "production_event",
-    "ghost",
-  ],
+  production_event: ["set", "derived_entity", "production_event", "ghost"],
+  set: ["set", "derived_entity", "production_event", "ghost"],
+  derived_entity: ["set", "derived_entity", "production_event", "ghost"],
   ghost: [
     "actor",
     "c_act",
@@ -87,7 +77,7 @@ const allowedConnectionMap = {
     "composite",
     "derived_entity",
     "elementary_actor",
-    "entity_class",
+    "set",
     "initiation_fact",
     "production_event",
     "self_activation",

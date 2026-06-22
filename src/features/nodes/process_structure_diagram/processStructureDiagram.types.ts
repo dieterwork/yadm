@@ -1,8 +1,14 @@
-import type { DerivedEntityNode } from "./derived_entity/derivedEntity.types";
-import type { EntityClassNode } from "./entity_class/entityClass.types";
-import type { ProductionEventNode } from "./production_event/productionEvent.types";
+import type { CActNode } from "./c_act/cAct.types";
+import type { CFactNode } from "./c_fact/cFact.types";
+import type { InitiationFactNode } from "./initiation_fact/initiationFact.types";
+import type { TKExecutionNode } from "./tk_execution/tkExecution.types";
+import type { TransactionKindNode } from "./transaction_kind/transactionKind.types";
+import type { TransactionTimeNode } from "./transaction_time/transactionTime.types";
 
 export type ProcessStructureDiagramNode =
-  | DerivedEntityNode
-  | EntityClassNode
-  | ProductionEventNode;
+  | CActNode
+  | CFactNode
+  | InitiationFactNode
+  | TKExecutionNode
+  | TransactionKindNode
+  | TransactionTimeNode;

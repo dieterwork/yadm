@@ -117,6 +117,7 @@ export const useIncompleteEdge = () => {
     const newEdgeMarker = getMarkerType(
       fromNode?.type as DEMONode["type"],
       "ghost",
+      "initial",
     );
     const data = getEdgeData(newEdgeType);
     const newEdge = {

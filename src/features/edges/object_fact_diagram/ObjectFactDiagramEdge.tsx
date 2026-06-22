@@ -1,4 +1,4 @@
-import { type EdgeProps } from "@xyflow/react";
+import { EdgeLabelRenderer, type EdgeProps } from "@xyflow/react";
 import { EditableEdgeComponent } from "../editable/EditableEdge";
 import type { ObjectFactDiagramEdge as ObjectFactDiagramEdgeType } from "../edges.types";
 import { getNode } from "$/features/modeler/store/useDEMOModelerStore";
@@ -29,13 +29,17 @@ const ObjectFactDiagramEdge = ({
         "changeLinePath",
         "changeLineType",
       ].concat(
-        sourceNode?.type === "production_event" &&
+        sourceNode?.type === "production_event" ||
           targetNode?.type === "production_event"
-          ? ["toggleMarkerEnd"]
+          ? data && "markerMid" in data
+            ? ["toggleMarkerMid"]
+            : ["toggleMarkerEnd"]
           : [],
       )}
       linePath={data?.linePath}
-    />
+    >
+      {data?.law === "exclusion" && <EdgeLabelRenderer></EdgeLabelRenderer>}
+    </EditableEdgeComponent>
   );
 };
 

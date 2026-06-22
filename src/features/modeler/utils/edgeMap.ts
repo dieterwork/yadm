@@ -99,19 +99,19 @@ const edgeMap: Partial<
   ],
   // ofd
   production_event: [
-    { id: "entity_class", type: "object_fact_diagram_edge" },
+    { id: "set", type: "object_fact_diagram_edge" },
     { id: "derived_entity", type: "object_fact_diagram_edge" },
     { id: "production_event", type: "object_fact_diagram_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
-  entity_class: [
-    { id: "entity_class", type: "object_fact_diagram_edge" },
+  set: [
+    { id: "set", type: "object_fact_diagram_edge" },
     { id: "derived_entity", type: "object_fact_diagram_edge" },
     { id: "production_event", type: "object_fact_diagram_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
   derived_entity: [
-    { id: "entity_class", type: "object_fact_diagram_edge" },
+    { id: "set", type: "object_fact_diagram_edge" },
     { id: "derived_entity", type: "object_fact_diagram_edge" },
     { id: "production_event", type: "object_fact_diagram_edge" },
     { id: "ghost", type: "ghost_edge" },

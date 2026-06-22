@@ -695,7 +695,7 @@ export const createNode = ({
         ariaLabel: t(($) => $["Production Event"]),
         deletable: true,
         data: {
-          subModel: "process_structure_diagram",
+          subModel: "object_fact_diagram",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
             isVisible: true,
@@ -733,7 +733,7 @@ export const createNode = ({
       };
     }
 
-    case "entity_class": {
+    case "set": {
       return {
         id: id,
         type: type,
@@ -741,7 +741,7 @@ export const createNode = ({
         ariaLabel: t(($) => $["Entity Class"]),
         deletable: true,
         data: {
-          subModel: "process_structure_diagram",
+          subModel: "object_fact_diagram",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
             isVisible: true,
@@ -779,7 +779,7 @@ export const createNode = ({
         ariaLabel: t(($) => $["Derived Entity"]),
         deletable: true,
         data: {
-          subModel: "process_structure_diagram",
+          subModel: "object_fact_diagram",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
             isVisible: true,
@@ -819,7 +819,7 @@ export const createNode = ({
           position,
           ariaLabel: t(($) => $["Transaction Time"]),
           data: {
-            subModel: "object_fact_diagram",
+            subModel: "process_structure_diagram",
             handles: {
               isVisible: true,
               left: {
@@ -860,7 +860,7 @@ export const createNode = ({
           },
           data: {
             content: DEFAULT_CONTENT_MAP["transaction_kind"],
-            subModel: "object_fact_diagram",
+            subModel: "process_structure_diagram",
           },
           style: {
             width: DEFAULT_SIZE_MAP["transaction_kind"].width,
@@ -892,7 +892,7 @@ export const createNode = ({
         ariaLabel: t(($) => $["Initiation Fact"]),
         deletable: true,
         data: {
-          subModel: "object_fact_diagram",
+          subModel: "process_structure_diagram",
           color: "default",
           handles: {
             isVisible: true,
@@ -943,7 +943,7 @@ export const createNode = ({
         ariaLabel: t(($) => $["C-Fact"]),
         deletable: true,
         data: {
-          subModel: "object_fact_diagram",
+          subModel: "process_structure_diagram",
           color: "default",
           handles: {
             isVisible: true,
@@ -994,7 +994,7 @@ export const createNode = ({
         ariaLabel: t(($) => $["C-Act"]),
         deletable: true,
         data: {
-          subModel: "object_fact_diagram",
+          subModel: "process_structure_diagram",
           color: "default",
           handles: {
             isVisible: true,
@@ -1044,7 +1044,7 @@ export const createNode = ({
         ariaLabel: t(($) => $["TK / Execution"]),
         deletable: true,
         data: {
-          subModel: "object_fact_diagram",
+          subModel: "process_structure_diagram",
           color: "default",
           handles: {
             isVisible: true,

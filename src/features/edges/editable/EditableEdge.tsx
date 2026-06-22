@@ -1,4 +1,5 @@
 import {
+  EdgeLabelRenderer,
   getSmoothStepPath,
   getStraightPath,
   MarkerType,
@@ -13,7 +14,7 @@ import { type DEMONode } from "../../nodes/nodes.types";
 import DEMOEdgeToolbar, {
   type EdgeToolbarAction,
 } from "../../edge_toolbar/DEMOEdgeToolbar";
-import { type CSSProperties } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
@@ -51,6 +52,7 @@ export function EditableEdgeComponent({
   actions,
   style,
   linePath,
+  children,
 }: EdgeProps<EditableEdge> & {
   markerMid?: MarkerType;
   type?: DEMOEdge["type"];
@@ -60,6 +62,7 @@ export function EditableEdgeComponent({
   centerY?: number;
   isDraggable?: boolean;
   linePath?: "step" | "straight";
+  children?: ReactNode;
 }) {
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const { screenToFlowPosition } = useReactFlow();

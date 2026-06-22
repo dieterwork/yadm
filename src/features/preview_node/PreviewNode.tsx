@@ -13,7 +13,7 @@ import cActIcon from "$assets/C-Act.svg";
 import cFactIcon from "$assets/C-Fact.svg";
 import tkExecutionIcon from "$assets/TK Execution.svg";
 import productionEventIcon from "$assets/Production Event.svg";
-import entityClassIcon from "$assets/Entity Class.svg";
+import setIcon from "$assets/Set.svg";
 import derivedEntityIcon from "$assets/Derived Entity.svg";
 import textIcon from "$assets/Text.svg";
 import organizationIcon from "$assets/Organization.svg";
@@ -33,7 +33,7 @@ const previewNodeMap = {
   c_fact: cFactIcon,
   tk_execution: tkExecutionIcon,
   production_event: productionEventIcon,
-  entity_class: entityClassIcon,
+  set: setIcon,
   derived_entity: derivedEntityIcon,
   transaction_kind: null,
   ghost: null,
@@ -64,7 +64,7 @@ const PreviewNode = ({ type }: PreviewNodeProps) => {
             <img src={icon} alt="" className="w-full h-full object-cover" />
           </div>
         </div>,
-        document.body
+        document.body,
       )}
     </>
   );

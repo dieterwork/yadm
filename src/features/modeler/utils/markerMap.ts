@@ -1,70 +1,224 @@
 import type { DEMONode } from "$/features/nodes/nodes.types";
 import { MarkerType, type EdgeMarkerType } from "@xyflow/react";
+import closedMarker from "./closedMarker";
 
-const closedMarker: EdgeMarkerType = {
-  type: MarkerType.ArrowClosed,
-  color: "var(--color-slate-900)",
-};
 // Todo make an object
 const markerMap: Partial<
   Record<
     DEMONode["type"],
     {
       id: DEMONode["type"];
-      markerStart?: EdgeMarkerType;
-      markerEnd?: EdgeMarkerType;
-      markerMid?: EdgeMarkerType;
+      initial: {
+        markerStart?: EdgeMarkerType;
+        markerEnd?: EdgeMarkerType;
+        markerMid?: EdgeMarkerType;
+      };
+      default: {
+        markerStart?: EdgeMarkerType;
+        markerEnd?: EdgeMarkerType;
+        markerMid?: EdgeMarkerType;
+      };
     }[]
   >
 > = {
   // cooperation model
-  actor: [{ id: "ghost", markerEnd: closedMarker }],
-  transaction: [{ id: "ghost", markerEnd: closedMarker }],
-  transactor: [{ id: "ghost", markerEnd: closedMarker }],
-  self_activation: [{ id: "ghost", markerEnd: closedMarker }],
-  composite: [{ id: "ghost", markerEnd: closedMarker }],
-  elementary_actor: [{ id: "ghost", markerEnd: closedMarker }],
-  several_actors: [{ id: "ghost", markerEnd: closedMarker }],
+  actor: [
+    {
+      id: "ghost",
+      default: {
+        markerEnd: closedMarker,
+      },
+      initial: {
+        markerEnd: closedMarker,
+      },
+    },
+  ],
+  transaction: [
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+  ],
+  transactor: [
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+  ],
+  self_activation: [
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+  ],
+  composite: [
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+  ],
+  elementary_actor: [
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+  ],
+  several_actors: [
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+  ],
   // ofd
   initiation_fact: [
-    { id: "initiation_fact", markerEnd: closedMarker },
-    { id: "c_fact", markerEnd: closedMarker },
-    { id: "c_act", markerEnd: closedMarker },
-    { id: "ghost", markerEnd: closedMarker },
+    {
+      id: "initiation_fact",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "c_fact",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "c_act",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
   ],
   c_fact: [
-    { id: "initiation_fact", markerEnd: closedMarker },
-    { id: "c_fact", markerEnd: closedMarker },
-    { id: "c_act", markerEnd: closedMarker },
-    { id: "tk_execution", markerEnd: closedMarker },
-    { id: "ghost", markerEnd: closedMarker },
+    {
+      id: "initiation_fact",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "c_fact",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "c_act",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "tk_execution",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
   ],
   c_act: [
-    { id: "initiation_fact", markerEnd: closedMarker },
-    { id: "c_fact", markerEnd: closedMarker },
-    { id: "tk_execution", markerEnd: closedMarker },
-    { id: "ghost", markerEnd: closedMarker },
+    {
+      id: "initiation_fact",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "c_fact",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "tk_execution",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
   ],
   tk_execution: [
-    { id: "c_fact", markerEnd: closedMarker },
-    { id: "c_act", markerEnd: closedMarker },
-    { id: "ghost", markerEnd: closedMarker },
+    {
+      id: "c_fact",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "c_act",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
   ],
   production_event: [
-    { id: "entity_class", markerMid: "url(#diamond)" },
-    { id: "derived_entity", markerMid: "url(#diamond)" },
-    { id: "production_event", markerEnd: closedMarker },
-    { id: "ghost", markerEnd: closedMarker },
+    {
+      id: "set",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: "url(#diamond)" },
+    },
+    {
+      id: "derived_entity",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: "url(#diamond)" },
+    },
+    {
+      id: "production_event",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
   ],
-  entity_class: [
-    { id: "entity_class", markerMid: "url(#diamond)" },
-    { id: "derived_entity", markerMid: "url(#diamond)" },
-    { id: "ghost", markerEnd: closedMarker },
+  set: [
+    {
+      id: "set",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: "url(#diamond)" },
+    },
+    {
+      id: "derived_entity",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: "url(#diamond)" },
+    },
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
   ],
   derived_entity: [
-    { id: "entity_class", markerMid: "url(#diamond)" },
-    { id: "derived_entity", markerMid: "url(#diamond)" },
-    { id: "ghost", markerEnd: closedMarker },
+    {
+      id: "set",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: "url(#diamond)" },
+    },
+    {
+      id: "derived_entity",
+      default: { markerMid: "url(#diamond)" },
+      initial: { markerMid: "url(#diamond)" },
+    },
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
   ],
 };
 

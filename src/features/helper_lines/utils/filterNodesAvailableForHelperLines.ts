@@ -10,7 +10,7 @@ const cooperationModelAvailableNodes: DEMONode["type"][] = [
   "several_actors",
   "transaction_time",
   "production_event",
-  "entity_class",
+  "set",
   "derived_entity",
 ];
 
@@ -24,7 +24,7 @@ const transactionTimeAvailableNodes: DEMONode["type"][] = [
   "several_actors",
   "transaction_time",
   "production_event",
-  "entity_class",
+  "set",
   "derived_entity",
 ];
 
@@ -47,7 +47,7 @@ const processStructureDiagramAvailableNodes: DEMONode["type"][] = [
   "several_actors",
   "transaction_time",
   "production_event",
-  "entity_class",
+  "set",
   "derived_entity",
 ];
 
@@ -61,7 +61,7 @@ const textAvailableNodes: DEMONode["type"][] = [
   "several_actors",
   "transaction_time",
   "production_event",
-  "entity_class",
+  "set",
   "derived_entity",
   "tk_execution",
   "text",
@@ -81,7 +81,7 @@ const organizationAvailableNodes: DEMONode["type"][] = [
   "several_actors",
   "transaction_time",
   "production_event",
-  "entity_class",
+  "set",
   "derived_entity",
   "tk_execution",
   "text",
@@ -109,7 +109,7 @@ const availableNodesMap: NodesMapType = {
   c_fact: objectFactDiagramAvailableNodes,
   tk_execution: objectFactDiagramAvailableNodes,
   production_event: processStructureDiagramAvailableNodes,
-  entity_class: processStructureDiagramAvailableNodes,
+  set: processStructureDiagramAvailableNodes,
   derived_entity: processStructureDiagramAvailableNodes,
   text: textAvailableNodes,
   transaction_kind: null,
@@ -119,7 +119,7 @@ const availableNodesMap: NodesMapType = {
 
 export default function filterNodesAvailableForHelperLines(
   nodeA: DEMONode,
-  nodeB: DEMONode
+  nodeB: DEMONode,
 ): boolean {
   const availableNodeBArray = availableNodesMap[nodeA.type];
   if (!availableNodeBArray) return false;

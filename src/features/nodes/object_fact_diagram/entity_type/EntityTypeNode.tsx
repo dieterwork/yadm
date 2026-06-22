@@ -2,9 +2,9 @@ import { type NodeProps } from "@xyflow/react";
 
 import DEMONodeBase from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
-import type { EntityClassNode as EntityClassNodeType } from "./entityClass.types";
+import type { EntityTypeNode as EntityTypeNodeType } from "./entityType.types";
 
-const EntityClassNode = ({
+const EntityTypeNode = ({
   id,
   data,
   selected,
@@ -12,7 +12,7 @@ const EntityClassNode = ({
   height,
   draggable,
   parentId,
-}: NodeProps<EntityClassNodeType>) => {
+}: NodeProps<EntityTypeNodeType>) => {
   const { content, fontSize, isEditable } = data;
 
   return (
@@ -22,7 +22,7 @@ const EntityClassNode = ({
       selected={selected}
       width={width}
       height={height}
-      type="entity_class"
+      type="derived_entity"
       draggable={draggable}
       actions={[
         "addHandle",
@@ -36,14 +36,14 @@ const EntityClassNode = ({
         isSelected={selected}
         isEditable={isEditable}
         content={content}
-        width={width * 0.75}
-        height={height * 0.75}
-        fontSize={fontSize}
+        width={width}
+        height={height}
         alignContent="center"
+        fontSize={fontSize}
         maxLength={60}
       />
     </DEMONodeBase>
   );
 };
 
-export default EntityClassNode;
+export default EntityTypeNode;

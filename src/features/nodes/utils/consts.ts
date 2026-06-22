@@ -73,7 +73,7 @@ export const DEFAULT_SIZE_MAP = {
     width: SMALL_NODE_SIZE,
     height: SMALL_NODE_SIZE,
   },
-  entity_class: {
+  set: {
     width: 100,
     height: 200,
   },
@@ -152,7 +152,7 @@ export const MIN_SIZE_MAP = {
     width: SMALL_NODE_SIZE,
     height: SMALL_NODE_SIZE,
   },
-  entity_class: {
+  set: {
     width: 100,
     height: 100,
   },
@@ -190,7 +190,7 @@ export const DEFAULT_CONTENT_MAP = {
   tk_execution: "A",
   // object fact diagram
   production_event: "01",
-  entity_class: "A",
+  set: "A",
   derived_entity: "A",
   text: "Insert text here",
   transaction_time: null,

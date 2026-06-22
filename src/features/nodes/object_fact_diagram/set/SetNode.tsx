@@ -2,9 +2,9 @@ import { type NodeProps } from "@xyflow/react";
 
 import DEMONodeBase from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
-import type { DerivedEntityNode as DerivedEntityNodeType } from "./derivedEntity.types";
+import type { SetNode as SetNodeType } from "./set.types";
 
-const DerivedEntityNode = ({
+const SetNode = ({
   id,
   data,
   selected,
@@ -12,7 +12,7 @@ const DerivedEntityNode = ({
   height,
   draggable,
   parentId,
-}: NodeProps<DerivedEntityNodeType>) => {
+}: NodeProps<SetNodeType>) => {
   const { content, fontSize, isEditable } = data;
 
   return (
@@ -22,7 +22,7 @@ const DerivedEntityNode = ({
       selected={selected}
       width={width}
       height={height}
-      type="derived_entity"
+      type="set"
       draggable={draggable}
       actions={[
         "addHandle",
@@ -36,14 +36,14 @@ const DerivedEntityNode = ({
         isSelected={selected}
         isEditable={isEditable}
         content={content}
-        width={width}
-        height={height}
-        alignContent="center"
+        width={width! * 0.75}
+        height={height! * 0.75}
         fontSize={fontSize}
+        alignContent="center"
         maxLength={60}
       />
     </DEMONodeBase>
   );
 };
 
-export default DerivedEntityNode;
+export default SetNode;

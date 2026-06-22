@@ -272,12 +272,12 @@ export const onConnect: OnConnect = (connection) => {
   if (isHandleEditModeEnabled) return;
   const sourceNode = getNode(connection.source);
   const targetNode = getNode(connection.target);
-  const type = getEdgeType(sourceNode.type, targetNode.type);
-  const marker = getMarkerType(sourceNode.type, targetNode.type);
+  const type = getEdgeType(sourceNode?.type, targetNode?.type, "initial");
+  const marker = getMarkerType(sourceNode?.type, targetNode?.type, "initial");
   const data = getEdgeData(type);
   const newEdge = {
     ...connection,
-    id: `${sourceNode.type}_${connection.sourceHandle}->${targetNode.type}_${connection.targetHandle}`,
+    id: `${sourceNode?.type ?? "node"}_${connection.sourceHandle}->${targetNode?.type ?? "node"}_${connection.targetHandle}`,
     type,
     data: {
       ...data,

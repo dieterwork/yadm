@@ -4,11 +4,11 @@ import type { NodeColor } from "../../../../shared/components/ui/colors/colors.t
 import Rectangle from "../../../shapes/Rectangle";
 import { NODE_BACKGROUND_COLOR_MAP } from "$/shared/components/ui/colors/colors.consts";
 
-type EntityClassShapeProps = {
+type SetShapeProps = {
   color?: NodeColor;
 };
 
-const EntityClassShape = ({ color }: EntityClassShapeProps) => {
+const SetShape = ({ color }: SetShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) throw new Error("No shape context found");
 
@@ -35,4 +35,4 @@ const EntityClassShape = ({ color }: EntityClassShapeProps) => {
   );
 };
 
-export default EntityClassShape;
+export default SetShape;
