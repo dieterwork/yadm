@@ -17,12 +17,7 @@ import {
 import { useGesture } from "@use-gesture/react";
 import { cn } from "@sglara/cn";
 import clamp from "$/shared/utils/clamp";
-import {
-  useEffect,
-  useState,
-  type CSSProperties,
-  type MouseEventHandler,
-} from "react";
+import { useState, type CSSProperties, type MouseEventHandler } from "react";
 import { updateHelperLinesFromHandleChanges } from "../helper_lines/useHelperLinesStore";
 import deleteHandle from "./utils/deleteHandle";
 import DEMOHandleToolbar from "../handle_toolbar/DEMOHandleToolbar";
@@ -197,6 +192,9 @@ const DEMOHandle = ({
           handleId={id}
           position={position}
           isVisible={selectedHandleId === id}
+          actions={["delete"].concat(
+            node.type === "entity_type" ? ["changeDerivation"] : [],
+          )}
         />
       </>
     );
@@ -226,6 +224,9 @@ const DEMOHandle = ({
         handleId={id}
         position={position}
         isVisible={selectedHandleId === id}
+        actions={["delete"].concat(
+          node.type === "entity_type" ? ["changeDerivation"] : [],
+        )}
       />
     </>
   );

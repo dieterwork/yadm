@@ -11,7 +11,7 @@ import type { CenterData, DEMOEdge, LinePath } from "../edges.types";
 import DEMOEdgeToolbar, {
   type EdgeToolbarAction,
 } from "../../edge_toolbar/DEMOEdgeToolbar";
-import { useEffect, type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
@@ -20,11 +20,18 @@ import {
   useDEMOModelerStore,
 } from "$/features/modeler/store/useDEMOModelerStore";
 import { getCenterEdgePoints } from "../utils/smoothStep";
+import {
+  getStartLabel0Translate,
+  getStartLabel1Translate,
+  getMiddleLabel0Translate,
+  getMiddleLabel1Translate,
+  getEndLabel0Translate,
+  getEndLabel1Translate,
+} from "./cardinalityTranslateCalculations";
 import getInteractiveCenterEdgeDirection from "../utils/getInteractiveCenterEdgeDirection";
 import getArrowDirection from "../utils/getArrowDirection";
 import { calcEdgeMidpoint } from "../utils/calcEdgeMidpoint";
 import getArrowRotation from "../utils/getArrowRotation";
-import { ExcludeIcon } from "@phosphor-icons/react/dist/ssr";
 import ExclusionLawMarker from "../object_fact_diagram/ExclusionLawMarker";
 import CardinalityLabel from "../object_fact_diagram/CardinalityLabel";
 
@@ -163,6 +170,9 @@ export function EditableEdgeComponent({
     interactiveEdgeDirection,
   });
 
+  const midLabelDirection: "horizontal" | "vertical" =
+    Math.abs(Math.cos(arrowRotation ?? 0)) > 0.5 ? "horizontal" : "vertical";
+
   return (
     <>
       <path
@@ -266,62 +276,64 @@ export function EditableEdgeComponent({
       {cardinality && (
         <>
           <CardinalityLabel
+            edgeId={id}
+            field="startLabel0"
+            isEnabled={isEnabled}
             labelX={sourceX}
             labelY={sourceY}
             content={cardinality.startLabel0}
-            translateX={
-              sourcePosition === "top" || sourcePosition === "bottom"
-                ? "-100%"
-                : "0"
-            }
-            translateY={"-100%"}
+            translateX={getStartLabel0Translate(sourcePosition).x}
+            translateY={getStartLabel0Translate(sourcePosition).y}
           />
           <CardinalityLabel
+            edgeId={id}
+            field="startLabel1"
+            isEnabled={isEnabled}
             labelX={sourceX}
             labelY={sourceY}
             content={cardinality.startLabel1}
-            translateX={"0"}
-            translateY={
-              sourcePosition === "left" || sourcePosition === "right"
-                ? "0%"
-                : "-100%"
-            }
+            translateX={getStartLabel1Translate(sourcePosition).x}
+            translateY={getStartLabel1Translate(sourcePosition).y}
           />
           <CardinalityLabel
+            edgeId={id}
+            field="middleLabel0"
+            isEnabled={isEnabled}
             labelX={interactiveEdgeMidpoint.x}
             labelY={interactiveEdgeMidpoint.y}
             content={cardinality.middleLabel0}
-            translateX={"-50%"}
-            translateY={"-100%"}
+            translateX={getMiddleLabel0Translate(midLabelDirection).x}
+            translateY={getMiddleLabel0Translate(midLabelDirection).y}
           />
           <CardinalityLabel
+            edgeId={id}
+            field="middleLabel1"
+            isEnabled={isEnabled}
             labelX={interactiveEdgeMidpoint.x}
             labelY={interactiveEdgeMidpoint.y}
             content={cardinality.middleLabel1}
-            translateX={"-50%"}
-            translateY={"0"}
+            translateX={getMiddleLabel1Translate(midLabelDirection).x}
+            translateY={getMiddleLabel1Translate(midLabelDirection).y}
           />
           <CardinalityLabel
+            edgeId={id}
+            field="endLabel0"
+            isEnabled={isEnabled}
             labelX={targetX}
             labelY={targetY}
             content={cardinality.endLabel0}
-            translateX={
-              sourcePosition === "left" || sourcePosition === "right"
-                ? "-100%"
-                : "0"
-            }
-            translateY={"-100%"}
+            translateX={getEndLabel0Translate(targetPosition).x}
+            translateY={getEndLabel0Translate(targetPosition).y}
           />
           <CardinalityLabel
+            edgeId={id}
+            field="endLabel1"
+            isEnabled={isEnabled}
             labelX={targetX}
             labelY={targetY}
             content={cardinality.endLabel1}
-            translateX={"-100%"}
-            translateY={
-              sourcePosition === "left" || sourcePosition === "right"
-                ? "0%"
-                : "-100%"
-            }
+            translateX={getEndLabel1Translate(targetPosition).x}
+            translateY={getEndLabel1Translate(targetPosition).y}
           />
         </>
       )}

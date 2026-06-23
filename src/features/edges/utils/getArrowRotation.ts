@@ -29,7 +29,7 @@ const getArrowRotation = ({
   const angle =
     Math.atan2(
       sourceGapped.y - targetGapped.y,
-      sourceGapped.x - targetGapped.x
+      sourceGapped.x - targetGapped.x,
     ) + Math.PI;
 
   if (interactiveEdgeDirection) {

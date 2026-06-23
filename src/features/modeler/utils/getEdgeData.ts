@@ -39,11 +39,11 @@ const getEdgeData = <T extends DEMOEdge>(
           data && "cardinality" in data && !!data.cardinality
             ? data.cardinality
             : {
-                startLabel0: "",
+                startLabel0: "0..*",
                 startLabel1: "",
                 middleLabel0: "",
                 middleLabel1: "",
-                endLabel0: "",
+                endLabel0: "1..1",
                 endLabel1: "",
               },
       } satisfies ObjectFactDiagramEdge["data"];

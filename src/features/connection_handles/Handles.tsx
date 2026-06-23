@@ -2,7 +2,8 @@ import { Position, useUpdateNodeInternals } from "@xyflow/react";
 import type { DEMOHandlesData } from "../nodes/nodes.types";
 import DEMOHandle from "./DEMOHandle";
 import { cn } from "@sglara/cn";
-import { getNode } from "../modeler/store/useDEMOModelerStore";
+import { useDEMOModelerStore } from "../modeler/store/useDEMOModelerStore";
+import { useShallow } from "zustand/react/shallow";
 import { useEffect } from "react";
 
 interface HandlesProps {
@@ -14,7 +15,9 @@ interface HandlesProps {
 }
 
 const Handles = ({ nodeId, width, height }: HandlesProps) => {
-  const node = getNode(nodeId);
+  const node = useDEMOModelerStore(
+    useShallow((state) => state.nodes.find((n) => n.id === nodeId)),
+  );
   const updateNodeInternals = useUpdateNodeInternals();
 
   useEffect(() => {

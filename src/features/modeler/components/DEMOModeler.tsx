@@ -24,8 +24,10 @@ import {
   onReconnect,
   onReconnectEnd,
   onReconnectStart,
+  setAction,
   setModel,
   updateNode,
+  updateNodeEditable,
   useDEMOModelerStore,
   type DEMOModelerState,
 } from "../store/useDEMOModelerStore";
@@ -61,6 +63,7 @@ import loadPublicModel from "$/features/actions/load/loadPublicModel";
 import { useTranslation } from "react-i18next";
 import useSharedServerModel from "../hooks/useSharedServerModel";
 import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModal";
+import setEndOfContentEditable from "$/features/editable_content/utils/setEndOfContentEditable";
 
 const id = uuid();
 
@@ -253,6 +256,25 @@ const DEMOModeler = () => {
             fitView
             onNodeClick={(_, node) => {
               handleNodeAttach(node);
+            }}
+            onNodeDoubleClick={(_, node) => {
+              const element = document.querySelector<HTMLDivElement>(
+                `.react-flow__node[data-id='${node.id}'] [contenteditable]`,
+              );
+              if (!element) return;
+              if (
+                node.data &&
+                "state" in node.data &&
+                node.data.state === "missing"
+              )
+                return;
+              updateNodeEditable(node.id, true);
+              updateNode(node.id, { selected: false });
+              setAction("edit");
+              setTimeout(() => {
+                element.focus();
+                setEndOfContentEditable(element);
+              }, 50);
             }}
             connectionLineComponent={(props) => <ConnectionLine {...props} />}
             connectionMode={ConnectionMode.Loose}

@@ -90,7 +90,10 @@ const EditableContent = ({
   const isContentEditable = !!isEditable && isEnabled;
 
   useEffect(() => {
-    ref.current.innerHTML = content ?? "";
+    const el = ref.current;
+    if (el) {
+      ref.current.innerHTML = content ?? "";
+    }
   }, []);
 
   return (
