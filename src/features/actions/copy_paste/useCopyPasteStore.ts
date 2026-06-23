@@ -6,15 +6,17 @@ import { create } from "zustand";
 interface CopyPasteState {
   bufferedNodes: DEMONode[];
   bufferedEdges: DEMOEdge[];
+  bufferedText: string | null;
 }
 
 export const useCopyPasteStore = create<CopyPasteState>()(() => ({
   bufferedNodes: [],
   bufferedEdges: [],
+  bufferedText: null,
 }));
 
 export const setCopyPasteBufferedNodes = (
-  newNodes: ReactStyleStateSetter<DEMONode[]>
+  newNodes: ReactStyleStateSetter<DEMONode[]>,
 ) => {
   useCopyPasteStore.setState((state) => ({
     bufferedNodes: Array.isArray(newNodes)
@@ -24,11 +26,22 @@ export const setCopyPasteBufferedNodes = (
 };
 
 export const setCopyPasteBufferedEdges = (
-  newEdges: ReactStyleStateSetter<DEMOEdge[]>
+  newEdges: ReactStyleStateSetter<DEMOEdge[]>,
 ) => {
   useCopyPasteStore.setState((state) => ({
     bufferedEdges: Array.isArray(newEdges)
       ? newEdges
       : newEdges(state.bufferedEdges),
+  }));
+};
+
+export const setCopyPasteBufferedText = (
+  newText: ReactStyleStateSetter<string | null>,
+) => {
+  useCopyPasteStore.setState((state) => ({
+    bufferedText:
+      newText === null || typeof newText === "string"
+        ? newText
+        : newText(state.bufferedText),
   }));
 };

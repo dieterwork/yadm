@@ -1,4 +1,3 @@
-import type { DEMOEdge } from "$/features/edges/edges.types";
 import {
   getNode,
   setEdges,
@@ -6,7 +5,6 @@ import {
   useDEMOModelerStore,
 } from "$/features/modeler/store/useDEMOModelerStore";
 import type { DEMONode } from "$/features/nodes/nodes.types";
-import uuid from "$/shared/utils/uuid";
 import {
   getConnectedEdges,
   useReactFlow,
@@ -38,6 +36,10 @@ const canCopyParentIdList = [
   "transaction_time",
 ];
 
+const isEditableContent = () =>
+  document.activeElement instanceof HTMLElement &&
+  document.activeElement.contentEditable === "true";
+
 const useCopyPaste = () => {
   const rfDomNode = useStore((state) => state.domNode);
   const mousePosition = useRef<XYPosition>({ x: 0, y: 0 });
@@ -46,6 +48,7 @@ const useCopyPaste = () => {
   const edges = useDEMOModelerStore((state) => state.edges);
   const bufferedNodes = useCopyPasteStore((state) => state.bufferedNodes);
   const bufferedEdges = useCopyPasteStore((state) => state.bufferedEdges);
+  const action = useDEMOModelerStore((state) => state.action);
 
   useEffect(() => {
     if (rfDomNode) {
@@ -83,7 +86,7 @@ const useCopyPaste = () => {
     });
 
     const filteredNodes = selectedNodes.filter(
-      (node) => !disabledNodes?.includes(node)
+      (node) => !disabledNodes?.includes(node),
     );
 
     const childNodes = getChildNodes(filteredNodes, nodes);
@@ -93,14 +96,14 @@ const useCopyPaste = () => {
     const selectedEdges = getConnectedEdges(filteredNodes, edges).filter(
       (edge) => {
         const isExternalSource = filteredNodes.every(
-          (n) => n.id !== edge.source
+          (n) => n.id !== edge.source,
         );
         const isExternalTarget = filteredNodes.every(
-          (n) => n.id !== edge.target
+          (n) => n.id !== edge.target,
         );
 
         return !(isExternalSource || isExternalTarget);
-      }
+      },
     );
 
     setCopyPasteBufferedNodes(combinedSelectedNodes);
@@ -109,11 +112,7 @@ const useCopyPaste = () => {
     return { selectedNodes: combinedSelectedNodes, selectedEdges };
   };
 
-  const copy = () => {
-    copyNodes();
-  };
-
-  const cut = () => {
+  const cutNodes = () => {
     const selectedElements = copyNodes();
 
     if (!selectedElements) return;
@@ -125,8 +124,8 @@ const useCopyPaste = () => {
     setEdges((edges) => edges.filter((edge) => !selectedEdges.includes(edge)));
   };
 
-  const paste = (
-    { x: pasteX, y: pasteY } = screenToFlowPosition(mousePosition.current)
+  const pasteNodes = (
+    { x: pasteX, y: pasteY } = screenToFlowPosition(mousePosition.current),
   ) => {
     // create an old/new id map to keep track of old node ids
     const nodeIdMap = createNodeIdMap(bufferedNodes);
@@ -151,7 +150,7 @@ const useCopyPaste = () => {
       };
 
       const nodeWithNewHandles = updateNodeWithNewHandleIds(
-        baseNewNode
+        baseNewNode,
       ) as DEMONode;
 
       return nodeWithNewHandles;
@@ -165,10 +164,10 @@ const useCopyPaste = () => {
       const newId = edgeIdMap.get(edge.id)!;
 
       const oldSourceNode = bufferedNodes.find(
-        (node) => node.id === edge.source
+        (node) => node.id === edge.source,
       );
       const oldTargetNode = bufferedNodes.find(
-        (node) => node.id === edge.target
+        (node) => node.id === edge.target,
       );
 
       const source = nodeIdMap.get(edge.source)!;
@@ -191,7 +190,7 @@ const useCopyPaste = () => {
         oldSourceNode,
         oldTargetNode,
         newSourceNode,
-        newTargetNode
+        newTargetNode,
       );
 
       return {
@@ -210,7 +209,7 @@ const useCopyPaste = () => {
     ];
 
     const updatedNodes = unsortedUpdatedNodes.sort((a, b) =>
-      sortNodes(a, b, unsortedUpdatedNodes)
+      sortNodes(a, b, unsortedUpdatedNodes),
     );
 
     const updatedEdges = [
@@ -222,7 +221,67 @@ const useCopyPaste = () => {
     setEdges(updatedEdges);
   };
 
-  return { cut, copy, paste };
+  const copyText = () => {
+    const selection = window.getSelection();
+    if (selection?.toString()) {
+      navigator.clipboard.writeText(selection.toString());
+    }
+  };
+
+  const dispatchInputEvent = () =>
+    document.activeElement?.dispatchEvent(
+      new InputEvent("input", { bubbles: true }),
+    );
+
+  const cutText = () => {
+    const selection = window.getSelection();
+    if (!selection?.toString()) return;
+    navigator.clipboard.writeText(selection.toString());
+    selection.getRangeAt(0).deleteContents();
+    dispatchInputEvent();
+  };
+
+  const pasteText = async () => {
+    const text = await navigator.clipboard.readText();
+    const selection = window.getSelection();
+    if (!selection?.rangeCount) return;
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+    const node = document.createTextNode(text);
+    range.insertNode(node);
+    range.setStartAfter(node);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    dispatchInputEvent();
+  };
+
+  const copy = () => {
+    console.log(isEditableContent());
+    if (isEditableContent()) {
+      copyText();
+    } else {
+      copyNodes();
+    }
+  };
+
+  const paste = () => {
+    if (isEditableContent()) {
+      pasteText();
+    } else {
+      pasteNodes();
+    }
+  };
+
+  const cut = () => {
+    if (isEditableContent()) {
+      cutText();
+    } else {
+      cutNodes();
+    }
+  };
+
+  return { copy, paste, cut };
 };
 
 export default useCopyPaste;

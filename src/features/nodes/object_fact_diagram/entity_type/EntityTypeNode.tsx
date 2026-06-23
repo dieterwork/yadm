@@ -37,17 +37,7 @@ const EntityTypeNode = ({
         isEditable={isEditable}
         content={content?.body}
         width={width}
-        height={height && height / 2}
-        alignContent="center"
-        fontSize={fontSize}
-        maxLength={60}
-      />
-      <EditableContent
-        isSelected={selected}
-        isEditable={isEditable}
-        content={content?.body}
-        width={width}
-        height={height && height / 2}
+        height={height}
         alignContent="center"
         fontSize={fontSize}
         maxLength={60}

@@ -136,7 +136,7 @@ const DEMOHandle = ({
     e.preventDefault();
     if (!id) return;
 
-    if (e.ctrlKey || e.metaKey) {
+    if (e.shiftKey) {
       deleteHandle(id, position, nodeId, edges, updateNodeInternals);
     } else {
       setSelectedHandleId(id);
