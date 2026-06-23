@@ -14,6 +14,7 @@ const edgeMap: Partial<
     { id: "composite", type: "cooperation_model_edge" },
     { id: "elementary_actor", type: "cooperation_model_edge" },
     { id: "several_actors", type: "cooperation_model_edge" },
+    { id: "multiple_transaction_kind", type: "cooperation_model_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
   transaction: [
@@ -21,6 +22,7 @@ const edgeMap: Partial<
     { id: "self_activation", type: "cooperation_model_edge" },
     { id: "composite", type: "cooperation_model_edge" },
     { id: "elementary_actor", type: "cooperation_model_edge" },
+    { id: "multiple_transaction_kind", type: "cooperation_model_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
   transactor: [
@@ -30,6 +32,7 @@ const edgeMap: Partial<
     { id: "composite", type: "cooperation_model_edge" },
     { id: "elementary_actor", type: "cooperation_model_edge" },
     { id: "several_actors", type: "cooperation_model_edge" },
+    { id: "multiple_transaction_kind", type: "cooperation_model_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
   self_activation: [
@@ -40,6 +43,7 @@ const edgeMap: Partial<
     { id: "composite", type: "cooperation_model_edge" },
     { id: "elementary_actor", type: "cooperation_model_edge" },
     { id: "several_actors", type: "cooperation_model_edge" },
+    { id: "multiple_transaction_kind", type: "cooperation_model_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
   composite: [
@@ -50,18 +54,31 @@ const edgeMap: Partial<
     { id: "composite", type: "cooperation_model_edge" },
     { id: "elementary_actor", type: "cooperation_model_edge" },
     { id: "several_actors", type: "cooperation_model_edge" },
+    { id: "multiple_transaction_kind", type: "cooperation_model_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
   elementary_actor: [
     { id: "transaction", type: "cooperation_model_edge" },
     { id: "self_activation", type: "cooperation_model_edge" },
     { id: "composite", type: "cooperation_model_edge" },
+    { id: "multiple_transaction_kind", type: "cooperation_model_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
   several_actors: [
     { id: "actor", type: "cooperation_model_edge" },
     { id: "self_activation", type: "cooperation_model_edge" },
     { id: "composite", type: "cooperation_model_edge" },
+    { id: "multiple_transaction_kind", type: "cooperation_model_edge" },
+    { id: "ghost", type: "ghost_edge" },
+  ],
+  multiple_transaction_kind: [
+    { id: "actor", type: "cooperation_model_edge" },
+    { id: "transaction", type: "cooperation_model_edge" },
+    { id: "self_activation", type: "cooperation_model_edge" },
+    { id: "composite", type: "cooperation_model_edge" },
+    { id: "elementary_actor", type: "cooperation_model_edge" },
+    { id: "several_actors", type: "cooperation_model_edge" },
+    { id: "multiple_transaction_kind", type: "cooperation_model_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
   // ofd

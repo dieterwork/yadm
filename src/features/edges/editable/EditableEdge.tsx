@@ -26,6 +26,7 @@ import { calcEdgeMidpoint } from "../utils/calcEdgeMidpoint";
 import getArrowRotation from "../utils/getArrowRotation";
 import { ExcludeIcon } from "@phosphor-icons/react/dist/ssr";
 import ExclusionLawMarker from "../object_fact_diagram/ExclusionLawMarker";
+import CardinalityLabel from "../object_fact_diagram/CardinalityLabel";
 
 export type EditableEdge = Edge<{
   center: CenterData;
@@ -50,6 +51,7 @@ export function EditableEdgeComponent({
   style,
   linePath,
   law,
+  cardinality,
 }: Omit<EdgeProps<EditableEdge>, "data"> & {
   markerMid?: MarkerType;
   type?: DEMOEdge["type"];
@@ -61,6 +63,14 @@ export function EditableEdgeComponent({
   linePath?: "step" | "straight";
   children?: ReactNode;
   law?: "exclusion" | "precedence";
+  cardinality?: {
+    startLabel0: string;
+    startLabel1: string;
+    middleLabel0: string;
+    middleLabel1: string;
+    endLabel0: string;
+    endLabel1: string;
+  };
 }) {
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const { screenToFlowPosition } = useReactFlow();
@@ -252,6 +262,68 @@ export function EditableEdgeComponent({
           labelX={interactiveEdgeMidpoint.x}
           labelY={interactiveEdgeMidpoint.y}
         />
+      )}
+      {cardinality && (
+        <>
+          <CardinalityLabel
+            labelX={sourceX}
+            labelY={sourceY}
+            content={cardinality.startLabel0}
+            translateX={
+              sourcePosition === "top" || sourcePosition === "bottom"
+                ? "-100%"
+                : "0"
+            }
+            translateY={"-100%"}
+          />
+          <CardinalityLabel
+            labelX={sourceX}
+            labelY={sourceY}
+            content={cardinality.startLabel1}
+            translateX={"0"}
+            translateY={
+              sourcePosition === "left" || sourcePosition === "right"
+                ? "0%"
+                : "-100%"
+            }
+          />
+          <CardinalityLabel
+            labelX={interactiveEdgeMidpoint.x}
+            labelY={interactiveEdgeMidpoint.y}
+            content={cardinality.middleLabel0}
+            translateX={"-50%"}
+            translateY={"-100%"}
+          />
+          <CardinalityLabel
+            labelX={interactiveEdgeMidpoint.x}
+            labelY={interactiveEdgeMidpoint.y}
+            content={cardinality.middleLabel1}
+            translateX={"-50%"}
+            translateY={"0"}
+          />
+          <CardinalityLabel
+            labelX={targetX}
+            labelY={targetY}
+            content={cardinality.endLabel0}
+            translateX={
+              sourcePosition === "left" || sourcePosition === "right"
+                ? "-100%"
+                : "0"
+            }
+            translateY={"-100%"}
+          />
+          <CardinalityLabel
+            labelX={targetX}
+            labelY={targetY}
+            content={cardinality.endLabel1}
+            translateX={"-100%"}
+            translateY={
+              sourcePosition === "left" || sourcePosition === "right"
+                ? "0%"
+                : "-100%"
+            }
+          />
+        </>
       )}
     </>
   );

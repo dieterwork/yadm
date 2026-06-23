@@ -18,6 +18,7 @@ import entityTypeIcon from "$assets/Entity Type.svg";
 import attributeIcon from "$assets/Attribute.svg";
 import textIcon from "$assets/Text.svg";
 import organizationIcon from "$assets/Organization.svg";
+import multipleTransactionKindIcon from "$assets/Multiple Transaction Kind.svg";
 import type { DEMONode } from "../nodes/nodes.types";
 
 const previewNodeMap = {
@@ -41,6 +42,7 @@ const previewNodeMap = {
   ghost: null,
   text: textIcon,
   organization: organizationIcon,
+  multiple_transaction_kind: multipleTransactionKindIcon,
 } satisfies Record<DEMONode["type"], string | null>;
 
 interface PreviewNodeProps {

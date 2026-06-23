@@ -75,6 +75,13 @@ const markerMap: Partial<
       initial: { markerEnd: closedMarker },
     },
   ],
+  multiple_transaction_kind: [
+    {
+      id: "ghost",
+      default: { markerEnd: closedMarker },
+      initial: { markerEnd: closedMarker },
+    },
+  ],
   // ofd
   initiation_fact: [
     {

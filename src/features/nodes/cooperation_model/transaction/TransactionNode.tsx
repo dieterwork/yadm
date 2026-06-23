@@ -11,7 +11,6 @@ import EditableContent from "../../../editable_content/EditableContent";
 import {
   getNode,
   updateNode,
-  useDEMOModelerStore,
 } from "$/features/modeler/store/useDEMOModelerStore";
 
 const TransactionNode = ({

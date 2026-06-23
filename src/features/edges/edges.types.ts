@@ -33,6 +33,14 @@ export type ObjectFactDiagramEdge = Edge<
     linePath: LinePath;
     lineType: LineType;
     law: "exclusion" | "precedence";
+    cardinality: {
+      startLabel0: string;
+      startLabel1: string;
+      middleLabel0: string;
+      middleLabel1: string;
+      endLabel0: string;
+      endLabel1: string;
+    };
   },
   "object_fact_diagram_edge"
 >;

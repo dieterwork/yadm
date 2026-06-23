@@ -16,6 +16,7 @@ import EntityTypeShape from "../nodes/object_fact_diagram/entity_type/EntityType
 import SetShape from "../nodes/object_fact_diagram/set/SetShape";
 import ProductionEventShape from "../nodes/object_fact_diagram/production_event/ProductionEventShape";
 import AttributeNodeShape from "../nodes/object_fact_diagram/attribute/AttributeNodeShape";
+import MultipleTransactionKindShape from "../nodes/cooperation_model/multiple_transaction_kind/MultipleTransactionKindShape";
 
 export const shapeMap = {
   // cooperation model
@@ -26,6 +27,7 @@ export const shapeMap = {
   composite: CompositeShape,
   elementary_actor: ElementaryActorShape,
   several_actors: SeveralActorsShape,
+  multiple_transaction_kind: MultipleTransactionKindShape,
   // transaction pattern diagram
   transaction_time: TransactionTimeShape,
   transaction_kind: TransactionKindShape,

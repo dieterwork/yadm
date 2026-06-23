@@ -35,6 +35,17 @@ const getEdgeData = <T extends DEMOEdge>(
             : "solid",
 
         law: "precedence",
+        cardinality:
+          data && "cardinality" in data && !!data.cardinality
+            ? data.cardinality
+            : {
+                startLabel0: "",
+                startLabel1: "",
+                middleLabel0: "",
+                middleLabel1: "",
+                endLabel0: "",
+                endLabel1: "",
+              },
       } satisfies ObjectFactDiagramEdge["data"];
     }
     case "process_structure_diagram_edge": {

@@ -1,3 +1,4 @@
+import { calculateDoubleDiamondInCircleDimensions } from "$/features/shapes/utils/calculateDoubleDiamondInCircleDimensions";
 import type { DEMONode, DEMONodeContent } from "../nodes.types";
 
 export const X_SMALL_NODE_SIZE = 25 as const;
@@ -7,6 +8,9 @@ export const LARGE_NODE_SIZE = 200 as const;
 export const TRANSACTION_TIME_HEIGHT = SMALL_NODE_SIZE - 4;
 export const TRANSACTION_TIME_WIDTH = 300 as const;
 export const TRANSACTION_TIME_MIN_SIZE = 100 as const;
+
+const doubleDiamondInCircleDimensions =
+  calculateDoubleDiamondInCircleDimensions(MEDIUM_NODE_SIZE);
 
 export const DEFAULT_SIZE_MAP = {
   actor: {
@@ -36,6 +40,10 @@ export const DEFAULT_SIZE_MAP = {
   several_actors: {
     width: 200,
     height: 300,
+  },
+  multiple_transaction_kind: {
+    width: doubleDiamondInCircleDimensions.width + 4,
+    height: MEDIUM_NODE_SIZE,
   },
   organization: {
     width: 200,
@@ -103,6 +111,10 @@ export const MIN_SIZE_MAP = {
   transaction: {
     width: 100,
     height: 100,
+  },
+  multiple_transaction_kind: {
+    width: doubleDiamondInCircleDimensions.width + 4,
+    height: MEDIUM_NODE_SIZE,
   },
   transactor: {
     width: 200,
@@ -238,5 +250,8 @@ export const DEFAULT_CONTENT_MAP = {
   ghost: null,
   organization: {
     body: "",
+  },
+  multiple_transaction_kind: {
+    body: "A",
   },
 } satisfies Record<DEMONode["type"], Partial<DEMONodeContent> | null>;

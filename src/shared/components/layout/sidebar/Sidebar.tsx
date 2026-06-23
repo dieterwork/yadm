@@ -8,6 +8,7 @@ import selfActivationIcon from "$assets/Self-Activation.svg";
 import elementaryActorIcon from "$assets/Elementary Actor.svg";
 import transactionTimeIcon from "$assets/Transaction Time.svg";
 import initiationFactIcon from "$assets/Initiation Fact.svg";
+import multipleTransactionKindIcon from "$assets/Multiple Transaction Kind.svg";
 import cActIcon from "$assets/C-Act.svg";
 import cFactIcon from "$assets/C-Fact.svg";
 import tkExecutionIcon from "$assets/TK Execution.svg";
@@ -132,6 +133,13 @@ const Sidebar = () => {
               label: t(($) => $["Several Actors"]),
               icon: severalActorsIcon,
               type: "several_actors",
+            },
+            {
+              id: "multiple_transaction_kind",
+              name: "multiple_transaction_kind",
+              label: t(($) => $["Multiple Transaction Kind"]),
+              icon: multipleTransactionKindIcon,
+              type: "multiple_transaction_kind",
             },
           ],
         },

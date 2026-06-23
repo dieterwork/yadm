@@ -42,6 +42,7 @@ const ObjectFactDiagramEdge = ({
       )}
       linePath={data?.linePath}
       law={data?.law}
+      cardinality={data?.cardinality}
     />
   );
 };

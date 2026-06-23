@@ -27,7 +27,10 @@ import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolba
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
 import { useTranslation } from "react-i18next";
 import { calculateDoubleDiamondInCircleDimensions } from "$/features/shapes/utils/calculateDoubleDiamondInCircleDimensions";
-import type { OrganizationState } from "$/features/nodes/nodes.types";
+import type {
+  MultipleTransactionKindState,
+  OrganizationState,
+} from "$/features/nodes/nodes.types";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -39,6 +42,7 @@ const NODES_WITH_STATE = [
   "transaction",
   "transactor",
   "several_actors",
+  "multiple_transaction_kind",
 ] as const;
 
 export type NodeWithState = (typeof NODES_WITH_STATE)[number];
@@ -52,6 +56,7 @@ const getIcon = (
     | TransactionState
     | TransactorState
     | SeveralActorsState
+    | MultipleTransactionKindState,
 ) => {
   switch (state) {
     case "default":
@@ -107,6 +112,11 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
       { id: "missing", label: missingT as string },
       { id: "double", label: doubleT as string },
     ],
+    multiple_transaction_kind: [
+      { id: "default", label: defaultT as string },
+      { id: "unclear", label: unclearT as string },
+      { id: "missing", label: missingT as string },
+    ],
     transactor: [
       { id: "internal", label: internalT as string },
       { id: "external", label: externalT as string },
@@ -140,6 +150,10 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
       id: TransactionState;
       label: string;
     }[];
+    multiple_transaction_kind: {
+      id: MultipleTransactionKindState;
+      label: string;
+    }[];
     transactor: {
       id: TransactorState;
       label: string;
@@ -155,7 +169,7 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   };
 
   const [selected, setSelected] = useState<Selection>(
-    new Set([node.data.state])
+    new Set([node.data.state]),
   );
   const options = stateOptions[node.type as NodeWithState];
   return (
@@ -182,6 +196,8 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
             for (const entry of selection) {
               if (typeof entry !== "string") return;
               updateNodeState(nodeId, entry);
+              // only transaction nodes can have double state
+              if (node.type !== "transaction") return;
               if (entry === "double") {
                 if (!node.measured?.height) return;
                 const newNodeWidth =

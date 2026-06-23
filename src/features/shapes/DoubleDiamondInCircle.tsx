@@ -2,6 +2,7 @@ import { type SVGAttributes } from "react";
 import Circle from "./Circle";
 import DiamondInCircle from "./DiamondInCircle";
 import type { ShapeProps } from "./shapes.types";
+import { NODE_BACKGROUND_COLOR_MAP } from "$/shared/components/ui/colors/colors.consts";
 
 type DiamondInCircleProps = ShapeProps & {
   diamondAttributes?: SVGAttributes<SVGElement>;
@@ -24,6 +25,7 @@ const DoubleDiamondInCircle = ({
         width={height}
         height={height}
         transform={`translate(${height / 8}, 0)`}
+        fill={NODE_BACKGROUND_COLOR_MAP["default"]}
       />
       <DiamondInCircle
         width={height}

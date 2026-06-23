@@ -139,6 +139,78 @@ export const createNode = ({
       };
     }
 
+    case "multiple_transaction_kind": {
+      return {
+        id: `multiple_transaction_kind_${id}`,
+        ariaLabel: t(($) => $["Multiple Transaction Kind"]),
+        type: type,
+        position,
+        deletable: true,
+        data: {
+          resizable: true,
+          subModel: "cooperation_model",
+          scope: "in",
+          state: "default",
+          content: DEFAULT_CONTENT_MAP[type],
+          handles: {
+            isVisible: true,
+            top: {
+              handles: [
+                {
+                  id: uuid(),
+                  type: "source",
+                  offset: 0.5 - 6 / DEFAULT_SIZE_MAP[type].width,
+                  canDrag: false,
+                },
+              ],
+              max: 1,
+            },
+            bottom: {
+              handles: [
+                {
+                  id: uuid(),
+                  type: "source",
+                  offset: 0.5 - 6 / DEFAULT_SIZE_MAP[type].width,
+                  canDrag: false,
+                },
+              ],
+              max: 1,
+            },
+            left: {
+              handles: [
+                {
+                  id: uuid(),
+                  type: "source",
+                  offset: 0.5,
+                  canDrag: false,
+                },
+              ],
+              max: 1,
+            },
+            right: {
+              handles: [
+                {
+                  id: uuid(),
+                  type: "source",
+                  offset: 0.5,
+                  canDrag: false,
+                },
+              ],
+              max: 1,
+            },
+          },
+        },
+        style: {
+          width: DEFAULT_SIZE_MAP[type].width,
+          height: DEFAULT_SIZE_MAP[type].height,
+          fill: NODE_BACKGROUND_COLOR_MAP["default"],
+          stroke: NODE_BORDER_COLOR_MAP["default"],
+        },
+        selected: true,
+        zIndex: 190,
+      };
+    }
+
     case "transactor": {
       const transactionId = uuid();
       const actorId = uuid();
@@ -700,22 +772,30 @@ export const createNode = ({
           handles: {
             isVisible: true,
             top: {
-              handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+              handles: [
+                { id: uuid(), type: "source", offset: 0.5, canDrag: false },
+              ],
               max: 1,
               step: SMALL_NODE_SIZE,
             },
             bottom: {
-              handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+              handles: [
+                { id: uuid(), type: "source", offset: 0.5, canDrag: false },
+              ],
               max: 1,
               step: SMALL_NODE_SIZE,
             },
             left: {
-              handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+              handles: [
+                { id: uuid(), type: "source", offset: 0.5, canDrag: false },
+              ],
               max: 1,
               step: SMALL_NODE_SIZE,
             },
             right: {
-              handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+              handles: [
+                { id: uuid(), type: "source", offset: 0.5, canDrag: false },
+              ],
               max: 1,
               step: SMALL_NODE_SIZE,
             },

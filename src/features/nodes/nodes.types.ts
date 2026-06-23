@@ -29,6 +29,7 @@ import type { Points } from "../whiteboard/types/whiteboard.types";
 import SetNode from "./object_fact_diagram/set/SetNode";
 import EntityTypeNode from "./object_fact_diagram/entity_type/EntityTypeNode";
 import AttributeNode from "./object_fact_diagram/attribute/AttributeNode";
+import MultipleTransactionKindComponent from "./cooperation_model/multiple_transaction_kind/MultipleTransactionKindComponent";
 
 export const nodeTypes = {
   // cooperation model
@@ -39,6 +40,7 @@ export const nodeTypes = {
   composite: CompositeNode,
   elementary_actor: ElementaryActorNode,
   several_actors: SeveralActorsNode,
+  multiple_transaction_kind: MultipleTransactionKindComponent,
 
   // transaction pattern diagram
   transaction_time: TransactionTimeNode,
@@ -136,3 +138,12 @@ export type WhiteboardNodeType = Node<{
   color: string;
   initialSize: { width: number; height: number };
 }>;
+
+export type MultipleTransactionKindState = "default" | "unclear" | "missing";
+export type MultipleTransactionKindNode = Node<
+  {
+    state: MultipleTransactionKindState;
+    scope: NodeScope;
+  } & DEMONodeBaseData<"cooperation_model">,
+  "multiple_transaction_kind"
+>;

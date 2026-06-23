@@ -13,6 +13,7 @@ const allowedConnectionMap = {
     "composite",
     "elementary_actor",
     "several_actors",
+    "multiple_transaction_kind",
     "ghost",
   ],
   transaction: [
@@ -29,6 +30,7 @@ const allowedConnectionMap = {
     "composite",
     "elementary_actor",
     "several_actors",
+    "multiple_transaction_kind",
     "ghost",
   ],
   self_activation: [
@@ -39,6 +41,7 @@ const allowedConnectionMap = {
     "composite",
     "elementary_actor",
     "several_actors",
+    "multiple_transaction_kind",
     "ghost",
   ],
   composite: [
@@ -49,10 +52,30 @@ const allowedConnectionMap = {
     "composite",
     "elementary_actor",
     "several_actors",
+    "multiple_transaction_kind",
     "ghost",
   ],
-  elementary_actor: ["transaction", "self_activation", "composite", "ghost"],
-  several_actors: ["actor", "self_activation", "composite", "ghost"],
+  elementary_actor: [
+    "transaction",
+    "self_activation",
+    "composite",
+    "multiple_transaction_kind",
+    "ghost",
+  ],
+  several_actors: [
+    "actor",
+    "self_activation",
+    "composite",
+    "multiple_transaction_kind",
+    "ghost",
+  ],
+  multiple_transaction_kind: [
+    "actor",
+    "self_activation",
+    "composite",
+    "elementary_actor",
+    "ghost",
+  ],
   // psd
   transaction_time: [
     "transaction_time",
