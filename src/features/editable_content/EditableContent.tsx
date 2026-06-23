@@ -3,6 +3,7 @@ import {
   useEffect,
   useRef,
   type CSSProperties,
+  type FocusEventHandler,
   type HTMLAttributes,
   type Ref,
   type RefObject,
@@ -14,6 +15,7 @@ import {
 import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
 import takeSnapshotAndSave from "../actions/undo/takeSnapshotAndSave";
+import getEditableContentPadding from "./utils/getEditableContentPadding";
 
 interface EditableContentProps extends Omit<
   HTMLAttributes<HTMLSpanElement>,
@@ -37,33 +39,9 @@ interface EditableContentProps extends Omit<
   contentLocation?: "header" | "body";
   fitContent?: boolean;
   relative?: boolean;
+  onFocus?: FocusEventHandler<HTMLSpanElement>;
+  onBlur?: FocusEventHandler<HTMLSpanElement>;
 }
-
-const getPadding = (fontSize: number) => {
-  switch (fontSize) {
-    case 10: {
-      return "p-1";
-    }
-    case 12: {
-      return "p-1";
-    }
-    case 14: {
-      return "p-2";
-    }
-    case 16: {
-      return "p-2";
-    }
-    case 18: {
-      return "p-2";
-    }
-    case 20: {
-      return "p-2";
-    }
-    default: {
-      return "p-2";
-    }
-  }
-};
 
 const EditableContent = ({
   width,
@@ -83,6 +61,8 @@ const EditableContent = ({
   contentLocation = "body",
   fitContent,
   relative,
+  onFocus,
+  onBlur,
   ...restProps
 }: EditableContentProps) => {
   const nodeId = useNodeId();
@@ -120,9 +100,8 @@ const EditableContent = ({
         className={cn(
           "editable-content-wrapper | inset-0 m-auto overflow-hidden",
           { "w-full": !width, "h-full": !height },
-          !padding && getPadding(fontSize),
+          !padding && getEditableContentPadding(fontSize),
           hide && "hidden",
-          isEditable && "outline outline-sky-500 -outline-offset-4",
           relative ? "relative" : "absolute",
           restProps.className,
         )}
@@ -151,6 +130,8 @@ const EditableContent = ({
             textAlign,
             lineHeight: leading,
           }}
+          onFocus={onFocus}
+          onBlur={onBlur}
         ></span>
       </div>
     </>
