@@ -1,3 +1,4 @@
+import { NODE_BACKGROUND_COLOR_MAP } from "$/shared/components/ui/colors/colors.consts";
 import type { ShapeProps } from "./shapes.types";
 import { generatePath } from "./utils/generatePath";
 
@@ -18,7 +19,11 @@ const Diamond = ({
 
   return (
     <g>
-      <path {...svgAttributes} d={diamondPath} fill="white" />
+      <path
+        {...svgAttributes}
+        d={diamondPath}
+        fill={NODE_BACKGROUND_COLOR_MAP["default"]}
+      />
       <path {...svgAttributes} d={diamondPath} />
     </g>
   );
