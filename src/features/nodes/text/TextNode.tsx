@@ -63,6 +63,8 @@ const TextNode = ({
           fontSize={fontSize}
           color={color}
           padding={0}
+          maxLength={Infinity}
+          maxLines={Infinity}
         />
       </div>
     </>
