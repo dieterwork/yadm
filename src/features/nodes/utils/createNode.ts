@@ -452,7 +452,7 @@ export const createNode = ({
         ariaLabel: t(($) => $["Composite"]),
         deletable: true,
         data: {
-          state: "default",
+          focus: "in",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
             isVisible: true,

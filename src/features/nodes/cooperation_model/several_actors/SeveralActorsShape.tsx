@@ -1,5 +1,9 @@
 import { useContext } from "react";
-import { getFocusFill, getStateFill } from "../../../../shared/utils/utils";
+import {
+  getFocusFill,
+  getStateFill,
+  getTransactionDiamondStroke,
+} from "../../../../shared/utils/utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 
 import type { SeveralActorsState } from "./severalActors.types";
@@ -44,7 +48,9 @@ const SeveralActorsShape = ({ focus, color }: TransactionShapeProps) => {
         fill={fill}
         width={dimensions.width}
         height={dimensions.height}
-        diamondAttributes={{ stroke: "var(--color-red-500)" }}
+        diamondAttributes={{
+          stroke: getTransactionDiamondStroke(focus, color),
+        }}
       />
     </g>
   );

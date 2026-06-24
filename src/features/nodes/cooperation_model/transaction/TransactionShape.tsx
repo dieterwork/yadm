@@ -1,6 +1,9 @@
 import { useContext } from "react";
 import QuestionMark from "../../../shapes/QuestionMark";
-import { getFocusFill } from "../../../../shared/utils/utils";
+import {
+  getFocusFill,
+  getTransactionDiamondStroke,
+} from "../../../../shared/utils/utils";
 import type { TransactionState } from "./transaction.types";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
@@ -28,7 +31,9 @@ const TransactionShape = ({ state, focus, color }: TransactionShapeProps) => {
           strokeDasharray={"6 4"}
           width={width}
           height={height}
-          diamondAttributes={{ stroke: "var(--color-red-500)" }}
+          diamondAttributes={{
+            stroke: getTransactionDiamondStroke(focus, color),
+          }}
         />
       );
 
@@ -40,7 +45,9 @@ const TransactionShape = ({ state, focus, color }: TransactionShapeProps) => {
             fill={fill}
             width={width}
             height={height}
-            diamondAttributes={{ stroke: "var(--color-red-500)" }}
+            diamondAttributes={{
+              stroke: getTransactionDiamondStroke(focus, color),
+            }}
           />
           <QuestionMark {...restSvgAttributes} width={width} height={height} />
         </g>
@@ -53,7 +60,9 @@ const TransactionShape = ({ state, focus, color }: TransactionShapeProps) => {
           fill={fill}
           width={width}
           height={height}
-          diamondAttributes={{ stroke: "var(--color-red-500)" }}
+          diamondAttributes={{
+            stroke: getTransactionDiamondStroke(focus, color),
+          }}
         />
       );
 
@@ -64,7 +73,9 @@ const TransactionShape = ({ state, focus, color }: TransactionShapeProps) => {
           fill={fill}
           width={width}
           height={height}
-          diamondAttributes={{ stroke: "var(--color-red-500)" }}
+          diamondAttributes={{
+            stroke: getTransactionDiamondStroke(focus, color),
+          }}
         />
       );
     }

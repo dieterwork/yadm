@@ -1,5 +1,9 @@
 import { useContext } from "react";
-import { getFocusFill, getStateFill } from "../../../../shared/utils/utils";
+import {
+  getFocusFill,
+  getStateFill,
+  getTransactionDiamondStroke,
+} from "../../../../shared/utils/utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
 import type { ElementaryActorState } from "./elementaryActor.types";
@@ -36,7 +40,9 @@ const ElementaryActorShape = ({ focus, color }: TransactionShapeProps) => {
         fill={fill}
         width={MEDIUM_NODE_SIZE}
         height={MEDIUM_NODE_SIZE}
-        diamondAttributes={{ stroke: "var(--color-red-500)" }}
+        diamondAttributes={{
+          stroke: getTransactionDiamondStroke(focus, color),
+        }}
       />
     </g>
   );

@@ -1,6 +1,9 @@
 import { useContext } from "react";
 import QuestionMark from "../../../shapes/QuestionMark";
-import { getFocusFill } from "../../../../shared/utils/utils";
+import {
+  getFocusFill,
+  getTransactionDiamondStroke,
+} from "../../../../shared/utils/utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DoubleDiamondInCircle from "../../../shapes/DoubleDiamondInCircle";
 import type {
@@ -33,7 +36,9 @@ const MultipleTransactionKindShape = ({
           strokeDasharray={"6 4"}
           width={width}
           height={height}
-          diamondAttributes={{ stroke: "var(--color-red-500)" }}
+          diamondAttributes={{
+            stroke: getTransactionDiamondStroke(focus, color),
+          }}
         />
       );
 
@@ -45,7 +50,9 @@ const MultipleTransactionKindShape = ({
             fill={fill}
             width={width}
             height={height}
-            diamondAttributes={{ stroke: "var(--color-red-500)" }}
+            diamondAttributes={{
+              stroke: getTransactionDiamondStroke(focus, color),
+            }}
           />
           <QuestionMark {...restSvgAttributes} width={height} height={height} />
         </g>
@@ -58,7 +65,9 @@ const MultipleTransactionKindShape = ({
           fill={fill}
           width={width}
           height={height}
-          diamondAttributes={{ stroke: "var(--color-red-500)" }}
+          diamondAttributes={{
+            stroke: getTransactionDiamondStroke(focus, color),
+          }}
         />
       );
     }

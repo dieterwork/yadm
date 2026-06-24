@@ -4,7 +4,10 @@ import DiamondInCircle from "../../../shapes/DiamondInCircle";
 import type { TransactorState } from "./transactor.types";
 import Rectangle from "../../../shapes/Rectangle";
 import { MEDIUM_NODE_SIZE } from "../../utils/consts";
-import { getFocusFill } from "$/shared/utils/utils";
+import {
+  getFocusFill,
+  getTransactionDiamondStroke,
+} from "$/shared/utils/utils";
 import type { NodeFocus } from "../../nodes.types";
 
 interface TransactionShapeProps {
@@ -34,7 +37,9 @@ const TransactorShape = ({ focus, color }: TransactionShapeProps) => {
         fill={fill}
         width={MEDIUM_NODE_SIZE}
         height={MEDIUM_NODE_SIZE}
-        diamondAttributes={{ stroke: "var(--color-red-500)" }}
+        diamondAttributes={{
+          stroke: getTransactionDiamondStroke(focus, color),
+        }}
       />
     </g>
   );
