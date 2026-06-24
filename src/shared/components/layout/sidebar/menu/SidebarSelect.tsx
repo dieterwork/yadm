@@ -33,7 +33,7 @@ const SidebarSelect = ({
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
 
   const [selected, setSelected] = useState<Key | null>(
-    menuItem.sections[0].items[0].id
+    menuItem.sections[0].items[0].id,
   );
 
   if (previewNode !== prevPreviewNode) {
@@ -61,7 +61,7 @@ const SidebarSelect = ({
         <SidebarMenu items={menuItem.sections} isOpen={isOpen}>
           {(section) => (
             <SidebarMenuSection key={section.id}>
-              <Header className="mb-4 text-xs text-slate-500">
+              <Header className="pb-4 text-xs text-slate-500">
                 {section.label}
               </Header>
               <Collection items={section.items}>

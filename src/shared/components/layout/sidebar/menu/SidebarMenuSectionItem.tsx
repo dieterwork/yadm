@@ -15,10 +15,10 @@ const SidebarMenuSectionItem = ({
     <ListBoxItem
       {...restProps}
       textValue={label}
-      className={({ isSelected }) =>
+      className={({ isHovered }) =>
         cn(
           "sidebar-menu-section-item",
-          isSelected
+          isHovered
             ? "border-sky-500 bg-sky-500 text-white"
             : "hover:bg-slate-100 border-slate-200 text-slate-900 bg-white",
           "outline-hidden flex items-center border px-4 py-4 not-first:mt-2 rounded-md",

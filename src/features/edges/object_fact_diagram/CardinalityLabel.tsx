@@ -44,6 +44,9 @@ const CardinalityLabel = ({
         style={{
           transform: `translate(${translateX ?? "-50%"}, ${translateY ?? "-50%"}) translate(${labelX}px,${labelY}px)`,
         }}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
         onDoubleClick={(e) => {
           e.stopPropagation();
           if (!isEnabled) return;

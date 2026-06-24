@@ -56,6 +56,7 @@ const DEMOEdgeToolbar = ({
 
   const hasTwoOrMoreEdgesSelected =
     edges.filter((edge) => edge.selected).length > 1;
+
   const hasNodeSelected = nodes.some((node) => node.selected);
 
   return (
