@@ -1,9 +1,8 @@
 import {
   getNode,
-  updateNodeScope,
+  updateNodeFocus,
 } from "$/features/modeler/store/useDEMOModelerStore";
-import { isNodeScope } from "$/features/nodes/utils/isNodeScope";
-import type { NodeScope } from "$/features/nodes/nodes.types";
+import type { NodeFocus } from "$/features/nodes/nodes.types";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -17,29 +16,30 @@ import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEM
 import type { DEMONodeToolbarControlProps } from "../types/DEMONodeToolbar.types";
 import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
+import { isNodeFocus } from "$/features/nodes/utils/isNodeFocus";
 
-const ChangeScopeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
+const ChangeFocusControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const { t } = useTranslation();
   if (!nodeId) return null;
   const node = getNode(nodeId);
   if (!node) return null;
-  if (!("scope" in node.data)) return null;
+  if (!("focus" in node.data)) return null;
 
-  const scopeOptions = [
+  const options = [
     { id: "in", label: t(($) => $["In"]) },
     { id: "out", label: t(($) => $["Out"]) },
-  ] satisfies { id: NodeScope; label: string }[];
+  ] satisfies { id: NodeFocus; label: string }[];
 
-  const [scopeSelected, setScopeSelected] = useState<Selection>(
-    new Set([node.data?.scope ?? "in"])
+  const [selected, setSelected] = useState<Selection>(
+    new Set([node.data?.focus ?? options[0].id]),
   );
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton
-        label={t(($) => $["Scope"])}
+        label={t(($) => $["Focus"])}
         icon={(iconProps) => <ArrowsLeftRightIcon {...iconProps} />}
         menuTrigger
-        id="change_scope"
+        id="change_focus"
       />
       <Popover
         placement="right top"
@@ -47,16 +47,16 @@ const ChangeScopeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
         className="outline-hidden"
       >
         <DEMOElementToolbarListBox
-          aria-labelledby="change_scope"
-          items={scopeOptions}
-          selectedKeys={scopeSelected}
+          aria-labelledby="change_focus"
+          items={options}
+          selectedKeys={selected}
           selectionMode="single"
           onSelectionChange={(selection) => {
-            setScopeSelected(selection);
+            setSelected(selection);
             if (!(selection instanceof Set)) return;
             for (const entry of selection) {
-              if (typeof entry !== "string" || !isNodeScope(entry)) return;
-              updateNodeScope(nodeId, entry);
+              if (typeof entry !== "string" || !isNodeFocus(entry)) return;
+              updateNodeFocus(nodeId, entry);
               takeSnapshotAndSave();
             }
           }}
@@ -79,4 +79,4 @@ const ChangeScopeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   );
 };
 
-export default ChangeScopeControl;
+export default ChangeFocusControl;

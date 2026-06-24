@@ -1,20 +1,21 @@
 import { useContext } from "react";
-import { getStateFill } from "../../../../shared/utils/utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
-import type { CompositeState } from "./composite.types";
+
 import Rectangle from "../../../shapes/Rectangle";
+import { getFocusFill } from "$/shared/utils/utils";
+import type { NodeFocus } from "../../nodes.types";
 
 interface CompositeShapeProps {
-  state: CompositeState;
+  focus: NodeFocus;
   color?: string;
 }
 
-const CompositeShape = ({ state, color }: CompositeShapeProps) => {
+const CompositeShape = ({ focus, color }: CompositeShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) return null;
   const { width, height, ...restSvgAttributes } = svgAttributes;
   if (!width || !height) return;
-  const fill = getStateFill(state, color);
+  const fill = getFocusFill(focus, color);
 
   return (
     <Rectangle

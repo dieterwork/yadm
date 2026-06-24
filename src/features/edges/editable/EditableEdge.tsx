@@ -15,6 +15,7 @@ import { type CSSProperties, type ReactNode } from "react";
 import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
+  getNode,
   updateEdge,
   updateEdgeData,
   useDEMOModelerStore,
@@ -34,6 +35,7 @@ import { calcEdgeMidpoint } from "../utils/calcEdgeMidpoint";
 import getArrowRotation from "../utils/getArrowRotation";
 import ExclusionLawMarker from "../object_fact_diagram/ExclusionLawMarker";
 import CardinalityLabel from "../object_fact_diagram/CardinalityLabel";
+import getNodeHandle from "$/features/connection_handles/utils/getHandle";
 
 export type EditableEdge = Edge<{
   center: CenterData;
@@ -59,6 +61,8 @@ export function EditableEdgeComponent({
   linePath,
   law,
   cardinality,
+  target,
+  targetHandleId,
 }: Omit<EdgeProps<EditableEdge>, "data"> & {
   markerMid?: MarkerType;
   type?: DEMOEdge["type"];
@@ -84,6 +88,8 @@ export function EditableEdgeComponent({
 
   const offset = 30;
   const stepPosition = 0.5;
+
+  const targetNode = getNode(target);
 
   const [sourceCenterPosition, targetCenterPosition] = getCenterEdgePoints({
     source: {
@@ -173,6 +179,8 @@ export function EditableEdgeComponent({
   const midLabelDirection: "horizontal" | "vertical" =
     Math.abs(Math.cos(arrowRotation ?? 0)) > 0.5 ? "horizontal" : "vertical";
 
+  const targetHandle = getNodeHandle(targetNode, targetHandleId);
+
   return (
     <>
       <path
@@ -195,6 +203,10 @@ export function EditableEdgeComponent({
         targetY={targetCenterPosition?.y ?? 0}
         active={isEnabled}
         direction={interactiveEdgeDirection}
+        onDoubleClick={(e) => {
+          e.stopPropagation();
+          updateEdgeData(id, { center: undefined });
+        }}
         onDragStart={({ event }) => {
           event.stopPropagation();
           updateEdgeData(id, (data) => ({
@@ -273,70 +285,72 @@ export function EditableEdgeComponent({
           labelY={interactiveEdgeMidpoint.y}
         />
       )}
-      {cardinality && (
-        <>
-          <CardinalityLabel
-            edgeId={id}
-            field="startLabel0"
-            isEnabled={isEnabled}
-            labelX={sourceX}
-            labelY={sourceY}
-            content={cardinality.startLabel0}
-            translateX={getStartLabel0Translate(sourcePosition).x}
-            translateY={getStartLabel0Translate(sourcePosition).y}
-          />
-          <CardinalityLabel
-            edgeId={id}
-            field="startLabel1"
-            isEnabled={isEnabled}
-            labelX={sourceX}
-            labelY={sourceY}
-            content={cardinality.startLabel1}
-            translateX={getStartLabel1Translate(sourcePosition).x}
-            translateY={getStartLabel1Translate(sourcePosition).y}
-          />
-          <CardinalityLabel
-            edgeId={id}
-            field="middleLabel0"
-            isEnabled={isEnabled}
-            labelX={interactiveEdgeMidpoint.x}
-            labelY={interactiveEdgeMidpoint.y}
-            content={cardinality.middleLabel0}
-            translateX={getMiddleLabel0Translate(midLabelDirection).x}
-            translateY={getMiddleLabel0Translate(midLabelDirection).y}
-          />
-          <CardinalityLabel
-            edgeId={id}
-            field="middleLabel1"
-            isEnabled={isEnabled}
-            labelX={interactiveEdgeMidpoint.x}
-            labelY={interactiveEdgeMidpoint.y}
-            content={cardinality.middleLabel1}
-            translateX={getMiddleLabel1Translate(midLabelDirection).x}
-            translateY={getMiddleLabel1Translate(midLabelDirection).y}
-          />
-          <CardinalityLabel
-            edgeId={id}
-            field="endLabel0"
-            isEnabled={isEnabled}
-            labelX={targetX}
-            labelY={targetY}
-            content={cardinality.endLabel0}
-            translateX={getEndLabel0Translate(targetPosition).x}
-            translateY={getEndLabel0Translate(targetPosition).y}
-          />
-          <CardinalityLabel
-            edgeId={id}
-            field="endLabel1"
-            isEnabled={isEnabled}
-            labelX={targetX}
-            labelY={targetY}
-            content={cardinality.endLabel1}
-            translateX={getEndLabel1Translate(targetPosition).x}
-            translateY={getEndLabel1Translate(targetPosition).y}
-          />
-        </>
-      )}
+      {cardinality &&
+        !!targetHandle?.handle.derivation &&
+        targetHandle?.handle.derivation === "none" && (
+          <>
+            <CardinalityLabel
+              edgeId={id}
+              field="startLabel0"
+              isEnabled={isEnabled}
+              labelX={sourceX}
+              labelY={sourceY}
+              content={cardinality.startLabel0}
+              translateX={getStartLabel0Translate(sourcePosition).x}
+              translateY={getStartLabel0Translate(sourcePosition).y}
+            />
+            <CardinalityLabel
+              edgeId={id}
+              field="startLabel1"
+              isEnabled={isEnabled}
+              labelX={sourceX}
+              labelY={sourceY}
+              content={cardinality.startLabel1}
+              translateX={getStartLabel1Translate(sourcePosition).x}
+              translateY={getStartLabel1Translate(sourcePosition).y}
+            />
+            <CardinalityLabel
+              edgeId={id}
+              field="middleLabel0"
+              isEnabled={isEnabled}
+              labelX={interactiveEdgeMidpoint.x}
+              labelY={interactiveEdgeMidpoint.y}
+              content={cardinality.middleLabel0}
+              translateX={getMiddleLabel0Translate(midLabelDirection).x}
+              translateY={getMiddleLabel0Translate(midLabelDirection).y}
+            />
+            <CardinalityLabel
+              edgeId={id}
+              field="middleLabel1"
+              isEnabled={isEnabled}
+              labelX={interactiveEdgeMidpoint.x}
+              labelY={interactiveEdgeMidpoint.y}
+              content={cardinality.middleLabel1}
+              translateX={getMiddleLabel1Translate(midLabelDirection).x}
+              translateY={getMiddleLabel1Translate(midLabelDirection).y}
+            />
+            <CardinalityLabel
+              edgeId={id}
+              field="endLabel0"
+              isEnabled={isEnabled}
+              labelX={targetX}
+              labelY={targetY}
+              content={cardinality.endLabel0}
+              translateX={getEndLabel0Translate(targetPosition).x}
+              translateY={getEndLabel0Translate(targetPosition).y}
+            />
+            <CardinalityLabel
+              edgeId={id}
+              field="endLabel1"
+              isEnabled={isEnabled}
+              labelX={targetX}
+              labelY={targetY}
+              content={cardinality.endLabel1}
+              translateX={getEndLabel1Translate(targetPosition).x}
+              translateY={getEndLabel1Translate(targetPosition).y}
+            />
+          </>
+        )}
     </>
   );
 }

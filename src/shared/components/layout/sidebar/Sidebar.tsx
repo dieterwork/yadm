@@ -255,7 +255,7 @@ const Sidebar = () => {
             isEnabled && isOpen ? "opacity-100" : "opacity-0",
           )}
         >
-          <div className="flex flex-col mb-6 outline-hidden">
+          <div className="flex flex-col pb-6 outline-hidden">
             <Collection items={sidebarMenuItems}>
               {(item) => (
                 <SidebarSelect

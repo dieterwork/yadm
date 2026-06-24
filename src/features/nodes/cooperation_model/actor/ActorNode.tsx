@@ -20,7 +20,7 @@ const ActorNode = ({
     "changeColor",
     "changeFontSize",
     "toggleHandlesVisibility",
-    "changeScope",
+    "changeFocus",
     "changeState",
     "editText",
   ];

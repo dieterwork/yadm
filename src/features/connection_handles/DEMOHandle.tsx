@@ -1,5 +1,4 @@
 import {
-  getConnectedEdges,
   Handle,
   Position,
   useInternalNode,
@@ -26,7 +25,6 @@ import GeneralisationHandle from "./GeneralisationHandle";
 import useHandleSelectionStore, {
   setSelectedHandleId,
 } from "../handle_toolbar/useHandleSelectionStore";
-import getDEMOHandleToolbarPosition from "./utils/getDEMOHandleToolbarPosition";
 
 const DEMOHandle = ({
   id,
@@ -136,7 +134,7 @@ const DEMOHandle = ({
     e.preventDefault();
     if (!id) return;
 
-    if (e.shiftKey) {
+    if (e.ctrlKey || e.metaKey) {
       deleteHandle(id, position, nodeId, edges, updateNodeInternals);
     } else {
       setSelectedHandleId(id);
@@ -191,10 +189,8 @@ const DEMOHandle = ({
           nodeId={nodeId}
           handleId={id}
           position={position}
-          isVisible={selectedHandleId === id}
-          actions={["delete"].concat(
-            node.type === "entity_type" ? ["changeDerivation"] : [],
-          )}
+          isVisible={selectedHandleId === id && isEnabled}
+          actions={["delete"].concat()}
         />
       </>
     );
@@ -224,9 +220,6 @@ const DEMOHandle = ({
         handleId={id}
         position={position}
         isVisible={selectedHandleId === id}
-        actions={["delete"].concat(
-          node.type === "entity_type" ? ["changeDerivation"] : [],
-        )}
       />
     </>
   );

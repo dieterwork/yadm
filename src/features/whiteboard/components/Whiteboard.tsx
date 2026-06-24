@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEventHandler } from "react";
+import { useRef, useState, type PointerEventHandler } from "react";
 import { cn } from "@sglara/cn";
 import {
   addNode,
@@ -72,7 +72,7 @@ const Whiteboard = () => {
     const { data, height, width, position } = processPoints(
       points,
       screenToFlowPosition,
-      offset.current
+      offset.current,
     );
 
     const newNode: WhiteboardNodeType = {
@@ -96,7 +96,7 @@ const Whiteboard = () => {
     <div
       className={cn(
         "draw-tool-container | w-full h-full absolute nopan nodrag",
-        isWhiteboardEnabled ? "z-20" : "z-0"
+        isWhiteboardEnabled ? "z-20" : "z-0",
       )}
     >
       <svg

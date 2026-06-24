@@ -19,6 +19,7 @@ import DEMOElementToolbarMenu from "$/shared/components/ui/element_toolbar/DEMOE
 import DEMOElementToolbarMenuItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarMenuItem";
 import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
+import { DEFAULT_SIZE_MAP } from "$/features/nodes/utils/consts";
 
 const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const updateNodeInternals = useUpdateNodeInternals();
@@ -70,12 +71,21 @@ const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
               return a.offset - b.offset;
             })[0];
 
+            console.log(leastOffsetHandle?.offset, node.type);
+
             updateNodeHandles(nodeId, key, (handles) => [
               ...handles,
               {
                 id: uuid(),
                 offset:
-                  (leastOffsetHandle?.offset ?? 0.5) *
+                  ((leastOffsetHandle?.offset ?? 0.5) -
+                    ((node.type === "transaction" &&
+                      node.data &&
+                      "state" in node.data &&
+                      node.data.state === "double") ||
+                    node.type === "multiple_transaction_kind"
+                      ? 6 / DEFAULT_SIZE_MAP["multiple_transaction_kind"].width
+                      : 0)) *
                   (handles.length > 1 ? 0.5 : 1),
               },
             ]);

@@ -119,9 +119,9 @@ export type DEMONodeBaseData<T extends SubModel> = {
   actions?: NodeToolbarAction[];
 };
 
-// Scope
-export const ALL_NODE_SCOPE_OPTIONS = ["in", "out"] as const;
-export type NodeScope = (typeof ALL_NODE_SCOPE_OPTIONS)[number];
+// Focus
+export const ALL_NODE_FOCUS_OPTIONS = ["in", "out"] as const;
+export type NodeFocus = (typeof ALL_NODE_FOCUS_OPTIONS)[number];
 
 // Organization
 export type OrganizationState = "default" | "missing";
@@ -143,7 +143,7 @@ export type MultipleTransactionKindState = "default" | "unclear" | "missing";
 export type MultipleTransactionKindNode = Node<
   {
     state: MultipleTransactionKindState;
-    scope: NodeScope;
+    focus: NodeFocus;
   } & DEMONodeBaseData<"cooperation_model">,
   "multiple_transaction_kind"
 >;

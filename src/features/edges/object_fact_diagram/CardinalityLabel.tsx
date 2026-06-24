@@ -1,7 +1,10 @@
 import { EdgeLabelRenderer } from "@xyflow/react";
 import { cn } from "@sglara/cn";
 import { useEffect, useRef, useState } from "react";
-import { updateEdgeData } from "$/features/modeler/store/useDEMOModelerStore";
+import {
+  updateEdgeData,
+  useDEMOModelerStore,
+} from "$/features/modeler/store/useDEMOModelerStore";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 import type { ObjectFactDiagramEdge } from "../edges.types";
 
@@ -60,7 +63,7 @@ const CardinalityLabel = ({
           suppressContentEditableWarning
           spellCheck={false}
           className={cn(
-            "inline-block text-[12px] outline-none min-w-6 min-h-[12px] leading-[12px]",
+            "inline-block text-[12px] outline-none min-w-6 min-h-[calc(1.2*12px)] leading-[1.2]",
             isEditing && "ring-1 ring-sky-500 rounded-sm px-0.5",
           )}
           onInput={(e) => {

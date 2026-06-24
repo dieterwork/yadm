@@ -25,14 +25,7 @@ const DEMOHandleToolbar = ({
   return (
     <NodeToolbar position={position} isVisible={isVisible}>
       <DEMOElementToolbar>
-        {actions?.indexOf("changeDerivation") !== -1 && (
-          <ChangeDerivationControl
-            handleId={handleId}
-            position={position}
-            nodeId={nodeId}
-          />
-        )}
-        {actions && actions.length > 1 && <DEMOElementToolbarSeparator />}
+        {/*{actions && actions.length > 1 && <DEMOElementToolbarSeparator />}*/}
         <DEMOElementToolbarGroup
           aria-label={t(($) => $["Danger zone actions"])}
         >

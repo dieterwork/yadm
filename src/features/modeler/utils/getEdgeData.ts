@@ -33,7 +33,6 @@ const getEdgeData = <T extends DEMOEdge>(
           data && "lineType" in data && !!data.lineType
             ? data.lineType
             : "solid",
-
         law: "precedence",
         cardinality:
           data && "cardinality" in data && !!data.cardinality

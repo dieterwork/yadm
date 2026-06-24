@@ -1,30 +1,35 @@
-import type { DEMOEdge } from "$/features/edges/edges.types";
 import {
+  getEdge,
   getNode,
   setEdges,
   updateNodeHandlesDerivation,
   useDEMOModelerStore,
 } from "$/features/modeler/store/useDEMOModelerStore";
+import {
+  AsteriskIcon,
+  PlusIcon,
+  TriangleIcon,
+  XIcon,
+} from "@phosphor-icons/react";
+import { MenuTrigger, Popover, type Selection } from "react-aria-components";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
-import { AsteriskIcon, XIcon } from "@phosphor-icons/react";
+import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types";
 import { useState } from "react";
-import { MenuTrigger, Popover, type Selection } from "react-aria-components";
+
 import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
-import type { DEMOHandleToolbarControlProps } from "../types/DEMOHandleToolbar.types";
-import { PlusIcon } from "@phosphor-icons/react/dist/ssr";
+import type { DEMOEdge } from "$/features/edges/edges.types";
 import getNodeHandle from "$/features/connection_handles/utils/getHandle";
 import markerMap from "$/features/modeler/utils/markerMap";
 
-const ChangeDerivationControl = ({
-  handleId,
-  nodeId,
-  position,
-}: DEMOHandleToolbarControlProps) => {
+const ChangeDerivationControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const { t } = useTranslation();
+  const edge = getEdge(edgeId);
   const edges = useDEMOModelerStore((state) => state.edges);
+  const targetNode = getNode(edge?.target);
+  const handle = getNodeHandle(targetNode, edge?.targetHandle);
 
   const options = [
     {
@@ -40,24 +45,19 @@ const ChangeDerivationControl = ({
     { id: "none", label: t(($) => $["None"]), icon: XIcon },
   ];
 
-  const node = getNode(nodeId);
-
-  if (!node) return null;
-
-  const handle = getNodeHandle(node, handleId);
-
-  const edgesConnected = edges.filter(
-    (e) => e.sourceHandle === handleId || e.targetHandle === handleId,
-  );
-
   const [selected, setSelected] = useState<Selection>(
     new Set([handle?.handle.derivation ?? options[2].id]),
+  );
+
+  const edgesConnected = edges.filter(
+    (e) => e.targetHandle === edge?.targetHandle,
   );
 
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton
-        label={t(($) => $["Derivation"])}
+        label={t(($) => $["Change derivation"])}
+        icon={({ size, color }) => <TriangleIcon size={size} color={color} />}
         menuTrigger
         id="change_derivation"
       />
@@ -76,7 +76,12 @@ const ChangeDerivationControl = ({
             if (!(selection instanceof Set)) return;
             for (const entry of selection) {
               if (typeof entry !== "string") return;
-              updateNodeHandlesDerivation(nodeId, handleId, position, entry);
+              updateNodeHandlesDerivation(
+                targetNode?.id,
+                edge?.targetHandle,
+                handle?.position,
+                entry,
+              );
               setEdges((edges) =>
                 edges.map((e) => {
                   if (!edgesConnected.includes(e)) return e;
@@ -110,7 +115,10 @@ const ChangeDerivationControl = ({
               label={item.label}
               textValue={item.label}
               id={item.id}
-              icon={({ size }) => <item.icon size={size} />}
+              icon={(iconProps) => {
+                const Icon = item.icon;
+                return <Icon {...iconProps} />;
+              }}
             />
           )}
         </DEMOElementToolbarListBox>

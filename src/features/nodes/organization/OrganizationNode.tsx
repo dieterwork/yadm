@@ -22,7 +22,7 @@ const OrganizationNode = ({
       height={height}
       draggable={draggable}
       type="organization"
-      actions={actions ?? ["changeState", "changeColor"]}
+      actions={actions ?? ["changeFocus", "changeColor"]}
     />
   );
 };

@@ -2,6 +2,8 @@ import type { Connection } from "@xyflow/react";
 import type { DEMOEdge } from "../../edges/edges.types";
 import { getNode } from "../store/useDEMOModelerStore";
 import type { DEMONode } from "../../nodes/nodes.types";
+import getNodeHandle from "$/features/connection_handles/utils/getHandle";
+import doesSourceHaveDerivation from "./doesSourceHaveDerivation";
 
 const allowedConnectionMap = {
   // cooperation model
@@ -135,7 +137,11 @@ const isValidConnection = (connection: DEMOEdge | Connection) => {
     return false;
   const allowedConnections = allowedConnectionMap[sourceNode?.type];
   if (!allowedConnections?.includes(targetNode?.type)) return false;
-  return true;
+  const sourceHasDerivation = doesSourceHaveDerivation(
+    sourceNode,
+    connection.sourceHandle,
+  );
+  return !sourceHasDerivation;
 };
 
 export default isValidConnection;

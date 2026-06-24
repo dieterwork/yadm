@@ -44,15 +44,13 @@ export const getMiddleLabel0Translate = (
   direction: "horizontal" | "vertical",
 ): Translate =>
   direction === "horizontal"
-    ? { x: "-50%", y: "-100%" }
-    : { x: "-100%", y: "-50%" };
+    ? { x: "-50%", y: "-105%" }
+    : { x: "-105%", y: "-50%" };
 
 export const getMiddleLabel1Translate = (
   direction: "horizontal" | "vertical",
 ): Translate =>
-  direction === "horizontal"
-    ? { x: "-50%", y: "0" }
-    : { x: "0", y: "-50%" };
+  direction === "horizontal" ? { x: "-50%", y: "5%" } : { x: "5%", y: "-50%" };
 
 // End labels — positioned at the point where the line arrives at the target handle.
 

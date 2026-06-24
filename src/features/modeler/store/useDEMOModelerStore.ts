@@ -20,7 +20,7 @@ import type {
   DEMOHandle,
   DEMONode,
   DEMONodeContent,
-  NodeScope,
+  NodeFocus,
 } from "../../nodes/nodes.types";
 import uuid from "../../../shared/utils/uuid";
 import type { DEMOEdge } from "../../edges/edges.types";
@@ -35,6 +35,8 @@ import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import takeSnapshotAndSave from "../../actions/undo/takeSnapshotAndSave";
 import takeWhiteboardSnapshotAndSave from "$/features/whiteboard/utils/takeWhiteboardSnapshotAndSave";
 import { setSelectedHandleId } from "$/features/handle_toolbar/useHandleSelectionStore";
+import getNodeHandle from "$/features/connection_handles/utils/getHandle";
+import markerMap from "../utils/markerMap";
 
 export type ModelerAction =
   | "attach"
@@ -109,9 +111,10 @@ export const setViewport = (newViewport: ReactStyleStateSetter<Viewport>) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getNode = (
-  id: string,
+  id: string | undefined,
   filter?: (node: DEMONode, index: number, array: DEMONode[]) => boolean,
 ) => {
+  if (!id) return undefined;
   return useDEMOModelerStore
     .getState()
     .nodes.find(
@@ -279,20 +282,32 @@ export const onConnect: OnConnect = (connection) => {
   if (isHandleEditModeEnabled) return;
   const sourceNode = getNode(connection.source);
   const targetNode = getNode(connection.target);
-  const type = getEdgeType(sourceNode?.type, targetNode?.type, "initial");
+  const type = getEdgeType(sourceNode?.type, targetNode?.type);
+  const targetHandle = getNodeHandle(targetNode, connection.targetHandle);
   const marker = getMarkerType(sourceNode?.type, targetNode?.type, "initial");
-  const data = getEdgeData(type);
+  const data = getEdgeData(type, {
+    lineType:
+      !!targetHandle?.handle.derivation &&
+      targetHandle?.handle.derivation !== "none"
+        ? "dashed"
+        : "solid",
+  });
   const newEdge = {
     ...connection,
     id: `${sourceNode?.type ?? "node"}_${connection.sourceHandle}->${targetNode?.type ?? "node"}_${connection.targetHandle}`,
     type,
     data: {
       ...data,
-      markerMid: marker.markerMid,
+      markerMid:
+        !!targetHandle?.handle.derivation &&
+        targetHandle?.handle.derivation === "none"
+          ? markerMap[sourceNode?.type ?? "entity_type"]?.find(
+              (m) => m.id === targetNode?.type,
+            )?.default.markerMid
+          : undefined,
     },
     markerStart: marker.markerStart,
     markerEnd: marker.markerEnd,
-    zIndex: 110,
     deletable: true,
   } satisfies DEMOEdge;
 
@@ -313,11 +328,24 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
       edge.source === newConnection.source &&
       edge.target === newConnection.target,
   );
+  const targetHandle = getNodeHandle(targetNode, newConnection.targetHandle);
   const newEdges = reconnectedEdges.map((edge) => {
     if (newEdge?.id !== edge.id) return edge;
     const marker = getMarkerType(sourceNode?.type, targetNode?.type, "initial");
     const type = getEdgeType(sourceNode?.type, targetNode?.type);
-    const data = getEdgeData(type, edge.data);
+
+    console.log(targetHandle);
+
+    const data = getEdgeData(type, {
+      ...edge.data,
+      lineType:
+        !!targetHandle?.handle.derivation &&
+        targetHandle?.handle.derivation !== "none"
+          ? "dashed"
+          : "solid",
+    });
+
+    console.log(data);
 
     return {
       ...edge,
@@ -325,7 +353,13 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
       data: {
         ...edge.data,
         ...data,
-        markerMid: marker.markerMid,
+        markerMid:
+          !!targetHandle?.handle.derivation &&
+          targetHandle?.handle.derivation === "none"
+            ? markerMap[sourceNode?.type ?? "entity_type"]?.find(
+                (m) => m.id === targetNode?.type,
+              )?.default.markerMid
+            : undefined,
         center: undefined,
       },
 
@@ -353,8 +387,8 @@ export const updateNodeState = (
   updateNodeData(id, { state });
 };
 
-export const updateNodeScope = (id: string, scope: NodeScope) => {
-  updateNodeData(id, { scope });
+export const updateNodeFocus = (id: string, focus: NodeFocus) => {
+  updateNodeData(id, { focus });
 };
 
 export const updateNodeBorderVisibility = (
@@ -454,14 +488,14 @@ export const updateNodeHandlesVisibility = (
 };
 
 export const updateNodeHandlesDerivation = (
-  id: string,
-  handleId: string,
+  id: string | undefined,
+  handleId: string | undefined,
   position: Position,
   newDerivation: ReactStyleStateSetter<
     "aggregation" | "generalisation" | "none"
   >,
 ) => {
-  console.log(id, handleId, position, newDerivation);
+  if (!id || !handleId || !position) return;
   updateNodeHandles(id, position, (handles) =>
     handles.map((handle) =>
       handle.id === handleId
@@ -470,12 +504,11 @@ export const updateNodeHandlesDerivation = (
             derivation:
               typeof newDerivation === "string"
                 ? newDerivation
-                : newDerivation(data.handles.derivation),
+                : newDerivation(handle.derivation),
           }
         : handle,
     ),
   );
-  console.log(useDEMOModelerStore.getState().nodes.find((n) => n.id === id));
 };
 
 export const setGridVisible = (isVisible: ReactStyleStateSetter<boolean>) => {

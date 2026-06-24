@@ -5,10 +5,9 @@ import {
   updateEdgeData,
 } from "$/features/modeler/store/useDEMOModelerStore";
 import {
-  ArrowElbowUpRightIcon,
-  ArrowRightIcon,
   CheckIcon,
   LineSegmentIcon,
+  ScalesIcon,
   XIcon,
 } from "@phosphor-icons/react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
@@ -22,6 +21,7 @@ import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 import type { ObjectFactDiagramEdge } from "$/features/edges/edges.types";
 import getMarkerType from "$/features/modeler/utils/getMarkerType";
+import getNodeHandle from "$/features/connection_handles/utils/getHandle";
 
 const ChangeLawControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const { t } = useTranslation();
@@ -40,13 +40,13 @@ const ChangeLawControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
 
   const marker = getMarkerType(sourceNode?.type, targetNode?.type, "default");
 
+  const targetHandle = getNodeHandle(targetNode, edge.targetHandle);
+
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton
         label={t(($) => $["Change law"])}
-        icon={({ size, color }) => (
-          <LineSegmentIcon size={size} color={color} />
-        )}
+        icon={({ size, color }) => <ScalesIcon size={size} color={color} />}
         menuTrigger
         id="change_law"
       />
@@ -91,7 +91,12 @@ const ChangeLawControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
                 updateEdgeData<ObjectFactDiagramEdge>(edgeId, (data) => ({
                   ...data,
                   markerMid:
-                    entry === "exclusion" ? undefined : marker.markerMid,
+                    entry === "exclusion"
+                      ? undefined
+                      : !!targetHandle?.handle.derivation &&
+                          targetHandle?.handle.derivation === "none"
+                        ? marker.markerMid
+                        : undefined,
                 }));
               }
 

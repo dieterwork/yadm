@@ -1,23 +1,23 @@
 import { useContext } from "react";
 import QuestionMark from "../../../shapes/QuestionMark";
-import { getScopeFill } from "../../../../shared/utils/utils";
+import { getFocusFill } from "../../../../shared/utils/utils";
 import type { TransactionState } from "./transaction.types";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
 import DoubleDiamondInCircle from "../../../shapes/DoubleDiamondInCircle";
-import type { NodeScope } from "../../nodes.types";
+import type { NodeFocus } from "../../nodes.types";
 
 interface TransactionShapeProps {
   state: TransactionState;
-  scope: NodeScope;
+  focus: NodeFocus;
   color?: string;
 }
 
-const TransactionShape = ({ state, scope, color }: TransactionShapeProps) => {
+const TransactionShape = ({ state, focus, color }: TransactionShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) return null;
   const { width, height, ...restSvgAttributes } = svgAttributes;
-  const fill = getScopeFill(scope, color);
+  const fill = getFocusFill(focus, color);
 
   switch (state) {
     case "missing":

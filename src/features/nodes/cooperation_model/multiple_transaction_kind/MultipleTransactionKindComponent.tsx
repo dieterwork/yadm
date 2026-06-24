@@ -19,7 +19,7 @@ const MultipleTransactionKindComponent = ({
     "changeColor",
     "changeFontSize",
     "toggleHandlesVisibility",
-    "changeScope",
+    "changeFocus",
     "editText",
     "changeState",
   ].concat(parentId ? ["attachNode"] : []);

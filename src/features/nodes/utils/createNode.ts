@@ -59,7 +59,7 @@ export const createNode = ({
           subModel: "cooperation_model",
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
-          scope: "in",
+          focus: "in",
           handles: {
             isVisible: true,
             top: {
@@ -97,7 +97,7 @@ export const createNode = ({
         data: {
           resizable: true,
           subModel: "cooperation_model",
-          scope: "in",
+          focus: "in",
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
@@ -149,7 +149,7 @@ export const createNode = ({
         data: {
           resizable: true,
           subModel: "cooperation_model",
-          scope: "in",
+          focus: "in",
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
           handles: {
@@ -328,7 +328,7 @@ export const createNode = ({
           position,
           deletable: true,
           data: {
-            state: "internal",
+            state: "in",
             content: DEFAULT_CONTENT_MAP[type],
             actions: [
               "changeColor",
@@ -401,14 +401,16 @@ export const createNode = ({
           position,
           deletable: true,
           data: {
-            state: "internal",
+            focus: "in",
             actions: [
               "changeColor",
               "toggleHandlesVisibility",
               "addHandle",
               "editText",
+              "changeFocus",
             ],
             subModel: "cooperation_model",
+            content: DEFAULT_CONTENT_MAP[type],
             handles: {
               isVisible: true,
               top: {

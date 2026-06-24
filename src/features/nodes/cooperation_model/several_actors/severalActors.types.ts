@@ -1,11 +1,9 @@
 import type { Node } from "@xyflow/react";
-import type { DEMONodeBaseData } from "../../nodes.types";
-
-export type SeveralActorsState = "internal" | "external";
+import type { DEMONodeBaseData, NodeFocus } from "../../nodes.types";
 
 export type SeveralActorsNode = Node<
   {
-    state: SeveralActorsState;
+    focus: NodeFocus;
   } & DEMONodeBaseData<"cooperation_model">,
   "several_actors"
 >;

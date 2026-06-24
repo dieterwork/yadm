@@ -3,23 +3,22 @@ import { ShapeContext } from "../../../shapes/ShapeContext";
 import type { NodeColor } from "../../../../shared/components/ui/colors/colors.types";
 import Rectangle from "../../../shapes/Rectangle";
 import { DEFAULT_BORDER_RADIUS } from "../objectFactDiagramConsts";
-import { getScopeFill } from "../../../../shared/utils/utils";
-import type { NodeScope } from "../../nodes.types";
+import { getFocusFill } from "../../../../shared/utils/utils";
 
 type EntityTypeShapeProps = {
   width: number;
   height: number;
-  scope: NodeScope;
+  focus: NodeFocus;
   color?: NodeColor;
 };
 
-const EntityTypeShape = ({ scope, color }: EntityTypeShapeProps) => {
+const EntityTypeShape = ({ focus, color }: EntityTypeShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) throw new Error("No shape context found");
 
   const { width, height } = svgAttributes;
 
-  const fill = getScopeFill(scope, color);
+  const fill = getFocusFill(focus, color);
 
   return (
     <>

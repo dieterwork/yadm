@@ -254,14 +254,14 @@ const DEMOModeler = () => {
             edgesFocusable={isEnabled}
             disableKeyboardA11y={false}
             fitView
-            onNodeClick={(_, node) => {
+            onNodeClick={(e, node) => {
               handleNodeAttach(node);
             }}
-            onNodeDoubleClick={(_, node) => {
-              const element = document.querySelector<HTMLDivElement>(
-                `.react-flow__node[data-id='${node.id}'] [contenteditable]`,
-              );
-              if (!element) return;
+            onNodeDoubleClick={(e, node) => {
+              const target = e.target;
+              if (!(target instanceof HTMLElement)) return;
+              if (!target.contentEditable) return;
+
               if (
                 node.data &&
                 "state" in node.data &&
@@ -272,8 +272,8 @@ const DEMOModeler = () => {
               updateNode(node.id, { selected: false });
               setAction("edit");
               setTimeout(() => {
-                element.focus();
-                setEndOfContentEditable(element);
+                target.focus();
+                setEndOfContentEditable(target);
               }, 50);
             }}
             connectionLineComponent={(props) => <ConnectionLine {...props} />}

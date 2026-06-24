@@ -1,28 +1,28 @@
 import { useContext } from "react";
 import QuestionMark from "../../../shapes/QuestionMark";
-import { getScopeFill } from "../../../../shared/utils/utils";
+import { getFocusFill } from "../../../../shared/utils/utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DoubleDiamondInCircle from "../../../shapes/DoubleDiamondInCircle";
 import type {
   MultipleTransactionKindState,
-  NodeScope,
+  NodeFocus,
 } from "../../nodes.types";
 
 interface MultipleTransactionKindShapeProps {
   state: MultipleTransactionKindState;
-  scope: NodeScope;
+  focus: NodeFocus;
   color?: string;
 }
 
 const MultipleTransactionKindShape = ({
   state,
-  scope,
+  focus,
   color,
 }: MultipleTransactionKindShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) return null;
   const { width, height, ...restSvgAttributes } = svgAttributes;
-  const fill = getScopeFill(scope, color);
+  const fill = getFocusFill(focus, color);
 
   switch (state) {
     case "missing":

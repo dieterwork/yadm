@@ -11,13 +11,13 @@ const useHandleEditModeShortcut = () => {
   const [isPressed, setPressed] = useState(false);
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Shift" && !isHandleEditModeEnabled) {
+    if (e.key === "Alt" && !isHandleEditModeEnabled) {
       setHandleEditModeEnabled(true);
       setPressed(true);
     }
   };
   const handleKeyUp = (e: KeyboardEvent) => {
-    if (e.key === "Shift" && isPressed) {
+    if (e.key === "Alt" && isPressed) {
       setHandleEditModeEnabled(false);
       setPressed(false);
     }

@@ -33,7 +33,7 @@ export type NodeToolbarAction =
   | "addHandle"
   | "toggleHandlesVisibility"
   | "attachNode"
-  | "changeScope"
+  | "changeFocus"
   | "changeState"
   | "editText"
   | "showBorder";
@@ -135,7 +135,7 @@ const DEMONodeBase = ({
             >
               <DEMOShape
                 state={"state" in data ? data.state : undefined}
-                scope={"scope" in data ? data.scope : undefined}
+                focus={"focus" in data ? data.focus : undefined}
                 color={"color" in data ? data.color : undefined}
               />
             </Shape>

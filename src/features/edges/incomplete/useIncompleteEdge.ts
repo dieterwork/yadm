@@ -19,6 +19,7 @@ import convertAbsoluteToRelativePosition from "$/features/nodes/utils/convertAbs
 import type { DEMONode } from "$/features/nodes/nodes.types";
 import getEdgeData from "$/features/modeler/utils/getEdgeData";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
+import getNodeHandle from "$/features/connection_handles/utils/getHandle";
 
 const getPosition = (fromPosition: Position | null) => {
   switch (fromPosition) {
@@ -69,7 +70,15 @@ export const useIncompleteEdge = () => {
       return;
     }
     const fromNode = connectionState.fromNode;
+    const parentNode = getNode(fromNode.id);
     const fromPosition = connectionState.fromPosition;
+    const fromHandle = getNodeHandle(fromNode, connectionState.fromHandle);
+    if (
+      fromNode.type === "entity_type" &&
+      fromHandle?.handle.derivation !== "none"
+    ) {
+      return;
+    }
     const ghostId = `ghost_${uuid()}`;
     const { clientX, clientY } =
       "changedTouches" in event ? event.changedTouches[0] : event;
@@ -78,8 +87,6 @@ export const useIncompleteEdge = () => {
       x: clientX,
       y: clientY,
     });
-
-    const parentNode = getNode(fromNode.id);
 
     const relativeParentCoordinates = convertAbsoluteToRelativePosition(
       position,

@@ -21,9 +21,11 @@ interface InteractiveCenterEdgeProps {
     PointerEvent | MouseEvent | TouchEvent | KeyboardEvent
   >;
   direction?: "horizontal" | "vertical";
+  onDoubleClick?: (e: React.MouseEvent) => void;
 }
 
 const InteractiveCenterEdge = ({
+  onDoubleClick,
   sourceX,
   sourceY,
   targetX,
@@ -52,6 +54,10 @@ const InteractiveCenterEdge = ({
   return (
     <path
       {...bind()}
+      onDoubleClick={(e) => {
+        if (!active) return;
+        onDoubleClick?.(e);
+      }}
       d={path}
       fill="none"
       strokeOpacity={1}
@@ -61,7 +67,7 @@ const InteractiveCenterEdge = ({
         direction === "horizontal" && active && "cursor-col-resize",
         direction === "vertical" && active && "cursor-row-resize",
         !direction && "cursor-auto",
-        active && "nopan"
+        active && "nopan",
       )}
       tabIndex={0}
       style={{ pointerEvents: "all", touchAction: "none" }}

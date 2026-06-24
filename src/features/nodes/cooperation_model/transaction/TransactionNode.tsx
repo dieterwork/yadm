@@ -32,9 +32,9 @@ const TransactionNode = ({
     "changeColor",
     "changeFontSize",
     "toggleHandlesVisibility",
-    "changeScope",
+    "changeFocus",
     "editText",
-    "changeState",
+    "changeFocus",
   ];
 
   if (parentId) {

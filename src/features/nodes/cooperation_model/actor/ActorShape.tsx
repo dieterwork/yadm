@@ -1,22 +1,22 @@
 import QuestionMark from "../../../shapes/QuestionMark";
 import Rectangle from "../../../shapes/Rectangle";
-import { getScopeFill } from "../../../../shared/utils/utils";
+import { getFocusFill } from "../../../../shared/utils/utils";
 import type { ActorState } from "./actor.types";
 import { useContext } from "react";
 import { ShapeContext } from "../../../shapes/ShapeContext";
-import type { NodeScope } from "../../nodes.types";
+import type { NodeFocus } from "../../nodes.types";
 
 interface ActorShapeProps {
   state: ActorState;
-  scope: NodeScope;
+  focus: NodeFocus;
   color?: string;
 }
 
-const ActorShape = ({ state, scope, color }: ActorShapeProps) => {
+const ActorShape = ({ state, focus, color }: ActorShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) return null;
   const { width, height, ...restSvgAttributes } = svgAttributes;
-  const fill = getScopeFill(scope, color);
+  const fill = getFocusFill(focus, color);
 
   switch (state) {
     case "missing":

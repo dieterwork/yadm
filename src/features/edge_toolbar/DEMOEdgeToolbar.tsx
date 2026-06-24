@@ -13,12 +13,13 @@ import ChangeLineTypeControl from "./actions/ChangeLineTypeControl";
 import ToggleProductionEventMenuItem from "./actions/ToggleProductionEventControl";
 import SwapConnectionControl from "./actions/SwapConnectionControl";
 import { useTranslation } from "react-i18next";
-import ResetEdgeCenter from "./actions/ResetEdgeCenter";
 import ChangeLinePathControl from "./actions/ChangeLinePath";
 import ToggleMarkerStartControl from "./actions/ToggleMarkerStartControl";
 import ToggleMarkerMidControl from "./actions/ToggleMarkerMidControl";
 import ToggleMarkerEndControl from "./actions/ToggleMarkerEndControl";
 import ChangeLawControl from "./actions/ChangeLawControl";
+import ChangeDerivationControl from "./actions/ChangeDerivation";
+import getNodeHandle from "../connection_handles/utils/getHandle";
 
 export type EdgeToolbarAction =
   | "toggleProductionEvent"
@@ -29,7 +30,8 @@ export type EdgeToolbarAction =
   | "toggleMarkerStart"
   | "toggleMarkerMid"
   | "toggleMarkerEnd"
-  | "changeLaw";
+  | "changeLaw"
+  | "changeDerivation";
 interface DEMOEdgeToolbarProps {
   edgeId?: string;
   position?: XYPosition;
@@ -59,6 +61,18 @@ const DEMOEdgeToolbar = ({
 
   const hasNodeSelected = nodes.some((node) => node.selected);
 
+  const targetHandle = getNodeHandle(targetNode, edge.targetHandle);
+
+  const numOfEdgesConnectedToTargetHandle = edges.filter(
+    (e) => e.targetHandle === edge.targetHandle,
+  ).length;
+
+  const multipleConnectionsToDerivationHandle =
+    sourceNode?.type === "entity_type" &&
+    !!targetHandle?.handle.derivation &&
+    targetHandle?.handle.derivation !== "none" &&
+    numOfEdgesConnectedToTargetHandle > 1;
+
   return (
     <EdgeToolbar
       xyPosition={position}
@@ -76,12 +90,10 @@ const DEMOEdgeToolbar = ({
             <ToggleProductionEventMenuItem edgeId={edgeId} />
           )}
           {actions?.indexOf("swapConnection") !== -1 &&
-            (targetNode?.type !== "ghost" || sourceNode?.type === "ghost") && (
+            (targetNode?.type !== "ghost" || sourceNode?.type === "ghost") &&
+            !multipleConnectionsToDerivationHandle && (
               <SwapConnectionControl edgeId={edgeId} />
             )}
-          {actions?.indexOf("resetEdgeCenter") !== -1 && (
-            <ResetEdgeCenter edgeId={edgeId} />
-          )}
           {actions?.indexOf("toggleMarkerStart") !== -1 && (
             <ToggleMarkerStartControl edgeId={edgeId} />
           )}
@@ -93,6 +105,9 @@ const DEMOEdgeToolbar = ({
           )}
           {actions?.indexOf("changeLaw") !== -1 && (
             <ChangeLawControl edgeId={edgeId} />
+          )}
+          {actions?.indexOf("changeDerivation") !== -1 && (
+            <ChangeDerivationControl edgeId={edgeId} />
           )}
         </DEMOElementToolbarGroup>
         {!!edge.deletable && (

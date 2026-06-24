@@ -6,7 +6,7 @@ import {
 import ChangeFontSizeControl from "./actions/ChangeFontSizeControl";
 import AddHandleControl from "./actions/AddHandleControl";
 import ChangeStateControl from "./actions/ChangeStateControl";
-import ChangeScopeControl from "./actions/ChangeScopeControl";
+import ChangeFocusControl from "./actions/ChangeFocusControl";
 import type { NodeToolbarAction } from "../nodes/DEMONodeBase";
 import ChangeColorControl from "./actions/ChangeColorControl";
 import ToggleHandlesVisibilityControl from "./actions/ToggleHandlesVisibilityControl";
@@ -62,8 +62,8 @@ const DEMONodeToolbar = ({
         {actions?.indexOf("changeState") !== -1 && (
           <ChangeStateControl nodeId={nodeId} />
         )}
-        {actions?.indexOf("changeScope") !== -1 && (
-          <ChangeScopeControl nodeId={nodeId} />
+        {actions?.indexOf("changeFocus") !== -1 && (
+          <ChangeFocusControl nodeId={nodeId} />
         )}
         {actions?.indexOf("changeColor") !== -1 &&
           node.type !== "whiteboard" && <ChangeColorControl nodeId={nodeId} />}

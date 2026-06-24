@@ -8,19 +8,12 @@ import {
   QuestionMarkIcon,
   RectangleDashedIcon,
   RectangleIcon,
-  SelectionBackgroundIcon,
-  SelectionForegroundIcon,
   SlidersIcon,
 } from "@phosphor-icons/react";
 import { useState } from "react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
 import type { ActorState } from "$/features/nodes/cooperation_model/actor/actor.types";
 import type { TransactionState } from "$/features/nodes/cooperation_model/transaction/transaction.types";
-import type { TransactorState } from "$/features/nodes/cooperation_model/transactor/transactor.types";
-import type { SelfActivationState } from "$/features/nodes/cooperation_model/self_activation/selfActivation.types";
-import type { CompositeState } from "$/features/nodes/cooperation_model/composite/composite.types";
-import type { ElementaryActorState } from "$/features/nodes/cooperation_model/elementary_actor/elementaryActor.types";
-import type { SeveralActorsState } from "$/features/nodes/cooperation_model/several_actors/severalActors.types";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
@@ -36,37 +29,20 @@ import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const NODES_WITH_STATE = [
   "actor",
-  "composite",
-  "elementary_actor",
-  "self_activation",
   "transaction",
-  "transactor",
-  "several_actors",
   "multiple_transaction_kind",
 ] as const;
 
 export type NodeWithState = (typeof NODES_WITH_STATE)[number];
 
 const getIcon = (
-  state:
-    | ActorState
-    | CompositeState
-    | ElementaryActorState
-    | SelfActivationState
-    | TransactionState
-    | TransactorState
-    | SeveralActorsState
-    | MultipleTransactionKindState,
+  state: ActorState | TransactionState | MultipleTransactionKindState,
 ) => {
   switch (state) {
     case "default":
       return RectangleIcon;
     case "double":
       return CopySimpleIcon;
-    case "external":
-      return SelectionBackgroundIcon;
-    case "internal":
-      return SelectionForegroundIcon;
     case "missing":
       return RectangleDashedIcon;
     case "unclear":
@@ -85,27 +61,13 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const missingT = t(($) => $["Missing"]);
   const doubleT = t(($) => $["Double"]);
 
-  const internalT = t(($) => $["Internal"]);
-  const externalT = t(($) => $["External"]);
-
   const stateOptions = {
     actor: [
       { id: "default", label: defaultT as string },
       { id: "unclear", label: unclearT as string },
       { id: "missing", label: missingT as string },
     ],
-    composite: [
-      { id: "internal", label: internalT as string },
-      { id: "external", label: externalT as string },
-    ],
-    elementary_actor: [
-      { id: "internal", label: internalT as string },
-      { id: "external", label: externalT as string },
-    ],
-    self_activation: [
-      { id: "internal", label: internalT as string },
-      { id: "external", label: externalT as string },
-    ],
+
     transaction: [
       { id: "default", label: defaultT as string },
       { id: "unclear", label: unclearT as string },
@@ -117,14 +79,6 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
       { id: "unclear", label: unclearT as string },
       { id: "missing", label: missingT as string },
     ],
-    transactor: [
-      { id: "internal", label: internalT as string },
-      { id: "external", label: externalT as string },
-    ],
-    several_actors: [
-      { id: "internal", label: internalT as string },
-      { id: "external", label: externalT as string },
-    ],
     organization: [
       { id: "default", label: defaultT as string },
       { id: "missing", label: missingT as string },
@@ -132,18 +86,6 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   } satisfies {
     actor: {
       id: ActorState;
-      label: string;
-    }[];
-    composite: {
-      id: CompositeState;
-      label: string;
-    }[];
-    elementary_actor: {
-      id: ElementaryActorState;
-      label: string;
-    }[];
-    self_activation: {
-      id: SelfActivationState;
       label: string;
     }[];
     transaction: {
@@ -154,24 +96,17 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
       id: MultipleTransactionKindState;
       label: string;
     }[];
-    transactor: {
-      id: TransactorState;
-      label: string;
-    }[];
-    several_actors: {
-      id: SeveralActorsState;
-      label: string;
-    }[];
     organization: {
       id: OrganizationState;
       label: string;
     }[];
   };
 
-  const [selected, setSelected] = useState<Selection>(
-    new Set([node.data.state]),
-  );
   const options = stateOptions[node.type as NodeWithState];
+
+  const [selected, setSelected] = useState<Selection>(
+    new Set([node.data.state ?? options[0].id]),
+  );
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton

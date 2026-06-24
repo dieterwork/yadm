@@ -20,7 +20,7 @@ const CompositeNode = ({
     "changeColor",
     "changeFontSize",
     "toggleHandlesVisibility",
-    "changeState",
+    "changeFocus",
     "editText",
   ];
 

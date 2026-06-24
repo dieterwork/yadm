@@ -29,7 +29,7 @@ const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   ] satisfies { id: string; label: string }[];
 
   const [colorSelected, setColorSelected] = useState<Selection>(
-    new Set([colorOptions[0].id])
+    new Set([colorOptions[0].id]),
   );
 
   return (
@@ -66,7 +66,7 @@ const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
               label={item.label}
               textValue={item.label}
               id={item.id}
-              isDisabled={"scope" in node.data && node.data.scope === "out"}
+              isDisabled={"focus" in node.data && node.data.focus === "out"}
               icon={({ size }) => (
                 <DEMOElementToolbarColorSwatch
                   color={item.id}

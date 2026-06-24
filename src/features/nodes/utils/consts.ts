@@ -5,7 +5,7 @@ export const X_SMALL_NODE_SIZE = 25 as const;
 export const SMALL_NODE_SIZE = 60 as const;
 export const MEDIUM_NODE_SIZE = 100 as const;
 export const LARGE_NODE_SIZE = 200 as const;
-export const TRANSACTION_TIME_HEIGHT = SMALL_NODE_SIZE - 4;
+export const TRANSACTION_TIME_HEIGHT = SMALL_NODE_SIZE;
 export const TRANSACTION_TIME_WIDTH = 300 as const;
 export const TRANSACTION_TIME_MIN_SIZE = 100 as const;
 
@@ -201,7 +201,8 @@ export const DEFAULT_CONTENT_MAP = {
     body: "A",
   },
   self_activation: {
-    body: "A",
+    header: "A1",
+    body: "A2",
   },
   composite: {
     body: "CT",

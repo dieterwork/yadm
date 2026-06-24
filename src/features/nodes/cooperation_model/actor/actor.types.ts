@@ -1,12 +1,12 @@
 import type { Node } from "@xyflow/react";
-import type { DEMONodeBaseData, NodeScope } from "../../nodes.types";
+import type { DEMONodeBaseData, NodeFocus } from "../../nodes.types";
 
 export type ActorState = "default" | "unclear" | "missing";
 
 export type ActorNode = Node<
   {
     state: ActorState;
-    scope: NodeScope;
+    focus: NodeFocus;
   } & DEMONodeBaseData<"cooperation_model">,
   "actor"
 >;
