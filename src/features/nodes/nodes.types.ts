@@ -97,6 +97,8 @@ export type DEMOHandlesPositionData = {
   handles?: DEMOHandle[];
   max?: number;
   step?: number;
+  // for objectFactDiagram
+  derivation?: "aggregation" | "generalisation" | "none";
 };
 
 export type DEMOHandlesData = {
@@ -105,8 +107,6 @@ export type DEMOHandlesData = {
   left?: DEMOHandlesPositionData;
   right?: DEMOHandlesPositionData;
   isVisible?: boolean;
-  // for objectFactDiagram
-  derivation?: "aggregation" | "generalisation" | "none";
 };
 
 export type DEMONodeBaseData<T extends SubModel> = {
