@@ -1,4 +1,7 @@
-import { updateNodeFontSize } from "$/features/modeler/store/useDEMOModelerStore";
+import {
+  getNode,
+  updateNodeFontSize,
+} from "$/features/modeler/store/useDEMOModelerStore";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
@@ -15,8 +18,14 @@ const fontSizeOptions = [10, 12, 14, 16, 20, 24].map((num) => ({
 })) satisfies { id: number; label: string }[];
 
 const ChangeFontSizeControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
+  const node = getNode(nodeId);
+  if (!node) return null;
   const [selected, setSelected] = useState<Selection>(
-    new Set([fontSizeOptions[3].id])
+    new Set([
+      "fontSize" in node.data && node.data.fontSize
+        ? node.data.fontSize
+        : fontSizeOptions[3].id,
+    ]),
   );
   const { t } = useTranslation();
   return (

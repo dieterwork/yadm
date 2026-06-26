@@ -20,10 +20,8 @@ import { isNodeFocus } from "$/features/nodes/utils/isNodeFocus";
 
 const ChangeFocusControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const { t } = useTranslation();
-  if (!nodeId) return null;
   const node = getNode(nodeId);
   if (!node) return null;
-  if (!("focus" in node.data)) return null;
 
   const options = [
     { id: "in", label: t(($) => $["In"]) },
@@ -31,7 +29,11 @@ const ChangeFocusControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   ] satisfies { id: NodeFocus; label: string }[];
 
   const [selected, setSelected] = useState<Selection>(
-    new Set([node.data?.focus ?? options[0].id]),
+    new Set([
+      "focus" in node.data && node.data.focus
+        ? node.data?.focus
+        : options[0].id,
+    ]),
   );
   return (
     <MenuTrigger>

@@ -11,8 +11,7 @@ import { useTranslation } from "react-i18next";
 import setEndOfContentEditable from "$/features/editable_content/utils/setEndOfContentEditable";
 
 const EditTextControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
-  const { t } = useTranslation("translation");
-  if (!nodeId) return null;
+  const { t } = useTranslation();
   const node = getNode(nodeId);
   if (!node) return null;
 
@@ -21,7 +20,7 @@ const EditTextControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
       isDisabled={"state" in node.data && node.data.state === "unclear"}
       onPress={() => {
         const element = document.querySelector<HTMLDivElement>(
-          `.react-flow__node[data-id='${nodeId}'] [contenteditable]`
+          `.react-flow__node[data-id='${nodeId}'] [contenteditable]`,
         );
         if (!element) return;
         updateNodeEditable(nodeId, true);

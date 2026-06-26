@@ -18,7 +18,6 @@ import takeWhiteboardSnapshotAndSave from "$/features/whiteboard/utils/takeWhite
 const ChangeWhiteboardColorControl = ({
   nodeId,
 }: DEMONodeToolbarControlProps) => {
-  const id = useId();
   const { t } = useTranslation();
   const node = getNode(nodeId);
   if (!node) return null;
@@ -28,7 +27,7 @@ const ChangeWhiteboardColorControl = ({
   const [color, setColor] = useState<Color>(() =>
     "color" in node.data && node.data.color
       ? parseColor(node.data.color)
-      : parseColor("#000")
+      : parseColor("#000"),
   );
 
   return (

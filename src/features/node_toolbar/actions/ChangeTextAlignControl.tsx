@@ -1,5 +1,8 @@
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
-import { updateNodeTextAlign } from "$/features/modeler/store/useDEMOModelerStore";
+import {
+  getNode,
+  updateNodeTextAlign,
+} from "$/features/modeler/store/useDEMOModelerStore";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
@@ -19,7 +22,7 @@ import { useTranslation } from "react-i18next";
 
 const getIcon = (
   textAlign: "start" | "center" | "end",
-  iconProps: { size: number; color: string }
+  iconProps: { size: number; color: string },
 ) => {
   switch (textAlign) {
     case "start":
@@ -34,6 +37,9 @@ const getIcon = (
 };
 
 const ChangeTextAlignMenuItem = ({ nodeId }: { nodeId: string }) => {
+  const node = getNode(nodeId);
+  if (!node) return null;
+
   const { t } = useTranslation();
   const textAlignOptions = [
     {
@@ -50,7 +56,11 @@ const ChangeTextAlignMenuItem = ({ nodeId }: { nodeId: string }) => {
     },
   ] satisfies { id: NodeTextAlign; label: string }[];
   const [selected, setSelected] = useState<Selection>(
-    new Set([textAlignOptions[0].id])
+    new Set([
+      "textAlign" in node.data && node.data.textAlign
+        ? node.data.textAlign
+        : textAlignOptions[0].id,
+    ]),
   );
   return (
     <MenuTrigger>

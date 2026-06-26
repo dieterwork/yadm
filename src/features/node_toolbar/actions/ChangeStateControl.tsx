@@ -54,7 +54,6 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const { t } = useTranslation();
   const node = getNode(nodeId);
   if (!node) return null;
-  if (!("state" in node.data)) return null;
 
   const defaultT = t(($) => $["Default"]);
   const unclearT = t(($) => $["Unclear"]);
@@ -105,7 +104,9 @@ const ChangeStateControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
   const options = stateOptions[node.type as NodeWithState];
 
   const [selected, setSelected] = useState<Selection>(
-    new Set([node.data.state ?? options[0].id]),
+    new Set([
+      "state" in node.data && node.data.state ? node.data.state : options[0].id,
+    ]),
   );
   return (
     <MenuTrigger>
