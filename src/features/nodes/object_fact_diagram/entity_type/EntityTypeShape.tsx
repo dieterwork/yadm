@@ -4,6 +4,7 @@ import type { NodeColor } from "../../../../shared/components/ui/colors/colors.t
 import Rectangle from "../../../shapes/Rectangle";
 import { DEFAULT_BORDER_RADIUS } from "../objectFactDiagramConsts";
 import { getFocusFill } from "../../../../shared/utils/utils";
+import type { NodeFocus } from "../../nodes.types";
 
 type EntityTypeShapeProps = {
   width: number;

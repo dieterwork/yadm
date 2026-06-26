@@ -37,6 +37,7 @@ import takeWhiteboardSnapshotAndSave from "$/features/whiteboard/utils/takeWhite
 import { setSelectedHandleId } from "$/features/handle_toolbar/useHandleSelectionStore";
 import getNodeHandle from "$/features/connection_handles/utils/getHandle";
 import markerMap from "../utils/markerMap";
+import { zIndexMap } from "$/shared/utils/zIndex";
 
 export type ModelerAction =
   | "attach"
@@ -239,6 +240,7 @@ export const onReconnectEnd = (
 
     setEdges((edges) => edges.filter((_edge) => _edge.id !== edge.id));
   }
+  takeSnapshotAndSave();
 };
 
 export const onEdgesDelete = (deletedEdges: DEMOEdge[]) => {
@@ -299,20 +301,21 @@ export const onConnect: OnConnect = (connection) => {
     data: {
       ...data,
       markerMid:
-        !!targetHandle?.handle.derivation &&
-        targetHandle?.handle.derivation === "none"
-          ? markerMap[sourceNode?.type ?? "entity_type"]?.find(
+        targetHandle?.handle.derivation &&
+        targetHandle.handle.derivation !== "none"
+          ? undefined
+          : markerMap[sourceNode?.type ?? "entity_type"]?.find(
               (m) => m.id === targetNode?.type,
-            )?.default.markerMid
-          : undefined,
+            )?.default.markerMid,
     },
     markerStart: marker.markerStart,
     markerEnd: marker.markerEnd,
     deletable: true,
   } satisfies DEMOEdge;
 
-  takeSnapshotAndSave();
   addEdge(newEdge);
+
+  takeSnapshotAndSave();
 };
 
 export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
@@ -334,8 +337,6 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
     const marker = getMarkerType(sourceNode?.type, targetNode?.type, "initial");
     const type = getEdgeType(sourceNode?.type, targetNode?.type);
 
-    console.log(targetHandle);
-
     const data = getEdgeData(type, {
       ...edge.data,
       lineType:
@@ -344,8 +345,6 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
           ? "dashed"
           : "solid",
     });
-
-    console.log(data);
 
     return {
       ...edge,
@@ -362,18 +361,13 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
             : undefined,
         center: undefined,
       },
-
       markerStart: marker.markerStart,
       markerEnd: marker.markerEnd,
       type,
-      zIndex: 110,
       deletable: true,
     } satisfies DEMOEdge;
   });
-  useDEMOModelerStore.setState(() => ({
-    edges: newEdges,
-  }));
-  takeSnapshotAndSave();
+  setEdges(newEdges);
 };
 
 export const updateNodeColor = (id: string, color: string) => {

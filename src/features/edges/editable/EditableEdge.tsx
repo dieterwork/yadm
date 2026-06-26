@@ -286,8 +286,8 @@ export function EditableEdgeComponent({
         />
       )}
       {cardinality &&
-        !!targetHandle?.handle.derivation &&
-        targetHandle?.handle.derivation === "none" && (
+        (!targetHandle?.handle.derivation ||
+          targetHandle?.handle.derivation === "none") && (
           <>
             <CardinalityLabel
               edgeId={id}

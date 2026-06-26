@@ -40,7 +40,7 @@ const AttachNodeControl = ({ nodeId }: { nodeId: string }) => {
               childNode: childNodeLabel,
               parentNode: parentNodeLabel,
             }),
-            { icon: "linkBreak" }
+            { icon: "linkBreak" },
           );
           takeSnapshotAndSave();
         } else {
@@ -53,7 +53,7 @@ const AttachNodeControl = ({ nodeId }: { nodeId: string }) => {
               // TODO adjust toaster to set autoremove to false
               duration: 1000000,
               className: "no-remove",
-            }
+            },
           );
           updateNode(nodeId, { selected: false });
         }

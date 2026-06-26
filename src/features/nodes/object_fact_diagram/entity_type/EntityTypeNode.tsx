@@ -30,6 +30,7 @@ const EntityTypeNode = ({
         "changeFontSize",
         "editText",
         "toggleHandlesVisibility",
+        "changeFocus",
       ].concat(parentId ? "attachNode" : [])}
     >
       <EditableContent

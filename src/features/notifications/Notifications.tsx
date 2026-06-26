@@ -1,9 +1,9 @@
 import {
   CheckCircleIcon,
-  CircleNotch,
   CircleNotchIcon,
   LinkBreakIcon,
   LinkIcon,
+  WarningIcon,
   XCircleIcon,
   XIcon,
 } from "@phosphor-icons/react";
@@ -42,7 +42,7 @@ const Notifications = () => {
               "toast | flex justify-end absolute w-[18rem] transition-all duration-500 ease-out top-2 right-2",
               toast?.visible
                 ? "animate-in fade-in"
-                : "animate-out fade-out opacity-0"
+                : "animate-out fade-out opacity-0",
             )}
             style={{
               transform: `translateY(${offset}px)`,
@@ -51,10 +51,17 @@ const Notifications = () => {
             {...toast.ariaProps}
           >
             <div
-              data-type={toast.type}
-              className="grid grid-cols-[auto_1fr_auto] gap-2 items-center bg-white data-[type='success']:bg-emerald-100 data-[type='error']:bg-rose-100 text-xs p-2.5 shadow-lg rounded-md text-slate-900 font-medium"
+              data-type={toast.icon === "warning" ? "warning" : toast.type}
+              className="grid grid-cols-[auto_1fr_auto] gap-2 items-center bg-white data-[type='success']:bg-emerald-100 data-[type='error']:bg-rose-100 data-[type='warning']:bg-yellow-100 text-xs p-2.5 shadow-lg rounded-md text-slate-900 font-medium"
             >
               <div>
+                {toast.icon === "warning" && (
+                  <WarningIcon
+                    size={24}
+                    color="var(--color-yellow-500)"
+                    weight="fill"
+                  />
+                )}
                 {toast.type === "error" && (
                   <XCircleIcon
                     size={24}

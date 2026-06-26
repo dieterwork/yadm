@@ -25,7 +25,7 @@ const AggregationHandle = ({ position, size = 32 }: Props) => {
       <path
         d="M16 14 L16 22 M12.5 16 L19.5 20 M19.5 16 L12.5 20"
         stroke="var(--color-black)"
-        stroke-width="2"
+        strokeWidth="2"
         stroke-linecap="round"
       />
     </svg>

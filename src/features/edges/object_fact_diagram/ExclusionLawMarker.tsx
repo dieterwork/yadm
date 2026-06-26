@@ -22,9 +22,9 @@ const ExclusionLawMarker = ({ labelX, labelY }: Props) => {
           r="10"
           fill="var(--color-white)"
           stroke="currentColor"
-          stroke-width="2"
+          strokeWidth="2"
         />
-        <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <g stroke="currentColor" strokeWidth="2" strokeLinecap="round">
           <line x1="8" y1="8" x2="16" y2="16" />
           <line x1="16" y1="8" x2="8" y2="16" />
         </g>

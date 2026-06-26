@@ -42,13 +42,46 @@ const useDelete = () => {
       return !(isExternalSource || isExternalTarget);
     });
 
-    if (!combinedSelectedNodes && !selectedEdges) return;
+    if (!combinedSelectedNodes.length && !selectedEdges.length) return;
+
+    const deletedNodeIds = new Set(combinedSelectedNodes.map((n) => n.id));
+    const postDeleteEdges = edges.filter(
+      (edge) =>
+        !deletedNodeIds.has(edge.source) && !deletedNodeIds.has(edge.target),
+    );
 
     setNodes((nodes) =>
-      nodes.filter(
-        (node) =>
-          !combinedSelectedNodes.map((node) => node.id).includes(node.id),
-      ),
+      nodes
+        .filter(
+          (node) =>
+            !combinedSelectedNodes.map((node) => node.id).includes(node.id),
+        )
+        .map((node) => {
+          if (!("handles" in node.data) || !node.data.handles) return node;
+
+          let handles = node.data.handles;
+          let changed = false;
+
+          for (const pos of ["top", "bottom", "left", "right"] as const) {
+            const group = handles[pos];
+            if (!group?.handles) continue;
+
+            const newHandles = group.handles.map((h) => {
+              if (!h.derivation || h.derivation === "none") return h;
+              const stillConnected = postDeleteEdges.some(
+                (edge) => edge.target === node.id && edge.targetHandle === h.id,
+              );
+              if (stillConnected) return h;
+              changed = true;
+              return { ...h, derivation: "none" };
+            });
+
+            handles = { ...handles, [pos]: { ...group, handles: newHandles } };
+          }
+
+          if (!changed) return node;
+          return { ...node, data: { ...node.data, handles } } as DEMONode;
+        }),
     );
     setEdges((edges) => edges.filter((edge) => !selectedEdges.includes(edge)));
   };

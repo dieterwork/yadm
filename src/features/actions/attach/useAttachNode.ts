@@ -83,6 +83,13 @@ export const useAttachNode = () => {
     if (node.parentId && node.type !== "transaction_kind") {
       return console.warn("Cannot attach to a node with an existing parent");
     }
+    if (node.id === childNodeId) {
+      toast(
+        t(($) => $["Cannot attach a node to itself"]),
+        { icon: "warning" },
+      );
+      return;
+    }
     let parentNodeId = node.id;
     if (node.type === "transaction_kind" && node.parentId) {
       // get parent node

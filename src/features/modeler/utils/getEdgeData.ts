@@ -41,7 +41,7 @@ const getEdgeData = <T extends DEMOEdge>(
                 startLabel0: "0..*",
                 startLabel1: "",
                 middleLabel0: "",
-                middleLabel1: "",
+                middleLabel1: "...",
                 endLabel0: "1..1",
                 endLabel1: "",
               },

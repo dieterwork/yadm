@@ -112,7 +112,7 @@ export type DEMOHandlesData = {
 export type DEMONodeBaseData<T extends SubModel> = {
   handles?: DEMOHandlesData;
   subModel: T;
-  fontSize?: string;
+  fontSize?: number;
   color?: string;
   content?: Partial<DEMONodeContent>;
   isEditable?: boolean;

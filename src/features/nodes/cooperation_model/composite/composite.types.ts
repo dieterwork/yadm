@@ -1,9 +1,9 @@
 import type { Node } from "@xyflow/react";
-import type { DEMONodeBaseData } from "../../nodes.types";
+import type { DEMONodeBaseData, NodeFocus } from "../../nodes.types";
 
 export type CompositeNode = Node<
   {
-    focus: "in" | "out";
+    focus: NodeFocus;
   } & DEMONodeBaseData<"cooperation_model">,
   "composite"
 >;

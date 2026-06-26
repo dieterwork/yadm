@@ -221,22 +221,21 @@ export const createNode = ({
           ariaLabel: t(($) => $["Actor"]),
           position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
           deletable: false,
+          className: "pointer-events-none",
           data: {
             state: "default",
+            focus: "in",
             content: DEFAULT_CONTENT_MAP["actor"],
             handles: {
               isVisible: true,
               bottom: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
               left: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
               right: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
             },
             resizable: false,
@@ -246,6 +245,7 @@ export const createNode = ({
               "toggleHandlesVisibility",
               "editText",
               "changeFontSize",
+              "changeFocus",
             ],
           },
           style: {
@@ -328,7 +328,6 @@ export const createNode = ({
           position,
           deletable: true,
           data: {
-            state: "in",
             content: DEFAULT_CONTENT_MAP[type],
             actions: [
               "changeColor",
@@ -408,6 +407,7 @@ export const createNode = ({
               "addHandle",
               "editText",
               "changeFocus",
+              "changeFontSize",
             ],
             subModel: "cooperation_model",
             content: DEFAULT_CONTENT_MAP[type],
@@ -494,7 +494,7 @@ export const createNode = ({
           deletable: false,
           position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
           data: {
-            state: "default",
+            focus: "in",
             content: DEFAULT_CONTENT_MAP["composite"],
             handles: {
               isVisible: true,
@@ -518,6 +518,7 @@ export const createNode = ({
               "toggleHandlesVisibility",
               "editText",
               "changeFontSize",
+              "changeFocus",
             ],
           },
           style: {
@@ -635,6 +636,7 @@ export const createNode = ({
           data: {
             subModel: "cooperation_model",
             state: "default",
+            focus: "in",
             content: DEFAULT_CONTENT_MAP["actor"],
             handles: {
               isVisible: true,
@@ -658,6 +660,7 @@ export const createNode = ({
               "toggleHandlesVisibility",
               "editText",
               "changeFontSize",
+              "changeFocus",
             ],
           },
           style: {
@@ -864,6 +867,7 @@ export const createNode = ({
           subModel: "object_fact_diagram",
           content: DEFAULT_CONTENT_MAP[type],
           fontSize: 12,
+          focus: "in",
           handles: {
             isVisible: true,
             top: {
@@ -902,6 +906,7 @@ export const createNode = ({
         data: {
           subModel: "object_fact_diagram",
           content: DEFAULT_CONTENT_MAP[type],
+          focus: "in",
           handles: {
             isVisible: true,
             top: {

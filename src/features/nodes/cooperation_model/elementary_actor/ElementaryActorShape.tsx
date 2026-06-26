@@ -1,12 +1,10 @@
 import { useContext } from "react";
 import {
   getFocusFill,
-  getStateFill,
   getTransactionDiamondStroke,
 } from "../../../../shared/utils/utils";
 import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
-import type { ElementaryActorState } from "./elementaryActor.types";
 import Rectangle from "../../../shapes/Rectangle";
 import { MEDIUM_NODE_SIZE } from "../../utils/consts";
 import type { NodeFocus } from "../../nodes.types";

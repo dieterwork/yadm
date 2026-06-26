@@ -11,12 +11,7 @@ export const getFocusFill = (focus: NodeFocus, color?: string) => {
   return NODE_BACKGROUND_COLOR_MAP[color];
 };
 
-export const getTransactionDiamondStroke = (
-  focus: NodeFocus,
-  color?: string,
-) => {
-  if (focus === "out") return NODE_BACKGROUND_COLOR_MAP["gray"];
-
+export const getTransactionDiamondStroke = (color?: string) => {
   if (color === "default" || !color) {
     return "var(--color-rose-500)";
   }

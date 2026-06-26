@@ -86,7 +86,7 @@ const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
                     node.type === "multiple_transaction_kind"
                       ? 6 / DEFAULT_SIZE_MAP["multiple_transaction_kind"].width
                       : 0)) *
-                  (handles.length > 1 ? 0.5 : 1),
+                  (handles.length >= 1 ? 0.5 : 1),
               },
             ]);
             updateNodeInternals(nodeId);

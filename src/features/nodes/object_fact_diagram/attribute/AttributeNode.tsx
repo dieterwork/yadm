@@ -66,6 +66,7 @@ const AttributeNode = ({
         "changeFontSize",
         "editText",
         "toggleHandlesVisibility",
+        "changeFocus",
       ].concat(parentId ? "attachNode" : [])}
     >
       <div className="grid grid-rows-[auto_1fr] absolute inset-0 m-auto w-full h-full overflow-hidden">

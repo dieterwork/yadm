@@ -16,6 +16,7 @@ import {
 import { useGesture } from "@use-gesture/react";
 import { cn } from "@sglara/cn";
 import clamp from "$/shared/utils/clamp";
+import { zIndexMap } from "$/shared/utils/zIndex";
 import { useState, type CSSProperties, type MouseEventHandler } from "react";
 import { updateHelperLinesFromHandleChanges } from "../helper_lines/useHelperLinesStore";
 import deleteHandle from "./utils/deleteHandle";
@@ -151,6 +152,7 @@ const DEMOHandle = ({
       position === Position.Left || position === Position.Right
         ? (offset ?? 0.5) * 100 + "%"
         : undefined,
+    zIndex: zIndexMap.handle,
   };
 
   if (isHandleEditModeEnabled)

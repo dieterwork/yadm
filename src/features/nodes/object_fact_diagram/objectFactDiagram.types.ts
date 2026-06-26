@@ -1,8 +1,10 @@
-import type { DEMONodeBaseData } from "../nodes.types";
+import type { DEMONodeBaseData, NodeFocus } from "../nodes.types";
 import type { Node } from "@xyflow/react";
 
 export type AttributeNode = Node<
-  DEMONodeBaseData<"object_fact_diagram">,
+  {
+    focus: NodeFocus;
+  } & DEMONodeBaseData<"object_fact_diagram">,
   "attribute"
 >;
 
@@ -14,7 +16,9 @@ export type ProductionEventNode = Node<
 >;
 
 export type EntityTypeNode = Node<
-  DEMONodeBaseData<"object_fact_diagram">,
+  {
+    focus: NodeFocus;
+  } & DEMONodeBaseData<"object_fact_diagram">,
   "entity_type"
 >;
 

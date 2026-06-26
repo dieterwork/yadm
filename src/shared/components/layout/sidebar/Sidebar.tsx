@@ -230,7 +230,7 @@ const Sidebar = () => {
             {
               id: "attribute",
               name: "attribute",
-              label: t(($) => $["Attribute"]),
+              label: t(($) => $["Entity Type with Attribute(s)"]),
               icon: attributeIcon,
               type: "attribute",
             },

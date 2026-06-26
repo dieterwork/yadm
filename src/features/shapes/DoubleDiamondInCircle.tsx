@@ -22,10 +22,10 @@ const DoubleDiamondInCircle = ({
   return (
     <g {...restSvgAttributes}>
       <Circle
+        {...circleAttributes}
         width={height}
         height={height}
         transform={`translate(${height / 8}, 0)`}
-        fill={NODE_BACKGROUND_COLOR_MAP["default"]}
       />
       <DiamondInCircle
         width={height}

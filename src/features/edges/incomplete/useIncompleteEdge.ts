@@ -20,6 +20,7 @@ import type { DEMONode } from "$/features/nodes/nodes.types";
 import getEdgeData from "$/features/modeler/utils/getEdgeData";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 import getNodeHandle from "$/features/connection_handles/utils/getHandle";
+import { zIndexMap } from "$/shared/utils/zIndex";
 
 const getPosition = (fromPosition: Position | null) => {
   switch (fromPosition) {

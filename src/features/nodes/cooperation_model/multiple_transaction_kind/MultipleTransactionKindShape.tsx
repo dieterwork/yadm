@@ -10,6 +10,7 @@ import type {
   MultipleTransactionKindState,
   NodeFocus,
 } from "../../nodes.types";
+import { NODE_BACKGROUND_COLOR_MAP } from "$/shared/components/ui/colors/colors.consts";
 
 interface MultipleTransactionKindShapeProps {
   state: MultipleTransactionKindState;
@@ -25,19 +26,31 @@ const MultipleTransactionKindShape = ({
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) return null;
   const { width, height, ...restSvgAttributes } = svgAttributes;
-  const fill = getFocusFill(focus, color);
+
+  const circleFill =
+    focus === "out"
+      ? NODE_BACKGROUND_COLOR_MAP["gray"]
+      : NODE_BACKGROUND_COLOR_MAP["default"];
+
+  const diamondStroke = getTransactionDiamondStroke(color);
+  const diamondFill = color
+    ? NODE_BACKGROUND_COLOR_MAP[color]
+    : NODE_BACKGROUND_COLOR_MAP["default"];
 
   switch (state) {
     case "missing":
       return (
         <DoubleDiamondInCircle
           {...restSvgAttributes}
-          fill={fill}
           strokeDasharray={"6 4"}
           width={width}
           height={height}
           diamondAttributes={{
-            stroke: getTransactionDiamondStroke(focus, color),
+            stroke: diamondStroke,
+            fill: diamondFill,
+          }}
+          circleAttributes={{
+            fill: circleFill,
           }}
         />
       );
@@ -47,11 +60,14 @@ const MultipleTransactionKindShape = ({
         <g>
           <DoubleDiamondInCircle
             {...restSvgAttributes}
-            fill={fill}
             width={width}
             height={height}
             diamondAttributes={{
-              stroke: getTransactionDiamondStroke(focus, color),
+              stroke: diamondStroke,
+              fill: diamondFill,
+            }}
+            circleAttributes={{
+              fill: circleFill,
             }}
           />
           <QuestionMark {...restSvgAttributes} width={height} height={height} />
@@ -62,11 +78,15 @@ const MultipleTransactionKindShape = ({
       return (
         <DoubleDiamondInCircle
           {...restSvgAttributes}
-          fill={fill}
+          // fill={fill}
           width={width}
           height={height}
           diamondAttributes={{
-            stroke: getTransactionDiamondStroke(focus, color),
+            stroke: diamondStroke,
+            fill: diamondFill,
+          }}
+          circleAttributes={{
+            fill: circleFill,
           }}
         />
       );

@@ -106,9 +106,10 @@ const DEMOEdgeToolbar = ({
           {actions?.indexOf("changeLaw") !== -1 && (
             <ChangeLawControl edgeId={edgeId} />
           )}
-          {actions?.indexOf("changeDerivation") !== -1 && (
-            <ChangeDerivationControl edgeId={edgeId} />
-          )}
+          {actions?.indexOf("changeDerivation") !== -1 &&
+            targetNode?.type === "entity_type" && (
+              <ChangeDerivationControl edgeId={edgeId} />
+            )}
         </DEMOElementToolbarGroup>
         {!!edge.deletable && (
           <DEMOElementToolbarGroup aria-label={t(($) => $["Danger zone"])}>

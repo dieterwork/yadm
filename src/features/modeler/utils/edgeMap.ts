@@ -23,6 +23,7 @@ const edgeMap: Partial<
     { id: "composite", type: "cooperation_model_edge" },
     { id: "elementary_actor", type: "cooperation_model_edge" },
     { id: "multiple_transaction_kind", type: "cooperation_model_edge" },
+    { id: "transaction", type: "cooperation_model_edge" },
     { id: "ghost", type: "ghost_edge" },
   ],
   transactor: [

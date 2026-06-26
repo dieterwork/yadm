@@ -24,8 +24,8 @@ const GeneralisationHandle = ({ position, size = 32 }: Props) => {
       <path
         d="M16 14 L16 22 M12 18 L20 18"
         stroke="var(--color-black)"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
     </svg>
   );

@@ -9,6 +9,7 @@ import { ShapeContext } from "../../../shapes/ShapeContext";
 import DiamondInCircle from "../../../shapes/DiamondInCircle";
 import DoubleDiamondInCircle from "../../../shapes/DoubleDiamondInCircle";
 import type { NodeFocus } from "../../nodes.types";
+import { NODE_BACKGROUND_COLOR_MAP } from "$/shared/components/ui/colors/colors.consts";
 
 interface TransactionShapeProps {
   state: TransactionState;
@@ -20,19 +21,31 @@ const TransactionShape = ({ state, focus, color }: TransactionShapeProps) => {
   const svgAttributes = useContext(ShapeContext);
   if (!svgAttributes) return null;
   const { width, height, ...restSvgAttributes } = svgAttributes;
-  const fill = getFocusFill(focus, color);
+
+  const circleFill =
+    focus === "out"
+      ? NODE_BACKGROUND_COLOR_MAP["gray"]
+      : NODE_BACKGROUND_COLOR_MAP["default"];
+
+  const diamondStroke = getTransactionDiamondStroke(color);
+  const diamondFill = color
+    ? NODE_BACKGROUND_COLOR_MAP[color]
+    : NODE_BACKGROUND_COLOR_MAP["default"];
 
   switch (state) {
     case "missing":
       return (
         <DiamondInCircle
           {...restSvgAttributes}
-          fill={fill}
           strokeDasharray={"6 4"}
           width={width}
           height={height}
           diamondAttributes={{
-            stroke: getTransactionDiamondStroke(focus, color),
+            stroke: diamondStroke,
+            fill: diamondFill,
+          }}
+          circleAttributes={{
+            fill: circleFill,
           }}
         />
       );
@@ -42,11 +55,14 @@ const TransactionShape = ({ state, focus, color }: TransactionShapeProps) => {
         <g>
           <DiamondInCircle
             {...restSvgAttributes}
-            fill={fill}
             width={width}
             height={height}
             diamondAttributes={{
-              stroke: getTransactionDiamondStroke(focus, color),
+              stroke: diamondStroke,
+              fill: diamondFill,
+            }}
+            circleAttributes={{
+              fill: circleFill,
             }}
           />
           <QuestionMark {...restSvgAttributes} width={width} height={height} />
@@ -57,11 +73,14 @@ const TransactionShape = ({ state, focus, color }: TransactionShapeProps) => {
       return (
         <DoubleDiamondInCircle
           {...restSvgAttributes}
-          fill={fill}
           width={width}
           height={height}
           diamondAttributes={{
-            stroke: getTransactionDiamondStroke(focus, color),
+            stroke: diamondStroke,
+            fill: diamondFill,
+          }}
+          circleAttributes={{
+            fill: circleFill,
           }}
         />
       );
@@ -70,11 +89,14 @@ const TransactionShape = ({ state, focus, color }: TransactionShapeProps) => {
       return (
         <DiamondInCircle
           {...restSvgAttributes}
-          fill={fill}
           width={width}
           height={height}
           diamondAttributes={{
-            stroke: getTransactionDiamondStroke(focus, color),
+            stroke: diamondStroke,
+            fill: diamondFill,
+          }}
+          circleAttributes={{
+            fill: circleFill,
           }}
         />
       );

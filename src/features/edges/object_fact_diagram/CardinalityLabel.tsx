@@ -43,18 +43,9 @@ const CardinalityLabel = ({
   return (
     <EdgeLabelRenderer>
       <div
-        className="cardinality | pointer-events-auto isolate absolute nodrag nopan p-1 grid place-items-center"
+        className="cardinality | pointer-events-all absolute nodrag nopan p-1 grid place-items-center"
         style={{
           transform: `translate(${translateX ?? "-50%"}, ${translateY ?? "-50%"}) translate(${labelX}px,${labelY}px)`,
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-        onDoubleClick={(e) => {
-          e.stopPropagation();
-          if (!isEnabled) return;
-          setIsEditing(true);
-          setTimeout(() => ref.current?.focus(), 50);
         }}
       >
         <span

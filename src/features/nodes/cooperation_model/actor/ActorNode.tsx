@@ -23,11 +23,7 @@ const ActorNode = ({
     "changeFocus",
     "changeState",
     "editText",
-  ];
-
-  if (parentId) {
-    defaultActions.push("attachNode");
-  }
+  ].concat(parentId ? ["attachNode"] : []);
 
   return (
     <DEMONodeBase

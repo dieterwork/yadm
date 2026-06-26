@@ -24,12 +24,7 @@ const DiamondInCircle = ({
 
   return (
     <g {...restSvgAttributes}>
-      <Circle
-        {...circleAttributes}
-        width={width}
-        height={height}
-        fill={NODE_BACKGROUND_COLOR_MAP["default"]}
-      />
+      <Circle {...circleAttributes} width={width} height={height} />
       <Diamond
         {...diamondAttributes}
         width={diamondWidth}
