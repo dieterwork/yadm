@@ -1,19 +1,17 @@
-import { Position } from "@xyflow/react";
-import getDerivationRotation from "./utils/getDerivationRotation";
-
 type Props = {
-  position: Position;
   size?: number;
+  rotation?: number;
 };
 
-const AggregationHandle = ({ position, size = 32 }: Props) => {
+const AggregationHandle = ({ size = 32, rotation = 0 }: Props) => {
   return (
     <svg
+      className="aggregation-handle"
       width={size}
       height={size}
       viewBox="0 0 32 32"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ transform: `rotate(${getDerivationRotation(position)}deg)` }}
+      style={{ transform: `rotate(${rotation * (180 / Math.PI)}deg)` }}
     >
       <polygon
         points="16,3 29,27 3,27"

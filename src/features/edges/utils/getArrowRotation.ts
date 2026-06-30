@@ -8,6 +8,7 @@ const getArrowRotation = ({
   sourcePosition,
   targetPosition,
   interactiveEdgeDirection,
+  linePath,
 }: {
   source: XYPosition;
   target: XYPosition;
@@ -15,9 +16,11 @@ const getArrowRotation = ({
   sourcePosition: Position;
   targetPosition: Position;
   offset: number;
+  linePath?: string;
 }) => {
   const sourceDir = handleDirections[sourcePosition];
   const targetDir = handleDirections[targetPosition];
+  offset = linePath === "straight" ? 0 : offset;
   const sourceGapped: XYPosition = {
     x: source.x + sourceDir.x * offset,
     y: source.y + sourceDir.y * offset,
@@ -32,7 +35,9 @@ const getArrowRotation = ({
       sourceGapped.x - targetGapped.x,
     ) + Math.PI;
 
-  if (interactiveEdgeDirection) {
+  if (linePath === "straight") {
+    return angle;
+  } else if (interactiveEdgeDirection) {
     const modulo = angle % Math.PI;
     if (interactiveEdgeDirection === "vertical") {
       if (modulo < Math.PI / 2) {

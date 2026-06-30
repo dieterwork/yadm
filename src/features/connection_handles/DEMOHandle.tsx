@@ -1,7 +1,9 @@
 import {
   Handle,
   Position,
+  useHandleConnections,
   useInternalNode,
+  useNodeConnections,
   useReactFlow,
   useUpdateNodeInternals,
   type HandleProps,
@@ -17,7 +19,12 @@ import { useGesture } from "@use-gesture/react";
 import { cn } from "@sglara/cn";
 import clamp from "$/shared/utils/clamp";
 import { zIndexMap } from "$/shared/utils/zIndex";
-import { useState, type CSSProperties, type MouseEventHandler } from "react";
+import {
+  useEffect,
+  useState,
+  type CSSProperties,
+  type MouseEventHandler,
+} from "react";
 import { updateHelperLinesFromHandleChanges } from "../helper_lines/useHelperLinesStore";
 import deleteHandle from "./utils/deleteHandle";
 import DEMOHandleToolbar from "../handle_toolbar/DEMOHandleToolbar";
@@ -26,6 +33,7 @@ import GeneralisationHandle from "./GeneralisationHandle";
 import useHandleSelectionStore, {
   setSelectedHandleId,
 } from "../handle_toolbar/useHandleSelectionStore";
+import DerivationHandle from "./DerivationHandle";
 
 const DEMOHandle = ({
   id,
@@ -55,6 +63,22 @@ const DEMOHandle = ({
   const selectedHandleId = useHandleSelectionStore(
     (state) => state.selectedHandleId,
   );
+
+  const sourceConnections = useNodeConnections({
+    nodeId,
+    handleId: id,
+    handleType: "source",
+  });
+  const targetConnections = useNodeConnections({
+    nodeId,
+    handleId: id,
+    handleType: "target",
+  });
+
+  const connections = [...sourceConnections, ...targetConnections];
+
+  const edgeIds = connections.map((c) => c.edgeId);
+  const connectedEdges = edges.filter((edge) => edgeIds.includes(edge.id));
 
   const bind = useGesture({
     onDragStart: () => {
@@ -155,6 +179,17 @@ const DEMOHandle = ({
     zIndex: zIndexMap.handle,
   };
 
+  const selectedEdgeId =
+    connectedEdges.find(
+      (e) => e.data && "linePath" in e.data && e.data.linePath === "straight",
+    )?.id ?? connectedEdges[0]?.id;
+
+  const edge = edges.find((e) => e.id === selectedEdgeId);
+
+  useEffect(() => {
+    console.log(connectedEdges);
+  }, [edge]);
+
   if (isHandleEditModeEnabled)
     return (
       <>
@@ -180,12 +215,15 @@ const DEMOHandle = ({
           position={position}
           onContextMenu={onContextMenu}
         >
-          {derivation === "aggregation" && (
-            <AggregationHandle position={position} />
-          )}
-          {derivation === "generalisation" && (
-            <GeneralisationHandle position={position} />
-          )}
+          <DerivationHandle
+            derivation={derivation}
+            nodeId={nodeId}
+            sourceHandle={edge?.sourceHandle}
+            targetHandle={edge?.targetHandle}
+            source={edge?.source}
+            target={edge?.target}
+            linePath={edge?.data?.linePath}
+          />
         </Handle>
         <DEMOHandleToolbar
           nodeId={nodeId}
@@ -206,16 +244,20 @@ const DEMOHandle = ({
           "demo-handle",
           !isEnabled && "nopan nodrag pointer-events-none",
         )}
+        data-handle-id={id}
         id={id}
         position={position}
         onContextMenu={onContextMenu}
       >
-        {derivation === "aggregation" && (
-          <AggregationHandle position={position} />
-        )}
-        {derivation === "generalisation" && (
-          <GeneralisationHandle position={position} />
-        )}
+        <DerivationHandle
+          derivation={derivation}
+          nodeId={nodeId}
+          source={edge?.source}
+          target={edge?.target}
+          sourceHandle={edge?.sourceHandle}
+          targetHandle={edge?.targetHandle}
+          linePath={edge?.data?.linePath}
+        />
       </Handle>
       <DEMOHandleToolbar
         nodeId={nodeId}

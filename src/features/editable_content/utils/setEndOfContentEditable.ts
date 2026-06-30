@@ -1,5 +1,5 @@
 export default function setEndOfContentEditable(
-  contentEditableElement: HTMLElement
+  contentEditableElement: HTMLElement,
 ) {
   const range = document.createRange(); //Create a range (a range is a like the selection but invisible)
   range.selectNodeContents(contentEditableElement); //Select the entire contents of the element with the range

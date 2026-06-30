@@ -8,7 +8,6 @@ const DoubleArrowMarker = ({
   labelX: number;
   labelY: number;
   rotation?: number;
-  direction?: 1 | -1;
 }) => {
   return (
     <EdgeLabelRenderer>

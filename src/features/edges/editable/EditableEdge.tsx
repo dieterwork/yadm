@@ -30,7 +30,6 @@ import {
   getEndLabel1Translate,
 } from "./cardinalityTranslateCalculations";
 import getInteractiveCenterEdgeDirection from "../utils/getInteractiveCenterEdgeDirection";
-import getArrowDirection from "../utils/getArrowDirection";
 import { calcEdgeMidpoint } from "../utils/calcEdgeMidpoint";
 import getArrowRotation from "../utils/getArrowRotation";
 import ExclusionLawMarker from "../object_fact_diagram/ExclusionLawMarker";
@@ -142,20 +141,6 @@ export function EditableEdgeComponent({
     offset,
   });
 
-  const arrowDirection = getArrowDirection({
-    source: {
-      x: sourceX,
-      y: sourceY,
-    },
-    target: {
-      x: targetX,
-      y: targetY,
-    },
-    sourcePosition,
-    targetPosition,
-    offset,
-  });
-
   const interactiveEdgeMidpoint = calcEdgeMidpoint(
     sourceCenterPosition ?? { x: labelX ?? centerX, y: labelY ?? centerY },
     targetCenterPosition ?? { x: labelX ?? centerX, y: labelY ?? centerY },
@@ -174,6 +159,7 @@ export function EditableEdgeComponent({
     targetPosition,
     offset,
     interactiveEdgeDirection,
+    linePath,
   });
 
   const midLabelDirection: "horizontal" | "vertical" =
@@ -196,71 +182,73 @@ export function EditableEdgeComponent({
         markerEnd={markerEnd}
         markerStart={markerStart}
       />
-      <InteractiveCenterEdge
-        sourceX={sourceCenterPosition?.x ?? 0}
-        targetX={targetCenterPosition?.x ?? 0}
-        sourceY={sourceCenterPosition?.y ?? 0}
-        targetY={targetCenterPosition?.y ?? 0}
-        active={isEnabled}
-        direction={interactiveEdgeDirection}
-        onDoubleClick={(e) => {
-          e.stopPropagation();
-          updateEdgeData(id, { center: undefined });
-        }}
-        onDragStart={({ event }) => {
-          event.stopPropagation();
-          updateEdgeData(id, (data) => ({
-            ...data,
-            center:
-              data && "center" in data
-                ? { ...data.center, active: true }
-                : undefined,
-          }));
-          updateEdge(id, (edge) => ({
-            ...edge,
-            selectable: false,
-            selected: false,
-          }));
-        }}
-        onDrag={({ xy, event }) => {
-          event.stopPropagation();
-          const position = screenToFlowPosition({
-            x: xy[0],
-            y: xy[1],
-          });
-          updateEdgeData(id, (data) => ({
-            ...data,
-            center:
-              data && "center" in data
-                ? {
-                    ...data.center,
-                    x:
-                      interactiveEdgeDirection === "horizontal"
-                        ? position.x
-                        : data.center?.x,
-                    y:
-                      interactiveEdgeDirection === "vertical"
-                        ? position.y
-                        : data.center?.y,
-                  }
-                : undefined,
-          }));
-        }}
-        onDragEnd={({ event }) => {
-          event.stopPropagation();
-          updateEdgeData(id, (data) => ({
-            ...data,
-            center:
-              data && "center" in data
-                ? { ...data.center, active: true }
-                : undefined,
-          }));
-          updateEdge(id, (edge) => ({
-            ...edge,
-            selectable: true,
-          }));
-        }}
-      />
+      {linePath === "step" && (
+        <InteractiveCenterEdge
+          sourceX={sourceCenterPosition?.x ?? 0}
+          targetX={targetCenterPosition?.x ?? 0}
+          sourceY={sourceCenterPosition?.y ?? 0}
+          targetY={targetCenterPosition?.y ?? 0}
+          active={isEnabled}
+          direction={interactiveEdgeDirection}
+          onDoubleClick={(e) => {
+            e.stopPropagation();
+            updateEdgeData(id, { center: undefined });
+          }}
+          onDragStart={({ event }) => {
+            event.stopPropagation();
+            updateEdgeData(id, (data) => ({
+              ...data,
+              center:
+                data && "center" in data
+                  ? { ...data.center, active: true }
+                  : undefined,
+            }));
+            updateEdge(id, (edge) => ({
+              ...edge,
+              selectable: false,
+              selected: false,
+            }));
+          }}
+          onDrag={({ xy, event }) => {
+            event.stopPropagation();
+            const position = screenToFlowPosition({
+              x: xy[0],
+              y: xy[1],
+            });
+            updateEdgeData(id, (data) => ({
+              ...data,
+              center:
+                data && "center" in data
+                  ? {
+                      ...data.center,
+                      x:
+                        interactiveEdgeDirection === "horizontal"
+                          ? position.x
+                          : data.center?.x,
+                      y:
+                        interactiveEdgeDirection === "vertical"
+                          ? position.y
+                          : data.center?.y,
+                    }
+                  : undefined,
+            }));
+          }}
+          onDragEnd={({ event }) => {
+            event.stopPropagation();
+            updateEdgeData(id, (data) => ({
+              ...data,
+              center:
+                data && "center" in data
+                  ? { ...data.center, active: true }
+                  : undefined,
+            }));
+            updateEdge(id, (edge) => ({
+              ...edge,
+              selectable: true,
+            }));
+          }}
+        />
+      )}
       {selected && (
         <DEMOEdgeToolbar
           edgeId={id}
@@ -273,10 +261,9 @@ export function EditableEdgeComponent({
       )}
       {markerMid && (
         <DoubleArrowMarker
-          labelX={interactiveEdgeMidpoint.x}
-          labelY={interactiveEdgeMidpoint.y}
+          labelX={linePath === "straight" ? labelX : interactiveEdgeMidpoint.x}
+          labelY={linePath === "straight" ? labelY : interactiveEdgeMidpoint.y}
           rotation={arrowRotation}
-          direction={arrowDirection}
         />
       )}
       {law === "exclusion" && (

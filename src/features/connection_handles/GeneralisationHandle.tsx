@@ -1,16 +1,15 @@
-import type { Position } from "@xyflow/react";
-import getDerivationRotation from "./utils/getDerivationRotation";
-
 type Props = {
-  position: Position;
   size?: number;
+  rotation?: number;
 };
-const GeneralisationHandle = ({ position, size = 32 }: Props) => {
+
+const GeneralisationHandle = ({ size = 32, rotation = 0 }: Props) => {
   return (
     <svg
+      className="generalisation-handle"
       width={size}
       height={size}
-      style={{ transform: `rotate(${getDerivationRotation(position)}deg)` }}
+      style={{ transform: `rotate(${rotation * (180 / Math.PI)}deg)` }}
       viewBox="0 0 32 32"
       xmlns="http://www.w3.org/2000/svg"
     >

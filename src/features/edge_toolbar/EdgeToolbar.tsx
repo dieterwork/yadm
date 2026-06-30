@@ -93,7 +93,7 @@ const EdgeToolbar = ({
     }
 
     return state.edges.filter((edge) =>
-      Array.isArray(edgeId) ? edgeId.includes(edge.id) : edge.id === edgeId
+      Array.isArray(edgeId) ? edgeId.includes(edge.id) : edge.id === edgeId,
     );
   });
   const selectedEdges = edges.filter((edge) => edge.selected);
@@ -115,7 +115,7 @@ const EdgeToolbar = ({
       { x, y, zoom },
       position,
       offset,
-      align
+      align,
     ),
     zIndex,
     ...style,

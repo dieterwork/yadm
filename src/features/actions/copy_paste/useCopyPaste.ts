@@ -257,7 +257,6 @@ const useCopyPaste = () => {
   };
 
   const copy = () => {
-    console.log(isEditableContent());
     if (isEditableContent()) {
       copyText();
     } else {

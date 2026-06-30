@@ -71,8 +71,6 @@ const AddHandleControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
               return a.offset - b.offset;
             })[0];
 
-            console.log(leastOffsetHandle?.offset, node.type);
-
             updateNodeHandles(nodeId, key, (handles) => [
               ...handles,
               {

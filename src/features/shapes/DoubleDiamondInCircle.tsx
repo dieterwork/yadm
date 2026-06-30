@@ -2,7 +2,6 @@ import { type SVGAttributes } from "react";
 import Circle from "./Circle";
 import DiamondInCircle from "./DiamondInCircle";
 import type { ShapeProps } from "./shapes.types";
-import { NODE_BACKGROUND_COLOR_MAP } from "$/shared/components/ui/colors/colors.consts";
 
 type DiamondInCircleProps = ShapeProps & {
   diamondAttributes?: SVGAttributes<SVGElement>;

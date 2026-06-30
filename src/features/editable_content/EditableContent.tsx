@@ -77,7 +77,6 @@ const EditableContent = ({
       updateNodeContent(nodeId, {
         [contentLocation]: content,
       });
-      takeSnapshotAndSave();
     },
     maxLines,
     maxLength,
@@ -134,7 +133,10 @@ const EditableContent = ({
             lineHeight: leading,
           }}
           onFocus={onFocus}
-          onBlur={onBlur}
+          onBlur={(e) => {
+            onBlur?.(e);
+            takeSnapshotAndSave();
+          }}
         ></span>
       </div>
     </>
