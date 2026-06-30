@@ -6,7 +6,7 @@ type Props = {
 const GeneralisationHandle = ({ size = 32, rotation = 0 }: Props) => {
   return (
     <svg
-      className="generalisation-handle"
+      className="generalisation-handle pointer-events-none"
       width={size}
       height={size}
       style={{ transform: `rotate(${rotation * (180 / Math.PI)}deg)` }}

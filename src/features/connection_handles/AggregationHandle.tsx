@@ -6,7 +6,7 @@ type Props = {
 const AggregationHandle = ({ size = 32, rotation = 0 }: Props) => {
   return (
     <svg
-      className="aggregation-handle"
+      className="aggregation-handle | pointer-events-none"
       width={size}
       height={size}
       viewBox="0 0 32 32"

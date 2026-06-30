@@ -16,6 +16,7 @@ const getHandleRotation = ({
   linePath?: string;
   derivation?: "aggregation" | "generalisation" | "none";
 }) => {
+  if (linePath !== "straight") return 0;
   const sourceDir = handleDirections[sourcePosition];
   const targetDir = handleDirections[targetPosition];
   const sourceGapped: XYPosition = {
@@ -26,13 +27,10 @@ const getHandleRotation = ({
     x: target.x + targetDir.x,
     y: target.y + targetDir.y,
   };
-  const angle =
-    linePath === "straight"
-      ? Math.atan2(
-          sourceGapped.y - targetGapped.y,
-          sourceGapped.x - targetGapped.x,
-        )
-      : 0;
+  const angle = Math.atan2(
+    sourceGapped.y - targetGapped.y,
+    sourceGapped.x - targetGapped.x,
+  );
 
   let derivationRotation = 0;
 

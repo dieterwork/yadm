@@ -368,6 +368,48 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
     } satisfies DEMOEdge;
   });
   setEdges(newEdges);
+
+  const oldTargetHandleChanged =
+    oldEdge.targetHandle !== newConnection.targetHandle ||
+    oldEdge.target !== newConnection.target;
+
+  if (oldTargetHandleChanged && oldEdge.targetHandle) {
+    const oldTargetNode = getNode(oldEdge.target);
+    const oldTargetHandle = getNodeHandle(oldTargetNode, oldEdge.targetHandle);
+    const hasDerivation =
+      oldTargetHandle?.handle.derivation &&
+      oldTargetHandle.handle.derivation !== "none";
+
+    if (hasDerivation) {
+      const stillConnected = newEdges.some(
+        (edge) =>
+          edge.target === oldEdge.target &&
+          edge.targetHandle === oldEdge.targetHandle,
+      );
+
+      if (!stillConnected) {
+        setNodes((nodes) =>
+          nodes.map((node) => {
+            if (node.id !== oldEdge.target) return node;
+            if (!("handles" in node.data) || !node.data.handles) return node;
+            const handles = node.data.handles;
+            const updated: typeof handles = { ...handles };
+            for (const pos of ["top", "bottom", "left", "right"] as const) {
+              const group = handles[pos];
+              if (!group?.handles) continue;
+              const newHandles = group.handles.map((h) =>
+                h.id === oldEdge.targetHandle
+                  ? { ...h, derivation: "none" as const }
+                  : h,
+              );
+              updated[pos] = { ...group, handles: newHandles };
+            }
+            return { ...node, data: { ...node.data, handles: updated } };
+          }),
+        );
+      }
+    }
+  }
 };
 
 export const updateNodeColor = (id: string, color: string) => {
@@ -727,8 +769,12 @@ export const modelSelector = (state: DEMOModelerState) => ({
 export const clearSelectedCardinalityLabels = () => {
   setEdges((edges) =>
     edges.map((edge) => {
-      if (!edge.data || !("cardinality" in edge.data) || !edge.data.cardinality) return edge;
-      const c = edge.data.cardinality as Record<string, { label: string; selected?: boolean }>;
+      if (!edge.data || !("cardinality" in edge.data) || !edge.data.cardinality)
+        return edge;
+      const c = edge.data.cardinality as Record<
+        string,
+        { label: string; selected?: boolean }
+      >;
       if (!Object.values(c).some((v) => v.selected)) return edge;
       return {
         ...edge,
