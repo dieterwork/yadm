@@ -415,19 +415,15 @@ export const createNode = ({
               isVisible: true,
               top: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
               bottom: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
               left: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
               right: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
             },
           },
@@ -500,15 +496,12 @@ export const createNode = ({
               isVisible: true,
               bottom: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
               left: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
               right: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
             },
             resizable: false,
@@ -642,15 +635,12 @@ export const createNode = ({
               isVisible: true,
               bottom: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
               left: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
               right: {
                 handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-                max: 1,
               },
             },
             resizable: false,
