@@ -52,24 +52,26 @@ const FileMenu = () => {
       if (error.httpCode === 401) {
         setPwdModalOpen(true);
       } else {
+        setPwdModalOpen(false);
         toast.error(
-          t(($) => $["Error saving model to server. Please try again"])
+          t(($) => $["Error saving model to server. Please try again"]),
         );
       }
     },
     onMutate: () => {
       toast.loading(
         t(($) => $["Saving model to server"]),
-        { id: loadingId }
+        { id: loadingId },
       );
     },
     onSuccess: () => {
+      setPwdModalOpen(false);
       queryClient.invalidateQueries({ queryKey: ["server_models"] });
       toast.dismiss(loadingId);
       toast.success(
         t(($) => $["save_on_server_storage_toast"], {
           fileName: model.fileName,
-        })
+        }),
       );
     },
   });
@@ -89,13 +91,13 @@ const FileMenu = () => {
             if (!isSharedModel) {
               setLocalModel({ ...model, version: "1.0.0" });
               toast.success(
-                t(($) => $["save_storage_toast"], { fileName: model.fileName })
+                t(($) => $["save_storage_toast"], { fileName: model.fileName }),
               );
             } else {
               toast.error(
                 t(($) => $["You cannot save shared models"], {
                   fileName: model.fileName,
-                })
+                }),
               );
             }
           }}
@@ -111,7 +113,7 @@ const FileMenu = () => {
                 toast.error(
                   t(($) => $["You cannot save shared models"], {
                     fileName: model.fileName,
-                  })
+                  }),
                 );
               }
             }}
@@ -220,7 +222,7 @@ const FileMenu = () => {
               ($) =>
                 $[
                   "This will delete the current model and remove any saved changes."
-                ]
+                ],
             )}
           </p>
           <p>{t(($) => $["This action cannot be undone."])}</p>

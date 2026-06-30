@@ -46,14 +46,12 @@ const ServerModelsMenu = () => {
     mutationKey: ["server_model"],
     mutationFn: loadServerModel,
     onSuccess: (data) => {
-      if (isPwdModalOpen) {
-        setPwdModalOpen(false);
-      }
+      setPwdModalOpen(false);
       toast.dismiss(loadingId);
       toast.success(
         t(($) => $["Loaded model"], {
           fileName: data.fileName,
-        })
+        }),
       );
       setCurrentFileName(null);
       setModel(data);
@@ -64,7 +62,7 @@ const ServerModelsMenu = () => {
     onMutate: () => {
       toast.loading(
         t(($) => $["Loading model"]),
-        { id: loadingId }
+        { id: loadingId },
       );
     },
     onError: (error) => {
@@ -72,6 +70,7 @@ const ServerModelsMenu = () => {
       if (error.httpCode === 401) {
         setPwdModalOpen(true);
       } else {
+        setPwdModalOpen(false);
         toast.error(t(($) => $["Error loading model. Please try again."]));
       }
     },

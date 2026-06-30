@@ -133,9 +133,7 @@ const DEMOModeler = () => {
     mutationKey: ["server_model"],
     mutationFn: loadServerModel,
     onSuccess: (data) => {
-      if (isPwdModalOpen) {
-        setPwdModalOpen(false);
-      }
+      setPwdModalOpen(false);
       toast.dismiss(loadingId);
       toast.success(
         t(($) => $["Loaded model"], {
@@ -157,6 +155,7 @@ const DEMOModeler = () => {
       if (error.httpCode === 401) {
         setPwdModalOpen(true);
       } else {
+        setPwdModalOpen(false);
         toast.error(t(($) => $["Error loading model. Please try again."]));
       }
     },
