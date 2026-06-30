@@ -15,6 +15,7 @@ import TopbarMenuButtonAutoComplete from "../_components/TopbarMenuButtonAutoCom
 import uuid from "$/shared/utils/uuid";
 import { useReactFlow } from "@xyflow/react";
 import useSharedServerModel from "$features/modeler/hooks/useSharedServerModel.ts";
+import {fullEmptyModel} from "$shared/types/reactFlow.types.ts";
 
 const PublicModelsMenu = () => {
   const { t } = useTranslation();
@@ -37,6 +38,9 @@ const PublicModelsMenu = () => {
     mutationKey: ["public_model"],
     mutationFn: loadPublicModel,
     onSuccess: (data) => {
+
+      data = {...fullEmptyModel, ...data};
+
       toast.dismiss(loadingId);
       toast.success(
         t(($) => $["Loaded model"], {

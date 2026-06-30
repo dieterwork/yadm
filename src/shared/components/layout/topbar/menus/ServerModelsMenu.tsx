@@ -9,7 +9,7 @@ import toast from "react-hot-toast/headless";
 import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModal";
 import useUserStore from "$/features/auth/useUserStore";
 import type { AppError } from "$/shared/utils/AppError";
-import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
+import {type DEMOModelJSON, fullEmptyModel} from "$/shared/types/reactFlow.types";
 import { setModel } from "$/features/modeler/store/useDEMOModelerStore";
 import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingState";
 import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
@@ -46,6 +46,9 @@ const ServerModelsMenu = () => {
     mutationKey: ["server_model"],
     mutationFn: loadServerModel,
     onSuccess: (data) => {
+
+      data = {...fullEmptyModel, ...data};
+
       setPwdModalOpen(false);
       toast.dismiss(loadingId);
       toast.success(

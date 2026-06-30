@@ -56,7 +56,7 @@ import Whiteboard from "$/features/whiteboard/components/Whiteboard";
 import takeWhiteboardSnapshotAndSave from "$/features/whiteboard/utils/takeWhiteboardSnapshotAndSave";
 import { useEffect, useId, useState } from "react";
 import toast from "react-hot-toast/headless";
-import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
+import {type DEMOModelJSON, fullEmptyModel} from "$/shared/types/reactFlow.types";
 import type { AppError } from "$/shared/utils/AppError";
 import { useMutation } from "@tanstack/react-query";
 import loadServerModel from "$/features/actions/load/loadServerModel";
@@ -102,6 +102,9 @@ const DEMOModeler = () => {
     mutationKey: ["public_model_test"],
     mutationFn: loadPublicModel,
     onSuccess: (data) => {
+
+      data = {...fullEmptyModel, ...data};
+
       toast.dismiss(loadingId);
       toast.success(
         t(($) => $["Loaded model"], {
@@ -118,7 +121,7 @@ const DEMOModeler = () => {
         { id: loadingId },
       );
     },
-    onError: () => {
+    onError: (error) => {
       toast.dismiss(loadingId);
       toast.error(t(($) => $["Error loading model"]));
     },
@@ -133,6 +136,9 @@ const DEMOModeler = () => {
     mutationKey: ["server_model"],
     mutationFn: loadServerModel,
     onSuccess: (data) => {
+
+      data = {...fullEmptyModel, ...data};
+
       setPwdModalOpen(false);
       toast.dismiss(loadingId);
       toast.success(
