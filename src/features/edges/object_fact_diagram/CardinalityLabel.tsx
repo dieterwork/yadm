@@ -16,12 +16,22 @@ type CardinalityField = keyof NonNullable<
   ObjectFactDiagramEdge["data"]
 >["cardinality"];
 
+const CARDINALITY_FIELDS: CardinalityField[] = [
+  "startLabel0",
+  "startLabel1",
+  "middleLabel0",
+  "middleLabel1",
+  "endLabel0",
+  "endLabel1",
+];
+
 type Props = {
   edgeId: string;
   field: CardinalityField;
   labelX: number;
   labelY: number;
   content: string;
+  selected?: boolean;
   translateX?: string;
   translateY?: string;
   isEnabled?: boolean;
@@ -33,13 +43,13 @@ const CardinalityLabel = ({
   labelX,
   labelY,
   content,
+  selected,
   translateX,
   translateY,
   isEnabled,
 }: Props) => {
   const ref = useRef<HTMLSpanElement>(null!);
   const [isEditable, setIsEditable] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -62,8 +72,23 @@ const CardinalityLabel = ({
     };
   }, [isEnabled]);
 
+  const setSelected = (value: boolean) => {
+    updateEdgeData(edgeId, (data) => {
+      if (!data || !("cardinality" in data) || !data.cardinality) return data;
+      const cardinality = value
+        ? Object.fromEntries(
+            CARDINALITY_FIELDS.map((f) => [
+              f,
+              { ...data.cardinality![f], selected: f === field },
+            ]),
+          )
+        : { ...data.cardinality, [field]: { ...data.cardinality[field], selected: false } };
+      return { ...data, cardinality };
+    });
+  };
+
   const edit = () => {
-    setShowMenu(false);
+    setSelected(false);
     setIsEditable(true);
     setAction("edit");
     setNodes((nodes) =>
@@ -81,7 +106,7 @@ const CardinalityLabel = ({
 
   const exit = () => {
     setIsEditable(false);
-    setShowMenu(false);
+    setSelected(false);
     setAction(null);
     takeSnapshotAndSave();
   };
@@ -102,26 +127,29 @@ const CardinalityLabel = ({
             spellCheck={false}
             className={cn(
               "inline-block text-[12px] outline-none min-w-6 min-h-[calc(1.2*12px)] leading-[1.2]",
-              (showMenu || isEditable) &&
+              (selected || isEditable) &&
                 "ring-1 ring-sky-500 rounded-sm px-0.5",
             )}
             onInput={(e) => {
               if (!isEnabled) return;
-              updateEdgeData(edgeId, (data) => ({
-                ...data,
-                cardinality:
-                  data && "cardinality" in data && data.cardinality
-                    ? {
-                        ...data?.cardinality,
-                        [field]: e.currentTarget.innerHTML,
-                      }
-                    : undefined,
-              }));
+              updateEdgeData(edgeId, (data) => {
+                if (!data || !("cardinality" in data) || !data.cardinality) return data;
+                return {
+                  ...data,
+                  cardinality: {
+                    ...data.cardinality,
+                    [field]: { ...data.cardinality[field], label: e.currentTarget.innerHTML },
+                  },
+                };
+              });
             }}
             onClick={(e) => {
               if (!isEnabled) return;
               e.stopPropagation();
-              setShowMenu(true);
+              setSelected(true);
+              setNodes((nodes) =>
+                nodes.map((n) => (n.selected ? { ...n, selected: false } : n)),
+              );
               setEdges((edges) =>
                 edges.map((e) => (e.selected ? { ...e, selected: false } : e)),
               );
@@ -140,25 +168,24 @@ const CardinalityLabel = ({
         </div>
       </EdgeLabelRenderer>
       <CardinalityLabelToolbar
-        isVisible={showMenu && isEnabled}
+        isVisible={selected && isEnabled}
         edgeId={edgeId}
         position={Position.Right}
         xyPosition={{ x: labelX, y: labelY }}
         onEdit={edit}
         onClose={() => {
-          updateEdgeData(edgeId, (data) => ({
-            ...data,
-            cardinality:
-              data && "cardinality" in data && data.cardinality
-                ? {
-                    ...data?.cardinality,
-                    [field]: "",
-                  }
-                : undefined,
-          }));
+          updateEdgeData(edgeId, (data) => {
+            if (!data || !("cardinality" in data) || !data.cardinality) return data;
+            return {
+              ...data,
+              cardinality: {
+                ...data.cardinality,
+                [field]: { label: "", selected: false },
+              },
+            };
+          });
           ref.current.innerHTML = "";
           takeSnapshotAndSave();
-          setShowMenu(false);
         }}
       />
     </>

@@ -282,7 +282,8 @@ export function EditableEdgeComponent({
               isEnabled={isEnabled}
               labelX={sourceX}
               labelY={sourceY}
-              content={cardinality.startLabel0}
+              content={cardinality.startLabel0.label}
+              selected={cardinality.startLabel0.selected}
               translateX={getStartLabel0Translate(sourcePosition).x}
               translateY={getStartLabel0Translate(sourcePosition).y}
             />
@@ -292,7 +293,8 @@ export function EditableEdgeComponent({
               isEnabled={isEnabled}
               labelX={sourceX}
               labelY={sourceY}
-              content={cardinality.startLabel1}
+              content={cardinality.startLabel1.label}
+              selected={cardinality.startLabel1.selected}
               translateX={getStartLabel1Translate(sourcePosition).x}
               translateY={getStartLabel1Translate(sourcePosition).y}
             />
@@ -302,7 +304,8 @@ export function EditableEdgeComponent({
               isEnabled={isEnabled}
               labelX={interactiveEdgeMidpoint.x}
               labelY={interactiveEdgeMidpoint.y}
-              content={cardinality.middleLabel0}
+              content={cardinality.middleLabel0.label}
+              selected={cardinality.middleLabel0.selected}
               translateX={getMiddleLabel0Translate(midLabelDirection).x}
               translateY={getMiddleLabel0Translate(midLabelDirection).y}
             />
@@ -312,7 +315,8 @@ export function EditableEdgeComponent({
               isEnabled={isEnabled}
               labelX={interactiveEdgeMidpoint.x}
               labelY={interactiveEdgeMidpoint.y}
-              content={cardinality.middleLabel1}
+              content={cardinality.middleLabel1.label}
+              selected={cardinality.middleLabel1.selected}
               translateX={getMiddleLabel1Translate(midLabelDirection).x}
               translateY={getMiddleLabel1Translate(midLabelDirection).y}
             />
@@ -322,7 +326,8 @@ export function EditableEdgeComponent({
               isEnabled={isEnabled}
               labelX={targetX}
               labelY={targetY}
-              content={cardinality.endLabel0}
+              content={cardinality.endLabel0.label}
+              selected={cardinality.endLabel0.selected}
               translateX={getEndLabel0Translate(targetPosition).x}
               translateY={getEndLabel0Translate(targetPosition).y}
             />
@@ -332,7 +337,8 @@ export function EditableEdgeComponent({
               isEnabled={isEnabled}
               labelX={targetX}
               labelY={targetY}
-              content={cardinality.endLabel1}
+              content={cardinality.endLabel1.label}
+              selected={cardinality.endLabel1.selected}
               translateX={getEndLabel1Translate(targetPosition).x}
               translateY={getEndLabel1Translate(targetPosition).y}
             />

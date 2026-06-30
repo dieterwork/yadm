@@ -34,12 +34,12 @@ export type ObjectFactDiagramEdge = Edge<
     lineType: LineType;
     law: "exclusion" | "precedence";
     cardinality: {
-      startLabel0: string;
-      startLabel1: string;
-      middleLabel0: string;
-      middleLabel1: string;
-      endLabel0: string;
-      endLabel1: string;
+      startLabel0: { label: string; selected?: boolean };
+      startLabel1: { label: string; selected?: boolean };
+      middleLabel0: { label: string; selected?: boolean };
+      middleLabel1: { label: string; selected?: boolean };
+      endLabel0: { label: string; selected?: boolean };
+      endLabel1: { label: string; selected?: boolean };
     };
   },
   "object_fact_diagram_edge"

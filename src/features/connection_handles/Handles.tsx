@@ -35,10 +35,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
 
   return (
     <div
-      className={cn(
-        "handles | absolute",
-        node.data?.handles.isVisible ? "visible" : "invisible",
-      )}
+      className={cn("handles | absolute")}
       style={{
         width,
         height,
@@ -56,6 +53,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             offset={handle.offset}
             canDrag={handle.canDrag}
             derivation={handle.derivation}
+            isVisible={node.data?.handles.isVisible}
           />
         ))}
       {node.data.handles.bottom?.handles &&
@@ -70,6 +68,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             offset={handle.offset}
             canDrag={handle.canDrag}
             derivation={handle.derivation}
+            isVisible={node.data?.handles.isVisible}
           />
         ))}
       {node.data.handles.left?.handles &&
@@ -84,6 +83,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             offset={handle.offset}
             canDrag={handle.canDrag}
             derivation={handle.derivation}
+            isVisible={node.data?.handles.isVisible}
           />
         ))}
       {node.data.handles.right?.handles &&
@@ -98,6 +98,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             offset={handle.offset}
             canDrag={handle.canDrag}
             derivation={handle.derivation}
+            isVisible={node.data?.handles.isVisible}
           />
         ))}
     </div>

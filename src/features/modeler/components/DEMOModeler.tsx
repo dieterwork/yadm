@@ -20,6 +20,7 @@ import {
   onEdgesDelete,
   onNodesChange,
   onNodesDelete,
+  clearSelectedCardinalityLabels,
   onPaneClick,
   onReconnect,
   onReconnectEnd,
@@ -255,7 +256,11 @@ const DEMOModeler = () => {
             disableKeyboardA11y={false}
             fitView
             onNodeClick={(e, node) => {
+              clearSelectedCardinalityLabels();
               handleNodeAttach(node);
+            }}
+            onEdgeClick={() => {
+              clearSelectedCardinalityLabels();
             }}
             onNodeDoubleClick={(e, node) => {
               const target = e.target;

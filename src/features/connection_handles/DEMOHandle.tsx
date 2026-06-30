@@ -1,7 +1,6 @@
 import {
   Handle,
   Position,
-  useHandleConnections,
   useInternalNode,
   useNodeConnections,
   useReactFlow,
@@ -19,21 +18,15 @@ import { useGesture } from "@use-gesture/react";
 import { cn } from "@sglara/cn";
 import clamp from "$/shared/utils/clamp";
 import { zIndexMap } from "$/shared/utils/zIndex";
-import {
-  useEffect,
-  useState,
-  type CSSProperties,
-  type MouseEventHandler,
-} from "react";
+import { useState, type CSSProperties, type MouseEventHandler } from "react";
 import { updateHelperLinesFromHandleChanges } from "../helper_lines/useHelperLinesStore";
 import deleteHandle from "./utils/deleteHandle";
 import DEMOHandleToolbar from "../handle_toolbar/DEMOHandleToolbar";
-import AggregationHandle from "./AggregationHandle";
-import GeneralisationHandle from "./GeneralisationHandle";
 import useHandleSelectionStore, {
   setSelectedHandleId,
 } from "../handle_toolbar/useHandleSelectionStore";
 import DerivationHandle from "./DerivationHandle";
+import getHandleRotation from "./utils/getHandleRotation";
 
 const DEMOHandle = ({
   id,
@@ -42,12 +35,14 @@ const DEMOHandle = ({
   offset,
   canDrag = true,
   derivation,
+  isVisible = true,
   ...restProps
 }: Omit<HandleProps, "onDragStart" | "onDrag" | "onDragEnd"> & {
   nodeId: string;
   offset: number;
   canDrag?: boolean;
   derivation?: "aggregation" | "generalisation" | "none";
+  isVisible?: boolean;
 }) => {
   const isHandleEditModeEnabled = useDEMOModelerStore(
     (state) => state.isHandleEditModeEnabled,
@@ -184,11 +179,49 @@ const DEMOHandle = ({
       (e) => e.data && "linePath" in e.data && e.data.linePath === "straight",
     )?.id ?? connectedEdges[0]?.id;
 
-  const edge = edges.find((e) => e.id === selectedEdgeId);
+  const selectedEdge = edges.find((e) => e.id === selectedEdgeId);
 
-  useEffect(() => {
-    console.log(connectedEdges);
-  }, [edge]);
+  const sourceNode = useInternalNode(selectedEdge?.source ?? "");
+  const targetNode = useInternalNode(selectedEdge?.target ?? "");
+
+  const sourceXYPosition = sourceNode?.internals.positionAbsolute ?? {
+    x: 0,
+    y: 0,
+  };
+  const targetXYPosition = targetNode?.internals.positionAbsolute ?? {
+    x: 0,
+    y: 0,
+  };
+
+  const sourceH = sourceNode?.internals.handleBounds?.source?.find(
+    (h) => h.id === selectedEdge?.sourceHandle,
+  );
+  const targetH = targetNode?.internals.handleBounds?.source?.find(
+    (h) => h.id === selectedEdge?.targetHandle,
+  );
+
+  const sourceX =
+    sourceXYPosition.x + (sourceH?.x ?? 0) + (sourceH?.width ?? 0) / 2;
+  const sourceY =
+    sourceXYPosition.y + (sourceH?.y ?? 0) + (sourceH?.height ?? 0) / 2;
+  const targetX =
+    targetXYPosition.x + (targetH?.x ?? 0) + (targetH?.width ?? 0) / 2;
+  const targetY =
+    targetXYPosition.y + (targetH?.y ?? 0) + (targetH?.height ?? 0) / 2;
+
+  const rotation = getHandleRotation({
+    source: { x: sourceX, y: sourceY },
+    target: { x: targetX, y: targetY },
+    sourcePosition: sourceH?.position ?? Position.Left,
+    targetPosition: targetH?.position ?? Position.Right,
+    linePath:
+      selectedEdge?.data &&
+      "linePath" in selectedEdge.data &&
+      selectedEdge.data.linePath
+        ? selectedEdge.data.linePath
+        : undefined,
+    derivation,
+  });
 
   if (isHandleEditModeEnabled)
     return (
@@ -196,7 +229,10 @@ const DEMOHandle = ({
         <Handle
           {...restProps}
           {...bind()}
-          style={style}
+          style={{
+            ...style,
+            transform: `rotate(${rotation * (180 / Math.PI)}deg)`,
+          }}
           className={cn(
             "demo-handle",
             "touch-none",
@@ -210,20 +246,13 @@ const DEMOHandle = ({
               "cursor-row-resize!",
             isEnabled && !canDrag && "cursor-not-allowed",
             !isEnabled && "nodrag pointer-events-none",
+            !isVisible ? "before:invisible" : "before:visible",
           )}
           id={id}
           position={position}
           onContextMenu={onContextMenu}
         >
-          <DerivationHandle
-            derivation={derivation}
-            nodeId={nodeId}
-            sourceHandle={edge?.sourceHandle}
-            targetHandle={edge?.targetHandle}
-            source={edge?.source}
-            target={edge?.target}
-            linePath={edge?.data?.linePath}
-          />
+          <DerivationHandle derivation={derivation} position={position} />
         </Handle>
         <DEMOHandleToolbar
           nodeId={nodeId}
@@ -239,25 +268,21 @@ const DEMOHandle = ({
     <>
       <Handle
         {...restProps}
-        style={style}
+        style={{
+          ...style,
+          transform: `rotate(${rotation * (180 / Math.PI)}deg)`,
+        }}
         className={cn(
           "demo-handle",
           !isEnabled && "nopan nodrag pointer-events-none",
+          !isVisible ? "before:invisible" : "before:visible",
         )}
         data-handle-id={id}
         id={id}
         position={position}
         onContextMenu={onContextMenu}
       >
-        <DerivationHandle
-          derivation={derivation}
-          nodeId={nodeId}
-          source={edge?.source}
-          target={edge?.target}
-          sourceHandle={edge?.sourceHandle}
-          targetHandle={edge?.targetHandle}
-          linePath={edge?.data?.linePath}
-        />
+        <DerivationHandle derivation={derivation} position={position} />
       </Handle>
       <DEMOHandleToolbar
         nodeId={nodeId}

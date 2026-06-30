@@ -724,6 +724,26 @@ export const modelSelector = (state: DEMOModelerState) => ({
   viewport: state.viewport,
 });
 
+export const clearSelectedCardinalityLabels = () => {
+  setEdges((edges) =>
+    edges.map((edge) => {
+      if (!edge.data || !("cardinality" in edge.data) || !edge.data.cardinality) return edge;
+      const c = edge.data.cardinality as Record<string, { label: string; selected?: boolean }>;
+      if (!Object.values(c).some((v) => v.selected)) return edge;
+      return {
+        ...edge,
+        data: {
+          ...edge.data,
+          cardinality: Object.fromEntries(
+            Object.entries(c).map(([k, v]) => [k, { ...v, selected: false }]),
+          ),
+        },
+      };
+    }),
+  );
+};
+
 export const onPaneClick = () => {
   setSelectedHandleId(null);
+  clearSelectedCardinalityLabels();
 };

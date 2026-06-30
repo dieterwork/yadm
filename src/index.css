@@ -81,6 +81,8 @@ body,
                 transform: translate(-50%, -50%);
                 border-radius: 9999px !important;
                 position: absolute;
+                top: 50%;
+                left: 50%;
                 z-index: 1;
                 pointer-events: all;
             }
@@ -89,17 +91,8 @@ body,
                 & svg {
                     translate: calc(-26px) -50%;
                 }
-                &::before {
-                    top: 50%;
-                    left: 50%;
-                    left: calc(50% - 3px);
-                }
                 &:has(svg) {
                     left: 0;
-                    &::before {
-                        top: 50%;
-                        left: calc(50% - 25px);
-                    }
                 }
             }
             &.react-flow__handle-right {
@@ -107,16 +100,8 @@ body,
                 & svg {
                     translate: calc(-4px) -50%;
                 }
-                &::before {
-                    top: 50%;
-                    left: calc(50% + 2px);
-                }
                 &:has(svg) {
                     right: 0;
-                    &::before {
-                        top: 50%;
-                        left: 24px;
-                    }
                 }
             }
             &.react-flow__handle-top {
@@ -124,15 +109,8 @@ body,
                 & svg {
                     translate: -50% calc(-50% - 12px);
                 }
-                &::before {
-                    top: calc(50% - 3px);
-                    left: 50%;
-                }
                 &:has(svg) {
                     top: 0;
-                    &::before {
-                        top: calc(50% - 24px);
-                    }
                 }
             }
             &.react-flow__handle-bottom {
@@ -140,16 +118,8 @@ body,
                 & svg {
                     translate: -50% calc(-50% + 14px);
                 }
-                &::before {
-                    top: calc(50% + 2px);
-                    left: 50%;
-                }
                 &:has(svg) {
                     bottom: 0;
-                    &::before {
-                        top: calc(50% + 25px);
-                        left: calc(50%);
-                    }
                 }
             }
         }
