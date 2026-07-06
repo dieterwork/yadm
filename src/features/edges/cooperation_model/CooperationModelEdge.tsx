@@ -28,11 +28,8 @@ const CooperationModelEdge = ({
         "toggleProductionEvent",
         "changeLineType",
         "changeLinePath",
-      ].concat(
-        markerType.markerStart ? ["toggleMarkerStart"] : [],
-        markerType.markerMid ? ["toggleMarkerMid"] : [],
-        markerType.markerEnd ? ["toggleMarkerEnd"] : [],
-      )}
+        "changeMarker",
+      ]}
       style={{ strokeDasharray: data?.lineType === "solid" ? "0" : "5" }}
       linePath={data?.linePath}
     />

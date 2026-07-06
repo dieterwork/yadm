@@ -36,7 +36,9 @@ export type NodeToolbarAction =
   | "changeFocus"
   | "changeState"
   | "editText"
-  | "showBorder";
+  | "showBorder"
+  | "sendToBack"
+  | "bringToFront";
 
 const DEMONodeBase = ({
   id,
@@ -54,6 +56,8 @@ const DEMONodeBase = ({
     "addHandle",
     "toggleHandlesVisibility",
     "editText",
+    "sendToBack",
+    "bringToFront",
   ],
   resizerProps,
   draggable,

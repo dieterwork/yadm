@@ -15,6 +15,8 @@ const MultipleTransactionKindComponent = ({
   const { content, fontSize, isEditable, actions, resizable } = data;
 
   const defaultActions: NodeToolbarAction[] = [
+    "bringToFront",
+    "sendToBack",
     "addHandle",
     "changeColor",
     "changeFontSize",

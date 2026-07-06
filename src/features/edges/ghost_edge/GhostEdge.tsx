@@ -22,11 +22,7 @@ const GhostEdge = ({ data, ...restProps }: EdgeProps<EditableEdge>) => {
       centerY={data?.center?.y}
       isDraggable={data?.center?.active}
       type="ghost_edge"
-      actions={["changeLinePath"].concat(
-        markerType.markerStart ? ["toggleMarkerStart"] : [],
-        markerType.markerMid ? ["toggleMarkerMid"] : [],
-        markerType.markerEnd ? ["toggleMarkerEnd"] : [],
-      )}
+      actions={["changeLinePath", "changeMarker"]}
       style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
       linePath={data?.linePath}
     />

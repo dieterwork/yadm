@@ -36,11 +36,8 @@ const ObjectFactDiagramEdge = ({
         "changeLineType",
         "changeLaw",
         "changeDerivation",
-      ].concat(
-        markerType.markerStart ? ["toggleMarkerStart"] : [],
-        markerType.markerMid ? ["toggleMarkerMid"] : [],
-        markerType.markerEnd ? ["toggleMarkerEnd"] : [],
-      )}
+        "changeMarker",
+      ]}
       linePath={data?.linePath}
       law={data?.law}
       cardinality={data?.cardinality}

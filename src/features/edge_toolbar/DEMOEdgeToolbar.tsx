@@ -14,11 +14,9 @@ import ToggleProductionEventMenuItem from "./actions/ToggleProductionEventContro
 import SwapConnectionControl from "./actions/SwapConnectionControl";
 import { useTranslation } from "react-i18next";
 import ChangeLinePathControl from "./actions/ChangeLinePath";
-import ToggleMarkerStartControl from "./actions/ToggleMarkerStartControl";
-import ToggleMarkerMidControl from "./actions/ToggleMarkerMidControl";
-import ToggleMarkerEndControl from "./actions/ToggleMarkerEndControl";
 import ChangeLawControl from "./actions/ChangeLawControl";
 import ChangeDerivationControl from "./actions/ChangeDerivation";
+import ChangeMarkerControl from "./actions/ChangeMarkerControl";
 import getNodeHandle from "../connection_handles/utils/getHandle";
 
 export type EdgeToolbarAction =
@@ -27,11 +25,9 @@ export type EdgeToolbarAction =
   | "changeLineType"
   | "resetEdgeCenter"
   | "changeLinePath"
-  | "toggleMarkerStart"
-  | "toggleMarkerMid"
-  | "toggleMarkerEnd"
   | "changeLaw"
-  | "changeDerivation";
+  | "changeDerivation"
+  | "changeMarker";
 interface DEMOEdgeToolbarProps {
   edgeId?: string;
   position?: XYPosition;
@@ -94,15 +90,6 @@ const DEMOEdgeToolbar = ({
             !multipleConnectionsToDerivationHandle && (
               <SwapConnectionControl edgeId={edgeId} />
             )}
-          {actions?.indexOf("toggleMarkerStart") !== -1 && (
-            <ToggleMarkerStartControl edgeId={edgeId} />
-          )}
-          {actions?.indexOf("toggleMarkerMid") !== -1 && (
-            <ToggleMarkerMidControl edgeId={edgeId} />
-          )}
-          {actions?.indexOf("toggleMarkerEnd") !== -1 && (
-            <ToggleMarkerEndControl edgeId={edgeId} />
-          )}
           {actions?.indexOf("changeLaw") !== -1 && (
             <ChangeLawControl edgeId={edgeId} />
           )}
@@ -110,6 +97,9 @@ const DEMOEdgeToolbar = ({
             targetNode?.type === "entity_type" && (
               <ChangeDerivationControl edgeId={edgeId} />
             )}
+          {actions?.indexOf("changeMarker") !== -1 && (
+            <ChangeMarkerControl edgeId={edgeId} />
+          )}
         </DEMOElementToolbarGroup>
         {!!edge.deletable && (
           <DEMOElementToolbarGroup aria-label={t(($) => $["Danger zone"])}>

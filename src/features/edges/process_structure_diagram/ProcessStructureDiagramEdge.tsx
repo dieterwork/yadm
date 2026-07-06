@@ -23,11 +23,7 @@ const ProcessStructureDiagramEdge = ({
         centerY={data?.center?.y}
         isDraggable={data?.center?.active}
         style={{ stroke: "var(--color-slate-900)", strokeWidth: 2 }}
-        actions={["swapConnection", "resetEdgeCenter", "changeLinePath"].concat(
-          markerType.markerStart ? ["toggleMarkerStart"] : [],
-          markerType.markerMid ? ["toggleMarkerMid"] : [],
-          markerType.markerEnd ? ["toggleMarkerEnd"] : [],
-        )}
+        actions={["swapConnection", "resetEdgeCenter", "changeLinePath", "changeMarker"]}
         linePath={data?.linePath}
       />
     </>

@@ -19,6 +19,8 @@ import DeleteControl from "./actions/DeleteControl";
 import DEMOElementToolbar from "$/shared/components/ui/element_toolbar/DEMOElementToolbar";
 import { useTranslation } from "react-i18next";
 import ChangeWhiteboardColorControl from "./actions/ChangeWhiteboardColorControl";
+import SendToBackControl from "./actions/SendToBackControl";
+import BringToFrontControl from "./actions/BringToFrontControl";
 
 const DEMONodeToolbar = ({
   nodeId,
@@ -64,6 +66,12 @@ const DEMONodeToolbar = ({
         )}
         {actions?.indexOf("changeFocus") !== -1 && (
           <ChangeFocusControl nodeId={nodeId} />
+        )}
+        {actions?.indexOf("bringToFront") !== -1 && (
+          <BringToFrontControl nodeId={nodeId} />
+        )}
+        {actions?.indexOf("sendToBack") !== -1 && (
+          <SendToBackControl nodeId={nodeId} />
         )}
         {actions?.indexOf("changeColor") !== -1 &&
           node.type !== "whiteboard" && <ChangeColorControl nodeId={nodeId} />}

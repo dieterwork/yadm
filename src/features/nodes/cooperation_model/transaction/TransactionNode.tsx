@@ -28,6 +28,8 @@ const TransactionNode = ({
     : null;
 
   const defaultActions: NodeToolbarAction[] = [
+    "bringToFront",
+    "sendToBack",
     "addHandle",
     "changeColor",
     "changeFontSize",
@@ -35,11 +37,7 @@ const TransactionNode = ({
     "changeFocus",
     "editText",
     "changeFocus",
-  ];
-
-  if (parentId) {
-    defaultActions.push("attachNode");
-  }
+  ].concat(parentId ? ["attachNode"] : []);
 
   const onResize: OnResize = (_, { width, height }) => {
     // Check if has parent

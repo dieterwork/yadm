@@ -1,4 +1,8 @@
-import { setNodes } from "$/features/modeler/store/useDEMOModelerStore";
+import {
+  getNode,
+  setNodes,
+} from "$/features/modeler/store/useDEMOModelerStore";
+import type { DEMONode } from "$/features/nodes/nodes.types";
 
 export const zIndexMap = {
   node: 190,
@@ -14,22 +18,22 @@ export const zIndexMap = {
   notification: 99999,
 } as const;
 
-export const bringToTop = (
-  nodeId: string,
-  nodes: { id: string; zIndex?: number }[],
-) => {
+export const bringNodeToFront = (nodeId: string, nodes: DEMONode[]) => {
   const max = Math.max(...nodes.map((n) => n.zIndex ?? 0));
+
+  // set nodes to that z-index
   setNodes((nodes) =>
     nodes.map((n) => (n.id === nodeId ? { ...n, zIndex: max + 1 } : n)),
   );
 };
 
-export const sendToBottom = (
-  nodeId: string,
-  nodes: { id: string; zIndex?: number }[],
-) => {
+export const sendNodeToBack = (nodeId: string, nodes: DEMONode[]) => {
   const min = Math.min(...nodes.map((n) => n.zIndex ?? 0));
+
+  // set nodes to that z-index
   setNodes((nodes) =>
-    nodes.map((n) => (n.id === nodeId ? { ...n, zIndex: min - 1 } : n)),
+    nodes.map((n) =>
+      n.id === nodeId ? { ...n, zIndex: Math.max(0, min - 1) } : n,
+    ),
   );
 };
