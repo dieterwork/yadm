@@ -4,7 +4,7 @@ import markerMap from "./markerMap";
 const getMarkerType = (
   sourceNodeType: DEMONode["type"],
   targetNodeType: DEMONode["type"],
-  state: "initial" | "default" = "default",
+  state: "initial" | "default" | "all" = "default",
 ) => {
   const markerType = markerMap[sourceNodeType]?.find(
     (marker) => marker.id === targetNodeType,

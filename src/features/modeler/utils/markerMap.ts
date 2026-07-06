@@ -18,6 +18,11 @@ const markerMap: Partial<
         markerEnd?: EdgeMarkerType;
         markerMid?: EdgeMarkerType;
       };
+      all: {
+        markerStart?: EdgeMarkerType;
+        markerEnd?: EdgeMarkerType;
+        markerMid?: EdgeMarkerType;
+      };
     }[]
   >
 > = {
@@ -31,6 +36,9 @@ const markerMap: Partial<
       initial: {
         markerEnd: closedMarker,
       },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   transaction: [
@@ -38,6 +46,9 @@ const markerMap: Partial<
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   transactor: [
@@ -45,6 +56,9 @@ const markerMap: Partial<
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   self_activation: [
@@ -52,6 +66,9 @@ const markerMap: Partial<
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   composite: [
@@ -59,6 +76,9 @@ const markerMap: Partial<
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   elementary_actor: [
@@ -66,6 +86,9 @@ const markerMap: Partial<
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   several_actors: [
@@ -73,6 +96,9 @@ const markerMap: Partial<
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   multiple_transaction_kind: [
@@ -80,6 +106,9 @@ const markerMap: Partial<
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   // ofd
@@ -88,21 +117,33 @@ const markerMap: Partial<
       id: "initiation_fact",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "c_fact",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "c_act",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   c_fact: [
@@ -110,26 +151,41 @@ const markerMap: Partial<
       id: "initiation_fact",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "c_fact",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "c_act",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "tk_execution",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   c_act: [
@@ -137,21 +193,33 @@ const markerMap: Partial<
       id: "initiation_fact",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "c_fact",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "tk_execution",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   tk_execution: [
@@ -159,16 +227,25 @@ const markerMap: Partial<
       id: "c_fact",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "c_act",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   production_event: [
@@ -176,26 +253,44 @@ const markerMap: Partial<
       id: "set",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "entity_type",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "attribute",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "production_event",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
     {
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   set: [
@@ -203,26 +298,45 @@ const markerMap: Partial<
       id: "set",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "entity_type",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "attribute",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "production_event",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: undefined },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   entity_type: [
@@ -230,26 +344,45 @@ const markerMap: Partial<
       id: "set",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "entity_type",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "attribute",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "production_event",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: undefined },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
   attribute: [
@@ -257,26 +390,45 @@ const markerMap: Partial<
       id: "set",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "entity_type",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "attribute",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: "url(#diamond)" },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "production_event",
       default: { markerMid: "url(#diamond)" },
       initial: { markerMid: undefined },
+      all: {
+        markerEnd: closedMarker,
+        markerMid: "url(#diamond)",
+      },
     },
     {
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
+      all: {
+        markerEnd: closedMarker,
+      },
     },
   ],
 };

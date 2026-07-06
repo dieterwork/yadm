@@ -24,7 +24,7 @@ const TransactionKindNode = ({
       type="transaction_kind"
       resizable={false}
       draggable={draggable}
-      actions={["editText", "changeColor"]}
+      actions={["editText", "changeColor", "changeFontSize"]}
     >
       <EditableContent
         isSelected={selected}
@@ -32,8 +32,8 @@ const TransactionKindNode = ({
         content={content?.body}
         width={width}
         height={height}
-        maxLines={1}
-        maxLength={3}
+        maxLines={3}
+        maxLength={30}
         fontSize={fontSize}
       />
     </DEMONodeBase>

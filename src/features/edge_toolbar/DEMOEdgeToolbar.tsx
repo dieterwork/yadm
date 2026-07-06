@@ -82,14 +82,12 @@ const DEMOEdgeToolbar = ({
           {actions?.indexOf("changeLinePath") !== -1 && (
             <ChangeLinePathControl edgeId={edgeId} />
           )}
+          {actions?.indexOf("changeMarker") !== -1 && (
+            <ChangeMarkerControl edgeId={edgeId} />
+          )}
           {actions?.indexOf("toggleProductionEvent") !== -1 && (
             <ToggleProductionEventMenuItem edgeId={edgeId} />
           )}
-          {actions?.indexOf("swapConnection") !== -1 &&
-            (targetNode?.type !== "ghost" || sourceNode?.type === "ghost") &&
-            !multipleConnectionsToDerivationHandle && (
-              <SwapConnectionControl edgeId={edgeId} />
-            )}
           {actions?.indexOf("changeLaw") !== -1 && (
             <ChangeLawControl edgeId={edgeId} />
           )}
@@ -97,13 +95,14 @@ const DEMOEdgeToolbar = ({
             targetNode?.type === "entity_type" && (
               <ChangeDerivationControl edgeId={edgeId} />
             )}
-          {actions?.indexOf("changeMarker") !== -1 && (
-            <ChangeMarkerControl edgeId={edgeId} />
-          )}
+          {actions?.indexOf("swapConnection") !== -1 &&
+            (targetNode?.type !== "ghost" || sourceNode?.type === "ghost") &&
+            !multipleConnectionsToDerivationHandle && (
+              <SwapConnectionControl edgeId={edgeId} />
+            )}
         </DEMOElementToolbarGroup>
         {!!edge.deletable && (
           <DEMOElementToolbarGroup aria-label={t(($) => $["Danger zone"])}>
-            {actions?.length !== 1 && <DEMOElementToolbarSeparator />}
             <DeleteMenuItem edgeId={edgeId} />
           </DEMOElementToolbarGroup>
         )}

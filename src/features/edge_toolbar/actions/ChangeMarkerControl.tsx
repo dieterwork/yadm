@@ -31,11 +31,7 @@ const ChangeMarkerControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
 
   const sourceNode = getNode(edge.source);
   const targetNode = getNode(edge.target);
-  const markerType = getMarkerType(
-    sourceNode?.type,
-    targetNode?.type,
-    "default",
-  );
+  const markerType = getMarkerType(sourceNode?.type, targetNode?.type, "all");
 
   const current: MarkerOption =
     edge.data && "markerMid" in edge.data && edge.data.markerMid
@@ -49,6 +45,11 @@ const ChangeMarkerControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
     { id: "markerEnd", label: t(($) => $["End marker"]) },
     { id: "none", label: t(($) => $["No marker"]) },
   ];
+  const filteredOptions = options.filter(
+    (o) => Boolean(markerType[o.id]) || o.id === "none",
+  );
+
+  console.log(markerType);
 
   const [selected, setSelected] = useState<Selection>(new Set([current]));
 
@@ -92,7 +93,7 @@ const ChangeMarkerControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
       >
         <DEMOElementToolbarListBox
           aria-labelledby="change_marker"
-          items={options}
+          items={filteredOptions}
           selectedKeys={selected}
           selectionMode="single"
           onSelectionChange={(selection) => {

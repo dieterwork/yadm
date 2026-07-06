@@ -45,7 +45,7 @@ const getHandleRotation = ({
         break;
       }
       case Position.Right: {
-        derivationRotation = -Math.PI;
+        derivationRotation = 0;
         break;
       }
       case Position.Bottom: {

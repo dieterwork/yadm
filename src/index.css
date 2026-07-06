@@ -67,65 +67,91 @@ body,
         }
     }
 }
+.derivation-handle {
+    position: absolute;
+}
 
 .react-flow {
     .handles {
         .react-flow__handle {
+            isolation: isolate;
+            display: grid;
+            place-items: center;
             &::before {
                 content: "";
                 display: block;
-                width: 9px;
-                aspect-ratio: 1;
+                width: 100%;
+                height: 100%;
                 background-color: var(--color-white) !important;
                 border: 1px solid var(--color-sky-500) !important;
-                transform: translate(-50%, -50%);
                 border-radius: 9999px !important;
                 position: absolute;
-                top: 50%;
-                left: 50%;
+                inset: 0;
+                margin: auto;
                 z-index: 1;
                 pointer-events: all;
             }
             &.react-flow__handle-left {
-                left: 2px;
-                & svg {
-                    translate: calc(-26px) -50%;
+                transform: translate(1px, -50%);
+                &::before {
+                    transform: translateX(-50%);
                 }
-                &:has(svg) {
-                    left: 0;
+                .derivation-handle {
+                    transform-origin: calc(50% - var(--_derivation-transform))
+                        50%;
+                    transform: rotate(var(--_handle-rotation)) translateX(-2px);
+                    & svg {
+                        transform: translateX(-50%) rotate(var(--_rotation));
+                    }
                 }
             }
             &.react-flow__handle-right {
-                right: 2px;
-                & svg {
-                    translate: calc(-4px) -50%;
+                transform: translate(-1px, -50%);
+                &::before {
+                    transform: translateX(50%);
                 }
-                &:has(svg) {
-                    right: 0;
+                .derivation-handle {
+                    transform-origin: calc(50% + var(--_derivation-transform))
+                        50%;
+                    transform: rotate(var(--_handle-rotation)) translateX(2px);
+                    & svg {
+                        transform: translateX(50%) rotate(var(--_rotation));
+                    }
                 }
             }
             &.react-flow__handle-top {
-                top: 2px;
-                & svg {
-                    translate: -50% calc(-50% - 12px);
+                transform: translate(-50%, 1px);
+                &::before {
+                    transform: translateY(-50%);
                 }
-                &:has(svg) {
-                    top: 0;
+                .derivation-handle {
+                    transform-origin: 50%
+                        calc(50% - var(--_derivation-transform));
+                    transform: rotate(var(--_handle-rotation)) translateY(-2px);
+                    & svg {
+                        transform: translateY(-50%) rotate(var(--_rotation));
+                    }
                 }
             }
             &.react-flow__handle-bottom {
-                bottom: 2px;
-                & svg {
-                    translate: -50% calc(-50% + 14px);
+                transform: translate(-50%, -1px);
+                &::before {
+                    transform: translateY(50%);
                 }
-                &:has(svg) {
-                    bottom: 0;
+                .derivation-handle {
+                    transform-origin: 50%
+                        calc(50% + var(--_derivation-transform));
+                    transform: rotate(var(--_handle-rotation)) translateY(2px);
+                    & svg {
+                        transform: translateY(50%) rotate(var(--_rotation));
+                    }
                 }
             }
         }
     }
     .react-flow__handle {
-        --_size: 1px;
+        --_size: 8px;
+        --_derivation-transform: calc(var(--_size) / 2);
         --_min-size: calc(var(--_size) - 1px);
         border-radius: 0 !important;
         min-width: var(--_min-size) !important;
@@ -137,25 +163,28 @@ body,
     }
 }
 
+/* Visible handle circle, rendered into the viewport portal (see DEMOHandle)
+   at the handle's absolute center so it can carry the attached edge's
+   z-index and stack with its connection line rather than being trapped in
+   the node. The .react-flow__handle::before is left as a transparent
+   hit-area only. */
+.react-flow .handle-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    box-sizing: border-box;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-sky-500);
+    border-radius: 9999px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
 .react-flow {
     .react-flow__panel {
         &.react-flow__minimap {
             z-index: 30;
         }
-    }
-
-    /* Handle dot rendered into the viewport portal so it always paints
-       above edges, regardless of the edge z-index. Mirrors the trapped
-       .react-flow__handle::before dot and sits exactly on top of it. */
-    .handle-dot {
-        position: absolute;
-        width: 9px;
-        height: 9px;
-        background-color: var(--color-white);
-        border: 1px solid var(--color-sky-500);
-        border-radius: 9999px;
-        transform: translate(-50%, -50%);
-        pointer-events: none;
     }
 }
 

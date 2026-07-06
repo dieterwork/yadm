@@ -5,6 +5,7 @@ import {
   useNodeConnections,
   useReactFlow,
   useUpdateNodeInternals,
+  ViewportPortal,
   type HandleProps,
 } from "@xyflow/react";
 import {
@@ -223,6 +224,17 @@ const DEMOHandle = ({
     derivation,
   });
 
+  const nodeAbs = internalNode?.internals.positionAbsolute ?? { x: 0, y: 0 };
+  const thisHandleBounds =
+    internalNode?.internals.handleBounds?.source?.find((h) => h.id === id) ??
+    internalNode?.internals.handleBounds?.target?.find((h) => h.id === id);
+  const dotX =
+    nodeAbs.x + (thisHandleBounds?.x ?? 0) + (thisHandleBounds?.width ?? 0) / 2;
+  const dotY =
+    nodeAbs.y +
+    (thisHandleBounds?.y ?? 0) +
+    (thisHandleBounds?.height ?? 0) / 2;
+
   if (isHandleEditModeEnabled)
     return (
       <>
@@ -231,7 +243,7 @@ const DEMOHandle = ({
           {...bind()}
           style={{
             ...style,
-            transform: `rotate(${rotation * (180 / Math.PI)}deg)`,
+            "--_handle-rotation": `${rotation * (180 / Math.PI)}deg`,
           }}
           className={cn(
             "demo-handle",
@@ -248,6 +260,13 @@ const DEMOHandle = ({
             !isEnabled && "nodrag pointer-events-none",
             !isVisible ? "before:invisible" : "before:visible",
           )}
+          data-line-path={
+            selectedEdge?.data &&
+            "linePath" in selectedEdge.data &&
+            selectedEdge?.data.linePath
+              ? selectedEdge?.data.linePath
+              : "step"
+          }
           id={id}
           position={position}
           onContextMenu={onContextMenu}
@@ -270,19 +289,30 @@ const DEMOHandle = ({
         {...restProps}
         style={{
           ...style,
-          transform: `rotate(${rotation * (180 / Math.PI)}deg)`,
+          "--_handle-rotation": `${rotation * (180 / Math.PI)}deg`,
         }}
         className={cn(
           "demo-handle",
           !isEnabled && "nopan nodrag pointer-events-none",
           !isVisible ? "before:invisible" : "before:visible",
         )}
+        data-line-path={
+          selectedEdge?.data &&
+          "linePath" in selectedEdge.data &&
+          selectedEdge?.data.linePath
+            ? selectedEdge?.data.linePath
+            : "step"
+        }
         data-handle-id={id}
         id={id}
         position={position}
         onContextMenu={onContextMenu}
       >
-        <DerivationHandle derivation={derivation} position={position} />
+        <DerivationHandle
+          derivation={derivation}
+          position={position}
+          xyPosition={{ x: dotX, y: dotY }}
+        />
       </Handle>
       <DEMOHandleToolbar
         nodeId={nodeId}

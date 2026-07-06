@@ -24,17 +24,13 @@ const deleteHandle = (
 
   const targetNodes = connectedEdges.map((edge) => edge.target);
 
-  if (connectedEdges) {
-    setEdges((edges) => edges.filter((edge) => !connectedEdges.includes(edge)));
-  }
+  setEdges((edges) => edges.filter((edge) => !connectedEdges.includes(edge)));
 
-  if (targetNodes) {
-    setNodes((nodes) =>
-      nodes.filter(
-        (node) => !targetNodes.includes(node.id) && node.type !== "ghost",
-      ),
-    );
-  }
+  setNodes((nodes) =>
+    nodes.filter(
+      (node) => !(targetNodes.includes(node.id) && node.type === "ghost"),
+    ),
+  );
 
   updateNodeHandles(nodeId, position, (handles) =>
     handles.filter((handle) => handle.id !== id),

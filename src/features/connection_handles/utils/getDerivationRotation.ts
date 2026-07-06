@@ -12,7 +12,7 @@ const getDerivationRotation = ({ position }: Props) => {
     case Position.Right:
       return -Math.PI / 2;
     case Position.Bottom:
-      return -Math.PI;
+      return 0;
     default:
       return 0;
   }
