@@ -2,52 +2,38 @@ import type { Position } from "@xyflow/react";
 
 type Translate = { x: string; y: string };
 
-// For straight (angled) lines, the line meets the node's flat edge forming a
-// triangle. Each of the two labels sits in one of the two wedges of that
-// triangle (label0 = "top"/"left" wedge, label1 = "bottom"/"right" wedge),
-// placed along the wedge's bisector — between the node-edge ray and the line
-// direction. `lineDir` is the direction the line travels away from the handle.
+// For straight (angled) lines, the label pair is shifted away from the handle
+// along the line direction, and the two labels are stacked vertically with each
+// other (identical X, offset only in Y). `lineDir` is the direction the line
+// travels away from the handle.
 export const getStraightLabelTranslate = (
-  position: Position,
   lineDir: { x: number; y: number },
   index: 0 | 1,
 ): Translate => {
-  const distance = 16; // px from the handle along the bisector
-
-  // The node's flat edge is perpendicular to the handle normal: vertical for
-  // left/right handles, horizontal for top/bottom. label0 takes the ray with
-  // the smaller coordinate (up / left), label1 the opposite.
-  const isVertical = position === "left" || position === "right";
-  const ray = isVertical
-    ? index === 0
-      ? { x: 0, y: -1 }
-      : { x: 0, y: 1 }
-    : index === 0
-      ? { x: -1, y: 0 }
-      : { x: 1, y: 0 };
+  const along = 16; // px the pair is shifted away from the handle along the line
+  const gap = 12; // half the vertical gap between the two stacked labels
 
   const len = Math.hypot(lineDir.x, lineDir.y) || 1;
   const dir = { x: lineDir.x / len, y: lineDir.y / len };
 
-  let bx = ray.x + dir.x;
-  let by = ray.y + dir.y;
-  const blen = Math.hypot(bx, by) || 1;
-  bx = (bx / blen) * distance;
-  by = (by / blen) * distance;
+  const ox = dir.x * along;
+  const oy = dir.y * along + (index === 0 ? -gap : gap);
 
   return {
-    x: `calc(-50% + ${bx.toFixed(2)}px)`,
-    y: `calc(-50% + ${by.toFixed(2)}px)`,
+    x: `calc(-50% + ${ox.toFixed(2)}px)`,
+    y: `calc(-50% + ${oy.toFixed(2)}px)`,
   };
 };
 
-// For straight lines, the middle labels sit at the edge midpoint offset
-// perpendicular to the line: label0 on the upper side, label1 on the lower.
+// For straight lines, the middle-label pair is shifted off the line
+// (perpendicular, shared by both labels) and the two labels are stacked
+// vertically with each other (identical X, offset only in Y).
 export const getStraightMiddleLabelTranslate = (
   lineDir: { x: number; y: number },
   index: 0 | 1,
 ): Translate => {
-  const distance = 14; // px from the line, perpendicular
+  const perpDist = 6; // px the pair is shifted off the line
+  const gap = 8; // half the vertical gap between the two stacked labels
 
   const len = Math.hypot(lineDir.x, lineDir.y) || 1;
   const dir = { x: lineDir.x / len, y: lineDir.y / len };
@@ -56,9 +42,8 @@ export const getStraightMiddleLabelTranslate = (
   let perp = { x: -dir.y, y: dir.x };
   if (perp.y > 0) perp = { x: -perp.x, y: -perp.y };
 
-  const sign = index === 0 ? 1 : -1;
-  const ox = perp.x * distance * sign;
-  const oy = perp.y * distance * sign;
+  const ox = perp.x * perpDist;
+  const oy = perp.y * perpDist + (index === 0 ? -gap : gap);
 
   return {
     x: `calc(-50% + ${ox.toFixed(2)}px)`,

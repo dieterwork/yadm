@@ -177,16 +177,16 @@ export function EditableEdgeComponent({
   const targetLineDir = { x: sourceX - targetX, y: sourceY - targetY };
 
   const startLabel0T = isStraight
-    ? getStraightLabelTranslate(sourcePosition, sourceLineDir, 0)
+    ? getStraightLabelTranslate(sourceLineDir, 0)
     : getStartLabel0Translate(sourcePosition);
   const startLabel1T = isStraight
-    ? getStraightLabelTranslate(sourcePosition, sourceLineDir, 1)
+    ? getStraightLabelTranslate(sourceLineDir, 1)
     : getStartLabel1Translate(sourcePosition);
   const endLabel0T = isStraight
-    ? getStraightLabelTranslate(targetPosition, targetLineDir, 0)
+    ? getStraightLabelTranslate(targetLineDir, 0)
     : getEndLabel0Translate(targetPosition);
   const endLabel1T = isStraight
-    ? getStraightLabelTranslate(targetPosition, targetLineDir, 1)
+    ? getStraightLabelTranslate(targetLineDir, 1)
     : getEndLabel1Translate(targetPosition);
   const middleLabel0T = isStraight
     ? getStraightMiddleLabelTranslate(sourceLineDir, 0)
