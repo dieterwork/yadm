@@ -8,6 +8,7 @@ import useEditShortcut from "../editable_content/useEditableContentShortcut";
 import usePreviewNodeShortcut from "../preview_node/usePreviewNodeShortcut";
 import useUndoWhiteboardShortcut from "../whiteboard/hooks/useUndoWhiteboardShortcut";
 import useHandleEditModeShortcut from "../connection_handles/useHandleEditModeShortcut";
+import useSelectShortcut from "../actions/select/useSelectShortcut";
 
 const useKeyboardShortcuts = () => {
   useCopyPasteShortcut();
@@ -21,6 +22,7 @@ const useKeyboardShortcuts = () => {
   usePreviewNodeShortcut();
   useUndoWhiteboardShortcut();
   useHandleEditModeShortcut();
+  useSelectShortcut();
 };
 
 export default useKeyboardShortcuts;
