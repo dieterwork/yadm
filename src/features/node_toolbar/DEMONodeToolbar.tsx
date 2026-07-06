@@ -56,9 +56,6 @@ const DEMONodeToolbar = ({
       style={{ zIndex: 99999 }}
     >
       <DEMOElementToolbar>
-        {actions?.indexOf("changeFontSize") !== -1 && (
-          <ChangeFontSizeControl nodeId={nodeId} />
-        )}
         {actions?.indexOf("addHandle") !== -1 && (
           <AddHandleControl nodeId={nodeId} />
         )}
@@ -68,34 +65,35 @@ const DEMONodeToolbar = ({
         {actions?.indexOf("changeFocus") !== -1 && (
           <ChangeFocusControl nodeId={nodeId} />
         )}
-        {actions?.indexOf("bringToFront") !== -1 && (
-          <BringToFrontControl nodeId={nodeId} />
-        )}
-        {actions?.indexOf("sendToBack") !== -1 && (
-          <SendToBackControl nodeId={nodeId} />
-        )}
         {actions?.indexOf("changeColor") !== -1 &&
           node.type !== "whiteboard" && <ChangeColorControl nodeId={nodeId} />}
         {actions?.indexOf("changeColor") !== -1 &&
           node.type === "whiteboard" && (
             <ChangeWhiteboardColorControl nodeId={nodeId} />
           )}
-        {actions?.indexOf("toggleHandlesVisibility") !== -1 && (
-          <ToggleHandlesVisibilityControl nodeId={nodeId} />
+        {actions?.indexOf("changeFontSize") !== -1 && (
+          <ChangeFontSizeControl nodeId={nodeId} />
         )}
         {actions?.indexOf("attachNode") !== -1 && (
           <AttachNodeControl nodeId={nodeId} />
         )}
-        {actions?.indexOf("showBorder") !== -1 && (
-          <ToggleTextBorderControl nodeId={nodeId} />
-        )}
         {actions?.indexOf("editText") !== -1 && (
           <EditTextControl nodeId={nodeId} />
         )}
-
+        {actions?.indexOf("showBorder") !== -1 && (
+          <ToggleTextBorderControl nodeId={nodeId} />
+        )}
+        {actions?.indexOf("toggleHandlesVisibility") !== -1 && (
+          <ToggleHandlesVisibilityControl nodeId={nodeId} />
+        )}
+        {actions?.indexOf("bringToFront") !== -1 && (
+          <BringToFrontControl nodeId={nodeId} />
+        )}
+        {actions?.indexOf("sendToBack") !== -1 && (
+          <SendToBackControl nodeId={nodeId} />
+        )}
         {!!node.deletable && (
           <>
-            {actions && actions.length > 1 && <DEMOElementToolbarSeparator />}
             <DEMOElementToolbarGroup
               aria-label={t(($) => $["Danger zone actions"])}
             >
