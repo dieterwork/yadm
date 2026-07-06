@@ -73,6 +73,7 @@ const DEMOEdgeToolbar = ({
     <EdgeToolbar
       xyPosition={position}
       isVisible={!hasNodeSelected && !hasTwoOrMoreEdgesSelected}
+      style={{ zIndex: 9999 }}
     >
       <DEMOElementToolbar>
         <DEMOElementToolbarGroup aria-label={t(($) => $["Edge options"])}>
