@@ -1,3 +1,4 @@
+import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 import {
   getNode,
   useDEMOModelerStore,
@@ -8,6 +9,7 @@ import {
   SelectionBackgroundIcon,
   SelectionForegroundIcon,
 } from "@phosphor-icons/react";
+import { useNodeConnections } from "@xyflow/react";
 import { useTranslation } from "react-i18next";
 
 const BringToFrontControl = ({ nodeId }: { nodeId: string }) => {
@@ -18,6 +20,8 @@ const BringToFrontControl = ({ nodeId }: { nodeId: string }) => {
 
   const label = t(($) => $["Bring to front"]);
 
+  const connections = useNodeConnections({ id: nodeId });
+
   return (
     <DEMOElementToolbarButton
       icon={(iconProps) => {
@@ -25,7 +29,8 @@ const BringToFrontControl = ({ nodeId }: { nodeId: string }) => {
       }}
       label={label}
       onPress={() => {
-        bringNodeToFront(nodeId, nodes);
+        bringNodeToFront(nodeId, nodes, connections);
+        takeSnapshotAndSave();
       }}
     />
   );

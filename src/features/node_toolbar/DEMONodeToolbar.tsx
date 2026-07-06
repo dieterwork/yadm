@@ -53,6 +53,7 @@ const DEMONodeToolbar = ({
         !node.dragging &&
         !node.resizing
       }
+      style={{ zIndex: 99999 }}
     >
       <DEMOElementToolbar>
         {actions?.indexOf("changeFontSize") !== -1 && (

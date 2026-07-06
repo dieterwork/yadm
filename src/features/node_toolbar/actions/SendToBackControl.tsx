@@ -1,3 +1,4 @@
+import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 import {
   getNode,
   useDEMOModelerStore,
@@ -5,6 +6,7 @@ import {
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import { sendNodeToBack } from "$/shared/utils/zIndex";
 import { SelectionForegroundIcon } from "@phosphor-icons/react";
+import { useNodeConnections } from "@xyflow/react";
 import { useTranslation } from "react-i18next";
 
 const SendToBackControl = ({ nodeId }: { nodeId: string }) => {
@@ -15,6 +17,8 @@ const SendToBackControl = ({ nodeId }: { nodeId: string }) => {
 
   const label = t(($) => $["Send to back"]);
 
+  const connections = useNodeConnections({ id: nodeId });
+
   return (
     <DEMOElementToolbarButton
       icon={(iconProps) => {
@@ -22,7 +26,8 @@ const SendToBackControl = ({ nodeId }: { nodeId: string }) => {
       }}
       label={label}
       onPress={() => {
-        sendNodeToBack(nodeId, nodes);
+        sendNodeToBack(nodeId, nodes, connections);
+        takeSnapshotAndSave();
       }}
     />
   );

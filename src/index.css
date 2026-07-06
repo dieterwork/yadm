@@ -143,6 +143,20 @@ body,
             z-index: 30;
         }
     }
+
+    /* Handle dot rendered into the viewport portal so it always paints
+       above edges, regardless of the edge z-index. Mirrors the trapped
+       .react-flow__handle::before dot and sits exactly on top of it. */
+    .handle-dot {
+        position: absolute;
+        width: 9px;
+        height: 9px;
+        background-color: var(--color-white);
+        border: 1px solid var(--color-sky-500);
+        border-radius: 9999px;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+    }
 }
 
 @theme {

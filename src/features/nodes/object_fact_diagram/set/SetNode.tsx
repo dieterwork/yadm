@@ -30,6 +30,8 @@ const SetNode = ({
         "changeFontSize",
         "editText",
         "toggleHandlesVisibility",
+        "bringToFront",
+        "sendToBack",
       ].concat(parentId ? "attachNode" : [])}
     >
       <EditableContent

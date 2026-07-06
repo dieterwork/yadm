@@ -31,6 +31,8 @@ const ProductionEventNode = ({
         "editText",
         "toggleHandlesVisibility",
         "attachNode",
+        "bringToFront",
+        "sendToBack",
       ]}
     >
       <EditableContent

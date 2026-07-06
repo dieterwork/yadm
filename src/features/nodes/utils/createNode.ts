@@ -408,6 +408,8 @@ export const createNode = ({
               "editText",
               "changeFocus",
               "changeFontSize",
+              "bringToFront",
+              "sendToBack",
             ],
             subModel: "cooperation_model",
             content: DEFAULT_CONTENT_MAP[type],

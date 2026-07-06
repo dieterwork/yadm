@@ -1,7 +1,7 @@
 import { calculateDoubleDiamondInCircleDimensions } from "$/features/shapes/utils/calculateDoubleDiamondInCircleDimensions";
 import type { DEMONode, DEMONodeContent } from "../nodes.types";
 
-export const X_SMALL_NODE_SIZE = 25 as const;
+export const X_SMALL_NODE_SIZE = 30 as const;
 export const SMALL_NODE_SIZE = 60 as const;
 export const MEDIUM_NODE_SIZE = 100 as const;
 export const LARGE_NODE_SIZE = 200 as const;

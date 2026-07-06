@@ -22,7 +22,10 @@ const ElementaryActorNode = ({
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const node = getNode(id);
 
-  const defaultActions: NodeToolbarAction[] = parentId ? ["attachNode"] : [];
+  const defaultActions: NodeToolbarAction[] = [
+    "bringToFront",
+    "sendToBack",
+  ].concat(parentId ? ["attachNode"] : []);
 
   const onResize: OnResize = (_, { width, height }) => {
     const childNodes = getChildNodes([node], nodes);

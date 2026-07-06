@@ -24,7 +24,10 @@ const SeveralActorsNode = ({
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const node = getNode(id);
 
-  const defaultActions: NodeToolbarAction[] = parentId ? ["attachNode"] : [];
+  const defaultActions: NodeToolbarAction[] = [
+    "bringToFront",
+    "sendToBack",
+  ].concat(parentId ? ["attachNode"] : []);
 
   const onResize: OnResize = (_, { width, height }) => {
     const childNodes = getChildNodes([node], nodes);
@@ -38,7 +41,7 @@ const SeveralActorsNode = ({
     )
       return;
     const transactionSize = calculateDoubleDiamondInCircleDimensions(
-      +transaction.style.width
+      +transaction.style.width,
     );
     const transactionHeight = +transaction.style.height;
     updateNode(transaction.id, {

@@ -20,7 +20,13 @@ const CFactNode = ({
       height={height}
       draggable={draggable}
       type="c_fact"
-      actions={["changeColor", "attachNode", "toggleHandlesVisibility"]}
+      actions={[
+        "changeColor",
+        "attachNode",
+        "toggleHandlesVisibility",
+        "bringToFront",
+        "sendToBack",
+      ]}
     />
   );
 };

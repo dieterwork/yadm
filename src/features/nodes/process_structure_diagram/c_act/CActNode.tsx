@@ -20,7 +20,13 @@ const CActNode = ({
       height={height}
       type="c_act"
       draggable={draggable}
-      actions={["changeColor", "attachNode", "toggleHandlesVisibility"]}
+      actions={[
+        "changeColor",
+        "attachNode",
+        "toggleHandlesVisibility",
+        "bringToFront",
+        "sendToBack",
+      ]}
     />
   );
 };
