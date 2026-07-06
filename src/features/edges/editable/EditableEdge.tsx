@@ -28,6 +28,8 @@ import {
   getMiddleLabel1Translate,
   getEndLabel0Translate,
   getEndLabel1Translate,
+  getStraightLabelTranslate,
+  getStraightMiddleLabelTranslate,
 } from "./cardinalityTranslateCalculations";
 import getInteractiveCenterEdgeDirection from "../utils/getInteractiveCenterEdgeDirection";
 import { calcEdgeMidpoint } from "../utils/calcEdgeMidpoint";
@@ -167,6 +169,32 @@ export function EditableEdgeComponent({
 
   const targetHandle = getNodeHandle(targetNode, targetHandleId);
 
+  // Cardinality label offsets. For straight lines, place the two labels at each
+  // handle along the bisectors of the wedges formed where the line meets the
+  // node edge; otherwise use the fixed per-position offsets.
+  const isStraight = linePath === "straight";
+  const sourceLineDir = { x: targetX - sourceX, y: targetY - sourceY };
+  const targetLineDir = { x: sourceX - targetX, y: sourceY - targetY };
+
+  const startLabel0T = isStraight
+    ? getStraightLabelTranslate(sourcePosition, sourceLineDir, 0)
+    : getStartLabel0Translate(sourcePosition);
+  const startLabel1T = isStraight
+    ? getStraightLabelTranslate(sourcePosition, sourceLineDir, 1)
+    : getStartLabel1Translate(sourcePosition);
+  const endLabel0T = isStraight
+    ? getStraightLabelTranslate(targetPosition, targetLineDir, 0)
+    : getEndLabel0Translate(targetPosition);
+  const endLabel1T = isStraight
+    ? getStraightLabelTranslate(targetPosition, targetLineDir, 1)
+    : getEndLabel1Translate(targetPosition);
+  const middleLabel0T = isStraight
+    ? getStraightMiddleLabelTranslate(sourceLineDir, 0)
+    : getMiddleLabel0Translate(midLabelDirection);
+  const middleLabel1T = isStraight
+    ? getStraightMiddleLabelTranslate(sourceLineDir, 1)
+    : getMiddleLabel1Translate(midLabelDirection);
+
   return (
     <>
       <path
@@ -284,8 +312,8 @@ export function EditableEdgeComponent({
               labelY={sourceY}
               content={cardinality.startLabel0.label}
               selected={cardinality.startLabel0.selected}
-              translateX={getStartLabel0Translate(sourcePosition).x}
-              translateY={getStartLabel0Translate(sourcePosition).y}
+              translateX={startLabel0T.x}
+              translateY={startLabel0T.y}
             />
             <CardinalityLabel
               edgeId={id}
@@ -295,8 +323,8 @@ export function EditableEdgeComponent({
               labelY={sourceY}
               content={cardinality.startLabel1.label}
               selected={cardinality.startLabel1.selected}
-              translateX={getStartLabel1Translate(sourcePosition).x}
-              translateY={getStartLabel1Translate(sourcePosition).y}
+              translateX={startLabel1T.x}
+              translateY={startLabel1T.y}
             />
             <CardinalityLabel
               edgeId={id}
@@ -306,8 +334,8 @@ export function EditableEdgeComponent({
               labelY={interactiveEdgeMidpoint.y}
               content={cardinality.middleLabel0.label}
               selected={cardinality.middleLabel0.selected}
-              translateX={getMiddleLabel0Translate(midLabelDirection).x}
-              translateY={getMiddleLabel0Translate(midLabelDirection).y}
+              translateX={middleLabel0T.x}
+              translateY={middleLabel0T.y}
             />
             <CardinalityLabel
               edgeId={id}
@@ -317,8 +345,8 @@ export function EditableEdgeComponent({
               labelY={interactiveEdgeMidpoint.y}
               content={cardinality.middleLabel1.label}
               selected={cardinality.middleLabel1.selected}
-              translateX={getMiddleLabel1Translate(midLabelDirection).x}
-              translateY={getMiddleLabel1Translate(midLabelDirection).y}
+              translateX={middleLabel1T.x}
+              translateY={middleLabel1T.y}
             />
             <CardinalityLabel
               edgeId={id}
@@ -328,8 +356,8 @@ export function EditableEdgeComponent({
               labelY={targetY}
               content={cardinality.endLabel0.label}
               selected={cardinality.endLabel0.selected}
-              translateX={getEndLabel0Translate(targetPosition).x}
-              translateY={getEndLabel0Translate(targetPosition).y}
+              translateX={endLabel0T.x}
+              translateY={endLabel0T.y}
             />
             <CardinalityLabel
               edgeId={id}
@@ -339,8 +367,8 @@ export function EditableEdgeComponent({
               labelY={targetY}
               content={cardinality.endLabel1.label}
               selected={cardinality.endLabel1.selected}
-              translateX={getEndLabel1Translate(targetPosition).x}
-              translateY={getEndLabel1Translate(targetPosition).y}
+              translateX={endLabel1T.x}
+              translateY={endLabel1T.y}
             />
           </>
         )}

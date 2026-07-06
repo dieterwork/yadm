@@ -82,7 +82,10 @@ const CardinalityLabel = ({
               { ...data.cardinality![f], selected: f === field },
             ]),
           )
-        : { ...data.cardinality, [field]: { ...data.cardinality[field], selected: false } };
+        : {
+            ...data.cardinality,
+            [field]: { ...data.cardinality[field], selected: false },
+          };
       return { ...data, cardinality };
     });
   };
@@ -126,19 +129,23 @@ const CardinalityLabel = ({
             suppressContentEditableWarning
             spellCheck={false}
             className={cn(
-              "inline-block text-[12px] outline-none min-w-6 min-h-[calc(1.2*12px)] leading-[1.2]",
+              "inline-block text-[12px] outline-none min-w-6 min-h-[calc(1.2*12px)] leading-[1.2] text-center",
               (selected || isEditable) &&
                 "ring-1 ring-sky-500 rounded-sm px-0.5",
             )}
             onInput={(e) => {
               if (!isEnabled) return;
               updateEdgeData(edgeId, (data) => {
-                if (!data || !("cardinality" in data) || !data.cardinality) return data;
+                if (!data || !("cardinality" in data) || !data.cardinality)
+                  return data;
                 return {
                   ...data,
                   cardinality: {
                     ...data.cardinality,
-                    [field]: { ...data.cardinality[field], label: e.currentTarget.innerHTML },
+                    [field]: {
+                      ...data.cardinality[field],
+                      label: e.currentTarget.innerHTML,
+                    },
                   },
                 };
               });
@@ -175,7 +182,8 @@ const CardinalityLabel = ({
         onEdit={edit}
         onClose={() => {
           updateEdgeData(edgeId, (data) => {
-            if (!data || !("cardinality" in data) || !data.cardinality) return data;
+            if (!data || !("cardinality" in data) || !data.cardinality)
+              return data;
             return {
               ...data,
               cardinality: {
