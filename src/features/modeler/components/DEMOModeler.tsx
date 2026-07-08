@@ -252,7 +252,7 @@ const DEMOModeler = () => {
   const [modelName, setModelName] = useQueryState("model");
   const [prevModelName, setPrevModelName] = useState<string | null>(modelName);
 
-  if (modelName === prevModelName) {
+  if (modelName && modelName === prevModelName) {
     if (modelName.includes("/")) {
       const piecesCount = modelName.split("/").length;
 
