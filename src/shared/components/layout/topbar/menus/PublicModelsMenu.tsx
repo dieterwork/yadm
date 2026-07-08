@@ -2,9 +2,9 @@ import TopbarMenuButton from "../_components/TopbarMenuButton";
 import TopbarMenuItem from "../_components/TopbarMenuItem";
 import { useTranslation } from "react-i18next";
 import TopbarSubMenuButton from "$shared/components/layout/topbar/_components/TopbarSubMenuButton.tsx";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import getPublicModelsByCompany from "$/shared/utils/getPublicModelsByCompany";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
 import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingState";
 import loadPublicModels from "$/features/actions/load/loadPublicModels";
@@ -15,7 +15,7 @@ import TopbarMenuButtonAutoComplete from "../_components/TopbarMenuButtonAutoCom
 import uuid from "$/shared/utils/uuid";
 import { useReactFlow } from "@xyflow/react";
 import useSharedServerModel from "$features/modeler/hooks/useSharedServerModel.ts";
-import {fullEmptyModel} from "$shared/types/reactFlow.types.ts";
+import { fullEmptyModel } from "$shared/types/reactFlow.types.ts";
 
 const PublicModelsMenu = () => {
   const { t } = useTranslation();
@@ -34,34 +34,73 @@ const PublicModelsMenu = () => {
 
   const [searchValue, setSearchValue] = useState("");
 
-  const publicModelMutation = useMutation({
-    mutationKey: ["public_model"],
-    mutationFn: loadPublicModel,
-    onSuccess: (data) => {
+  const [selectedModel, setSelectedModel] = useState<{
+    fileName: string;
+    company: string;
+  } | null>(null);
 
-      data = {...fullEmptyModel, ...data};
-
-      toast.dismiss(loadingId);
-      toast.success(
-        t(($) => $["Loaded model"], {
-          fileName: data.fileName,
-        })
-      );
-      setModel({ ...data, isEnabled: false });
-      setSharedModel(true);
-      fitView();
-    },
-    onMutate: () => {
-      toast.loading(
-        t(($) => $["Loading model"]),
-        { id: loadingId }
-      );
-    },
-    onError: () => {
-      toast.dismiss(loadingId);
-      toast.error(t(($) => $["Error loading model"]));
-    },
+  const publicModelQuery = useQuery({
+    queryKey: ["public_model", selectedModel?.company, selectedModel?.fileName],
+    queryFn: () => loadPublicModel(selectedModel!),
+    enabled: !!selectedModel,
+    staleTime: Infinity,
   });
+
+  const [lastLoaded, setLastLoaded] = useState<{
+    model: { fileName: string; company: string };
+    updatedAt: number;
+  } | null>(null);
+
+  if (
+    selectedModel &&
+    publicModelQuery.isSuccess &&
+    publicModelQuery.data &&
+    (lastLoaded?.model !== selectedModel ||
+      lastLoaded?.updatedAt !== publicModelQuery.dataUpdatedAt)
+  ) {
+    setLastLoaded({
+      model: selectedModel,
+      updatedAt: publicModelQuery.dataUpdatedAt,
+    });
+
+    const data = { ...fullEmptyModel, ...publicModelQuery.data };
+    setModel({ ...data, isEnabled: false });
+    setSharedModel(true);
+    fitView();
+  }
+
+  useEffect(() => {
+    if (selectedModel) {
+      if (publicModelQuery.isFetching) {
+        toast.loading(
+          t(($) => $["Loading model"]),
+          { id: loadingId },
+        );
+      } else if (publicModelQuery.isSuccess && publicModelQuery.data) {
+        toast.dismiss(loadingId);
+
+        const data = { ...fullEmptyModel, ...publicModelQuery.data };
+        toast.success(
+          t(($) => $["Loaded model"], {
+            fileName: data.fileName,
+          }),
+          {
+            duration: 2000,
+          },
+        );
+      } else if (publicModelQuery.isError) {
+        toast.dismiss(loadingId);
+        toast.error(t(($) => $["Error loading model"]));
+      }
+    }
+  }, [
+    toast,
+    selectedModel,
+    publicModelQuery.status,
+    publicModelQuery.fetchStatus,
+    publicModelQuery.dataUpdatedAt,
+    publicModelQuery.errorUpdatedAt,
+  ]);
 
   const label = t(($) => $["Public models"]);
 
@@ -84,7 +123,7 @@ const PublicModelsMenu = () => {
   }
 
   const publicModelsByCompany = getPublicModelsByCompany(
-    publicModelsQuery.data
+    publicModelsQuery.data,
   );
 
   const companyMenuItems = [...publicModelsByCompany.keys()]
@@ -96,7 +135,9 @@ const PublicModelsMenu = () => {
       <TopbarMenuButtonAutoComplete
         label={label}
         searchValue={searchValue}
-        onSearchValueChange={(value) => setSearchValue(value.trimStart().replace(/[^a-zA-Z0-9_\-\s]/g, ""))}
+        onSearchValueChange={(value) =>
+          setSearchValue(value.trimStart().replace(/[^a-zA-Z0-9_\-\s]/g, ""))
+        }
         items={publicModelsQuery.data}
         searchLabel="Search public models"
         size="large"
@@ -104,12 +145,12 @@ const PublicModelsMenu = () => {
       >
         {(model) => (
           <TopbarMenuItem
-            onAction={() => {
-              publicModelMutation.mutate({
+            onAction={() =>
+              setSelectedModel({
                 fileName: model.fileName,
                 company: model.companyName,
-              });
-            }}
+              })
+            }
             textValue={model.modelName}
           >
             {model.modelName}
@@ -124,7 +165,9 @@ const PublicModelsMenu = () => {
       label={label}
       items={companyMenuItems}
       searchValue={searchValue}
-      onSearchValueChange={(value) => setSearchValue(value.trimStart().replace(/[^a-zA-Z0-9_\-\s]/g, ""))}
+      onSearchValueChange={(value) =>
+        setSearchValue(value.trimStart().replace(/[^a-zA-Z0-9_\-\s]/g, ""))
+      }
       searchLabel="Search public models"
       size="large"
       renderEmptyState={() => (
@@ -139,18 +182,18 @@ const PublicModelsMenu = () => {
           ?.sort((a, b) =>
             a.modelName
               .toLocaleLowerCase()
-              .localeCompare(b.modelName.toLocaleLowerCase())
+              .localeCompare(b.modelName.toLocaleLowerCase()),
           );
         return (
           <TopbarSubMenuButton label={company.name} items={publicModels}>
             {(model) => (
               <TopbarMenuItem
-                onAction={() => {
-                  publicModelMutation.mutate({
+                onAction={() =>
+                  setSelectedModel({
                     fileName: model.fileName,
                     company: company.name,
-                  });
-                }}
+                  })
+                }
                 textValue={model.modelName}
               >
                 {model.modelName}

@@ -38,6 +38,17 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
     new Set([edge.data.lineType]),
   );
 
+  const [prevLineType, setPrevLineType] = useState(edge.data.lineType);
+
+  if (
+    prevLineType !== edge.data.lineType &&
+    selected instanceof Set &&
+    !selected.has(edge.data.lineType)
+  ) {
+    setPrevLineType(edge.data.lineType);
+    setSelected(new Set([edge.data.lineType]));
+  }
+
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton

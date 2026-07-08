@@ -2,6 +2,7 @@ import { type NodeProps } from "@xyflow/react";
 
 import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
+import type { MultipleTransactionKindNode } from "../../nodes.types";
 
 const MultipleTransactionKindComponent = ({
   id,

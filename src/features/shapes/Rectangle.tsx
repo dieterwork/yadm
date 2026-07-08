@@ -16,7 +16,7 @@ const Rectangle = ({
         {...svgAttributes}
         width={width}
         height={height}
-        fill={NODE_BACKGROUND_COLOR_MAP["default"]}
+        fill={transparent ? "none" : NODE_BACKGROUND_COLOR_MAP["default"]}
       />
       <rect
         {...svgAttributes}

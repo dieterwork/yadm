@@ -1,5 +1,6 @@
 import "./index.css";
 import YADMApp from "./YADMApp";
+import { NuqsAdapter } from "nuqs/adapters/react";
 
 const originalWarn = console.warn;
 
@@ -8,7 +9,7 @@ console.warn = (...args) => {
   if (
     typeof firstArg === "string" &&
     firstArg.includes(
-      "An aria-label or aria-labelledby prop is required for accessibility."
+      "An aria-label or aria-labelledby prop is required for accessibility.",
     )
   ) {
     return;
@@ -18,5 +19,9 @@ console.warn = (...args) => {
 };
 
 export default function App() {
-  return <YADMApp />;
+  return (
+    <NuqsAdapter>
+      <YADMApp />
+    </NuqsAdapter>
+  );
 }

@@ -18,7 +18,7 @@ const ServerPasswordModal = ({
   errorMessage,
   ...restProps
 }: TopbarMenuModalProps & {
-  onSubmitCallback?: () => void;
+  onSubmitCallback?: (pwd: string) => void;
   isPending?: boolean;
   errorMessage?: string;
 }) => {
@@ -32,8 +32,9 @@ const ServerPasswordModal = ({
   const { setPassword } = useUserStore();
 
   const onSubmit: SubmitHandler<FormInputs> = (data) => {
-    setPassword(sha256(data.password));
-    onSubmitCallback?.();
+    const password = sha256(data.password);
+    setPassword(password);
+    onSubmitCallback?.(password);
   };
 
   return (

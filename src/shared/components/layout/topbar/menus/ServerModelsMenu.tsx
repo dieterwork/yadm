@@ -1,15 +1,18 @@
 import TopbarMenuButton from "../_components/TopbarMenuButton";
 import TopbarMenuItem from "../_components/TopbarMenuItem";
 import { useTranslation } from "react-i18next";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useId, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useId, useState } from "react";
 import loadServerModels from "$/features/actions/load/loadServerModels";
 import loadServerModel from "$/features/actions/load/loadServerModel";
 import toast from "react-hot-toast/headless";
 import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModal";
 import useUserStore from "$/features/auth/useUserStore";
 import type { AppError } from "$/shared/utils/AppError";
-import {type DEMOModelJSON, fullEmptyModel} from "$/shared/types/reactFlow.types";
+import {
+  type DEMOModelJSON,
+  fullEmptyModel,
+} from "$/shared/types/reactFlow.types";
 import { setModel } from "$/features/modeler/store/useDEMOModelerStore";
 import TopbarMenuItemLoadingState from "../_components/TopbarMenuItemLoadingState";
 import TopbarMenuItemErrorState from "../_components/TopbarMenuItemErrorState";
@@ -21,8 +24,7 @@ import uuid from "$/shared/utils/uuid";
 const ServerModelsMenu = () => {
   const { t } = useTranslation();
   const [isPwdModalOpen, setPwdModalOpen] = useState(false);
-  const [currentFileName, setCurrentFileName] = useState(null);
-  const [isSharedModel, setSharedModel] = useSharedServerModel();
+  const [, setSharedModel] = useSharedServerModel();
   const { fitView } = useReactFlow();
 
   const serverModelsQuery = useQuery({
@@ -37,47 +39,86 @@ const ServerModelsMenu = () => {
 
   const [searchValue, setSearchValue] = useState("");
 
-  const serverModelMutation = useMutation<
-    DEMOModelJSON,
-    AppError,
-    string,
-    void
-  >({
-    mutationKey: ["server_model"],
-    mutationFn: loadServerModel,
-    onSuccess: (data) => {
+  const [selectedModel, setSelectedModel] = useState<{
+    fileName: string;
+  } | null>(null);
 
-      data = {...fullEmptyModel, ...data};
-
-      setPwdModalOpen(false);
-      toast.dismiss(loadingId);
-      toast.success(
-        t(($) => $["Loaded model"], {
-          fileName: data.fileName,
-        }),
-      );
-      setCurrentFileName(null);
-      setModel(data);
-      fitView();
-      setSearchValue("");
-      setSharedModel(false);
-    },
-    onMutate: () => {
-      toast.loading(
-        t(($) => $["Loading model"]),
-        { id: loadingId },
-      );
-    },
-    onError: (error) => {
-      toast.dismiss(loadingId);
-      if (error.httpCode === 401) {
-        setPwdModalOpen(true);
-      } else {
-        setPwdModalOpen(false);
-        toast.error(t(($) => $["Error loading model. Please try again."]));
-      }
-    },
+  const serverModelQuery = useQuery<DEMOModelJSON, AppError>({
+    queryKey: ["server_model", selectedModel?.fileName],
+    queryFn: () => loadServerModel(selectedModel!.fileName),
+    enabled: !!selectedModel && !!user.password,
+    retry: false,
+    staleTime: Infinity,
   });
+
+  const [lastLoaded, setLastLoaded] = useState<{
+    model: { fileName: string };
+    updatedAt: number;
+  } | null>(null);
+  const [lastErrorAt, setLastErrorAt] = useState<number | null>(null);
+
+  if (
+    selectedModel &&
+    serverModelQuery.isSuccess &&
+    serverModelQuery.data &&
+    (lastLoaded?.model !== selectedModel ||
+      lastLoaded?.updatedAt !== serverModelQuery.dataUpdatedAt)
+  ) {
+    setLastLoaded({
+      model: selectedModel,
+      updatedAt: serverModelQuery.dataUpdatedAt,
+    });
+
+    setPwdModalOpen(false);
+    const data = { ...fullEmptyModel, ...serverModelQuery.data };
+    setModel(data);
+    fitView();
+    setSearchValue("");
+    setSharedModel(false);
+  }
+
+  if (
+    selectedModel &&
+    serverModelQuery.isError &&
+    serverModelQuery.errorUpdatedAt !== lastErrorAt
+  ) {
+    setLastErrorAt(serverModelQuery.errorUpdatedAt);
+    setPwdModalOpen(serverModelQuery.error?.httpCode === 401);
+  }
+
+  useEffect(() => {
+    if (selectedModel) {
+      if (serverModelQuery.isFetching) {
+        toast.loading(
+          t(($) => $["Loading model"]),
+          { id: loadingId },
+        );
+      } else if (serverModelQuery.isSuccess && serverModelQuery.data) {
+        toast.dismiss(loadingId);
+        const data = { ...fullEmptyModel, ...serverModelQuery.data };
+        toast.success(
+          t(($) => $["Loaded model"], {
+            fileName: data.fileName,
+          }),
+          {
+            duration: 2000,
+          },
+        );
+      } else if (serverModelQuery.isError) {
+        toast.dismiss(loadingId);
+        if (serverModelQuery.error?.httpCode !== 401) {
+          toast.error(t(($) => $["Error loading model. Please try again."]));
+        }
+      }
+    }
+  }, [
+    toast,
+    selectedModel,
+    serverModelQuery.status,
+    serverModelQuery.fetchStatus,
+    serverModelQuery.dataUpdatedAt,
+    serverModelQuery.errorUpdatedAt,
+  ]);
 
   const label = t(($) => $["My models"]);
 
@@ -119,10 +160,8 @@ const ServerModelsMenu = () => {
         {(model) => (
           <TopbarMenuItem
             onAction={() => {
-              setCurrentFileName(model.fileName);
-              if (user.password) {
-                serverModelMutation.mutate(model.fileName);
-              } else {
+              setSelectedModel({ fileName: model.fileName });
+              if (!user.password) {
                 setPwdModalOpen(true);
               }
             }}
@@ -135,14 +174,12 @@ const ServerModelsMenu = () => {
       <ServerPasswordModal
         isOpen={isPwdModalOpen}
         onOpenChange={(isOpen) => setPwdModalOpen(isOpen)}
+        isPending={serverModelQuery.isFetching}
         onSubmitCallback={() => {
-          if (currentFileName) {
-            serverModelMutation.mutate(currentFileName);
-          }
+          serverModelQuery.refetch();
         }}
-        isPending={serverModelMutation.isPending}
         errorMessage={
-          serverModelMutation.error?.httpCode === 401
+          serverModelQuery.error?.httpCode === 401
             ? "Invalid password"
             : undefined
         }

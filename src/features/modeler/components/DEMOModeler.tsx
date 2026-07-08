@@ -56,15 +56,20 @@ import Whiteboard from "$/features/whiteboard/components/Whiteboard";
 import takeWhiteboardSnapshotAndSave from "$/features/whiteboard/utils/takeWhiteboardSnapshotAndSave";
 import { useEffect, useId, useState } from "react";
 import toast from "react-hot-toast/headless";
-import {type DEMOModelJSON, fullEmptyModel} from "$/shared/types/reactFlow.types";
+import {
+  type DEMOModelJSON,
+  fullEmptyModel,
+} from "$/shared/types/reactFlow.types";
 import type { AppError } from "$/shared/utils/AppError";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import loadServerModel from "$/features/actions/load/loadServerModel";
 import loadPublicModel from "$/features/actions/load/loadPublicModel";
+import useUserStore from "$/features/auth/useUserStore";
 import { useTranslation } from "react-i18next";
 import useSharedServerModel from "../hooks/useSharedServerModel";
 import ServerPasswordModal from "$/shared/components/ui/modal/ServerPasswordModal";
 import setEndOfContentEditable from "$/features/editable_content/utils/setEndOfContentEditable";
+import { useQueryState } from "nuqs";
 
 const id = uuid();
 
@@ -92,115 +97,190 @@ const DEMOModeler = () => {
   useTitleTranslate();
 
   const { fitView } = useReactFlow();
-  const [currentFileName, setCurrentFileName] = useState("");
   const [, setSharedModel] = useSharedServerModel();
   const [isPwdModalOpen, setPwdModalOpen] = useState(false);
   const loadingId = useId();
   const { t } = useTranslation();
+  const { user } = useUserStore();
 
-  const publicModelMutation = useMutation({
-    mutationKey: ["public_model_test"],
-    mutationFn: loadPublicModel,
-    onSuccess: (data) => {
+  const [selectedPublicModel, setSelectedPublicModel] = useState<{
+    fileName: string;
+    company: string;
+  } | null>(null);
 
-      data = {...fullEmptyModel, ...data};
+  const [selectedServerModel, setSelectedServerModel] = useState<{
+    fileName: string;
+  } | null>(null);
 
-      toast.dismiss(loadingId);
-      toast.success(
-        t(($) => $["Loaded model"], {
-          fileName: data.fileName,
-        }),
-      );
-      setModel({ ...data, isEnabled: false });
-      setSharedModel(true);
-      fitView();
-    },
-    onMutate: () => {
-      toast.loading(
-        t(($) => $["Loading model"]),
-        { id: loadingId },
-      );
-    },
-    onError: (error) => {
-      toast.dismiss(loadingId);
-      toast.error(t(($) => $["Error loading model"]));
-    },
+  const publicModelQuery = useQuery({
+    queryKey: [
+      "public_model",
+      selectedPublicModel?.company,
+      selectedPublicModel?.fileName,
+    ],
+    queryFn: () => loadPublicModel(selectedPublicModel!),
+    enabled: !!selectedPublicModel,
+    staleTime: Infinity,
   });
 
-  const serverModelMutation = useMutation<
-    DEMOModelJSON,
-    AppError,
-    string,
-    void
-  >({
-    mutationKey: ["server_model"],
-    mutationFn: loadServerModel,
-    onSuccess: (data) => {
-
-      data = {...fullEmptyModel, ...data};
-
-      setPwdModalOpen(false);
-      toast.dismiss(loadingId);
-      toast.success(
-        t(($) => $["Loaded model"], {
-          fileName: data.fileName,
-        }),
-      );
-      setModel({ ...data, isEnabled: true });
-      setSharedModel(false);
-      fitView();
-    },
-    onMutate: () => {
-      toast.loading(
-        t(($) => $["Loading model"]),
-        { id: loadingId },
-      );
-    },
-    onError: (error) => {
-      toast.dismiss(loadingId);
-      if (error.httpCode === 401) {
-        setPwdModalOpen(true);
-      } else {
-        setPwdModalOpen(false);
-        toast.error(t(($) => $["Error loading model. Please try again."]));
-      }
-    },
+  const serverModelQuery = useQuery<DEMOModelJSON, AppError>({
+    queryKey: ["server_model", selectedServerModel?.fileName],
+    queryFn: () => loadServerModel(selectedServerModel!.fileName),
+    enabled: !!selectedServerModel && !!user.password,
+    retry: false,
+    staleTime: Infinity,
   });
+
+  // Tracks which selection + fetched data we've already applied to the store,
+  // so re-selecting a cached model (new object identity) or a completed
+  // refetch (new dataUpdatedAt) re-applies it exactly once.
+  const [lastPublicLoaded, setLastPublicLoaded] = useState<{
+    model: { fileName: string; company: string };
+    updatedAt: number;
+  } | null>(null);
+  const [lastServerLoaded, setLastServerLoaded] = useState<{
+    model: { fileName: string };
+    updatedAt: number;
+  } | null>(null);
+  const [lastServerErrorAt, setLastServerErrorAt] = useState<number | null>(
+    null,
+  );
+
+  // Apply the loaded public model to the store during render (derived state).
+  if (
+    selectedPublicModel &&
+    publicModelQuery.isSuccess &&
+    publicModelQuery.data &&
+    (lastPublicLoaded?.model !== selectedPublicModel ||
+      lastPublicLoaded?.updatedAt !== publicModelQuery.dataUpdatedAt)
+  ) {
+    setLastPublicLoaded({
+      model: selectedPublicModel,
+      updatedAt: publicModelQuery.dataUpdatedAt,
+    });
+
+    const data = { ...fullEmptyModel, ...publicModelQuery.data };
+    setModel({ ...data, isEnabled: false });
+    setSharedModel(true);
+    fitView();
+  }
+
+  if (
+    selectedServerModel &&
+    serverModelQuery.isSuccess &&
+    serverModelQuery.data &&
+    (lastServerLoaded?.model !== selectedServerModel ||
+      lastServerLoaded?.updatedAt !== serverModelQuery.dataUpdatedAt)
+  ) {
+    setLastServerLoaded({
+      model: selectedServerModel,
+      updatedAt: serverModelQuery.dataUpdatedAt,
+    });
+
+    setPwdModalOpen(false);
+    const data = { ...fullEmptyModel, ...serverModelQuery.data };
+    setModel({ ...data, isEnabled: true });
+    setSharedModel(false);
+    fitView();
+  }
+
+  if (
+    selectedServerModel &&
+    serverModelQuery.isError &&
+    serverModelQuery.errorUpdatedAt !== lastServerErrorAt
+  ) {
+    setLastServerErrorAt(serverModelQuery.errorUpdatedAt);
+    setPwdModalOpen(serverModelQuery.error?.httpCode === 401);
+  }
 
   useEffect(() => {
-    if (!init) {
-      init = true;
-      const modelName =
-        new URLSearchParams(window.location.search).get("model") ?? "";
+    if (!selectedPublicModel) return;
 
-      if (modelName !== "" && modelName.includes("/")) {
+    if (publicModelQuery.isFetching) {
+      toast.loading(
+        t(($) => $["Loading model"]),
+        { id: loadingId },
+      );
+    } else if (publicModelQuery.isSuccess && publicModelQuery.data) {
+      toast.dismiss(loadingId);
+      const data = { ...fullEmptyModel, ...publicModelQuery.data };
+      toast.success(
+        t(($) => $["Loaded model"], {
+          fileName: data.fileName,
+        }),
+      );
+    } else if (publicModelQuery.isError) {
+      toast.dismiss(loadingId);
+      toast.error(t(($) => $["Error loading model"]));
+    }
+  }, [
+    toast,
+    selectedPublicModel,
+    publicModelQuery.status,
+    publicModelQuery.fetchStatus,
+    publicModelQuery.dataUpdatedAt,
+    publicModelQuery.errorUpdatedAt,
+  ]);
+
+  useEffect(() => {
+    if (selectedServerModel) {
+      if (serverModelQuery.isFetching) {
+        toast.loading(
+          t(($) => $["Loading model"]),
+          { id: loadingId },
+        );
+      } else if (serverModelQuery.isSuccess && serverModelQuery.data) {
+        toast.dismiss(loadingId);
+        const data = { ...fullEmptyModel, ...serverModelQuery.data };
+        toast.success(
+          t(($) => $["Loaded model"], {
+            fileName: data.fileName,
+          }),
+        );
+      } else if (serverModelQuery.isError) {
+        toast.dismiss(loadingId);
+        if (serverModelQuery.error?.httpCode !== 401) {
+          toast.error(t(($) => $["Error loading model. Please try again."]));
+        }
+      }
+    }
+  }, [
+    toast,
+    selectedServerModel,
+    serverModelQuery.status,
+    serverModelQuery.fetchStatus,
+    serverModelQuery.dataUpdatedAt,
+    serverModelQuery.errorUpdatedAt,
+  ]);
+
+  const [modelName, setModelName] = useQueryState("model");
+
+  useEffect(() => {
+    if (modelName) {
+      if (modelName.includes("/")) {
         const piecesCount = modelName.split("/").length;
-
-        console.log(modelName);
 
         if (piecesCount === 3) {
           // 3 slashes is my models
           const [mymodels, , fileName] = modelName.split("/");
 
           if (mymodels === "mymodels") {
-            console.log("my models");
-            setCurrentFileName(fileName);
-            serverModelMutation.mutate(fileName);
+            setSelectedServerModel({ fileName });
+            if (!user.password) {
+              setPwdModalOpen(true);
+            }
           }
         } else if (piecesCount === 2) {
           // 2 slashes is a public model
-
-          console.log("public model");
-
           const [company, fileName] = modelName.split("/");
 
-          publicModelMutation.mutate({ fileName, company });
+          setSelectedPublicModel({ fileName, company });
         }
 
-        window.history.pushState({}, "YADM", window.location.origin + "/");
+        setModelName(null);
       }
     }
-  }, []);
+  }, [modelName]);
 
   return (
     <>
@@ -208,11 +288,11 @@ const DEMOModeler = () => {
         isOpen={isPwdModalOpen}
         onOpenChange={(isOpen) => setPwdModalOpen(isOpen)}
         onSubmitCallback={() => {
-          serverModelMutation.mutate(currentFileName);
+          serverModelQuery.refetch();
         }}
-        isPending={serverModelMutation.isPending}
+        isPending={serverModelQuery.isFetching}
         errorMessage={
-          serverModelMutation.error?.httpCode === 401
+          serverModelQuery.error?.httpCode === 401
             ? "Invalid password"
             : undefined
         }
