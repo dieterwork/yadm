@@ -5,32 +5,20 @@ import {
 } from "../modeler/store/useDEMOModelerStore";
 
 const useHandleEditModeShortcut = () => {
-  const isHandleEditModeEnabled = useDEMOModelerStore(
-    (state) => state.isHandleEditModeEnabled,
-  );
-  const [isPressed, setPressed] = useState(false);
-
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Alt" && !isHandleEditModeEnabled) {
-      setHandleEditModeEnabled(true);
-      setPressed(true);
-    }
-  };
-  const handleKeyUp = (e: KeyboardEvent) => {
-    if (e.key === "Alt" && isPressed) {
-      setHandleEditModeEnabled(false);
-      setPressed(false);
+    if (e.repeat) return;
+    if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === "h") {
+      e.preventDefault();
+      setHandleEditModeEnabled((isEnabled) => !isEnabled);
     }
   };
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keyup", handleKeyUp);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
     };
-  }, [handleKeyDown, handleKeyUp]);
+  }, [handleKeyDown]);
 };
 
 export default useHandleEditModeShortcut;
