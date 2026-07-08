@@ -131,9 +131,6 @@ const DEMOModeler = () => {
     staleTime: Infinity,
   });
 
-  // Tracks which selection + fetched data we've already applied to the store,
-  // so re-selecting a cached model (new object identity) or a completed
-  // refetch (new dataUpdatedAt) re-applies it exactly once.
   const [lastPublicLoaded, setLastPublicLoaded] = useState<{
     model: { fileName: string; company: string };
     updatedAt: number;
@@ -146,7 +143,6 @@ const DEMOModeler = () => {
     null,
   );
 
-  // Apply the loaded public model to the store during render (derived state).
   if (
     selectedPublicModel &&
     publicModelQuery.isSuccess &&
@@ -254,33 +250,32 @@ const DEMOModeler = () => {
   ]);
 
   const [modelName, setModelName] = useQueryState("model");
+  const [prevModelName, setPrevModelName] = useState<string | null>(modelName);
 
-  useEffect(() => {
-    if (modelName) {
-      if (modelName.includes("/")) {
-        const piecesCount = modelName.split("/").length;
+  if (modelName === prevModelName) {
+    if (modelName.includes("/")) {
+      const piecesCount = modelName.split("/").length;
 
-        if (piecesCount === 3) {
-          // 3 slashes is my models
-          const [mymodels, , fileName] = modelName.split("/");
+      if (piecesCount === 3) {
+        // 3 slashes is my models
+        const [mymodels, , fileName] = modelName.split("/");
 
-          if (mymodels === "mymodels") {
-            setSelectedServerModel({ fileName });
-            if (!user.password) {
-              setPwdModalOpen(true);
-            }
+        if (mymodels === "mymodels") {
+          setSelectedServerModel({ fileName });
+          if (!user.password) {
+            setPwdModalOpen(true);
           }
-        } else if (piecesCount === 2) {
-          // 2 slashes is a public model
-          const [company, fileName] = modelName.split("/");
-
-          setSelectedPublicModel({ fileName, company });
         }
+      } else if (piecesCount === 2) {
+        // 2 slashes is a public model
+        const [company, fileName] = modelName.split("/");
 
-        setModelName(null);
+        setSelectedPublicModel({ fileName, company });
       }
+
+      setModelName(null);
     }
-  }, [modelName]);
+  }
 
   return (
     <>
