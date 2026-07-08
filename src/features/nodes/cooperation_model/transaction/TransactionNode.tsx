@@ -28,8 +28,6 @@ const TransactionNode = ({
     : null;
 
   const defaultActions: NodeToolbarAction[] = [
-    "bringToFront",
-    "sendToBack",
     "addHandle",
     "changeColor",
     "changeFontSize",

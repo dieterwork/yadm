@@ -21,13 +21,7 @@ const InitiationFactNode = ({
         height={height}
         draggable={draggable}
         type="initiation_fact"
-        actions={[
-          "changeColor",
-          "attachNode",
-          "toggleHandlesVisibility",
-          "bringToFront",
-          "sendToBack",
-        ]}
+        actions={["changeColor", "attachNode", "toggleHandlesVisibility"]}
       />
     </>
   );

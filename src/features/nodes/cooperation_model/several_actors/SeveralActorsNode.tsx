@@ -24,10 +24,9 @@ const SeveralActorsNode = ({
   const nodes = useDEMOModelerStore((state) => state.nodes);
   const node = getNode(id);
 
-  const defaultActions: NodeToolbarAction[] = [
-    "bringToFront",
-    "sendToBack",
-  ].concat(parentId ? ["attachNode"] : []);
+  const defaultActions: NodeToolbarAction[] = [].concat(
+    parentId ? ["attachNode"] : [],
+  );
 
   const onResize: OnResize = (_, { width, height }) => {
     const childNodes = getChildNodes([node], nodes);

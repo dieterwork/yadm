@@ -16,8 +16,6 @@ const ActorNode = ({
   const { content, fontSize, isEditable, resizable, actions, state } = data;
 
   const defaultActions: NodeToolbarAction[] = [
-    "bringToFront",
-    "sendToBack",
     "addHandle",
     "changeColor",
     "changeFontSize",

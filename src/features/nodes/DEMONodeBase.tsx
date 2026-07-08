@@ -56,8 +56,6 @@ const DEMONodeBase = ({
     "addHandle",
     "toggleHandlesVisibility",
     "editText",
-    "sendToBack",
-    "bringToFront",
   ],
   resizerProps,
   draggable,

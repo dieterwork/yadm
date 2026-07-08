@@ -35,8 +35,6 @@ const SelfActivationNode = ({
   const [activeEl, setActiveEl] = useState<"header" | "body" | null>(null);
 
   const defaultActions: NodeToolbarAction[] = [
-    "bringToFront",
-    "sendToBack",
     "addHandle",
     "changeColor",
     "changeFontSize",

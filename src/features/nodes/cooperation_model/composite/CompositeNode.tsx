@@ -16,8 +16,6 @@ const CompositeNode = ({
   const { content, fontSize, isEditable, actions } = data;
 
   const defaultActions: NodeToolbarAction[] = [
-    "bringToFront",
-    "sendToBack",
     "addHandle",
     "changeColor",
     "changeFontSize",
