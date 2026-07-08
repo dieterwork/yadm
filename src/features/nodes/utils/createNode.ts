@@ -221,7 +221,6 @@ export const createNode = ({
           ariaLabel: t(($) => $["Actor"]),
           position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
           deletable: false,
-          className: "pointer-events-none",
           data: {
             state: "default",
             focus: "in",
@@ -348,7 +347,59 @@ export const createNode = ({
 
     case "self_activation": {
       const transactionId = uuid();
+      const actorId = uuid();
       return [
+        {
+          id: actorId,
+          type: "actor",
+          ariaLabel: t(($) => $["Actor"]),
+          position: { x: 0, y: 0 },
+          deletable: false,
+          data: {
+            state: "default",
+            focus: "in",
+            content: DEFAULT_CONTENT_MAP[type],
+            handles: {
+              isVisible: true,
+              top: {
+                handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+              },
+              bottom: {
+                handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+              },
+              left: {
+                handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+              },
+              right: {
+                handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+              },
+            },
+            resizable: false,
+            actions: [
+              "addHandle",
+              "changeColor",
+              "toggleHandlesVisibility",
+              "editText",
+              "changeFontSize",
+              "changeFocus",
+            ],
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP[type].width,
+            height: DEFAULT_SIZE_MAP[type].height,
+            fill: NODE_BACKGROUND_COLOR_MAP["default"],
+            stroke: NODE_BORDER_COLOR_MAP["default"],
+            strokeWidth: 2,
+          },
+          selected: false,
+          parentId: id,
+          draggable: false,
+          extent: [
+            [0, 0],
+            [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
+          ],
+          zIndex: 191,
+        },
         {
           id: transactionId,
           type: "transaction",
@@ -366,7 +417,7 @@ export const createNode = ({
             state: "default",
             content: DEFAULT_CONTENT_MAP["transaction"],
             actions: ["changeColor", "editText", "changeFontSize"],
-            resizable: true,
+            resizable: false,
           },
           style: {
             width: DEFAULT_SIZE_MAP["transaction"].width,
@@ -390,7 +441,7 @@ export const createNode = ({
                 DEFAULT_SIZE_MAP["transaction"].height / 2,
             ],
           ],
-          zIndex: 191,
+          zIndex: 192,
           draggable: false,
         },
         {
@@ -400,39 +451,11 @@ export const createNode = ({
           position,
           deletable: true,
           data: {
-            focus: "in",
-            actions: [
-              "changeColor",
-              "toggleHandlesVisibility",
-              "addHandle",
-              "editText",
-              "changeFocus",
-              "changeFontSize",
-            ],
             subModel: "cooperation_model",
-            content: DEFAULT_CONTENT_MAP[type],
-            handles: {
-              isVisible: true,
-              top: {
-                handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-              },
-              bottom: {
-                handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-              },
-              left: {
-                handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-              },
-              right: {
-                handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-              },
-            },
           },
           style: {
             width: DEFAULT_SIZE_MAP[type].width,
             height: DEFAULT_SIZE_MAP[type].height,
-            fill: NODE_BACKGROUND_COLOR_MAP["default"],
-            stroke: NODE_BORDER_COLOR_MAP["default"],
-            strokeWidth: 2,
           },
           selected: true,
           zIndex: 190,
@@ -809,41 +832,190 @@ export const createNode = ({
     }
 
     case "set": {
-      return {
-        id: id,
-        type: type,
-        position,
-        ariaLabel: t(($) => $["Entity Class"]),
-        deletable: true,
-        data: {
-          subModel: "object_fact_diagram",
-          content: DEFAULT_CONTENT_MAP[type],
-          handles: {
-            isVisible: true,
-            top: {
-              handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-            },
-            bottom: {
-              handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-            },
-            left: {
-              handles: [{ id: uuid(), type: "source", offset: 0.5 }],
-            },
-            right: {
-              handles: [{ id: uuid(), type: "source", offset: 0.5 }],
+      const parentEntityTypeId = uuid();
+      const childEntityTypeId = uuid();
+      return [
+        {
+          id: id,
+          type: type,
+          position,
+          ariaLabel: t(($) => $["Set"]),
+          deletable: true,
+          data: {
+            subModel: "object_fact_diagram",
+            content: DEFAULT_CONTENT_MAP[type],
+            focus: "in",
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP[type].width,
+            height: DEFAULT_SIZE_MAP[type].height,
+            fill: NODE_BACKGROUND_COLOR_MAP["default"],
+            strokeWidth: 2,
+            stroke: NODE_BORDER_COLOR_MAP["default"],
+          },
+          selected: true,
+          zIndex: 190,
+        },
+        {
+          id: childEntityTypeId,
+          type: "entity_type",
+          position: {
+            x:
+              DEFAULT_SIZE_MAP[type].width / 2 -
+              (DEFAULT_SIZE_MAP[type].width / 2 - 20),
+            y:
+              DEFAULT_SIZE_MAP[type].height / 2 -
+              (DEFAULT_SIZE_MAP[type].height / 2 - 20),
+          },
+          ariaLabel: t(($) => $["Entity Type"]),
+          deletable: false,
+          parentId: parentEntityTypeId,
+          extent: [
+            [
+              DEFAULT_SIZE_MAP[type].width / 2 -
+                (DEFAULT_SIZE_MAP[type].width - 20) / 2,
+              DEFAULT_SIZE_MAP[type].height / 2 -
+                (DEFAULT_SIZE_MAP[type].height - 20) / 2,
+            ],
+            [
+              DEFAULT_SIZE_MAP[type].width / 2 +
+                (DEFAULT_SIZE_MAP[type].width - 20) / 2,
+              DEFAULT_SIZE_MAP[type].height / 2 +
+                (DEFAULT_SIZE_MAP[type].height - 20) / 2,
+            ],
+          ],
+          data: {
+            resizable: false,
+            focus: "in",
+            subModel: "object_fact_diagram",
+            content: DEFAULT_CONTENT_MAP[type],
+            handles: {
+              isVisible: true,
+              top: {
+                handles: [
+                  {
+                    id: uuid(),
+                    type: "source",
+                    offset: 0.5,
+                    derivation: "none",
+                  },
+                ],
+              },
+              bottom: {
+                handles: [
+                  {
+                    id: uuid(),
+                    type: "source",
+                    offset: 0.5,
+                    derivation: "none",
+                  },
+                ],
+              },
+              left: {
+                handles: [
+                  {
+                    id: uuid(),
+                    type: "source",
+                    offset: 0.5,
+                    derivation: "none",
+                  },
+                ],
+              },
+              right: {
+                handles: [
+                  {
+                    id: uuid(),
+                    type: "source",
+                    offset: 0.5,
+                    derivation: "none",
+                  },
+                ],
+              },
             },
           },
+          style: {
+            width: DEFAULT_SIZE_MAP[type].width - 20,
+            height: DEFAULT_SIZE_MAP[type].height - 20,
+            fill: NODE_BACKGROUND_COLOR_MAP["default"],
+            strokeWidth: 2,
+            stroke: NODE_BORDER_COLOR_MAP["default"],
+          },
+          selected: false,
+          draggable: false,
+          zIndex: 191,
         },
-        style: {
-          width: DEFAULT_SIZE_MAP[type].width,
-          height: DEFAULT_SIZE_MAP[type].height,
-          fill: NODE_BACKGROUND_COLOR_MAP["default"],
-          strokeWidth: 2,
-          stroke: NODE_BORDER_COLOR_MAP["default"],
+        {
+          id: parentEntityTypeId,
+          type: "entity_type",
+          position: { x: 0, y: 0 },
+          parentId: id,
+          ariaLabel: t(($) => $["Entity Type"]),
+          deletable: false,
+          extent: [
+            [0, 0],
+            [DEFAULT_SIZE_MAP[type].width, DEFAULT_SIZE_MAP[type].height],
+          ],
+          data: {
+            resizable: false,
+            focus: "in",
+            subModel: "object_fact_diagram",
+            content: DEFAULT_CONTENT_MAP[type],
+            handles: {
+              isVisible: true,
+              top: {
+                handles: [
+                  {
+                    id: uuid(),
+                    type: "source",
+                    offset: 0.5,
+                    derivation: "none",
+                  },
+                ],
+              },
+              bottom: {
+                handles: [
+                  {
+                    id: uuid(),
+                    type: "source",
+                    offset: 0.5,
+                    derivation: "none",
+                  },
+                ],
+              },
+              left: {
+                handles: [
+                  {
+                    id: uuid(),
+                    type: "source",
+                    offset: 0.5,
+                    derivation: "none",
+                  },
+                ],
+              },
+              right: {
+                handles: [
+                  {
+                    id: uuid(),
+                    type: "source",
+                    offset: 0.5,
+                    derivation: "none",
+                  },
+                ],
+              },
+            },
+          },
+          style: {
+            width: DEFAULT_SIZE_MAP[type].width,
+            height: DEFAULT_SIZE_MAP[type].height,
+            fill: NODE_BACKGROUND_COLOR_MAP["default"],
+            strokeWidth: 2,
+            stroke: NODE_BORDER_COLOR_MAP["default"],
+          },
+          selected: false,
+          draggable: false,
+          zIndex: 192,
         },
-        selected: true,
-        zIndex: 190,
-      };
+      ];
     }
 
     case "attribute": {
@@ -891,7 +1063,7 @@ export const createNode = ({
         id,
         type: type,
         position,
-        ariaLabel: t(($) => $["Derived Entity"]),
+        ariaLabel: t(($) => $["Entity Type"]),
         deletable: true,
         data: {
           subModel: "object_fact_diagram",

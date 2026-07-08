@@ -40,13 +40,7 @@ import markerMap from "../utils/markerMap";
 import { zIndexMap } from "$/shared/utils/zIndex";
 
 export type ModelerAction =
-  | "attach"
-  | "preview"
-  | "select"
-  | "pan"
-  | "edit"
-  | "draw"
-  | null;
+  "attach" | "preview" | "select" | "pan" | "edit" | "draw" | null;
 
 export interface DEMOModelerState {
   id: string;
@@ -110,7 +104,6 @@ export const setViewport = (newViewport: ReactStyleStateSetter<Viewport>) => {
   }));
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getNode = (
   id: string | undefined,
   filter?: (node: DEMONode, index: number, array: DEMONode[]) => boolean,

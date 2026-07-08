@@ -13,7 +13,6 @@ import TransactionKindShape from "../nodes/process_structure_diagram/transaction
 import TransactionTimeShape from "../nodes/process_structure_diagram/transaction_time/TransactionTimeShape";
 import OrganizationShape from "../nodes/organization/OrganizationShape";
 import EntityTypeShape from "../nodes/object_fact_diagram/entity_type/EntityTypeShape";
-import SetShape from "../nodes/object_fact_diagram/set/SetShape";
 import ProductionEventShape from "../nodes/object_fact_diagram/production_event/ProductionEventShape";
 import AttributeNodeShape from "../nodes/object_fact_diagram/attribute/AttributeNodeShape";
 import MultipleTransactionKindShape from "../nodes/cooperation_model/multiple_transaction_kind/MultipleTransactionKindShape";
@@ -22,11 +21,7 @@ export const shapeMap = {
   // cooperation model
   actor: ActorShape,
   transaction: TransactionShape,
-  transactor: TransactorShape,
-  self_activation: SelfActivationShape,
   composite: CompositeShape,
-  elementary_actor: ElementaryActorShape,
-  several_actors: SeveralActorsShape,
   multiple_transaction_kind: MultipleTransactionKindShape,
   // transaction pattern diagram
   transaction_time: TransactionTimeShape,
@@ -37,7 +32,6 @@ export const shapeMap = {
   tk_execution: TKExecutionShape,
   // object fact diagram
   production_event: ProductionEventShape,
-  set: SetShape,
   entity_type: EntityTypeShape,
   attribute: AttributeNodeShape,
   organization: OrganizationShape,

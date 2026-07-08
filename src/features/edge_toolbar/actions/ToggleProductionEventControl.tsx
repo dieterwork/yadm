@@ -13,6 +13,7 @@ const ToggleProductionEventMenuItem = ({ edgeId }: { edgeId: string }) => {
   if (!edge) return null;
 
   const isProductionFactVisible = !!edge?.markerStart;
+
   return (
     <DEMOElementToolbarToggleButton
       icon={(iconProps) => {

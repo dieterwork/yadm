@@ -82,7 +82,7 @@ const reactFlowSelector = (state: DEMOModelerState) => ({
   isGridSnapEnabled: state.isGridSnapEnabled,
 });
 
-let init = false;
+const init = false;
 
 const DEMOModeler = () => {
   const { isEnabled, nodes, edges, action, isGridVisible, isGridSnapEnabled } =

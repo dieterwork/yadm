@@ -13,7 +13,6 @@ import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEM
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
 import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types";
-import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
@@ -28,9 +27,7 @@ const ChangeLinePathControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
     { id: "straight", label: t(($) => $["Straight"]) },
   ];
 
-  const [selected, setSelected] = useState<Selection>(
-    new Set([edge.data.linePath]),
-  );
+  const selected = new Set([edge.data.linePath]);
 
   return (
     <MenuTrigger>
@@ -53,10 +50,9 @@ const ChangeLinePathControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
           selectedKeys={selected}
           selectionMode="single"
           onSelectionChange={(selection) => {
-            setSelected(selection);
             if (!(selection instanceof Set)) return;
             for (const entry of selection) {
-              if (typeof entry !== "string") return;
+              if (entry !== "straight" && entry !== "step") return;
               updateEdgeData<CooperationModelEdge>(edgeId, (data) => ({
                 ...data,
                 linePath: data?.linePath === "straight" ? "step" : "straight",

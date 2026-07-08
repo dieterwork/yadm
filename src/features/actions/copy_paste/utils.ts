@@ -4,7 +4,7 @@ import type { DEMONode } from "../../nodes/nodes.types";
 
 export const getDisabledNodes = (
   selectedNodes: DEMONode[],
-  disabledNodeTypes?: DEMONode["type"][]
+  disabledNodeTypes?: DEMONode["type"][],
 ) => {
   if (!disabledNodeTypes) return selectedNodes;
   return selectedNodes.filter((node) => {
@@ -14,7 +14,7 @@ export const getDisabledNodes = (
 
 export const showDisabledNodesError = (disabledNodes: DEMONode[]) => {
   return disabledNodes.map((node) =>
-    console.error(`Cannot copy node type ${node.type}`)
+    console.error(`Cannot copy node type ${node.type}`),
   );
 };
 
@@ -81,10 +81,10 @@ export const createEdgeIdMap = (edges: DEMOEdge[]) => {
 
 export const getMinCoords = (nodes: DEMONode[]) => {
   const minX = Math.min(
-    ...nodes.filter((node) => !node.parentId).map((node) => node.position.x)
+    ...nodes.filter((node) => !node.parentId).map((node) => node.position.x),
   );
   const minY = Math.min(
-    ...nodes.filter((node) => !node.parentId).map((node) => node.position.y)
+    ...nodes.filter((node) => !node.parentId).map((node) => node.position.y),
   );
   return [minX, minY];
 };
@@ -94,7 +94,7 @@ export const createNewHandles = (
   oldSourceNode: DEMONode,
   oldTargetNode: DEMONode,
   newSourceNode: DEMONode,
-  newTargetNode: DEMONode
+  newTargetNode: DEMONode,
 ) => {
   if (
     !("handles" in oldSourceNode.data) ||
@@ -119,10 +119,10 @@ export const createNewHandles = (
   const newTargetNodeHandleIds = createHandleIds(newTargetNode);
 
   const oldSourceHandleIndex = oldSourceNodeHandleIds.findIndex(
-    (id) => id === edge.sourceHandle
+    (id) => id === edge.sourceHandle,
   );
   const oldTargetHandleIndex = oldTargetNodeHandleIds.findIndex(
-    (id) => id === edge.targetHandle
+    (id) => id === edge.targetHandle,
   );
 
   const newSourceHandle = newSourceNodeHandleIds[oldSourceHandleIndex];
@@ -145,7 +145,7 @@ const createHandleIds = (node: DEMONode) => {
       .sort((a, b) => {
         return a[0].toLocaleLowerCase().localeCompare(b[0].toLocaleLowerCase());
       })
-      .flatMap(([key, value]) => {
+      .flatMap(([, value]) => {
         if (typeof value === "boolean") return "";
         return value.handles?.map((h) => h.id) ?? "";
       })

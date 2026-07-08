@@ -1,4 +1,4 @@
-import { EdgeLabelRenderer, Position } from "@xyflow/react";
+import { EdgeLabelRenderer, Position, useReactFlow } from "@xyflow/react";
 import { cn } from "@sglara/cn";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -50,6 +50,8 @@ const CardinalityLabel = ({
 }: Props) => {
   const ref = useRef<HTMLSpanElement>(null!);
   const [isEditable, setIsEditable] = useState(false);
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+  const { screenToFlowPosition } = useReactFlow();
 
   useEffect(() => {
     const el = ref.current;
@@ -154,6 +156,11 @@ const CardinalityLabel = ({
               if (!isEnabled) return;
               e.stopPropagation();
               setSelected(true);
+              const position = screenToFlowPosition({
+                x: e.clientX,
+                y: e.clientY,
+              });
+              setMenuPosition(position);
               setNodes((nodes) =>
                 nodes.map((n) => (n.selected ? { ...n, selected: false } : n)),
               );
@@ -178,7 +185,7 @@ const CardinalityLabel = ({
         isVisible={selected && isEnabled}
         edgeId={edgeId}
         position={Position.Right}
-        xyPosition={{ x: labelX, y: labelY }}
+        xyPosition={menuPosition}
         onEdit={edit}
         onClose={() => {
           updateEdgeData(edgeId, (data) => {
@@ -188,12 +195,10 @@ const CardinalityLabel = ({
               ...data,
               cardinality: {
                 ...data.cardinality,
-                [field]: { label: "", selected: false },
+                [field]: { ...data.cardinality[field], selected: false },
               },
             };
           });
-          ref.current.innerHTML = "";
-          takeSnapshotAndSave();
         }}
       />
     </>

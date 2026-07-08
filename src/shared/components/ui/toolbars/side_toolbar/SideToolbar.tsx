@@ -2,7 +2,6 @@ import { TooltipTrigger } from "react-aria-components";
 import {
   AlignLeftIcon,
   ArrowsInLineHorizontalIcon,
-  FilePlusIcon,
   FlowArrowIcon,
   GridFourIcon,
   HandIcon,

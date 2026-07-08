@@ -5,7 +5,7 @@ import {
 } from "@xyflow/react";
 import { shapeMap } from "../shapes/shapeMap";
 import Shape from "../shapes/Shape";
-import { useRef, type ReactNode } from "react";
+import { useRef, type ReactNode, type RefObject } from "react";
 import NodeToolbar from "../node_toolbar/DEMONodeToolbar";
 import { MIN_SIZE_MAP } from "./utils/consts";
 import type { DEMONode } from "./nodes.types";
@@ -15,8 +15,16 @@ import {
   getNode,
   useDEMOModelerStore,
 } from "../modeler/store/useDEMOModelerStore";
-import { CornersOutIcon } from "@phosphor-icons/react";
-import getChildNodes from "./utils/getChildNodes";
+import { cn } from "@sglara/cn";
+import useParentDrag from "./utils/useParentDrag";
+
+const NO_SHAPE_NODES = [
+  "transactor",
+  "several_actors",
+  "elementary_actor",
+  "self_activation",
+  "set",
+];
 
 interface DEMONodeBaseProps extends Omit<NodeProps<DEMONode>, "dragHandle"> {
   resizable?: boolean;
@@ -25,6 +33,10 @@ interface DEMONodeBaseProps extends Omit<NodeProps<DEMONode>, "dragHandle"> {
   actions?: NodeToolbarAction[] | null;
   resizerProps?: NodeResizerProps;
   dragHandle?: boolean;
+  dragParent?: boolean;
+  ref?: RefObject<HTMLDivElement>;
+  className?: string;
+  parentId?: string;
 }
 
 export type NodeToolbarAction =
@@ -60,16 +72,21 @@ const DEMONodeBase = ({
   resizerProps,
   draggable,
   dragging,
+  dragParent,
+  className,
+  parentId,
 }: DEMONodeBaseProps) => {
   const { inProgress: isConnectionInProgress } = useConnection();
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
   const isExportEnabled = useDEMOModelerStore((state) => state.isExportEnabled);
-  const nodes = useDEMOModelerStore((state) => state.nodes);
   const action = useDEMOModelerStore((state) => state.action);
+  const ref = useRef<HTMLDivElement>(null);
 
   const shapeRef = useRef<SVGSVGElement>(null!);
   const node = getNode(id);
   const DEMOShape = shapeMap[type];
+
+  useParentDrag(parentId, ref, dragParent);
 
   if (!node) return;
 
@@ -77,74 +94,65 @@ const DEMONodeBase = ({
     throw new Error("Cannot render node primitive with text node");
   }
 
-  const areNodeHandlesVisible = getChildNodes([node], nodes).every((node) => {
-    if (!("handles" in node.data) || !node.data.handles) return false;
-    return !!node.data.handles.isVisible;
-  });
-
   return (
-    <>
-      {(type === "elementary_actor" ||
-        type === "transactor" ||
-        type === "several_actors") &&
-        draggable &&
-        !isExportEnabled &&
-        areNodeHandlesVisible && (
-          <div className="drag-handle w-6 h-6 grid place-items-center absolute top-1 right-1 pointer-events-all">
-            <CornersOutIcon color="var(--clr-slate-900)" size={20} />
-          </div>
-        )}
-      <div className="isolate" style={{ width, height }}>
-        {/* Controls */}
-        {!isConnectionInProgress &&
+    <div
+      ref={ref}
+      className={cn(
+        "isolate",
+        className,
+        !!parentId &&
+          !!dragParent &&
           isEnabled &&
-          !isExportEnabled &&
-          action !== "attach" && <NodeToolbar nodeId={id} actions={actions} />}
-        {resizable && isEnabled && !isExportEnabled && (
-          <DEMONodeResizer
-            {...resizerProps}
-            nodeId={id}
-            keepAspectRatio={keepAspectRatio}
-            isVisible={selected && !dragging}
-            minHeight={MIN_SIZE_MAP[type]?.height}
-            minWidth={MIN_SIZE_MAP[type]?.width}
-            lineClassName="node-resizer-line"
-            handleClassName="node-resizer-handle"
-            type={type}
+          "nopan cursor-grab active:cursor-grabbing",
+      )}
+      style={{ width, height }}
+    >
+      {/* Controls */}
+      {!isConnectionInProgress &&
+        isEnabled &&
+        !isExportEnabled &&
+        action !== "attach" && <NodeToolbar nodeId={id} actions={actions} />}
+      {resizable && isEnabled && !isExportEnabled && (
+        <DEMONodeResizer
+          {...resizerProps}
+          nodeId={id}
+          keepAspectRatio={keepAspectRatio}
+          isVisible={selected && !dragging}
+          minHeight={MIN_SIZE_MAP[type]?.height}
+          minWidth={MIN_SIZE_MAP[type]?.width}
+          lineClassName="node-resizer-line"
+          handleClassName="node-resizer-handle"
+          type={type}
+        />
+      )}
+      {"handles" in data && data.handles && !isExportEnabled && (
+        <Handles
+          nodeId={id}
+          handles={data?.handles}
+          width={width}
+          height={height}
+        />
+      )}
+      {/* Shape */}
+      {DEMOShape && !NO_SHAPE_NODES.includes(type) && (
+        <Shape
+          ref={shapeRef}
+          width={width}
+          height={height}
+          strokeWidth={2}
+          isHighlighted={
+            selected && !resizable && isEnabled && !isExportEnabled
+          }
+        >
+          <DEMOShape
+            state={"state" in data ? data.state : undefined}
+            focus={"focus" in data ? data.focus : undefined}
+            color={"color" in data ? data.color : undefined}
           />
-        )}
-        {"handles" in data && data.handles && !isExportEnabled && (
-          <Handles
-            nodeId={id}
-            handles={data?.handles}
-            width={width}
-            height={height}
-          />
-        )}
-        {/* Shape */}
-        {DEMOShape &&
-          type !== "several_actors" &&
-          type !== "transactor" &&
-          type !== "elementary_actor" && (
-            <Shape
-              ref={shapeRef}
-              width={width}
-              height={height}
-              strokeWidth={2}
-              isHighlighted={
-                selected && !resizable && isEnabled && !isExportEnabled
-              }
-            >
-              <DEMOShape
-                state={"state" in data ? data.state : undefined}
-                focus={"focus" in data ? data.focus : undefined}
-                color={"color" in data ? data.color : undefined}
-              />
-            </Shape>
-          )}
-        {children}
-      </div>
-    </>
+        </Shape>
+      )}
+      {children}
+    </div>
   );
 };
 

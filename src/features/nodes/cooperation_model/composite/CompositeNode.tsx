@@ -1,8 +1,10 @@
+import { useRef } from "react";
 import { type NodeProps } from "@xyflow/react";
 
 import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import type { CompositeNode as CompositeNodeType } from "./composite.types";
 import EditableContent from "../../../editable_content/EditableContent";
+import useParentDrag from "../../utils/useParentDrag";
 
 const CompositeNode = ({
   id,
@@ -15,6 +17,12 @@ const CompositeNode = ({
 }: NodeProps<CompositeNodeType>) => {
   const { content, fontSize, isEditable, actions } = data;
 
+  // As a passive child (inside an elementary_actor), a drag on the composite
+  // body drives React Flow's native drag on the parent, while clicks still
+  // select the composite and handles stay connectable.
+  const dragRef = useRef<HTMLDivElement>(null);
+  useParentDrag(parentId, dragRef);
+
   const defaultActions: NodeToolbarAction[] = [
     "addHandle",
     "changeColor",
@@ -22,11 +30,7 @@ const CompositeNode = ({
     "toggleHandlesVisibility",
     "changeFocus",
     "editText",
-  ];
-
-  if (parentId) {
-    defaultActions.push("attachNode");
-  }
+  ].concat(parentId ? ["attachNode"] : []);
 
   return (
     <DEMONodeBase
@@ -38,6 +42,8 @@ const CompositeNode = ({
       height={height}
       type="composite"
       actions={actions ?? defaultActions}
+      parentId={parentId}
+      dragParent
     >
       <EditableContent
         isSelected={selected}

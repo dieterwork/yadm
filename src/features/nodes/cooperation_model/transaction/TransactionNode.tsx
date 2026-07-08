@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import {
   type CoordinateExtent,
   type NodeProps,
@@ -23,6 +24,7 @@ const TransactionNode = ({
   parentId,
 }: NodeProps<TransactionNodeType>) => {
   const { content, fontSize, isEditable, actions, resizable } = data;
+
   const selfActivationNode = parentId
     ? getNode(parentId, (node) => node.type === "self_activation")
     : null;
@@ -87,6 +89,8 @@ const TransactionNode = ({
         maxWidth: selfActivationNode?.width,
         maxHeight: selfActivationNode?.height,
       }}
+      parentId={parentId}
+      dragParent
     >
       <EditableContent
         isSelected={selected}

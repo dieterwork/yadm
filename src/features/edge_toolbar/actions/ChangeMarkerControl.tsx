@@ -49,9 +49,7 @@ const ChangeMarkerControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
     (o) => Boolean(markerType[o.id]) || o.id === "none",
   );
 
-  console.log(markerType);
-
-  const [selected, setSelected] = useState<Selection>(new Set([current]));
+  const selected = new Set([current]);
 
   const changeMarker = (option: MarkerOption) => {
     if (option === "markerMid") {
@@ -59,19 +57,22 @@ const ChangeMarkerControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
         ...data,
         markerMid: markerType.markerMid,
       }));
-      updateEdge(edgeId, { markerEnd: undefined });
+      updateEdge(edgeId, { markerEnd: undefined, markerStart: undefined });
     } else if (option === "markerEnd") {
       updateEdgeData<DEMOEdge>(edgeId, (data) => ({
         ...data,
         markerMid: undefined,
       }));
-      updateEdge(edgeId, { markerEnd: markerType.markerEnd });
+      updateEdge(edgeId, {
+        markerEnd: markerType.markerEnd,
+        markerStart: undefined,
+      });
     } else {
       updateEdgeData<DEMOEdge>(edgeId, (data) => ({
         ...data,
         markerMid: undefined,
       }));
-      updateEdge(edgeId, { markerEnd: undefined });
+      updateEdge(edgeId, { markerEnd: undefined, markerStart: undefined });
     }
     takeSnapshotAndSave();
   };
@@ -97,10 +98,8 @@ const ChangeMarkerControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
           selectedKeys={selected}
           selectionMode="single"
           onSelectionChange={(selection) => {
-            setSelected(selection);
             if (!(selection instanceof Set)) return;
             for (const entry of selection) {
-              if (typeof entry !== "string") return;
               changeMarker(entry as MarkerOption);
             }
           }}

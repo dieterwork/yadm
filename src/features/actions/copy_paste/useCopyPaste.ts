@@ -48,7 +48,6 @@ const useCopyPaste = () => {
   const edges = useDEMOModelerStore((state) => state.edges);
   const bufferedNodes = useCopyPasteStore((state) => state.bufferedNodes);
   const bufferedEdges = useCopyPasteStore((state) => state.bufferedEdges);
-  const action = useDEMOModelerStore((state) => state.action);
 
   useEffect(() => {
     if (rfDomNode) {

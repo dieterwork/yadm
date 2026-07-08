@@ -1,4 +1,4 @@
-const loadServerModels = async (): Promise<any> => {
+const loadServerModels = async () => {
   const email = localStorage.getItem("yadm-user-email") || "";
   const authKey = localStorage.getItem("yadm-auth-key") || "";
 

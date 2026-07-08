@@ -37,7 +37,7 @@ const Shape = ({
         height={height}
         className={cn(
           "demo-shape-svg",
-          isHighlighted && "outline-1 outline-sky-500"
+          isHighlighted && "outline-1 outline-sky-500",
         )}
         ref={ref}
       >

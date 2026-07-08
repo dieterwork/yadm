@@ -7,13 +7,12 @@ import {
   RectangleDashedIcon,
   RectangleIcon,
 } from "@phosphor-icons/react";
-import { MenuTrigger, Popover, type Selection } from "react-aria-components";
+import { MenuTrigger, Popover } from "react-aria-components";
 import type { CooperationModelEdge } from "../../edges.types";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
 import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types";
-import { useState } from "react";
 
 import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
@@ -34,20 +33,7 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
     { id: "dashed", label: t(($) => $["Dashed"]) },
   ];
 
-  const [selected, setSelected] = useState<Selection>(
-    new Set([edge.data.lineType]),
-  );
-
-  const [prevLineType, setPrevLineType] = useState(edge.data.lineType);
-
-  if (
-    prevLineType !== edge.data.lineType &&
-    selected instanceof Set &&
-    !selected.has(edge.data.lineType)
-  ) {
-    setPrevLineType(edge.data.lineType);
-    setSelected(new Set([edge.data.lineType]));
-  }
+  const selected = new Set([edge.data.lineType]);
 
   return (
     <MenuTrigger>
@@ -68,13 +54,11 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
           selectedKeys={selected}
           selectionMode="single"
           onSelectionChange={(selection) => {
-            setSelected(selection);
-            if (!(selection instanceof Set)) return;
             for (const entry of selection) {
-              if (typeof entry !== "string") return;
+              if (entry !== "solid" && entry !== "dashed") return;
               updateEdgeData<CooperationModelEdge>(edgeId, (data) => ({
                 ...data,
-                lineType: data?.lineType === "solid" ? "dashed" : "solid",
+                lineType: entry,
               }));
               takeSnapshotAndSave();
             }
