@@ -35,6 +35,7 @@ type Props = {
   translateX?: string;
   translateY?: string;
   isEnabled?: boolean;
+  law?: "precedence" | "exclusion"
 };
 
 const CardinalityLabel = ({
@@ -47,6 +48,7 @@ const CardinalityLabel = ({
   translateX,
   translateY,
   isEnabled,
+  law
 }: Props) => {
   const ref = useRef<HTMLSpanElement>(null!);
   const [isEditable, setIsEditable] = useState(false);
@@ -187,6 +189,19 @@ const CardinalityLabel = ({
         position={Position.Right}
         xyPosition={menuPosition}
         onEdit={edit}
+        onDelete={() => {
+          updateEdgeData(edgeId, (data) => {
+            if (!data || !("cardinality" in data) || !data.cardinality)
+              return data;
+            return {
+              ...data,
+              cardinality: {
+                ...data.cardinality,
+                [field]: { ...data.cardinality[field], label: "" },
+              },
+            };
+          });
+        }}
         onClose={() => {
           updateEdgeData(edgeId, (data) => {
             if (!data || !("cardinality" in data) || !data.cardinality)

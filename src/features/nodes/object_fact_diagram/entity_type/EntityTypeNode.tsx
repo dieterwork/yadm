@@ -14,7 +14,7 @@ const EntityTypeNode = ({
   draggable,
   parentId,
 }: NodeProps<EntityTypeNodeType>) => {
-  const { content, fontSize, isEditable, resizable } = data;
+  const { content, fontSize, isEditable, resizable, actions } = data;
   const setParentId = parentId ? getNode(parentId)?.parentId : undefined;
 
   return (
@@ -27,7 +27,7 @@ const EntityTypeNode = ({
       type="entity_type"
       draggable={draggable}
       resizable={resizable}
-      actions={[
+      actions={actions ?? [
         "addHandle",
         "changeColor",
         "changeFontSize",

@@ -43,6 +43,11 @@ export type EditableEdge = Edge<{
   linePath?: LinePath;
 }>;
 
+type CardinalityLabel = {
+  label: string;
+  selected: boolean;
+}
+
 export function EditableEdgeComponent({
   id,
   sourceX,
@@ -76,12 +81,12 @@ export function EditableEdgeComponent({
   children?: ReactNode;
   law?: "exclusion" | "precedence";
   cardinality?: {
-    startLabel0: string;
-    startLabel1: string;
-    middleLabel0: string;
-    middleLabel1: string;
-    endLabel0: string;
-    endLabel1: string;
+    startLabel0: CardinalityLabel;
+    startLabel1: CardinalityLabel;
+    middleLabel0: CardinalityLabel;
+    middleLabel1: CardinalityLabel;
+    endLabel0: CardinalityLabel;
+    endLabel1: CardinalityLabel;
   };
 }) {
   const isEnabled = useDEMOModelerStore((state) => state.isEnabled);
@@ -169,9 +174,6 @@ export function EditableEdgeComponent({
 
   const targetHandle = getNodeHandle(targetNode, targetHandleId);
 
-  // Cardinality label offsets. For straight lines, place the two labels at each
-  // handle along the bisectors of the wedges formed where the line meets the
-  // node edge; otherwise use the fixed per-position offsets.
   const isStraight = linePath === "straight";
   const sourceLineDir = { x: targetX - sourceX, y: targetY - sourceY };
   const targetLineDir = { x: sourceX - targetX, y: sourceY - targetY };
@@ -189,11 +191,11 @@ export function EditableEdgeComponent({
     ? getStraightLabelTranslate(targetLineDir, 1)
     : getEndLabel1Translate(targetPosition);
   const middleLabel0T = isStraight
-    ? getStraightMiddleLabelTranslate(sourceLineDir, 0)
-    : getMiddleLabel0Translate(midLabelDirection);
+    ? getStraightMiddleLabelTranslate(sourceLineDir, 0, law)
+    : getMiddleLabel0Translate(midLabelDirection, law);
   const middleLabel1T = isStraight
-    ? getStraightMiddleLabelTranslate(sourceLineDir, 1)
-    : getMiddleLabel1Translate(midLabelDirection);
+    ? getStraightMiddleLabelTranslate(sourceLineDir, 1, law)
+    : getMiddleLabel1Translate(midLabelDirection, law);
 
   return (
     <>
@@ -305,15 +307,15 @@ export function EditableEdgeComponent({
           targetHandle?.handle.derivation === "none") && (
           <>
             <CardinalityLabel
-              edgeId={id}
-              field="startLabel0"
-              isEnabled={isEnabled}
-              labelX={sourceX}
-              labelY={sourceY}
-              content={cardinality.startLabel0.label}
-              selected={cardinality.startLabel0.selected}
-              translateX={startLabel0T.x}
-              translateY={startLabel0T.y}
+            edgeId={id}
+            field="startLabel0"
+            isEnabled={isEnabled}
+            labelX={sourceX}
+            labelY={sourceY}
+            content={cardinality.startLabel0.label}
+            selected={cardinality.startLabel0.selected}
+            translateX={startLabel0T.x}
+            translateY={startLabel0T.y}
             />
             <CardinalityLabel
               edgeId={id}

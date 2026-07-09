@@ -1,45 +1,7 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { useStoreApi } from "@xyflow/react";
-import { XYDrag, errorMessages, type XYDragInstance } from "@xyflow/system";
-import { getNode } from "$/features/modeler/store/useDEMOModelerStore";
-
-type StoreApi = ReturnType<typeof useStoreApi>;
-
-const selectNode = ({
-  id,
-  store,
-  unselect = false,
-  nodeRef,
-}: {
-  id: string;
-  store: StoreApi;
-  unselect?: boolean;
-  nodeRef: RefObject<HTMLElement>;
-}) => {
-  const {
-    addSelectedNodes,
-    unselectNodesAndEdges,
-    multiSelectionActive,
-    nodeLookup,
-    onError,
-  } = store.getState();
-  const node = nodeLookup.get(id);
-
-  if (!node) {
-    onError?.("012", errorMessages["error012"](id));
-    return;
-  }
-
-  store.setState({ nodesSelectionActive: false });
-
-  if (!node.selected) {
-    addSelectedNodes([id]);
-  } else if (unselect || (node.selected && multiSelectionActive)) {
-    unselectNodesAndEdges({ nodes: [node], edges: [] });
-
-    requestAnimationFrame(() => nodeRef?.current?.blur());
-  }
-};
+import { XYDrag, type XYDragInstance } from "@xyflow/system";
+import selectNode from "./selectNode";
 
 export default function useParentDrag(
   parentId: string | undefined,
@@ -48,7 +10,6 @@ export default function useParentDrag(
 ) {
   const store = useStoreApi();
   const xyDrag = useRef<XYDragInstance | null>(null);
-  const node = getNode(nodeRef.current);
 
   useEffect(() => {
     if (isEnabled) {
@@ -67,5 +28,5 @@ export default function useParentDrag(
       }
     }
     return () => xyDrag.current?.destroy();
-  }, [parentId, store, XYDrag, selectNode, isEnabled]);
+  }, [parentId, store, isEnabled]);
 }

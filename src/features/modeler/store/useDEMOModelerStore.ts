@@ -38,6 +38,7 @@ import { setSelectedHandleId } from "$/features/handle_toolbar/useHandleSelectio
 import getNodeHandle from "$/features/connection_handles/utils/getHandle";
 import markerMap from "../utils/markerMap";
 import { zIndexMap } from "$/shared/utils/zIndex";
+import getChildNodes from "../../nodes/utils/getChildNodes";
 
 export type ModelerAction =
   "attach" | "preview" | "select" | "pan" | "edit" | "draw" | null;
@@ -405,7 +406,23 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
   }
 };
 
+// A `set` renders no shape itself — its inner child nodes are what's visible —
+// so color/focus changes cascade to those children.
+const updateSetChildren = (
+  setNode: DEMONode,
+  data: { color?: string; focus?: NodeFocus },
+) => {
+  const nodes = useDEMOModelerStore.getState().nodes;
+  getChildNodes([setNode], nodes).forEach((child) =>
+    updateNodeData(child.id, data),
+  );
+};
+
 export const updateNodeColor = (id: string, color: string) => {
+  const node = getNode(id);
+  if (node?.type === "set") {
+    updateSetChildren(node, { color });
+  }
   updateNodeData(id, { color });
 };
 
@@ -417,6 +434,10 @@ export const updateNodeState = (
 };
 
 export const updateNodeFocus = (id: string, focus: NodeFocus) => {
+  const node = getNode(id);
+  if (node?.type === "set") {
+    updateSetChildren(node, { focus });
+  }
   updateNodeData(id, { focus });
 };
 

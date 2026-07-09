@@ -2,16 +2,12 @@ import type { Position } from "@xyflow/react";
 
 type Translate = { x: string; y: string };
 
-// For straight (angled) lines, the label pair is shifted away from the handle
-// along the line direction, and the two labels are stacked vertically with each
-// other (identical X, offset only in Y). `lineDir` is the direction the line
-// travels away from the handle.
 export const getStraightLabelTranslate = (
   lineDir: { x: number; y: number },
   index: 0 | 1,
 ): Translate => {
   const along = 16; // px the pair is shifted away from the handle along the line
-  const gap = 12; // half the vertical gap between the two stacked labels
+  const gap = 12;
 
   const len = Math.hypot(lineDir.x, lineDir.y) || 1;
   const dir = { x: lineDir.x / len, y: lineDir.y / len };
@@ -25,15 +21,13 @@ export const getStraightLabelTranslate = (
   };
 };
 
-// For straight lines, the middle-label pair is shifted off the line
-// (perpendicular, shared by both labels) and the two labels are stacked
-// vertically with each other (identical X, offset only in Y).
 export const getStraightMiddleLabelTranslate = (
   lineDir: { x: number; y: number },
   index: 0 | 1,
+  law?: "precedence" | "exclusion",
 ): Translate => {
-  const perpDist = 6; // px the pair is shifted off the line
-  const gap = 8; // half the vertical gap between the two stacked labels
+  const perpDist = 0; // px the pair is shifted off the line
+  const gap = 12 + (law === "exclusion" ? 8 : 0); // half the vertical gap between the two stacked labels
 
   const len = Math.hypot(lineDir.x, lineDir.y) || 1;
   const dir = { x: lineDir.x / len, y: lineDir.y / len };
@@ -55,7 +49,9 @@ export const getStraightMiddleLabelTranslate = (
 // Horizontal exits (left/right): labels stack above and below the line.
 // Vertical exits (top/bottom): labels sit left and right of the line.
 
-export const getStartLabel0Translate = (sourcePosition: Position) => {
+export const getStartLabel0Translate = (
+  sourcePosition: Position,
+) => {
   switch (sourcePosition) {
     case "right":
       return { x: "0", y: "-100%" };
@@ -70,7 +66,9 @@ export const getStartLabel0Translate = (sourcePosition: Position) => {
   }
 };
 
-export const getStartLabel1Translate = (sourcePosition: Position) => {
+export const getStartLabel1Translate = (
+  sourcePosition: Position,
+) => {
   switch (sourcePosition) {
     case "right":
       return { x: "0", y: "0" };
@@ -84,26 +82,24 @@ export const getStartLabel1Translate = (sourcePosition: Position) => {
       return { x: "-50%", y: "-50%" };
   }
 };
-
-// Middle labels — placed at the edge midpoint.
-// Direction is derived from arrowRotation: horizontal arrow → labels above/below,
-// vertical arrow → labels left/right.
 
 export const getMiddleLabel0Translate = (
   direction: "horizontal" | "vertical",
+  law?: "exclusion" | "precedence",
 ): Translate =>
   direction === "horizontal"
-    ? { x: "-50%", y: "-105%" }
-    : { x: "-105%", y: "-50%" };
+    ? { x: "-50%", y: `calc(-105% - ${law === "exclusion" ? "8px" : "0px"})` }
+    : { x: `calc(-105% - ${law === "exclusion" ? "8px" : "0px"})`, y: "-50%" };
 
 export const getMiddleLabel1Translate = (
   direction: "horizontal" | "vertical",
+  law?: "exclusion" | "precedence",
 ): Translate =>
-  direction === "horizontal" ? { x: "-50%", y: "5%" } : { x: "5%", y: "-50%" };
+  direction === "horizontal" ? { x: "-50%", y: `calc(5% + ${law === "exclusion" ? "8px" : "0px"})` } : { x: `calc(5% + ${law === "exclusion" ? "8px" : "0px"})`, y: "-50%" };
 
 // End labels — positioned at the point where the line arrives at the target handle.
 
-export const getEndLabel0Translate = (targetPosition: Position) => {
+export const getEndLabel0Translate = (targetPosition: Position, law?: "exclusion" | "precedence") => {
   switch (targetPosition) {
     case "right":
       return { x: "0", y: "-100%" };
@@ -118,7 +114,7 @@ export const getEndLabel0Translate = (targetPosition: Position) => {
   }
 };
 
-export const getEndLabel1Translate = (targetPosition: Position) => {
+export const getEndLabel1Translate = (targetPosition: Position, law?: "exclusion" | "precedence") => {
   switch (targetPosition) {
     case "right":
       return { x: "0", y: "0" };

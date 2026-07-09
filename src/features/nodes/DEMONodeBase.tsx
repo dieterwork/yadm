@@ -17,6 +17,7 @@ import {
 } from "../modeler/store/useDEMOModelerStore";
 import { cn } from "@sglara/cn";
 import useParentDrag from "./utils/useParentDrag";
+import useParentSelection from "./utils/useParentSelection";
 
 const NO_SHAPE_NODES = [
   "transactor",
@@ -87,6 +88,7 @@ const DEMONodeBase = ({
   const DEMOShape = shapeMap[type];
 
   useParentDrag(parentId, ref, dragParent);
+  useParentSelection(parentId, ref, dragParent);
 
   if (!node) return;
 

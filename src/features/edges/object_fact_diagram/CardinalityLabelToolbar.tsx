@@ -44,6 +44,7 @@ export type CardinalityLabelToolbarProps = HTMLAttributes<HTMLDivElement> & {
   xyPosition?: XYPosition;
   onEdit?: () => void;
   onClose?: () => void;
+  onDelete?: () => void;
   labelField?: string;
 };
 
@@ -58,6 +59,7 @@ const CardinalityLabelToolbar = ({
   xyPosition,
   onEdit,
   onClose,
+  onDelete,
   labelField,
   ...restProps
 }: CardinalityLabelToolbarProps) => {
@@ -118,6 +120,7 @@ const CardinalityLabelToolbar = ({
               state="danger"
               onPress={() => {
                 onClose?.();
+                onDelete?.();
               }}
             />
           </DEMOElementToolbarGroup>

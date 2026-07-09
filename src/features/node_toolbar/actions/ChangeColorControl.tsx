@@ -28,13 +28,11 @@ const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
     { id: "yellow", label: t(($) => $["Yellow"]) },
   ] satisfies { id: string; label: string }[];
 
-  const [colorSelected, setColorSelected] = useState<Selection>(
-    new Set([
-      "color" in node.data && node.data.color
-        ? node.data.color
-        : colorOptions[0].id,
-    ]),
-  );
+  const selected = new Set([
+    "color" in node.data && node.data.color
+      ? node.data.color
+      : colorOptions[0].id,
+  ]);
 
   return (
     <MenuTrigger>
@@ -52,10 +50,9 @@ const ChangeColorControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
         <DEMOElementToolbarListBox
           aria-labelledby="change_color"
           items={colorOptions}
-          selectedKeys={colorSelected}
+          selectedKeys={selected}
           selectionMode="single"
           onSelectionChange={(selection) => {
-            setColorSelected(selection);
             if (!(selection instanceof Set)) return;
             for (const entry of selection) {
               if (typeof entry !== "string") return;

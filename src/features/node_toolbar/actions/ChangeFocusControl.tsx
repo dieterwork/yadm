@@ -28,13 +28,10 @@ const ChangeFocusControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
     { id: "out", label: t(($) => $["Out"]) },
   ] satisfies { id: NodeFocus; label: string }[];
 
-  const [selected, setSelected] = useState<Selection>(
-    new Set([
-      "focus" in node.data && node.data.focus
-        ? node.data?.focus
-        : options[0].id,
-    ]),
-  );
+  const selected = new Set([
+    "focus" in node.data && node.data.focus ? node.data.focus : options[0].id,
+  ]);
+
   return (
     <MenuTrigger>
       <DEMOElementToolbarButton
@@ -54,7 +51,6 @@ const ChangeFocusControl = ({ nodeId }: DEMONodeToolbarControlProps) => {
           selectedKeys={selected}
           selectionMode="single"
           onSelectionChange={(selection) => {
-            setSelected(selection);
             if (!(selection instanceof Set)) return;
             for (const entry of selection) {
               if (typeof entry !== "string" || !isNodeFocus(entry)) return;

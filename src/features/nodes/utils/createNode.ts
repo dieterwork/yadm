@@ -889,6 +889,12 @@ export const createNode = ({
             focus: "in",
             subModel: "object_fact_diagram",
             content: DEFAULT_CONTENT_MAP[type],
+            actions: [
+                    "addHandle",
+                    "changeFontSize",
+                    "editText",
+                    "toggleHandlesVisibility",
+                  ],
             handles: {
               isVisible: true,
               top: {
@@ -960,6 +966,10 @@ export const createNode = ({
             focus: "in",
             subModel: "object_fact_diagram",
             content: DEFAULT_CONTENT_MAP[type],
+            actions: [
+                    "addHandle",
+                    "toggleHandlesVisibility",
+                  ],
             handles: {
               isVisible: true,
               top: {

@@ -1,20 +1,11 @@
-import { EdgeLabelRenderer, type EdgeProps } from "@xyflow/react";
+import { type EdgeProps } from "@xyflow/react";
 import { EditableEdgeComponent } from "../editable/EditableEdge";
 import type { ObjectFactDiagramEdge as ObjectFactDiagramEdgeType } from "../edges.types";
-import { getNode } from "$/features/modeler/store/useDEMOModelerStore";
-import getMarkerType from "$/features/modeler/utils/getMarkerType";
 
 const ObjectFactDiagramEdge = ({
   data,
   ...restProps
 }: EdgeProps<ObjectFactDiagramEdgeType>) => {
-  const sourceNode = getNode(restProps.source);
-  const targetNode = getNode(restProps.target);
-  const markerType = getMarkerType(
-    sourceNode?.type,
-    targetNode?.type,
-    "default",
-  );
   return (
     <EditableEdgeComponent
       {...restProps}

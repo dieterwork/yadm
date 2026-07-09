@@ -24,7 +24,7 @@ const SetNode = ({
   const node = getNode(id);
   if (!node) return null;
 
-  const defaultActions: NodeToolbarAction[] = [].concat(
+  const defaultActions: NodeToolbarAction[] = ["changeFocus", "changeColor"].concat(
     parentId ? ["attachNode"] : [],
   );
 
@@ -35,7 +35,6 @@ const SetNode = ({
     const childEntityType = childNodes.find(
       (node) => node.parentId === parentEntityType?.id,
     );
-    console.log(parentEntityType, childEntityType);
 
     if (!parentEntityType || !childEntityType) {
       return;
