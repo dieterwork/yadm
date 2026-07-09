@@ -2,6 +2,7 @@ import { type NodeProps } from "@xyflow/react";
 
 import type { OrganizationNode as OrganizationNodeType } from "../nodes.types";
 import DEMONodeBase from "../DEMONodeBase";
+import OrganizationLabel from "./OrganizationLabel";
 
 const OrganizationNode = ({
   id,
@@ -11,7 +12,7 @@ const OrganizationNode = ({
   height,
   draggable,
 }: NodeProps<OrganizationNodeType>) => {
-  const { actions } = data;
+  const { actions, content, isEditable, fontSize } = data;
 
   return (
     <DEMONodeBase
@@ -22,8 +23,15 @@ const OrganizationNode = ({
       height={height}
       draggable={draggable}
       type="organization"
-      actions={actions ?? ["changeColor"]}
-    />
+      actions={actions ?? ["changeColor", "changeFontSize", "editText"]}
+    >
+      <OrganizationLabel
+        content={content?.body}
+        isEditable={isEditable}
+        fontSize={fontSize}
+        width={width}
+      />
+    </DEMONodeBase>
   );
 };
 

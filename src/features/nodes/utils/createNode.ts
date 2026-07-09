@@ -5,7 +5,6 @@ import {
   DEFAULT_CONTENT_MAP,
   DEFAULT_SIZE_MAP,
   SMALL_NODE_SIZE,
-  X_SMALL_NODE_SIZE,
 } from "./consts";
 import type { CSSProperties } from "react";
 import { calculateDoubleDiamondInCircleDimensions } from "$/features/shapes/utils/calculateDoubleDiamondInCircleDimensions";
@@ -1435,54 +1434,25 @@ export const createNode = ({
       };
     }
     case "organization": {
-      return [
-        {
-          id,
-          type,
-          position,
-          data: { state: "default" },
-          ariaLabel: t(($) => $["Organization"]),
-          deletable: true,
-          style: {
-            width: width ?? DEFAULT_SIZE_MAP["organization"].width,
-            height: height ?? DEFAULT_SIZE_MAP["organization"].height,
-            fill: NODE_BACKGROUND_COLOR_MAP["transparent"],
-            stroke: ORGANIZATION_BORDER_COLOR_MAP["default"],
-            strokeWidth: 16,
-          },
-          selected: selected ?? true,
-          zIndex: 210,
+      // The editable label above the organization is rendered by
+      // OrganizationNode (data.label), so no separate text child is needed.
+      return {
+        id,
+        type,
+        position,
+        data: { state: "default", content: { body: "" }, fontSize: 12 },
+        ariaLabel: t(($) => $["Organization"]),
+        deletable: true,
+        style: {
+          width: width ?? DEFAULT_SIZE_MAP["organization"].width,
+          height: height ?? DEFAULT_SIZE_MAP["organization"].height,
+          fill: NODE_BACKGROUND_COLOR_MAP["transparent"],
+          stroke: ORGANIZATION_BORDER_COLOR_MAP["default"],
+          strokeWidth: 16,
         },
-        {
-          id: uuid(),
-          type: "text",
-          deletable: true,
-          position: {
-            x:
-              DEFAULT_SIZE_MAP["organization"].width / 2 -
-              DEFAULT_SIZE_MAP["organization"].width / 4,
-            y: -X_SMALL_NODE_SIZE - 4,
-          },
-          parentId: id,
-          ariaLabel: t(($) => $["Text"]),
-          data: {
-            content: "",
-            textAlign: "center",
-            isEditable: false,
-            alignContent: "center",
-            fontSize: 12,
-            isBorderVisible: true,
-          },
-          style: {
-            width: DEFAULT_SIZE_MAP["organization"].width / 2,
-            height: X_SMALL_NODE_SIZE,
-            fill: NODE_BACKGROUND_COLOR_MAP["transparent"],
-            stroke: NODE_BORDER_COLOR_MAP["red"],
-          },
-          selected: selected ?? true,
-          zIndex: 210,
-        },
-      ];
+        selected: selected ?? true,
+        zIndex: 210,
+      };
     }
     case "whiteboard": {
       return [

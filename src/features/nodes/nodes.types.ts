@@ -128,6 +128,9 @@ export type OrganizationState = "default" | "missing";
 export type OrganizationNode = Node<
   {
     state: OrganizationState;
+    content?: Partial<DEMONodeContent>;
+    fontSize?: number;
+    isEditable?: boolean;
     actions?: NodeToolbarAction[];
   },
   "organization"
