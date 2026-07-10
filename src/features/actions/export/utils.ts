@@ -14,10 +14,12 @@ export const generatePNG = async ({
   nodesBounds,
   backgroundColor = "#fff",
   scaleFactor = 1,
+  withWaterMark = true
 }: {
   nodesBounds: Rect;
   backgroundColor?: string;
   scaleFactor?: number;
+  withWaterMark?: boolean
 }) => {
   const PADDING = 10;
 
@@ -63,7 +65,7 @@ export const generatePNG = async ({
     image.onerror = () => rej(image);
   });
 
-  const imgBlob = await convertWhitePixelsToTransparentPixels(image);
+  const imgBlob = await convertWhitePixelsToTransparentPixels(image, withWaterMark);
   const newUrl = URL.createObjectURL(imgBlob);
   return { url: newUrl, width: imageWidth, height: imageHeight };
 };

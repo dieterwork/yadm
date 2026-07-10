@@ -1,5 +1,6 @@
+
 const convertWhitePixelsToTransparentPixels = async (
-    image: HTMLImageElement
+    image: HTMLImageElement, withWaterMark: boolean = true
 ) => {
     const canvas = new OffscreenCanvas(image.width, image.height);
 
@@ -25,7 +26,7 @@ const convertWhitePixelsToTransparentPixels = async (
 
     ctx?.putImageData(imageData, 0, 0);
 
-    if (ctx != null) {
+    if (withWaterMark && ctx != null) {
 
         ctx.textAlign = 'end';
         ctx.font = '15px Helvetica';

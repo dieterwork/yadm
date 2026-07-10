@@ -12,6 +12,7 @@ import toast from "react-hot-toast/headless";
 import formatDate from "$/shared/utils/formatDate";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
+import useUserStore from "$features/auth/useUserStore.ts";
 
 const useExport = () => {
   const { getNodesBounds } = useReactFlow();
@@ -21,6 +22,8 @@ const useExport = () => {
   const model = useDEMOModelerStore(useShallow(modelSelector));
 
   const { t } = useTranslation();
+
+  const { isAuthenticated } = useUserStore();
 
   const fileNameSchema = z
     .string()
@@ -42,7 +45,7 @@ const useExport = () => {
       const parsedFileName = fileNameSchema.parse(fileName);
       const date = formatDate();
       setExportEnabled(true);
-      const { url } = await generatePNG({ nodesBounds, scaleFactor });
+      const { url } = await generatePNG({ nodesBounds, scaleFactor, withWaterMark: !isAuthenticated });
       downloadFile(
         url,
         (parsedFileName || "New Model") + " " + date + ` x${scaleFactor}.png`
@@ -66,13 +69,13 @@ const useExport = () => {
       const { url, width, height } = await generatePNG({
         nodesBounds,
         scaleFactor: scaleFactor * (4 / 3),
+        withWaterMark: !isAuthenticated
       });
       const doc = new jsPDF("landscape", "px", [width, height]);
       doc.addImage(url, "png", width / 4, height / 4, width / 2, height / 2);
-      doc.output("dataurlnewwindow", {
-        filename:
-          (parsedFileName || "New Model") + " " + date + ` x${scaleFactor}.pdf`,
-      });
+
+      doc.save((parsedFileName || "New Model") + " " + date + ` x${scaleFactor}.pdf`);
+
       setExportEnabled(false);
     } catch (err) {
       console.error("Could not generate PDF.", err);
