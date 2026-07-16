@@ -41,8 +41,8 @@ import takeWhiteboardSnapshotAndSave from "$/features/whiteboard/utils/takeWhite
 import { setSelectedHandleId } from "$/features/handle_toolbar/useHandleSelectionStore";
 import getNodeHandle from "$/features/connection_handles/utils/getHandle";
 import markerMap from "../utils/markerMap";
-import { zIndexMap } from "$/shared/utils/zIndex";
 import getChildNodes from "../../nodes/utils/getChildNodes";
+import { zIndexMap } from "$/shared/utils/zIndex";
 
 export type ModelerAction =
   "attach" | "preview" | "select" | "pan" | "edit" | "draw" | null;
@@ -86,6 +86,7 @@ export const useDEMOModelerStore = create<DEMOModelerState>()((set, get) => ({
   isHandleEditModeEnabled: false,
   isWhiteboardEnabled: false,
   viewport: localDEMOModel?.viewport ?? { x: 0, y: 0, zoom: 1 },
+  selectedHandleId: "",
 }));
 
 export const setNodes = (newNodes: ReactStyleStateSetter<DEMONode[]>) => {
@@ -335,6 +336,15 @@ export const onConnect: OnConnect = (connection) => {
         ? "dashed"
         : "solid",
   });
+  const zIndex = Math.max(
+    sourceNode?.zIndex && (sourceNode?.zIndex ?? 0 >= 1)
+      ? sourceNode.zIndex - 1
+      : 0,
+    targetNode?.zIndex && (targetNode?.zIndex ?? 0 >= 1)
+      ? targetNode.zIndex - 1
+      : 0,
+    zIndexMap.edge,
+  );
   const newEdge = {
     ...connection,
     id: `${sourceNode?.type ?? "node"}_${connection.sourceHandle}->${targetNode?.type ?? "node"}_${connection.targetHandle}`,
@@ -352,6 +362,7 @@ export const onConnect: OnConnect = (connection) => {
     markerStart: marker.markerStart,
     markerEnd: marker.markerEnd,
     deletable: true,
+    zIndex,
   } satisfies DEMOEdge;
 
   addEdge(newEdge);
@@ -387,6 +398,16 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
           : "solid",
     });
 
+    const zIndex = Math.max(
+      sourceNode?.zIndex && (sourceNode?.zIndex ?? 0 >= 1)
+        ? sourceNode.zIndex - 1
+        : 0,
+      targetNode?.zIndex && (targetNode?.zIndex ?? 0 >= 1)
+        ? targetNode.zIndex - 1
+        : 0,
+      zIndexMap.edge,
+    );
+
     return {
       ...edge,
       id: `${type ?? "edge"}_${uuid()}`,
@@ -406,6 +427,7 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
       markerEnd: marker.markerEnd,
       type,
       deletable: true,
+      zIndex,
     } satisfies DEMOEdge;
   });
   setEdges(newEdges);
