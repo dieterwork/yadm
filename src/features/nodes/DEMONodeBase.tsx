@@ -127,7 +127,7 @@ const DEMONodeBase = ({
           type={type}
         />
       )}
-      {"handles" in data && data.handles && !isExportEnabled && (
+      {"handles" in data && data.handles && (
         <Handles
           nodeId={id}
           handles={data?.handles}

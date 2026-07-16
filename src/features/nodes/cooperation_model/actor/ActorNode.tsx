@@ -5,6 +5,7 @@ import { cn } from "@sglara/cn";
 import type { ActorNode as ActorNodeType } from "./actor.types";
 import DEMONodeBase, { type NodeToolbarAction } from "../../DEMONodeBase";
 import EditableContent from "../../../editable_content/EditableContent";
+import { getNode } from "$/features/modeler/store/useDEMOModelerStore";
 
 const ActorNode = ({
   id,
@@ -18,6 +19,8 @@ const ActorNode = ({
   const { content, fontSize, isEditable, resizable, actions, state } = data;
 
   const [activeEl, setActiveEl] = useState<"header" | "body" | null>(null);
+
+  const parent = getNode(parentId);
 
   const defaultActions: NodeToolbarAction[] = [
     "addHandle",
@@ -43,7 +46,7 @@ const ActorNode = ({
       parentId={parentId}
       dragParent
     >
-      {content?.header ? (
+      {parent?.type === "self_activation" ? (
         <div className="grid grid-rows-[1fr_100px_1fr] absolute inset-0 m-auto w-full h-full overflow-hidden">
           <div
             className={cn(

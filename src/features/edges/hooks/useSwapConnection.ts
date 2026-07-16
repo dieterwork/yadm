@@ -53,7 +53,8 @@ const useSwapConnection = ({
             !("handles" in node.data) ||
             !node.data.handles ||
             !sourceHandle ||
-            sourceNode.type !== "entity_type"
+            (sourceNode.type !== "entity_type" &&
+              sourceNode.type !== "attribute")
           ) {
             return node;
           }
@@ -81,7 +82,8 @@ const useSwapConnection = ({
             !("handles" in node.data) ||
             !node.data.handles ||
             !targetHandle ||
-            targetNode.type !== "entity_type"
+            (targetNode.type !== "entity_type" &&
+              targetNode.type !== "attribute")
           ) {
             return node;
           }

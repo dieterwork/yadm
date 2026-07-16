@@ -46,7 +46,7 @@ export type EditableEdge = Edge<{
 type CardinalityLabel = {
   label: string;
   selected: boolean;
-}
+};
 
 export function EditableEdgeComponent({
   id,
@@ -307,15 +307,15 @@ export function EditableEdgeComponent({
           targetHandle?.handle.derivation === "none") && (
           <>
             <CardinalityLabel
-            edgeId={id}
-            field="startLabel0"
-            isEnabled={isEnabled}
-            labelX={sourceX}
-            labelY={sourceY}
-            content={cardinality.startLabel0.label}
-            selected={cardinality.startLabel0.selected}
-            translateX={startLabel0T.x}
-            translateY={startLabel0T.y}
+              edgeId={id}
+              field="startLabel0"
+              isEnabled={isEnabled}
+              labelX={sourceX}
+              labelY={sourceY}
+              content={cardinality.startLabel0.label}
+              selected={cardinality.startLabel0.selected}
+              translateX={startLabel0T.x}
+              translateY={startLabel0T.y}
             />
             <CardinalityLabel
               edgeId={id}

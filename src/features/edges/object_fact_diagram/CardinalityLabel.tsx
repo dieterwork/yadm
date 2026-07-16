@@ -35,7 +35,7 @@ type Props = {
   translateX?: string;
   translateY?: string;
   isEnabled?: boolean;
-  law?: "precedence" | "exclusion"
+  law?: "precedence" | "exclusion";
 };
 
 const CardinalityLabel = ({
@@ -48,7 +48,7 @@ const CardinalityLabel = ({
   translateX,
   translateY,
   isEnabled,
-  law
+  law,
 }: Props) => {
   const ref = useRef<HTMLSpanElement>(null!);
   const [isEditable, setIsEditable] = useState(false);
@@ -122,7 +122,7 @@ const CardinalityLabel = ({
     <>
       <EdgeLabelRenderer>
         <div
-          className="cardinality | pointer-events-auto absolute nodrag nopan p-1 grid place-items-center"
+          className="cardinality | pointer-events-none absolute nodrag nopan p-1 grid place-items-center"
           style={{
             transform: `translate(${translateX ?? "-50%"}, ${translateY ?? "-50%"}) translate(${labelX}px,${labelY}px)`,
           }}
@@ -133,7 +133,7 @@ const CardinalityLabel = ({
             suppressContentEditableWarning
             spellCheck={false}
             className={cn(
-              "inline-block text-[12px] outline-none min-w-6 min-h-[calc(1.2*12px)] leading-[1.2] text-center",
+              "inline-block pointer-events-auto text-[12px] outline-none min-w-6 min-h-[calc(1.2*12px)] leading-[1.2] text-center",
               (selected || isEditable) &&
                 "ring-1 ring-sky-500 rounded-sm px-0.5",
             )}

@@ -6,7 +6,7 @@ type Props = {
 const AggregationHandle = ({ size = 32, rotation = 0 }: Props) => {
   return (
     <div
-      className="derivation-handle"
+      className="derivation-handle | pointer-events-none"
       style={{
         width: size + "px",
         height: size + "px",

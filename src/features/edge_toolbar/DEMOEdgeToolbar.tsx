@@ -64,7 +64,7 @@ const DEMOEdgeToolbar = ({
   ).length;
 
   const multipleConnectionsToDerivationHandle =
-    sourceNode?.type === "entity_type" &&
+    (sourceNode?.type === "entity_type" || sourceNode?.type === "attribute") &&
     !!targetHandle?.handle.derivation &&
     targetHandle?.handle.derivation !== "none" &&
     numOfEdgesConnectedToTargetHandle > 1;
@@ -93,7 +93,8 @@ const DEMOEdgeToolbar = ({
             <ChangeLawControl edgeId={edgeId} />
           )}
           {actions?.indexOf("changeDerivation") !== -1 &&
-            targetNode?.type === "entity_type" && (
+            (targetNode?.type === "entity_type" ||
+              targetNode?.type === "attribute") && (
               <ChangeDerivationControl edgeId={edgeId} />
             )}
           {actions?.indexOf("swapConnection") !== -1 &&

@@ -786,6 +786,7 @@ export const createNode = ({
         data: {
           subModel: "object_fact_diagram",
           content: DEFAULT_CONTENT_MAP[type],
+          fontSize: 12,
           handles: {
             isVisible: true,
             top: {
@@ -885,15 +886,16 @@ export const createNode = ({
           ],
           data: {
             resizable: false,
+            fontSize: 12,
             focus: "in",
             subModel: "object_fact_diagram",
             content: DEFAULT_CONTENT_MAP[type],
             actions: [
-                    "addHandle",
-                    "changeFontSize",
-                    "editText",
-                    "toggleHandlesVisibility",
-                  ],
+              "addHandle",
+              "changeFontSize",
+              "editText",
+              "toggleHandlesVisibility",
+            ],
             handles: {
               isVisible: true,
               top: {
@@ -965,10 +967,7 @@ export const createNode = ({
             focus: "in",
             subModel: "object_fact_diagram",
             content: DEFAULT_CONTENT_MAP[type],
-            actions: [
-                    "addHandle",
-                    "toggleHandlesVisibility",
-                  ],
+            actions: ["addHandle", "toggleHandlesVisibility"],
             handles: {
               isVisible: true,
               top: {
@@ -1078,6 +1077,7 @@ export const createNode = ({
           subModel: "object_fact_diagram",
           content: DEFAULT_CONTENT_MAP[type],
           focus: "in",
+          fontSize: 12,
           handles: {
             isVisible: true,
             top: {

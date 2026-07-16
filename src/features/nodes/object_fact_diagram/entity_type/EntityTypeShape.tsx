@@ -28,8 +28,8 @@ const EntityTypeShape = ({ focus, color }: EntityTypeShapeProps) => {
         width={width}
         height={height}
         fill={fill}
-        rx={DEFAULT_BORDER_RADIUS}
-        ry={DEFAULT_BORDER_RADIUS}
+        rx={8}
+        ry={8}
       />
     </>
   );

@@ -11,7 +11,7 @@ const GeneralisationHandle = ({ size = 32, rotation = 0 }: Props) => {
         height: size + "px",
         "--_rotation": `${rotation * (180 / Math.PI)}deg`,
       }}
-      className="derivation-handle"
+      className="derivation-handle pointer-events-none"
     >
       <svg
         className="generalisation-handle pointer-events-none"

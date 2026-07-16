@@ -20,6 +20,8 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
   );
   const updateNodeInternals = useUpdateNodeInternals();
 
+  const isExportEnabled = useDEMOModelerStore((state) => state.isExportEnabled);
+
   useEffect(() => {
     updateNodeInternals(nodeId);
   }, [updateNodeInternals, nodeId]);
@@ -53,7 +55,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             offset={handle.offset}
             canDrag={handle.canDrag}
             derivation={handle.derivation}
-            isVisible={node.data?.handles.isVisible}
+            isVisible={node.data?.handles.isVisible && !isExportEnabled}
           />
         ))}
       {node.data.handles.bottom?.handles &&
@@ -68,7 +70,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             offset={handle.offset}
             canDrag={handle.canDrag}
             derivation={handle.derivation}
-            isVisible={node.data?.handles.isVisible}
+            isVisible={node.data?.handles.isVisible && !isExportEnabled}
           />
         ))}
       {node.data.handles.left?.handles &&
@@ -83,7 +85,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             offset={handle.offset}
             canDrag={handle.canDrag}
             derivation={handle.derivation}
-            isVisible={node.data?.handles.isVisible}
+            isVisible={node.data?.handles.isVisible && !isExportEnabled}
           />
         ))}
       {node.data.handles.right?.handles &&
@@ -98,7 +100,7 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             offset={handle.offset}
             canDrag={handle.canDrag}
             derivation={handle.derivation}
-            isVisible={node.data?.handles.isVisible}
+            isVisible={node.data?.handles.isVisible && !isExportEnabled}
           />
         ))}
     </div>

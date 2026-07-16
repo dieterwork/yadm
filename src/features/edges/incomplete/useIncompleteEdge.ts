@@ -75,7 +75,7 @@ export const useIncompleteEdge = () => {
     const fromPosition = connectionState.fromPosition;
     const fromHandle = getNodeHandle(fromNode, connectionState.fromHandle);
     if (
-      fromNode.type === "entity_type" &&
+      (fromNode.type === "entity_type" || fromNode.type === "attribute") &&
       !!fromHandle?.handle.derivation &&
       fromHandle?.handle.derivation !== "none"
     ) {
