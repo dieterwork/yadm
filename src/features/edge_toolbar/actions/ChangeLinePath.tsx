@@ -16,6 +16,7 @@ import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types
 
 import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
+import { useState } from "react";
 
 const ChangeLinePathControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const { t } = useTranslation();
@@ -56,6 +57,7 @@ const ChangeLinePathControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
               updateEdgeData<CooperationModelEdge>(edgeId, (data) => ({
                 ...data,
                 linePath: data?.linePath === "straight" ? "step" : "straight",
+                center: undefined,
               }));
               takeSnapshotAndSave();
             }
