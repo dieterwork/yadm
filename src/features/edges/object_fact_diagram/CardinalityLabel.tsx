@@ -1,29 +1,23 @@
-import { EdgeLabelRenderer, Position, useReactFlow } from "@xyflow/react";
+import {
+  EdgeLabelRenderer,
+  Position,
+  useReactFlow,
+  useViewport,
+} from "@xyflow/react";
 import { cn } from "@sglara/cn";
 import { useEffect, useRef, useState } from "react";
 import {
+  getEdge,
   setAction,
   setEdges,
   setNodes,
-  updateEdgeData,
+  updateCardinalityLabel,
 } from "$/features/modeler/store/useDEMOModelerStore";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
-import type { ObjectFactDiagramEdge } from "../edges.types";
+import { cardinalityFields, type CardinalityField } from "../edges.types";
 import setEndOfContentEditable from "$/features/editable_content/utils/setEndOfContentEditable";
 import CardinalityLabelToolbar from "./CardinalityLabelToolbar";
-
-type CardinalityField = keyof NonNullable<
-  ObjectFactDiagramEdge["data"]
->["cardinality"];
-
-const CARDINALITY_FIELDS: CardinalityField[] = [
-  "startLabel0",
-  "startLabel1",
-  "middleLabel0",
-  "middleLabel1",
-  "endLabel0",
-  "endLabel1",
-];
+import { useGesture } from "@use-gesture/react";
 
 type Props = {
   edgeId: string;
@@ -34,6 +28,8 @@ type Props = {
   selected?: boolean;
   translateX?: string;
   translateY?: string;
+  offsetX?: number;
+  offsetY?: number;
   isEnabled?: boolean;
   law?: "precedence" | "exclusion";
 };
@@ -47,8 +43,9 @@ const CardinalityLabel = ({
   selected,
   translateX,
   translateY,
+  offsetX,
+  offsetY,
   isEnabled,
-  law,
 }: Props) => {
   const ref = useRef<HTMLSpanElement>(null!);
   const [isEditable, setIsEditable] = useState(false);
@@ -77,21 +74,17 @@ const CardinalityLabel = ({
   }, [isEnabled]);
 
   const setSelected = (value: boolean) => {
-    updateEdgeData(edgeId, (data) => {
-      if (!data || !("cardinality" in data) || !data.cardinality) return data;
-      const cardinality = value
-        ? Object.fromEntries(
-            CARDINALITY_FIELDS.map((f) => [
-              f,
-              { ...data.cardinality![f], selected: f === field },
-            ]),
-          )
-        : {
-            ...data.cardinality,
-            [field]: { ...data.cardinality[field], selected: false },
-          };
-      return { ...data, cardinality };
+    const cardinalityFieldsNotSelected = cardinalityFields.filter(
+      (f) => f !== field,
+    );
+    updateCardinalityLabel(edgeId, field, {
+      selected: value,
     });
+    for (const field of cardinalityFieldsNotSelected) {
+      updateCardinalityLabel(edgeId, field, {
+        selected: false,
+      });
+    }
   };
 
   const edit = () => {
@@ -118,16 +111,89 @@ const CardinalityLabel = ({
     takeSnapshotAndSave();
   };
 
+  const { zoom } = useViewport();
+  const [isDragging, setDragging] = useState(false);
+
+  const bind = useGesture(
+    {
+      onDrag: ({ delta: [dx, dy], tap }) => {
+        console.log(tap);
+        if (tap) return;
+        setDragging(true);
+        setSelected(true);
+        updateCardinalityLabel(edgeId, field, (data) => ({
+          offset: {
+            x: (data.offset?.x ?? 0) + dx / zoom,
+            y: (data.offset?.y ?? 0) + dy / zoom,
+          },
+        }));
+      },
+      onDragEnd: ({ xy: [x, y] }) => {
+        setDragging(false);
+        const position = screenToFlowPosition({
+          x,
+          y,
+        });
+        setMenuPosition(position);
+      },
+      onClick: ({ event: e }) => {
+        if (!isEnabled) return;
+        e.stopPropagation();
+        setSelected(true);
+        const position = screenToFlowPosition({
+          x: e.clientX,
+          y: e.clientY,
+        });
+        setMenuPosition(position);
+        setNodes((nodes) =>
+          nodes.map((n) => (n.selected ? { ...n, selected: false } : n)),
+        );
+        setEdges((edges) =>
+          edges.map((e) => (e.selected ? { ...e, selected: false } : e)),
+        );
+      },
+      onDoubleClick: ({ event: e }) => {
+        e.preventDefault();
+        if (!isEnabled) return;
+        if (isEditable) return;
+        e.stopPropagation();
+        edit();
+      },
+      onBlur: () => {
+        exit();
+      },
+      onInput: ({ event: e }) => {
+        if (!isEnabled) return;
+        updateCardinalityLabel(edgeId, field, {
+          label:
+            e.currentTarget instanceof HTMLElement
+              ? e.currentTarget.innerHTML
+              : "",
+        });
+      },
+    },
+    {
+      drag: {
+        filterTaps: true,
+      },
+    },
+  );
+
   return (
     <>
       <EdgeLabelRenderer>
         <div
-          className="cardinality | pointer-events-none absolute nodrag nopan p-1 grid place-items-center"
+          className={cn(
+            "cardinality | absolute nodrag nopan grid place-items-center p-1",
+            isEnabled && !isEditable && "cursor-move",
+          )}
           style={{
-            transform: `translate(${translateX ?? "-50%"}, ${translateY ?? "-50%"}) translate(${labelX}px,${labelY}px)`,
+            transform: `translate(${translateX ?? "-50%"}, ${translateY ?? "-50%"}) translate(${labelX}px,${labelY}px) translate(${offsetX}px,${offsetY}px)`,
+            touchAction: "none",
           }}
         >
           <span
+            {...bind()}
             ref={ref}
             contentEditable={isEnabled && isEditable}
             suppressContentEditableWarning
@@ -136,83 +202,31 @@ const CardinalityLabel = ({
               "inline-block pointer-events-auto text-[12px] outline-none min-w-6 min-h-[calc(1.2*12px)] leading-[1.2] text-center",
               (selected || isEditable) &&
                 "ring-1 ring-sky-500 rounded-sm px-0.5",
+              !isEnabled && "pointer-events-none",
             )}
-            onInput={(e) => {
-              if (!isEnabled) return;
-              updateEdgeData(edgeId, (data) => {
-                if (!data || !("cardinality" in data) || !data.cardinality)
-                  return data;
-                return {
-                  ...data,
-                  cardinality: {
-                    ...data.cardinality,
-                    [field]: {
-                      ...data.cardinality[field],
-                      label: e.currentTarget.innerHTML,
-                    },
-                  },
-                };
-              });
-            }}
-            onClick={(e) => {
-              if (!isEnabled) return;
-              e.stopPropagation();
-              setSelected(true);
-              const position = screenToFlowPosition({
-                x: e.clientX,
-                y: e.clientY,
-              });
-              setMenuPosition(position);
-              setNodes((nodes) =>
-                nodes.map((n) => (n.selected ? { ...n, selected: false } : n)),
-              );
-              setEdges((edges) =>
-                edges.map((e) => (e.selected ? { ...e, selected: false } : e)),
-              );
-            }}
-            onDoubleClick={(e) => {
-              e.preventDefault();
-              if (!isEnabled) return;
-              if (isEditable) return;
-              e.stopPropagation();
-              edit();
-            }}
-            onBlur={() => {
-              exit();
-            }}
           />
         </div>
       </EdgeLabelRenderer>
       <CardinalityLabelToolbar
-        isVisible={selected && isEnabled}
+        isVisible={selected && isEnabled && !isDragging}
         edgeId={edgeId}
         position={Position.Right}
         xyPosition={menuPosition}
         onEdit={edit}
         onDelete={() => {
-          updateEdgeData(edgeId, (data) => {
-            if (!data || !("cardinality" in data) || !data.cardinality)
-              return data;
-            return {
-              ...data,
-              cardinality: {
-                ...data.cardinality,
-                [field]: { ...data.cardinality[field], label: "" },
-              },
-            };
+          updateCardinalityLabel(edgeId, field, {
+            label: "",
+          });
+        }}
+        onResetPosition={() => {
+          updateCardinalityLabel(edgeId, field, {
+            offset: { x: 0, y: 0 },
+            selected: false,
           });
         }}
         onClose={() => {
-          updateEdgeData(edgeId, (data) => {
-            if (!data || !("cardinality" in data) || !data.cardinality)
-              return data;
-            return {
-              ...data,
-              cardinality: {
-                ...data.cardinality,
-                [field]: { ...data.cardinality[field], selected: false },
-              },
-            };
+          updateCardinalityLabel(edgeId, field, {
+            selected: false,
           });
         }}
       />

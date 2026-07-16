@@ -23,7 +23,11 @@ import type {
   NodeFocus,
 } from "../../nodes/nodes.types";
 import uuid from "../../../shared/utils/uuid";
-import type { DEMOEdge } from "../../edges/edges.types";
+import type {
+  CardinalityField,
+  CardinalityLabelData,
+  DEMOEdge,
+} from "../../edges/edges.types";
 import getEdgeType from "../utils/getEdgeType";
 import getMarkerType from "../utils/getMarkerType";
 import type { ReactStyleStateSetter } from "$/shared/types/react.types";
@@ -173,12 +177,13 @@ export const updateEdge = <T extends DEMOEdge>(
 };
 
 export const updateEdgeData = <T extends DEMOEdge>(
-  id: string,
+  id: string | string[],
   newEdgeData: ReactStyleStateSetter<Partial<T["data"]>>,
 ) => {
   setEdges((edges) =>
     edges.map((edge) => {
-      if (edge.id !== id) return edge;
+      if (Array.isArray(id) && !id.includes(edge.id)) return edge;
+      if (typeof id === "string" && edge.id !== id) return edge;
       const isTypedEdge = isEdge<T>(edge);
       if (!isTypedEdge) return edge;
       const data =
@@ -190,6 +195,48 @@ export const updateEdgeData = <T extends DEMOEdge>(
       return { ...edge, data: { ...edge.data, ...data } };
     }),
   );
+};
+
+export const updateCardinalityLabel = (
+  edgeId: string | string[],
+  field: CardinalityField | CardinalityField[],
+  newCardinalityFieldData: ReactStyleStateSetter<Partial<CardinalityLabelData>>,
+) => {
+  updateEdgeData(edgeId, (data) => {
+    if (!data || !("cardinality" in data) || !data.cardinality) return data;
+    if (Array.isArray(field)) {
+      const fields = field.reduce(
+        (acc, curr) => {
+          const newData =
+            typeof newCardinalityFieldData === "object"
+              ? newCardinalityFieldData
+              : newCardinalityFieldData(data.cardinality[curr]);
+          acc[curr] = newData;
+          return acc;
+        },
+        {} as Record<CardinalityField, CardinalityLabelData>,
+      );
+      return {
+        ...data,
+        cardinality: {
+          ...data.cardinality,
+          ...fields,
+        },
+      };
+    } else {
+      const newData =
+        typeof newCardinalityFieldData === "object"
+          ? newCardinalityFieldData
+          : newCardinalityFieldData(data.cardinality[field]);
+      return {
+        ...data,
+        cardinality: {
+          ...data.cardinality,
+          [field]: { ...data.cardinality[field], ...newData },
+        },
+      };
+    }
+  });
 };
 
 export const clearModel = () => {

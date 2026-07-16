@@ -3,25 +3,16 @@ import DEMOElementToolbar from "$/shared/components/ui/element_toolbar/DEMOEleme
 import DEMOElementToolbarGroup from "$/shared/components/ui/element_toolbar/DEMOElementToolbarGroup";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarSeparator from "$/shared/components/ui/element_toolbar/DEMOElementToolbarSeparator";
-import {
-  updateEdgeData,
-  useDEMOModelerStore,
-} from "$/features/modeler/store/useDEMOModelerStore";
-import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 import { useTranslation } from "react-i18next";
-import type { ObjectFactDiagramEdge } from "../edges.types";
 import CardinalityLabelPortal from "./CardinalityLabelPortal";
 import { cn } from "tailwind-variants";
 import type { CSSProperties, HTMLAttributes } from "react";
 import { getCardinalityLabelToolbarTransform } from "./getCardinalityLabelToolbarTransform";
 import { Position, type Align, type XYPosition } from "@xyflow/react";
+import { ArrowsOutCardinalIcon } from "@phosphor-icons/react/dist/ssr";
 
 export type CardinalityLabelToolbarProps = HTMLAttributes<HTMLDivElement> & {
-  /**
-   * By passing in an array of edge id's you can render a single tooltip for a group or collection
-   * of edges.
-   */
-  edgeId?: string;
   /** If `true`, edge toolbar is visible even if edge is not selected. */
   isVisible?: boolean;
   /**
@@ -45,33 +36,29 @@ export type CardinalityLabelToolbarProps = HTMLAttributes<HTMLDivElement> & {
   onEdit?: () => void;
   onClose?: () => void;
   onDelete?: () => void;
-  labelField?: string;
+  onResetPosition?: () => void;
 };
 
 const CardinalityLabelToolbar = ({
-  edgeId,
   className,
   style,
   isVisible,
   position = Position.Top,
   offset = 10,
   align = "center",
-  xyPosition,
+  xyPosition = { x: 0, y: 0 },
   onEdit,
   onClose,
   onDelete,
-  labelField,
+  onResetPosition,
   ...restProps
 }: CardinalityLabelToolbarProps) => {
   const { t } = useTranslation();
 
-  xyPosition = xyPosition ?? { x: 0, y: 0 };
   const viewport = useDEMOModelerStore((state) => state.viewport);
   const { x, y, zoom } = viewport;
 
-  const edges = useDEMOModelerStore((state) => {
-    return state.edges;
-  });
+  const edges = useDEMOModelerStore((state) => state.edges);
 
   const isActive = isVisible;
 
@@ -112,7 +99,15 @@ const CardinalityLabelToolbar = ({
               }}
             />
           </DEMOElementToolbarGroup>
-          <DEMOElementToolbarSeparator />
+          <DEMOElementToolbarGroup aria-label={t(($) => $["Reset position"])}>
+            <DEMOElementToolbarButton
+              icon={(iconProps) => <ArrowsOutCardinalIcon {...iconProps} />}
+              label={t(($) => $["Reset position"])}
+              onPress={() => {
+                onResetPosition?.();
+              }}
+            />
+          </DEMOElementToolbarGroup>
           <DEMOElementToolbarGroup aria-label={t(($) => $["Danger zone"])}>
             <DEMOElementToolbarButton
               icon={(iconProps) => <TrashIcon {...iconProps} />}

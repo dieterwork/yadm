@@ -26,6 +26,23 @@ export type CooperationModelEdge = Edge<
   "cooperation_model_edge"
 >;
 
+export type CardinalityLabelData = {
+  label: string;
+  selected?: boolean;
+  offset?: { x: number; y: number };
+};
+
+export const cardinalityFields = [
+  "startLabel0",
+  "startLabel1",
+  "middleLabel0",
+  "middleLabel1",
+  "endLabel0",
+  "endLabel1",
+] as const;
+
+export type CardinalityField = (typeof cardinalityFields)[number];
+
 export type ObjectFactDiagramEdge = Edge<
   {
     center?: CenterData;
@@ -33,14 +50,7 @@ export type ObjectFactDiagramEdge = Edge<
     linePath: LinePath;
     lineType: LineType;
     law: "exclusion" | "precedence";
-    cardinality: {
-      startLabel0: { label: string; selected?: boolean };
-      startLabel1: { label: string; selected?: boolean };
-      middleLabel0: { label: string; selected?: boolean };
-      middleLabel1: { label: string; selected?: boolean };
-      endLabel0: { label: string; selected?: boolean };
-      endLabel1: { label: string; selected?: boolean };
-    };
+    cardinality: Record<CardinalityField, CardinalityLabelData>;
   },
   "object_fact_diagram_edge"
 >;

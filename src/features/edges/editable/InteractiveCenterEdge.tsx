@@ -36,20 +36,27 @@ const InteractiveCenterEdge = ({
   direction,
   active,
 }: InteractiveCenterEdgeProps) => {
-  const bind = useGesture({
-    onDragStart: (params) => {
-      if (!active) return;
-      if (onDragStart) onDragStart(params);
+  const bind = useGesture(
+    {
+      onDragStart: (params) => {
+        if (!active) return;
+        if (onDragStart) onDragStart(params);
+      },
+      onDrag: (params) => {
+        if (!active) return;
+        if (onDrag) onDrag(params);
+      },
+      onDragEnd: (params) => {
+        if (!active) return;
+        if (onDragEnd) onDragEnd(params);
+      },
     },
-    onDrag: (params) => {
-      if (!active) return;
-      if (onDrag) onDrag(params);
+    {
+      drag: {
+        filterTaps: true,
+      },
     },
-    onDragEnd: (params) => {
-      if (!active) return;
-      if (onDragEnd) onDragEnd(params);
-    },
-  });
+  );
   const [path] = getStraightPath({ sourceX, sourceY, targetX, targetY });
   return (
     <path

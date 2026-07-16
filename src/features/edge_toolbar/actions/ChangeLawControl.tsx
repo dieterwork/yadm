@@ -71,14 +71,6 @@ const ChangeLawControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
                 law: entry,
               }));
 
-              if (marker.markerStart) {
-                updateEdge(edgeId, (edge) => ({
-                  ...edge,
-                  markerStart:
-                    entry === "exclusion" ? undefined : marker.markerStart,
-                }));
-              }
-
               if (marker.markerEnd) {
                 updateEdge(edgeId, (edge) => ({
                   ...edge,
