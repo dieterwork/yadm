@@ -9,6 +9,7 @@ import {
   type HandleProps,
 } from "@xyflow/react";
 import {
+  clearSelectedCardinalityLabels,
   getNode,
   setNodes,
   updateNode,
@@ -78,6 +79,7 @@ const DEMOHandle = ({
 
   const bind = useGesture({
     onDragStart: () => {
+      clearSelectedCardinalityLabels();
       setNodes((nodes) =>
         nodes.map((node) =>
           node.id === nodeId ? { ...node, selected: false } : node,

@@ -304,6 +304,7 @@ const DEMOModeler = () => {
             nodes={nodes}
             nodeTypes={nodeTypes}
             onNodeDragStart={(e, node) => {
+              clearSelectedCardinalityLabels();
               if (node.type === "whiteboard") {
                 takeWhiteboardSnapshotAndSave();
               } else {

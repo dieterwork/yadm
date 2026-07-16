@@ -21,6 +21,7 @@ import { useEffect, type CSSProperties, type ReactNode } from "react";
 import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
+  clearSelectedCardinalityLabels,
   getNode,
   updateEdge,
   updateEdgeData,
@@ -34,8 +35,6 @@ import {
   getMiddleLabel1Translate,
   getEndLabel0Translate,
   getEndLabel1Translate,
-  getStraightLabelTranslate,
-  getStraightMiddleLabelTranslate,
 } from "./cardinalityTranslateCalculations";
 import getInteractiveCenterEdgeDirection from "../utils/getInteractiveCenterEdgeDirection";
 import { calcEdgeMidpoint } from "../utils/calcEdgeMidpoint";
@@ -204,6 +203,7 @@ export function EditableEdgeComponent({
           }}
           onDragStart={({ event }) => {
             event.stopPropagation();
+            clearSelectedCardinalityLabels();
             updateEdgeData(id, (data) => ({
               ...data,
               center:
