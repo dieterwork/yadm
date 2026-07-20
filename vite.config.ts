@@ -4,6 +4,7 @@ import { viteSingleFile } from "vite-plugin-singlefile";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
+import { i18nextVitePlugin } from "@i18next-selector/vite-plugin";
 
 const markdownLoader = () => {
   return {
@@ -23,17 +24,25 @@ export default ({ mode }: { mode: string }) => {
   const buildSingleHTMLFile = false;
   //process.env.VITE_BUILD_SINGLE_HTML_FILE === "true";
 
+  const basePlugins = [
+    react(),
+    tailwindcss(),
+    markdownLoader(),
+    i18nextVitePlugin({
+      // required:
+      sourceDir: path.join(path.resolve(), "src", "assets", "locales"),
+    }),
+  ];
+
   const plugins = buildSingleHTMLFile
     ? [
         viteSingleFile(),
         createHtmlPlugin({
           minify: true,
         }),
-        react(),
-        tailwindcss(),
-        markdownLoader(),
+        ...basePlugins,
       ]
-    : [react(), tailwindcss(), markdownLoader()];
+    : basePlugins;
 
   return defineConfig({
     resolve: {

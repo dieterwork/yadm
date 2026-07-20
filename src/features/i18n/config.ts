@@ -1,8 +1,8 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import enTranslation from "./en/translation.json";
-import nlBeTranslation from "./nl/translation.json";
-import frTranslation from "./fr/translation.json";
+import enTranslation from "../../assets/locales/en/translation.json";
+import nlBeTranslation from "../../assets/locales/nl/translation.json";
+import frTranslation from "../../assets/locales/fr/translation.json";
 
 export const defaultNS = "translation";
 export const resources = {
@@ -17,6 +17,9 @@ export const resources = {
   },
 } as const;
 
+export type Resources = (typeof resources)["en"];
+export type DefaultNS = typeof defaultNS;
+
 i18n
   .use(initReactI18next)
   // init i18next
@@ -30,6 +33,7 @@ i18n
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
+    enableSelector: true,
   });
 
 export default i18n;

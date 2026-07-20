@@ -8,7 +8,6 @@ import EdgeToolbar from "./EdgeToolbar";
 import DeleteMenuItem from "./actions/DeleteEdgeControl";
 import DEMOElementToolbar from "$/shared/components/ui/element_toolbar/DEMOElementToolbar";
 import DEMOElementToolbarGroup from "$/shared/components/ui/element_toolbar/DEMOElementToolbarGroup";
-import DEMOElementToolbarSeparator from "$/shared/components/ui/element_toolbar/DEMOElementToolbarSeparator";
 import ChangeLineTypeControl from "./actions/ChangeLineTypeControl";
 import ToggleProductionEventMenuItem from "./actions/ToggleProductionEventControl";
 import SwapConnectionControl from "./actions/SwapConnectionControl";

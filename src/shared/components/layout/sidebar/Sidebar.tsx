@@ -1,20 +1,20 @@
 import { Collection } from "react-aria-components";
-import actorIcon from "$assets/Actor.svg";
-import transactionIcon from "$assets/Transaction.svg";
-import transactorIcon from "$assets/Transactor.svg";
-import severalActorsIcon from "$assets/Several Actors.svg";
-import compositeIcon from "$assets/Composite.svg";
-import selfActivationIcon from "$assets/Self-Activation.svg";
-import elementaryActorIcon from "$assets/Elementary Actor.svg";
-import transactionTimeIcon from "$assets/Transaction Time.svg";
-import initiationFactIcon from "$assets/Initiation Fact.svg";
-import multipleTransactionKindIcon from "$assets/Multiple Transaction Kind.svg";
-import cActIcon from "$assets/C-Act.svg";
-import cFactIcon from "$assets/C-Fact.svg";
-import tkExecutionIcon from "$assets/TK Execution.svg";
-import productionEventIcon from "$assets/Production Event.svg";
-import setIcon from "$assets/Set.svg";
-import entityTypeIcon from "$assets/Entity Type.svg";
+import actorIcon from "$assets/DEMO_icons/Actor.svg";
+import transactionIcon from "$assets/DEMO_icons/Transaction.svg";
+import transactorIcon from "$assets/DEMO_icons/Transactor.svg";
+import severalActorsIcon from "$assets/DEMO_icons/Several Actors.svg";
+import compositeIcon from "$assets/DEMO_icons/Composite.svg";
+import selfActivationIcon from "$assets/DEMO_icons/Self-Activation.svg";
+import elementaryActorIcon from "$assets/DEMO_icons/Elementary Actor.svg";
+import transactionTimeIcon from "$assets/DEMO_icons/Transaction Time.svg";
+import initiationFactIcon from "$assets/DEMO_icons/Initiation Fact.svg";
+import multipleTransactionKindIcon from "$assets/DEMO_icons/Multiple Transaction Kind.svg";
+import cActIcon from "$assets/DEMO_icons/C-Act.svg";
+import cFactIcon from "$assets/DEMO_icons/C-Fact.svg";
+import tkExecutionIcon from "$assets/DEMO_icons/TK Execution.svg";
+import productionEventIcon from "$assets/DEMO_icons/Production Event.svg";
+import setIcon from "$assets/DEMO_icons/Set.svg";
+import entityTypeIcon from "$assets/DEMO_icons/Entity Type.svg";
 import SidebarSelect from "./menu/SidebarSelect";
 import {
   resetPreviewNode,
@@ -32,7 +32,7 @@ import {
   useAttachStore,
 } from "$/features/actions/attach/useAttachStore";
 
-import attributeIcon from "$assets/Attribute.svg";
+import attributeIcon from "$assets/DEMO_icons/Attribute.svg";
 
 export type SidebarMenuSectionItemType = {
   id: string;

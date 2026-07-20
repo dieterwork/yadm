@@ -5,7 +5,6 @@ import {
   useNodeConnections,
   useReactFlow,
   useUpdateNodeInternals,
-  ViewportPortal,
   type HandleProps,
 } from "@xyflow/react";
 import {
