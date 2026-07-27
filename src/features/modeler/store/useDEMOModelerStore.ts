@@ -840,6 +840,7 @@ export const setModel = (model: DEMOModelJSON) => {
         ? "cooperation_structure_diagram_edge"
         : e.type,
   }));
+  console.log(model.edges);
   setNodes(updatedNodes);
   setEdges(updatedEdges);
   setFileName(model.fileName);
