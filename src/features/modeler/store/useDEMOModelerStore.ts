@@ -43,6 +43,10 @@ import markerMap from "../utils/markerMap";
 import getChildNodes from "../../nodes/utils/getChildNodes";
 import { zIndexMap } from "$/shared/utils/zIndex";
 import type { CooperationStructureDiagramNode } from "$/features/nodes/cooperation_structure_diagram/cooperationStructureDiagram.types";
+import {
+  updateEdgesForBackwardsCompatability,
+  updateNodesForBackwardsCompatability,
+} from "../utils/backwardsCompatabilitySetter";
 
 export type ModelerAction =
   "attach" | "preview" | "select" | "pan" | "edit" | "draw" | null;
@@ -76,8 +80,8 @@ console.log(
 export const useDEMOModelerStore = create<DEMOModelerState>()((set, get) => ({
   id: uuid(),
   fileName: localDEMOModel?.fileName ?? `New Model`,
-  nodes: localDEMOModel?.nodes ?? [],
-  edges: localDEMOModel?.edges ?? [],
+  nodes: updateNodesForBackwardsCompatability(localDEMOModel?.nodes ?? []),
+  edges: updateEdgesForBackwardsCompatability(localDEMOModel?.edges ?? []),
   action: "pan",
   isGridVisible: true,
   isGridSnapEnabled: true,
@@ -815,33 +819,8 @@ export const onNodesDelete: OnNodesDelete<DEMONode> = (nodes) => {
 
 export const setModel = (model: DEMOModelJSON) => {
   // backwards compatibility
-  const updatedNodes = model.nodes.map((n) => ({
-    ...n,
-    type:
-      n.type === "cooperation_model" ? "cooperation_structure_diagram" : n.type,
-    data: n.data
-      ? {
-          ...n.data,
-          subModel:
-            "subModel" in n.data
-              ? n.data.subModel === "cooperation_model"
-                ? "cooperation_structure_diagram"
-                : n.data.subModel
-              : undefined,
-        }
-      : undefined,
-  }));
-
-  const updatedEdges = model.edges.map((e) => ({
-    ...e,
-    type:
-      e.type === "cooperation_model_edge"
-        ? "cooperation_structure_diagram_edge"
-        : e.type,
-  }));
-  console.log(model.edges);
-  setNodes(updatedNodes);
-  setEdges(updatedEdges);
+  setNodes(updateNodesForBackwardsCompatability(model.nodes));
+  setEdges(updateEdgesForBackwardsCompatability(model.edges));
   setFileName(model.fileName);
   setViewport(model.viewport ?? { x: 0, y: 0, zoom: 1 });
   toggleLock(model.isEnabled);
