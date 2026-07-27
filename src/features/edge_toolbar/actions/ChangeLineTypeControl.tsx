@@ -8,7 +8,7 @@ import {
   RectangleIcon,
 } from "@phosphor-icons/react";
 import { MenuTrigger, Popover } from "react-aria-components";
-import type { CooperationModelEdge } from "../../edges.types";
+import type { CooperationStructureDiagramEdge } from "../../edges.types";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
@@ -22,7 +22,7 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
   const edge = getEdge(edgeId);
   if (
     !edge ||
-    (edge.type !== "cooperation_model_edge" &&
+    (edge.type !== "cooperation_structure_diagram_edge" &&
       edge.type !== "object_fact_diagram_edge") ||
     !edge.data?.lineType
   )
@@ -56,10 +56,13 @@ const ChangeLineTypeControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
           onSelectionChange={(selection) => {
             for (const entry of selection) {
               if (entry !== "solid" && entry !== "dashed") return;
-              updateEdgeData<CooperationModelEdge>(edgeId, (data) => ({
-                ...data,
-                lineType: entry,
-              }));
+              updateEdgeData<CooperationStructureDiagramEdge>(
+                edgeId,
+                (data) => ({
+                  ...data,
+                  lineType: entry,
+                }),
+              );
               takeSnapshotAndSave();
             }
           }}

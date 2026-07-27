@@ -12,8 +12,8 @@ import {
 } from "@phosphor-icons/react";
 import { useState } from "react";
 import { MenuTrigger, Popover, type Selection } from "react-aria-components";
-import type { ActorState } from "$/features/nodes/cooperation_model/actor/actor.types";
-import type { TransactionState } from "$/features/nodes/cooperation_model/transaction/transaction.types";
+import type { ActorState } from "$/features/nodes/cooperation_structure_diagram/actor/actor.types";
+import type { TransactionState } from "$/features/nodes/cooperation_structure_diagram/transaction/transaction.types";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";

@@ -3,10 +3,10 @@ import TransactionTimeEdgeComponent from "./transaction_time_edge/TransactionTim
 import ObjectFactDiagramEdgeComponent from "./object_fact_diagram/ObjectFactDiagramEdge";
 import ProcessStructureDiagramEdgeComponent from "./process_structure_diagram/ProcessStructureDiagramEdge";
 import GhostEdgeComponent from "./ghost_edge/GhostEdge";
-import CooperationModelEdgeComponent from "./cooperation_model/CooperationModelEdge";
+import CooperationStructureDiagramEdgeComponent from "./cooperation_structure_diagram/CooperationStructureDiagramEdge";
 
 export const edgeTypes = {
-  cooperation_model_edge: CooperationModelEdgeComponent,
+  cooperation_structure_diagram_edge: CooperationStructureDiagramEdgeComponent,
   object_fact_diagram_edge: ObjectFactDiagramEdgeComponent,
   process_structure_diagram_edge: ProcessStructureDiagramEdgeComponent,
   transaction_time_edge: TransactionTimeEdgeComponent,
@@ -21,9 +21,9 @@ export type LinePath = "step" | "straight";
 
 export type LineType = "solid" | "dashed";
 
-export type CooperationModelEdge = Edge<
+export type CooperationStructureDiagramEdge = Edge<
   { center?: CenterData; lineType: LineType; linePath: LinePath },
-  "cooperation_model_edge"
+  "cooperation_structure_diagram_edge"
 >;
 
 export type CardinalityLabelData = {
@@ -69,7 +69,7 @@ export type GhostEdge = Edge<
 export type TransactionTimeEdge = Edge<{}, "transaction_time_edge">;
 
 export type DEMOEdge =
-  | CooperationModelEdge
+  | CooperationStructureDiagramEdge
   | ObjectFactDiagramEdge
   | ProcessStructureDiagramEdge
   | TransactionTimeEdge

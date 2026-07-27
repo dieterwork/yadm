@@ -1,5 +1,5 @@
 import type {
-  CooperationModelEdge,
+  CooperationStructureDiagramEdge,
   DEMOEdge,
   ObjectFactDiagramEdge,
   ProcessStructureDiagramEdge,
@@ -11,8 +11,9 @@ const getEdgeData = <T extends DEMOEdge>(
 ): T["data"] => {
   if (!edgeType) return undefined;
   switch (edgeType) {
-    case "cooperation_model_edge": {
+    case "cooperation_structure_diagram_edge": {
       return {
+        ...data,
         lineType:
           data && "lineType" in data && !!data.lineType
             ? data.lineType
@@ -21,10 +22,11 @@ const getEdgeData = <T extends DEMOEdge>(
           data && "linePath" in data && !!data.linePath
             ? data.linePath
             : "step",
-      } satisfies CooperationModelEdge["data"];
+      } satisfies CooperationStructureDiagramEdge["data"];
     }
     case "object_fact_diagram_edge": {
       return {
+        ...data,
         linePath:
           data && "linePath" in data && !!data.linePath
             ? data.linePath
@@ -49,14 +51,20 @@ const getEdgeData = <T extends DEMOEdge>(
     }
     case "process_structure_diagram_edge": {
       return {
+        ...data,
         linePath:
           data && "linePath" in data && !!data.linePath
             ? data.linePath
             : "step",
+        lineType:
+          data && "lineType" in data && !!data.lineType
+            ? data.lineType
+            : "solid",
       } satisfies ProcessStructureDiagramEdge["data"];
     }
     case "ghost_edge": {
       return {
+        ...data,
         linePath:
           data && "linePath" in data && !!data.linePath
             ? data.linePath
@@ -64,7 +72,7 @@ const getEdgeData = <T extends DEMOEdge>(
       } satisfies ProcessStructureDiagramEdge["data"];
     }
     default: {
-      return {};
+      return { ...data };
     }
   }
 };

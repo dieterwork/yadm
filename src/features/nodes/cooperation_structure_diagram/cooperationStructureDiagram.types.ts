@@ -7,7 +7,7 @@ import type { CompositeNode } from "./composite/composite.types";
 import type { ElementaryActorNode } from "./elementary_actor/elementaryActor.types";
 import type { SeveralActorsNode } from "./several_actors/severalActors.types";
 
-export type CooperationModelShapeType =
+export type CooperationStructureDiagramShapeType =
   | "actor"
   | "transactor"
   | "transaction"
@@ -17,23 +17,22 @@ export type CooperationModelShapeType =
   | "several_actors"
   | "multiple_transaction_kind";
 
-export type CooperationModelShapeProps = {
+export type CooperationStructureDiagramShapeProps = {
   width: number;
   height: number;
 } & SVGAttributes<SVGElement>;
 
-export type CooperationModelShapeComponentProps =
-  Partial<CooperationModelShapeProps> & {
-    type: CooperationModelShapeType;
+export type CooperationStructureDiagramShapeComponentProps =
+  Partial<CooperationStructureDiagramShapeProps> & {
+    type: CooperationStructureDiagramShapeType;
     ref?: React.RefObject<SVGSVGElement>;
   };
 
-export type CooperationModelNode =
+export type CooperationStructureDiagramNode =
   | ActorNode
   | CompositeNode
   | ElementaryActorNode
   | SelfActivationNode
   | SeveralActorsNode
   | TransactionNode
-  | TransactorNode
-  | CompositeNode;
+  | TransactorNode;

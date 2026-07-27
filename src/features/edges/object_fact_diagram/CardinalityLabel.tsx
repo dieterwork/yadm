@@ -7,7 +7,6 @@ import {
 import { cn } from "@sglara/cn";
 import { useEffect, useRef, useState } from "react";
 import {
-  getEdge,
   setAction,
   setEdges,
   setNodes,
@@ -17,6 +16,7 @@ import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 import { cardinalityFields, type CardinalityField } from "../edges.types";
 import setEndOfContentEditable from "$/features/editable_content/utils/setEndOfContentEditable";
 import CardinalityLabelToolbar from "./CardinalityLabelToolbar";
+import sanitizeHtml from "sanitize-html";
 import { useGesture } from "@use-gesture/react";
 
 type Props = {
@@ -55,7 +55,7 @@ const CardinalityLabel = ({
   useEffect(() => {
     const el = ref.current;
     if (el) {
-      ref.current.innerHTML = content ?? "";
+      el.innerHTML = sanitizeHtml(content ?? "");
     }
   }, []);
 
@@ -217,6 +217,10 @@ const CardinalityLabel = ({
           updateCardinalityLabel(edgeId, field, {
             label: "",
           });
+          const el = ref.current;
+          if (el) {
+            el.innerHTML = "";
+          }
         }}
         onResetPosition={() => {
           updateCardinalityLabel(edgeId, field, {

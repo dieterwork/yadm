@@ -34,7 +34,6 @@ import type { ReactStyleStateSetter } from "$/shared/types/react.types";
 import getEdgeData from "../utils/getEdgeData";
 import { sortNodes } from "$/shared/utils/sortNodes";
 import { updateHelperLinesFromNodeChanges } from "../../helper_lines/useHelperLinesStore";
-import type { CooperationModelNode } from "../../nodes/cooperation_model/cooperationModel.types";
 import type { DEMOModelJSON } from "$/shared/types/reactFlow.types";
 import takeSnapshotAndSave from "../../actions/undo/takeSnapshotAndSave";
 import takeWhiteboardSnapshotAndSave from "$/features/whiteboard/utils/takeWhiteboardSnapshotAndSave";
@@ -43,6 +42,7 @@ import getNodeHandle from "$/features/connection_handles/utils/getHandle";
 import markerMap from "../utils/markerMap";
 import getChildNodes from "../../nodes/utils/getChildNodes";
 import { zIndexMap } from "$/shared/utils/zIndex";
+import type { CooperationStructureDiagramNode } from "$/features/nodes/cooperation_structure_diagram/cooperationStructureDiagram.types";
 
 export type ModelerAction =
   "attach" | "preview" | "select" | "pan" | "edit" | "draw" | null;
@@ -217,6 +217,7 @@ export const updateCardinalityLabel = (
         },
         {} as Record<CardinalityField, CardinalityLabelData>,
       );
+      console.log(fields);
       return {
         ...data,
         cardinality: {
@@ -373,17 +374,23 @@ export const onConnect: OnConnect = (connection) => {
 export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
   const sourceNode = getNode(newConnection.source);
   const targetNode = getNode(newConnection.target);
+  const oldTargetNode = getNode(oldEdge.target);
+  const oldTargetHandle = getNodeHandle(oldTargetNode, oldEdge.targetHandle);
+  const targetHandle = getNodeHandle(targetNode, newConnection.targetHandle);
+  const edges = useDEMOModelerStore.getState().edges;
+  const nodes = useDEMOModelerStore.getState().nodes;
+
   const reconnectedEdges = reconnectEdge<DEMOEdge>(
     oldEdge as DEMOEdge,
     newConnection,
-    useDEMOModelerStore.getState().edges,
+    edges,
   );
   const newEdge = reconnectedEdges.find(
     (edge) =>
       edge.source === newConnection.source &&
       edge.target === newConnection.target,
   );
-  const targetHandle = getNodeHandle(targetNode, newConnection.targetHandle);
+
   const newEdges = reconnectedEdges.map((edge) => {
     if (newEdge?.id !== edge.id) return edge;
     const marker = getMarkerType(sourceNode?.type, targetNode?.type, "initial");
@@ -391,11 +398,6 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
 
     const data = getEdgeData(type, {
       ...edge.data,
-      lineType:
-        !!targetHandle?.handle.derivation &&
-        targetHandle?.handle.derivation !== "none"
-          ? "dashed"
-          : "solid",
     });
 
     const zIndex = Math.max(
@@ -412,67 +414,72 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
       ...edge,
       id: `${type ?? "edge"}_${uuid()}`,
       data: {
-        ...edge.data,
         ...data,
         markerMid:
-          !!targetHandle?.handle.derivation &&
-          targetHandle?.handle.derivation === "none"
-            ? markerMap[sourceNode?.type ?? "entity_type"]?.find(
-                (m) => m.id === targetNode?.type,
-              )?.default.markerMid
-            : undefined,
+          data &&
+          "markerMid" in data &&
+          data.markerMid &&
+          targetNode?.type !== "ghost"
+            ? oldTargetHandle?.handle.derivation === "none"
+              ? markerMap[sourceNode?.type ?? "entity_type"]?.find(
+                  (m) => m.id === targetNode?.type,
+                )?.default.markerMid
+              : undefined
+            : oldTargetHandle?.handle.derivation !== "none"
+              ? undefined
+              : marker.markerMid,
         center: undefined,
       },
-      markerStart: marker.markerStart,
-      markerEnd: marker.markerEnd,
+      markerStart: edge.markerStart ? edge.markerStart : marker.markerStart,
+      markerEnd:
+        edge.markerEnd && targetNode?.type !== "ghost"
+          ? edge.markerEnd
+          : marker.markerEnd,
       type,
       deletable: true,
       zIndex,
     } satisfies DEMOEdge;
   });
+
   setEdges(newEdges);
 
-  const oldTargetHandleChanged =
-    oldEdge.targetHandle !== newConnection.targetHandle ||
-    oldEdge.target !== newConnection.target;
+  const hasDerivation =
+    oldTargetHandle?.handle.derivation &&
+    oldTargetHandle.handle.derivation !== "none";
 
-  if (oldTargetHandleChanged && oldEdge.targetHandle) {
-    const oldTargetNode = getNode(oldEdge.target);
-    const oldTargetHandle = getNodeHandle(oldTargetNode, oldEdge.targetHandle);
-    const hasDerivation =
-      oldTargetHandle?.handle.derivation &&
-      oldTargetHandle.handle.derivation !== "none";
+  if (!hasDerivation) return;
 
-    if (hasDerivation) {
-      const stillConnected = newEdges.some(
-        (edge) =>
-          edge.target === oldEdge.target &&
-          edge.targetHandle === oldEdge.targetHandle,
-      );
+  const stillConnected = newEdges.some(
+    (edge) =>
+      edge.target === oldEdge.target &&
+      edge.targetHandle === oldEdge.targetHandle,
+  );
 
-      if (!stillConnected) {
-        setNodes((nodes) =>
-          nodes.map((node) => {
-            if (node.id !== oldEdge.target) return node;
-            if (!("handles" in node.data) || !node.data.handles) return node;
-            const handles = node.data.handles;
-            const updated: typeof handles = { ...handles };
-            for (const pos of ["top", "bottom", "left", "right"] as const) {
-              const group = handles[pos];
-              if (!group?.handles) continue;
-              const newHandles = group.handles.map((h) =>
-                h.id === oldEdge.targetHandle
-                  ? { ...h, derivation: "none" as const }
-                  : h,
-              );
-              updated[pos] = { ...group, handles: newHandles };
-            }
-            return { ...node, data: { ...node.data, handles: updated } };
-          }),
-        );
-      }
+  if (stillConnected) return;
+
+  const newNodes: DEMONode[] = nodes.map((node) => {
+    if (node.id !== oldEdge.target) return node;
+    if (!("handles" in node.data) || !node.data.handles) return node;
+    const handles = node.data.handles;
+    const updated: typeof handles = { ...handles };
+    for (const pos of ["top", "bottom", "left", "right"] as const) {
+      const group = handles[pos];
+      if (!group?.handles) continue;
+      const newHandles = group.handles.map((h) => {
+        if (h.id === oldEdge.targetHandle) {
+          return { ...h, derivation: "none" };
+        }
+        if (h.id === newEdge?.targetHandle) {
+          // get derivation from old target handle
+          return { ...h, derivation: oldTargetHandle.handle.derivation };
+        }
+        return h;
+      });
+      updated[pos] = { ...group, handles: newHandles };
     }
-  }
+    return { ...node, data: { ...node.data, handles: updated } };
+  });
+  setNodes(newNodes);
 };
 
 // A `set` renders no shape itself — its inner child nodes are what's visible —
@@ -497,7 +504,7 @@ export const updateNodeColor = (id: string, color: string) => {
 
 export const updateNodeState = (
   id: string,
-  state: CooperationModelNode["data"]["state"],
+  state: CooperationStructureDiagramNode["data"]["state"],
 ) => {
   updateNodeData(id, { state });
 };
@@ -530,9 +537,15 @@ export const updateNodeFontSize = (id: string, fontSize: number) => {
 
 export const updateNodeContent = (
   id: string,
-  content: Partial<DEMONodeContent>,
+  newContent: ReactStyleStateSetter<Partial<DEMONodeContent>>,
 ) => {
-  updateNodeData(id, { content });
+  updateNodeData(id, (data) => ({
+    ...data,
+    content:
+      typeof newContent === "object"
+        ? { ...data.content, ...newContent }
+        : newContent(data.content),
+  }));
 };
 
 export const setAction = (action: ModelerAction) => {
@@ -802,8 +815,33 @@ export const onNodesDelete: OnNodesDelete<DEMONode> = (nodes) => {
 };
 
 export const setModel = (model: DEMOModelJSON) => {
-  setNodes(model.nodes);
-  setEdges(model.edges);
+  // backwards compatibility
+  const updatedNodes = model.nodes.map((n) => ({
+    ...n,
+    type:
+      n.type === "cooperation_model" ? "cooperation_structure_diagram" : n.type,
+    data: n.data
+      ? {
+          ...n.data,
+          subModel:
+            "subModel" in n.data
+              ? n.data.subModel === "cooperation_model"
+                ? "cooperation_structure_diagram"
+                : n.data.subModel
+              : undefined,
+        }
+      : undefined,
+  }));
+
+  const updatedEdges = model.edges.map((e) => ({
+    ...e,
+    type:
+      e.type === "cooperation_model_edge"
+        ? "cooperation_structure_diagram_edge"
+        : e.type,
+  }));
+  setNodes(updatedNodes);
+  setEdges(updatedEdges);
   setFileName(model.fileName);
   setViewport(model.viewport ?? { x: 0, y: 0, zoom: 1 });
   toggleLock(model.isEnabled);

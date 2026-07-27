@@ -68,10 +68,10 @@ const Sidebar = () => {
 
   const sidebarMenuItems = [
     {
-      id: "cooperation_model",
-      name: "cooperation_model",
-      label: t(($) => $["Cooperation Model"]),
-      icon: "Hii",
+      id: "cooperation_structure_diagram",
+      name: "cooperation_structure_diagram",
+      label: t(($) => $["Cooperation Structure Diagram"]),
+      icon: "",
       sections: [
         {
           id: "actor_type",

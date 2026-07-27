@@ -4,6 +4,6 @@ import type { DEMONodeBaseData, NodeFocus } from "../../nodes.types";
 export type SeveralActorsNode = Node<
   {
     focus: NodeFocus;
-  } & DEMONodeBaseData<"cooperation_model">,
+  } & DEMONodeBaseData<"cooperation_structure_diagram">,
   "several_actors"
 >;

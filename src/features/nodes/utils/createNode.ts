@@ -55,7 +55,7 @@ export const createNode = ({
         position,
         deletable: true,
         data: {
-          subModel: "cooperation_model",
+          subModel: "cooperation_structure_diagram",
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
           focus: "in",
@@ -95,7 +95,7 @@ export const createNode = ({
         deletable: true,
         data: {
           resizable: true,
-          subModel: "cooperation_model",
+          subModel: "cooperation_structure_diagram",
           focus: "in",
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
@@ -147,7 +147,7 @@ export const createNode = ({
         deletable: true,
         data: {
           resizable: true,
-          subModel: "cooperation_model",
+          subModel: "cooperation_structure_diagram",
           focus: "in",
           state: "default",
           content: DEFAULT_CONTENT_MAP[type],
@@ -332,7 +332,7 @@ export const createNode = ({
               "changeFontSize",
               "toggleHandlesVisibility",
             ],
-            subModel: "cooperation_model",
+            subModel: "cooperation_structure_diagram",
           },
           style: {
             width: DEFAULT_SIZE_MAP[type].width,
@@ -450,7 +450,7 @@ export const createNode = ({
           position,
           deletable: true,
           data: {
-            subModel: "cooperation_model",
+            subModel: "cooperation_structure_diagram",
           },
           style: {
             width: DEFAULT_SIZE_MAP[type].width,
@@ -622,7 +622,7 @@ export const createNode = ({
               "changeFontSize",
               "toggleHandlesVisibility",
             ],
-            subModel: "cooperation_model",
+            subModel: "cooperation_structure_diagram",
           },
           style: {
             width: DEFAULT_SIZE_MAP[type].width,
@@ -649,7 +649,7 @@ export const createNode = ({
           position: { x: 0, y: DEFAULT_SIZE_MAP["transaction"].height / 2 },
           deletable: false,
           data: {
-            subModel: "cooperation_model",
+            subModel: "cooperation_structure_diagram",
             state: "default",
             focus: "in",
             content: DEFAULT_CONTENT_MAP["actor"],
@@ -757,7 +757,7 @@ export const createNode = ({
           deletable: true,
           ariaLabel: t(($) => $["Several Actors"]),
           data: {
-            subModel: "cooperation_model",
+            subModel: "cooperation_structure_diagram",
             state: "internal",
             content: DEFAULT_CONTENT_MAP[type],
             actions: [

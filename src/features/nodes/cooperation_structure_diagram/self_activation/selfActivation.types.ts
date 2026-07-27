@@ -1,9 +1,9 @@
 import type { Node } from "@xyflow/react";
 import type { DEMONodeBaseData, NodeFocus } from "../../nodes.types";
 
-export type TransactorNode = Node<
+export type SelfActivationNode = Node<
   {
     focus: NodeFocus;
-  } & DEMONodeBaseData<"cooperation_model">,
-  "transactor"
+  } & DEMONodeBaseData<"cooperation_structure_diagram">,
+  "self_activation"
 >;

@@ -32,6 +32,8 @@ const ActorNode = ({
     "editText",
   ].concat(parentId ? ["attachNode"] : []);
 
+  console.log(content);
+
   return (
     <DEMONodeBase
       id={id}
@@ -98,6 +100,7 @@ const ActorNode = ({
           width={width}
           height={height}
           fontSize={fontSize}
+          contentLocation="body"
           maxLength={100}
           maxLines={4}
           hidden={state === "unclear"}

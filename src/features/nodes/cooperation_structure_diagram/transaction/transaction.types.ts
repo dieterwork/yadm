@@ -6,6 +6,6 @@ export type TransactionNode = Node<
   {
     state: TransactionState;
     focus: NodeFocus;
-  } & DEMONodeBaseData<"cooperation_model">,
+  } & DEMONodeBaseData<"cooperation_structure_diagram">,
   "transaction"
 >;

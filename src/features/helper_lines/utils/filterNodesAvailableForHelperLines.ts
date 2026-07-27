@@ -1,6 +1,6 @@
 import type { DEMONode } from "$/features/nodes/nodes.types";
 
-const cooperationModelAvailableNodes: DEMONode["type"][] = [
+const cooperationStructureDiagramAvailableNodes: DEMONode["type"][] = [
   "actor",
   "transaction",
   "transactor",
@@ -104,14 +104,14 @@ const organizationAvailableNodes: DEMONode["type"][] = [
 type NodesMapType = Record<DEMONode["type"], DEMONode["type"][] | null>;
 
 const availableNodesMap: NodesMapType = {
-  actor: cooperationModelAvailableNodes,
-  transaction: cooperationModelAvailableNodes,
-  transactor: cooperationModelAvailableNodes,
-  self_activation: cooperationModelAvailableNodes,
-  composite: cooperationModelAvailableNodes,
-  elementary_actor: cooperationModelAvailableNodes,
-  several_actors: cooperationModelAvailableNodes,
-  multiple_transaction_kind: cooperationModelAvailableNodes,
+  actor: cooperationStructureDiagramAvailableNodes,
+  transaction: cooperationStructureDiagramAvailableNodes,
+  transactor: cooperationStructureDiagramAvailableNodes,
+  self_activation: cooperationStructureDiagramAvailableNodes,
+  composite: cooperationStructureDiagramAvailableNodes,
+  elementary_actor: cooperationStructureDiagramAvailableNodes,
+  several_actors: cooperationStructureDiagramAvailableNodes,
+  multiple_transaction_kind: cooperationStructureDiagramAvailableNodes,
   transaction_time: processStructureDiagramAvailableNodes,
   initiation_fact: processStructureDiagramAvailableNodes,
   c_act: processStructureDiagramAvailableNodes,

@@ -1,10 +1,10 @@
-import ActorNode from "./cooperation_model/actor/ActorNode";
-import TransactionNode from "./cooperation_model/transaction/TransactionNode";
-import TransactorNode from "./cooperation_model/transactor/TransactorNode";
-import SelfActivationNode from "./cooperation_model/self_activation/SelfActivationNode";
-import CompositeNode from "./cooperation_model/composite/CompositeNode";
-import ElementaryActorNode from "./cooperation_model/elementary_actor/ElementaryActorNode";
-import SeveralActorsNode from "./cooperation_model/several_actors/SeveralActorsNode";
+import ActorNode from "./cooperation_structure_diagram/actor/ActorNode";
+import TransactionNode from "./cooperation_structure_diagram/transaction/TransactionNode";
+import TransactorNode from "./cooperation_structure_diagram/transactor/TransactorNode";
+import SelfActivationNode from "./cooperation_structure_diagram/self_activation/SelfActivationNode";
+import CompositeNode from "./cooperation_structure_diagram/composite/CompositeNode";
+import ElementaryActorNode from "./cooperation_structure_diagram/elementary_actor/ElementaryActorNode";
+import SeveralActorsNode from "./cooperation_structure_diagram/several_actors/SeveralActorsNode";
 import ProductionEventNode from "./object_fact_diagram/production_event/ProductionEventNode";
 import TransactionKindNode from "./process_structure_diagram/transaction_kind/TransactionKindNode";
 import CFactNode from "./process_structure_diagram/c_fact/CFactNode";
@@ -23,13 +23,13 @@ import type { TextNode as TextNodeType } from "./text/textNode.types";
 import type { CSSProperties } from "react";
 import type { Node, Position } from "@xyflow/react";
 import type { GhostNode as GhostNodeType } from "./ghost/ghost.types";
-import type { CooperationModelNode } from "./cooperation_model/cooperationModel.types";
+import type { CooperationStructureDiagramNode } from "./cooperation_structure_diagram/cooperationStructureDiagram.types";
 import type { NodeToolbarAction } from "./DEMONodeBase";
 import type { Points } from "../whiteboard/types/whiteboard.types";
 import SetNode from "./object_fact_diagram/set/SetNode";
 import EntityTypeNode from "./object_fact_diagram/entity_type/EntityTypeNode";
 import AttributeNode from "./object_fact_diagram/attribute/AttributeNode";
-import MultipleTransactionKindComponent from "./cooperation_model/multiple_transaction_kind/MultipleTransactionKindComponent";
+import MultipleTransactionKindComponent from "./cooperation_structure_diagram/multiple_transaction_kind/MultipleTransactionKindComponent";
 
 export const nodeTypes = {
   // cooperation model
@@ -64,7 +64,7 @@ export const nodeTypes = {
 };
 
 export type DEMONode =
-  | CooperationModelNode
+  | CooperationStructureDiagramNode
   | ObjectFactDiagramNode
   | ProcessStructureDiagramNode
   | TextNodeType
@@ -89,7 +89,7 @@ export type DEMONodeContent = {
 };
 
 export type SubModel =
-  | "cooperation_model"
+  | "cooperation_structure_diagram"
   | "object_fact_diagram"
   | "process_structure_diagram";
 
@@ -147,6 +147,6 @@ export type MultipleTransactionKindNode = Node<
   {
     state: MultipleTransactionKindState;
     focus: NodeFocus;
-  } & DEMONodeBaseData<"cooperation_model">,
+  } & DEMONodeBaseData<"cooperation_structure_diagram">,
   "multiple_transaction_kind"
 >;

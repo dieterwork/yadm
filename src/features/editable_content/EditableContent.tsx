@@ -6,7 +6,6 @@ import {
   type FocusEventHandler,
   type HTMLAttributes,
   type Ref,
-  type RefObject,
 } from "react";
 import {
   updateNodeContent,
@@ -16,6 +15,7 @@ import { useNodeId } from "@xyflow/react";
 import { useEditableContent } from "./useEditableContent";
 import takeSnapshotAndSave from "../actions/undo/takeSnapshotAndSave";
 import getEditableContentPadding from "./utils/getEditableContentPadding";
+import sanitizeHtml from "sanitize-html";
 
 interface EditableContentProps extends Omit<
   HTMLAttributes<HTMLSpanElement>,
@@ -91,7 +91,9 @@ const EditableContent = ({
   useEffect(() => {
     const el = ref.current;
     if (el) {
-      ref.current.innerHTML = content ?? "";
+      el.innerHTML = sanitizeHtml(content ?? "", {
+        allowedTags: ["b", "i", "em", "strong", "a"],
+      });
     }
   }, []);
 

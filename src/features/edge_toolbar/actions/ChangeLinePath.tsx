@@ -7,8 +7,8 @@ import {
   ArrowRightIcon,
   LineSegmentIcon,
 } from "@phosphor-icons/react";
-import { MenuTrigger, Popover, type Selection } from "react-aria-components";
-import type { CooperationModelEdge } from "../../edges.types";
+import { MenuTrigger, Popover } from "react-aria-components";
+import type { CooperationStructureDiagramEdge } from "../../edges.types";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
@@ -54,11 +54,14 @@ const ChangeLinePathControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
             if (!(selection instanceof Set)) return;
             for (const entry of selection) {
               if (entry !== "straight" && entry !== "step") return;
-              updateEdgeData<CooperationModelEdge>(edgeId, (data) => ({
-                ...data,
-                linePath: data?.linePath === "straight" ? "step" : "straight",
-                center: undefined,
-              }));
+              updateEdgeData<CooperationStructureDiagramEdge>(
+                edgeId,
+                (data) => ({
+                  ...data,
+                  linePath: data?.linePath === "straight" ? "step" : "straight",
+                  center: undefined,
+                }),
+              );
               takeSnapshotAndSave();
             }
           }}

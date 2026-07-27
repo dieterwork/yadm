@@ -1,25 +1,15 @@
 import { type EdgeProps } from "@xyflow/react";
 import { EditableEdgeComponent } from "../editable/EditableEdge";
-import type { CooperationModelEdge as CooperationModelEdgeType } from "../edges.types";
-import { getNode } from "$/features/modeler/store/useDEMOModelerStore";
-import getMarkerType from "$/features/modeler/utils/getMarkerType";
+import type { CooperationStructureDiagramEdge as CooperationStructureDiagramEdgeType } from "../edges.types";
 
-const CooperationModelEdge = ({
+const CooperationStructureDiagramEdge = ({
   data,
   ...restProps
-}: EdgeProps<CooperationModelEdgeType>) => {
-  const sourceNode = getNode(restProps.source);
-  const targetNode = getNode(restProps.target);
-  const markerType = getMarkerType(
-    sourceNode?.type,
-    targetNode?.type,
-    "default",
-  );
-
+}: EdgeProps<CooperationStructureDiagramEdgeType>) => {
   return (
     <EditableEdgeComponent
       {...restProps}
-      type="cooperation_model_edge"
+      type="cooperation_structure_diagram_edge"
       centerX={data?.center?.x}
       centerY={data?.center?.y}
       isDraggable={data?.center?.active}
@@ -36,4 +26,4 @@ const CooperationModelEdge = ({
   );
 };
 
-export default CooperationModelEdge;
+export default CooperationStructureDiagramEdge;
