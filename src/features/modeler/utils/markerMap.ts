@@ -37,6 +37,7 @@ const markerMap: Partial<
         markerEnd: closedMarker,
       },
       all: {
+        markerStart: closedMarker,
         markerEnd: closedMarker,
       },
     },
@@ -47,6 +48,7 @@ const markerMap: Partial<
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
       all: {
+        markerStart: closedMarker,
         markerEnd: closedMarker,
       },
     },
@@ -77,6 +79,7 @@ const markerMap: Partial<
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
       all: {
+        markerStart: closedMarker,
         markerEnd: closedMarker,
       },
     },
@@ -107,6 +110,7 @@ const markerMap: Partial<
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
       all: {
+        markerStart: closedMarker,
         markerEnd: closedMarker,
       },
     },
