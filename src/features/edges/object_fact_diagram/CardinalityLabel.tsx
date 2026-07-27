@@ -117,7 +117,6 @@ const CardinalityLabel = ({
   const bind = useGesture(
     {
       onDrag: ({ delta: [dx, dy], tap }) => {
-        console.log(tap);
         if (tap) return;
         setDragging(true);
         setSelected(true);

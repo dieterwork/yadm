@@ -217,7 +217,6 @@ export const updateCardinalityLabel = (
         },
         {} as Record<CardinalityField, CardinalityLabelData>,
       );
-      console.log(fields);
       return {
         ...data,
         cardinality: {

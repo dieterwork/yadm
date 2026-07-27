@@ -32,8 +32,6 @@ const ActorNode = ({
     "editText",
   ].concat(parentId ? ["attachNode"] : []);
 
-  console.log(content);
-
   return (
     <DEMONodeBase
       id={id}
