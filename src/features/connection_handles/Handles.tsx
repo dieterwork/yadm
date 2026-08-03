@@ -57,7 +57,12 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             derivation={handle.derivation}
             nodeWidth={width}
             nodeHeight={height}
-            isVisible={node.data?.handles.isVisible && !isExportEnabled}
+            isVisible={
+              node.data &&
+              "handles" in node.data &&
+              node.data.handles?.isVisible &&
+              !isExportEnabled
+            }
           />
         ))}
       {node.data.handles.bottom?.handles &&
@@ -74,7 +79,12 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             derivation={handle.derivation}
             nodeWidth={width}
             nodeHeight={height}
-            isVisible={node.data?.handles.isVisible && !isExportEnabled}
+            isVisible={
+              node.data &&
+              "handles" in node.data &&
+              node.data.handles?.isVisible &&
+              !isExportEnabled
+            }
           />
         ))}
       {node.data.handles.left?.handles &&
@@ -91,7 +101,12 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             derivation={handle.derivation}
             nodeWidth={width}
             nodeHeight={height}
-            isVisible={node.data?.handles.isVisible && !isExportEnabled}
+            isVisible={
+              node.data &&
+              "handles" in node.data &&
+              node.data.handles?.isVisible &&
+              !isExportEnabled
+            }
           />
         ))}
       {node.data.handles.right?.handles &&
@@ -108,7 +123,12 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             derivation={handle.derivation}
             nodeWidth={width}
             nodeHeight={height}
-            isVisible={node.data?.handles.isVisible && !isExportEnabled}
+            isVisible={
+              node.data &&
+              "handles" in node.data &&
+              node.data.handles?.isVisible &&
+              !isExportEnabled
+            }
           />
         ))}
     </div>

@@ -3,16 +3,8 @@ import type { shapeMap } from "$/features/shapes/shapeMap";
 import type { Rect } from "@xyflow/system";
 import type { XYPosition } from "@xyflow/react";
 
-// the outline is walked as a polyline, so a curve is approximated by this many
-// segments. a multiple of four keeps the four points a handle can be dragged
-// to the end of on the outline
 const ELLIPSE_SEGMENTS = 128;
 
-/**
- * Builds the outline a node type's handles travel along, in node local
- * coordinates, as a closed polyline per part of the shape. It is rebuilt from
- * the node's width/height, so the outline scales with the node.
- */
 export type HandleOutlineBuilder = (
   width: number,
   height: number,
@@ -60,8 +52,6 @@ const squareDiamondOutline: HandleOutlineBuilder = (_, height) =>
 
 const doubleCircleOutline: HandleOutlineBuilder = (_, height) => {
   const front = getOutlineBox(height, height);
-  // the circle behind is shifted by an eighth of the drawn circle, which is
-  // the one the shift is measured on (see DoubleDiamondInCircle)
   const shift = (height - 2 * DEFAULT_STROKE_WIDTH) / 8;
 
   return [ellipsePoints(front), ellipsePoints({ ...front, x: shift })];

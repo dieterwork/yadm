@@ -19,28 +19,21 @@ const getHandleOutlinePoint = ({
 
   const outline = handleOutlineMap[type](width, height);
 
-  // the offset runs along the main axis, the outline decides the cross axis
   const isMainAxisX = position === Position.Top || position === Position.Bottom;
   const getMain = (point: XYPosition) => (isMainAxisX ? point.x : point.y);
   const getCross = (point: XYPosition) => (isMainAxisX ? point.y : point.x);
   const toPoint = (main: number, cross: number) =>
     isMainAxisX ? { x: main, y: cross } : { x: cross, y: main };
 
-  // a point on the far side of the shape would be inside it, the one closest
-  // to the side the handle belongs to is the one to keep
   const isLeading = position === Position.Top || position === Position.Left;
 
   const mainValues = outline.flat().map(getMain);
-  // an offset outside the shape (it is measured on the bounding box, which can
-  // be wider than the shape) lands on the shape's outermost point
   const target = clamp(
     offset * (isMainAxisX ? width : height),
     Math.min(...mainValues),
     Math.max(...mainValues),
   );
 
-  // the point is where the line at the offset crosses the outline, every part
-  // of it is closed so there are always at least two crossings to choose from
   let crossing: number | null = null;
   for (const part of outline) {
     for (let index = 0; index < part.length; index++) {
