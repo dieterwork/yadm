@@ -29,6 +29,42 @@ const markerMap: Partial<
   // cooperation model
   actor: [
     {
+      id: "actor",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
+      id: "transaction",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
+      id: "composite",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
+      id: "multiple_transaction_kind",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
       id: "ghost",
       default: {
         markerEnd: closedMarker,
@@ -43,6 +79,42 @@ const markerMap: Partial<
     },
   ],
   transaction: [
+    {
+      id: "actor",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
+      id: "transaction",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
+      id: "composite",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
+      id: "multiple_transaction_kind",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
     {
       id: "ghost",
       default: { markerEnd: closedMarker },
@@ -75,6 +147,42 @@ const markerMap: Partial<
   ],
   composite: [
     {
+      id: "actor",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
+      id: "transaction",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
+      id: "composite",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
+      id: "multiple_transaction_kind",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
       id: "ghost",
       default: { markerEnd: closedMarker },
       initial: { markerEnd: closedMarker },
@@ -105,6 +213,42 @@ const markerMap: Partial<
     },
   ],
   multiple_transaction_kind: [
+    {
+      id: "actor",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
+      id: "transaction",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
+      id: "composite",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
+    {
+      id: "multiple_transaction_kind",
+      default: {},
+      initial: {},
+      all: {
+        markerStart: closedMarker,
+        markerEnd: closedMarker,
+      },
+    },
     {
       id: "ghost",
       default: { markerEnd: closedMarker },

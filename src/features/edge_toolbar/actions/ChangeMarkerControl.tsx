@@ -7,16 +7,14 @@ import {
 import {
   ArrowRightIcon,
   CaretRightIcon,
-  DiamondIcon,
   DiamondsFourIcon,
   ProhibitIcon,
 } from "@phosphor-icons/react";
-import { MenuTrigger, Popover, type Selection } from "react-aria-components";
+import { MenuTrigger, Popover } from "react-aria-components";
 import DEMOElementToolbarButton from "$/shared/components/ui/element_toolbar/DEMOElementToolbarButton";
 import DEMOElementToolbarListBox from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBox";
 import DEMOElementToolbarListBoxItem from "$/shared/components/ui/element_toolbar/DEMOElementToolbarListBoxItem";
 import type { DEMOEdgeToolbarControlProps } from "../types/DEMOEdgeToolbar.types";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 import getMarkerType from "$/features/modeler/utils/getMarkerType";
