@@ -31,6 +31,7 @@ import {
   updateNodeEditable,
   useDEMOModelerStore,
   type DEMOModelerState,
+  onBeforeDelete,
 } from "../store/useDEMOModelerStore";
 import { useShallow } from "zustand/react/shallow";
 import ConnectionLine from "../../connection_line/ConnectionLine";

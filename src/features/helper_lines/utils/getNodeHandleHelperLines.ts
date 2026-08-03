@@ -1,12 +1,10 @@
-import type { DEMONode } from "$/features/nodes/nodes.types";
+import type { DEMOHandlesData, DEMONode } from "$/features/nodes/nodes.types";
 import convertRelativeToAbsolutePosition from "$/features/nodes/utils/convertRelativeToAbsolutePosition";
 import { Position } from "@xyflow/react";
 import type { HandleChange } from "../types/types";
 import getHandleAbsoluteCoordinates from "./getHandleAbsoluteCoordinates";
 import type { HandleWithPosition } from "./getConnectedHandlePairs";
 
-// this utility function can be called with a position change (inside onNodesChange)
-// it checks all other nodes and calculated the helper line positions and the position where the current node should snap to
 interface GetNodeHandleHelperLinesParams {
   change: HandleChange;
   nodes: DEMONode[];
@@ -19,12 +17,35 @@ type GetHelperLinesResult = {
   snapOffset?: number;
 };
 
+// what a handle can line up with, a handle of another node has both axes, a
+// line of the handle's own node only the axis the handle is dragged along
+type HelperLineCoordinates = { x?: number; y?: number };
+
+const getAllHandles = (handles?: DEMOHandlesData): HandleWithPosition[] => [
+  ...(handles?.top?.handles?.map((handle) => ({
+    handle,
+    position: Position.Top,
+  })) ?? []),
+  ...(handles?.bottom?.handles?.map((handle) => ({
+    handle,
+    position: Position.Bottom,
+  })) ?? []),
+  ...(handles?.left?.handles?.map((handle) => ({
+    handle,
+    position: Position.Left,
+  })) ?? []),
+  ...(handles?.right?.handles?.map((handle) => ({
+    handle,
+    position: Position.Right,
+  })) ?? []),
+];
+
 export function getNodeHandleHelperLines({
   change,
   nodes,
   distance = 5,
 }: GetNodeHandleHelperLinesParams): GetHelperLinesResult {
-  const defaultResult = {
+  const defaultResult: GetHelperLinesResult = {
     horizontal: undefined,
     vertical: undefined,
     snapOffset: undefined,
@@ -52,37 +73,47 @@ export function getNodeHandleHelperLines({
   let horizontalDistance = distance;
   let verticalDistance = distance;
 
+  const isDraggedHorizontally =
+    change.position === Position.Top || change.position === Position.Bottom;
+
+  //  |‾‾‾‾‾|‾‾‾‾‾|
+  //  |     |     |
+  //  |_____|_____|
+  //  |     |     |
+  //
+  // the start, middle and end of the node the handle belongs to are helper
+  // lines of their own, so a handle can be placed on them without another
+  // node's handle to align to. only the axis the handle is dragged along is
+  // checked, the other one cannot move.
+  const ownNodeLines: HelperLineCoordinates[] = [0, 0.5, 1].map((ratio) =>
+    isDraggedHorizontally
+      ? {
+          x:
+            (nodeWithHandleChangeAbsolutePosition.x ?? 0) +
+            (nodeWithHandleChange.measured?.width ?? 0) * ratio,
+        }
+      : {
+          y:
+            (nodeWithHandleChangeAbsolutePosition.y ?? 0) +
+            (nodeWithHandleChange.measured?.height ?? 0) * ratio,
+        },
+  );
+
   return nodes
-    .filter(
-      (node) => node.id !== nodeWithHandleChange.id && "handles" in node.data,
-    )
-    .reduce<GetHelperLinesResult>((result, nodeWithoutHandleChange) => {
-      if (!("handles" in nodeWithoutHandleChange.data)) return result;
-      const handles = nodeWithoutHandleChange.data.handles;
+    .filter((node) => "handles" in node.data)
+    .reduce<GetHelperLinesResult>((result, node) => {
+      if (!("handles" in node.data)) return result;
 
-      const allHandles: HandleWithPosition[] = [
-        ...(handles?.top?.handles?.map((handle) => ({
-          handle,
-          position: Position.Top,
-        })) ?? []),
-        ...(handles?.bottom?.handles?.map((handle) => ({
-          handle,
-          position: Position.Bottom,
-        })) ?? []),
-        ...(handles?.left?.handles?.map((handle) => ({
-          handle,
-          position: Position.Left,
-        })) ?? []),
-        ...(handles?.right?.handles?.map((handle) => ({
-          handle,
-          position: Position.Right,
-        })) ?? []),
-      ];
+      // the handles of the node being changed are left out, they move with the
+      // node and lining the dragged handle up with them only stacks the two
+      const helperLines: HelperLineCoordinates[] =
+        node.id === nodeWithHandleChange.id
+          ? ownNodeLines
+          : getAllHandles(node.data.handles).map((handle) =>
+              getHandleAbsoluteCoordinates(node, handle, nodes),
+            );
 
-      return allHandles.reduce<GetHelperLinesResult>((handleResult, handle) => {
-        const absoluteHandleCoordinatesForUnchangedHandle =
-          getHandleAbsoluteCoordinates(nodeWithoutHandleChange, handle, nodes);
-
+      return helperLines.reduce<GetHelperLinesResult>((lineResult, line) => {
         //  |‾‾‾‾‾‾‾‾‾‾‾|
         //  |     A     |
         //  |___________|
@@ -92,40 +123,43 @@ export function getNodeHandleHelperLines({
         //  |     B     |
         //  |___________|
 
-        const distanceCenterVertical = Math.abs(
-          (absoluteHandleCoordinatesForUnchangedHandle?.x ?? 0) -
-            (absoluteHandleCoordinatesForChangedHandle?.x ?? 0),
-        );
+        if (line.x !== undefined) {
+          const distanceCenterVertical = Math.abs(
+            line.x - (absoluteHandleCoordinatesForChangedHandle?.x ?? 0),
+          );
 
-        if (distanceCenterVertical < verticalDistance) {
-          handleResult.vertical = absoluteHandleCoordinatesForUnchangedHandle.x;
-          handleResult.snapOffset =
-            ((absoluteHandleCoordinatesForUnchangedHandle.x ?? 0) -
-              (nodeWithHandleChangeAbsolutePosition.x ?? 0)) /
-            (nodeWithHandleChange.measured?.width ?? 0);
-          verticalDistance = distanceCenterVertical;
+          if (distanceCenterVertical < verticalDistance) {
+            lineResult.vertical = line.x;
+            if (isDraggedHorizontally) {
+              lineResult.snapOffset =
+                (line.x - (nodeWithHandleChangeAbsolutePosition.x ?? 0)) /
+                (nodeWithHandleChange.measured?.width ?? 0);
+              verticalDistance = distanceCenterVertical;
+            }
+          }
         }
 
         //  |‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|     |‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
         //  |    A    |-----|    B    |
         //  |_________|     |_________|
 
-        const distanceCenterHorizontal = Math.abs(
-          (absoluteHandleCoordinatesForUnchangedHandle?.y ?? 0) -
-            (absoluteHandleCoordinatesForChangedHandle?.y ?? 0),
-        );
+        if (line.y !== undefined) {
+          const distanceCenterHorizontal = Math.abs(
+            line.y - (absoluteHandleCoordinatesForChangedHandle?.y ?? 0),
+          );
 
-        if (distanceCenterHorizontal < horizontalDistance) {
-          handleResult.horizontal =
-            absoluteHandleCoordinatesForUnchangedHandle.y;
-          handleResult.snapOffset =
-            ((absoluteHandleCoordinatesForUnchangedHandle.y ?? 0) -
-              (nodeWithHandleChangeAbsolutePosition.y ?? 0)) /
-            (nodeWithHandleChange.measured?.height ?? 0);
-          horizontalDistance = distanceCenterHorizontal;
+          if (distanceCenterHorizontal < horizontalDistance) {
+            lineResult.horizontal = line.y;
+            if (!isDraggedHorizontally) {
+              lineResult.snapOffset =
+                (line.y - (nodeWithHandleChangeAbsolutePosition.y ?? 0)) /
+                (nodeWithHandleChange.measured?.height ?? 0);
+              horizontalDistance = distanceCenterHorizontal;
+            }
+          }
         }
 
-        return handleResult;
+        return lineResult;
       }, result);
     }, defaultResult);
 }

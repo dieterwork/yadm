@@ -55,6 +55,8 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             offset={handle.offset}
             canDrag={handle.canDrag}
             derivation={handle.derivation}
+            nodeWidth={width}
+            nodeHeight={height}
             isVisible={node.data?.handles.isVisible && !isExportEnabled}
           />
         ))}
@@ -70,6 +72,8 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             offset={handle.offset}
             canDrag={handle.canDrag}
             derivation={handle.derivation}
+            nodeWidth={width}
+            nodeHeight={height}
             isVisible={node.data?.handles.isVisible && !isExportEnabled}
           />
         ))}
@@ -85,6 +89,8 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             offset={handle.offset}
             canDrag={handle.canDrag}
             derivation={handle.derivation}
+            nodeWidth={width}
+            nodeHeight={height}
             isVisible={node.data?.handles.isVisible && !isExportEnabled}
           />
         ))}
@@ -100,6 +106,8 @@ const Handles = ({ nodeId, width, height }: HandlesProps) => {
             offset={handle.offset}
             canDrag={handle.canDrag}
             derivation={handle.derivation}
+            nodeWidth={width}
+            nodeHeight={height}
             isVisible={node.data?.handles.isVisible && !isExportEnabled}
           />
         ))}

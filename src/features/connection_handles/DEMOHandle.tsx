@@ -28,6 +28,7 @@ import useHandleSelectionStore, {
 } from "../handle_toolbar/useHandleSelectionStore";
 import DerivationHandle from "./DerivationHandle";
 import getHandleRotation from "./utils/getHandleRotation";
+import getHandleOutlinePoint from "./utils/getHandleOutlinePoint";
 
 const DEMOHandle = ({
   id,
@@ -37,6 +38,8 @@ const DEMOHandle = ({
   canDrag = true,
   derivation,
   isVisible = true,
+  nodeWidth,
+  nodeHeight,
   ...restProps
 }: Omit<HandleProps, "onDragStart" | "onDrag" | "onDragEnd"> & {
   nodeId: string;
@@ -44,6 +47,8 @@ const DEMOHandle = ({
   canDrag?: boolean;
   derivation?: "aggregation" | "generalisation" | "none";
   isVisible?: boolean;
+  nodeWidth: number;
+  nodeHeight: number;
 }) => {
   const isHandleEditModeEnabled = useDEMOModelerStore(
     (state) => state.isHandleEditModeEnabled,
@@ -164,17 +169,34 @@ const DEMOHandle = ({
     }
   };
 
-  const style: CSSProperties = {
-    left:
-      position === Position.Top || position === Position.Bottom
-        ? (offset ?? 0.5) * 100 + "%"
-        : undefined,
-    top:
-      position === Position.Left || position === Position.Right
-        ? (offset ?? 0.5) * 100 + "%"
-        : undefined,
-    zIndex: zIndexMap.handle,
-  };
+  const isDraggedHorizontally =
+    position === Position.Top || position === Position.Bottom;
+
+  const outlinePoint = getHandleOutlinePoint({
+    type: node.type,
+    position,
+    offset: offset ?? 0.5,
+    width: nodeWidth,
+    height: nodeHeight,
+  });
+
+  const style: CSSProperties = { zIndex: zIndexMap.handle };
+
+  if (outlinePoint) {
+    if (isDraggedHorizontally) {
+      style.left = outlinePoint.x;
+      if (position === Position.Top) style.top = outlinePoint.y;
+      else style.bottom = nodeHeight - outlinePoint.y;
+    } else {
+      style.top = outlinePoint.y;
+      if (position === Position.Left) style.left = outlinePoint.x;
+      else style.right = nodeWidth - outlinePoint.x;
+    }
+  } else if (isDraggedHorizontally) {
+    style.left = (offset ?? 0.5) * 100 + "%";
+  } else {
+    style.top = (offset ?? 0.5) * 100 + "%";
+  }
 
   const selectedEdgeId =
     connectedEdges.find(
@@ -279,7 +301,7 @@ const DEMOHandle = ({
           handleId={id}
           position={position}
           isVisible={selectedHandleId === id && isEnabled}
-          actions={["delete"].concat()}
+          actions={["delete"]}
         />
       </>
     );

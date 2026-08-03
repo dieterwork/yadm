@@ -101,6 +101,22 @@ const ChangeDerivationControl = ({ edgeId }: DEMOEdgeToolbarControlProps) => {
                             )?.default.markerMid
                           : undefined,
                     },
+                    markerStart:
+                      entry === "none"
+                        ? markerMap[targetNode?.type ?? "entity_type"]?.find(
+                            (item) =>
+                              item.id === sourceNode?.type ||
+                              item.id === "entity_type",
+                          )?.default.markerStart
+                        : undefined,
+                    markerEnd:
+                      entry === "none"
+                        ? markerMap[targetNode?.type ?? "entity_type"]?.find(
+                            (item) =>
+                              item.id === sourceNode?.type ||
+                              item.id === "entity_type",
+                          )?.default.markerEnd
+                        : undefined,
                   } as DEMOEdge;
                   return newEdge;
                 }),

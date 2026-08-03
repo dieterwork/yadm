@@ -6,6 +6,7 @@ import {
   type HandleType,
   isEdge,
   isNode,
+  type OnBeforeDelete,
   type OnConnect,
   type OnEdgesChange,
   type OnNodesChange,
@@ -18,6 +19,7 @@ import {
 
 import type {
   DEMOHandle,
+  DEMOHandlesData,
   DEMONode,
   DEMONodeContent,
   NodeFocus,
@@ -269,6 +271,32 @@ export const onEdgesChange: OnEdgesChange<DEMOEdge> = (changes) => {
   }));
 };
 
+// a derivation is drawn on the handle an edge ends on, so it goes with the
+// edge once the edge stops ending there, the same way deleting an edge takes
+// it (see useDelete)
+const clearHandleDerivation = (edge: DEMOEdge, remainingEdges: DEMOEdge[]) => {
+  const targetHandle = getNodeHandle(getNode(edge.target), edge.targetHandle);
+  if (
+    !targetHandle?.handle.derivation ||
+    targetHandle.handle.derivation === "none"
+  )
+    return;
+
+  const stillConnected = remainingEdges.some(
+    (remaining) =>
+      remaining.target === edge.target &&
+      remaining.targetHandle === edge.targetHandle,
+  );
+  if (stillConnected) return;
+
+  updateNodeHandlesDerivation(
+    edge.target,
+    edge.targetHandle ?? undefined,
+    targetHandle.position as Position,
+    "none",
+  );
+};
+
 export const onReconnectEnd = (
   event: MouseEvent | TouchEvent,
   edge: DEMOEdge,
@@ -283,8 +311,14 @@ export const onReconnectEnd = (
         return !(isGhost && isTarget);
       });
     });
-
-    setEdges((edges) => edges.filter((_edge) => _edge.id !== edge.id));
+    // the target end was dragged off, onReconnect has already moved the
+    // derivation along for a valid drop, an invalid one only leaves a ghost
+    // behind (see useIncompleteEdge) and the old handle to clean up
+    const remainingEdges = useDEMOModelerStore
+      .getState()
+      .edges.filter((_edge) => _edge.id !== edge.id);
+    setEdges(remainingEdges);
+    clearHandleDerivation(edge, remainingEdges);
   }
   takeSnapshotAndSave();
 };
@@ -461,26 +495,27 @@ export const onReconnect: OnReconnect = (oldEdge, newConnection) => {
   if (stillConnected) return;
 
   const newNodes: DEMONode[] = nodes.map((node) => {
-    if (node.id !== oldEdge.target) return node;
     if (!("handles" in node.data) || !node.data.handles) return node;
     const handles = node.data.handles;
-    const updated: typeof handles = { ...handles };
-    for (const pos of ["top", "bottom", "left", "right"] as const) {
-      const group = handles[pos];
-      if (!group?.handles) continue;
-      const newHandles = group.handles.map((h) => {
-        if (h.id === oldEdge.targetHandle) {
-          return { ...h, derivation: "none" };
-        }
-        if (h.id === newEdge?.targetHandle) {
-          // get derivation from old target handle
-          return { ...h, derivation: oldTargetHandle.handle.derivation };
-        }
-        return h;
-      });
-      updated[pos] = { ...group, handles: newHandles };
+    const updatedHandles: DEMOHandlesData = { ...handles };
+    if (node.id === newEdge?.target || node.id === oldEdge?.target) {
+      for (const pos of ["top", "bottom", "left", "right"] as const) {
+        const group = handles[pos];
+        if (!group?.handles) continue;
+        const newHandles = group.handles.map((h) => {
+          if (h.id === newEdge?.targetHandle) {
+            return { ...h, derivation: oldTargetHandle.handle.derivation };
+          } else if (h.id === oldEdge.targetHandle) {
+            return { ...h, derivation: "none" as const };
+          }
+          return h;
+        });
+        updatedHandles[pos] = { ...group, handles: newHandles };
+      }
+      return { ...node, data: { ...node.data, handles: updatedHandles } };
+    } else {
+      return node;
     }
-    return { ...node, data: { ...node.data, handles: updated } };
   });
   setNodes(newNodes);
 };
@@ -892,4 +927,12 @@ export const clearSelectedCardinalityLabels = () => {
 export const onPaneClick = () => {
   setSelectedHandleId(null);
   clearSelectedCardinalityLabels();
+};
+
+export const onBeforeDelete: OnBeforeDelete<DEMONode, DEMOEdge> = async ({
+  nodes,
+  edges,
+}) => {
+  console.log(nodes, edges);
+  return { nodes, edges };
 };
