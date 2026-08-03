@@ -7,10 +7,12 @@ import {
 import { cn } from "@sglara/cn";
 import { useEffect, useRef, useState } from "react";
 import {
+  getEdge,
   setAction,
   setEdges,
   setNodes,
   updateCardinalityLabel,
+  useDEMOModelerStore,
 } from "$/features/modeler/store/useDEMOModelerStore";
 import takeSnapshotAndSave from "$/features/actions/undo/takeSnapshotAndSave";
 import { cardinalityFields, type CardinalityField } from "../edges.types";
@@ -51,6 +53,8 @@ const CardinalityLabel = ({
   const [isEditable, setIsEditable] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const { screenToFlowPosition } = useReactFlow();
+
+  const edge = getEdge(edgeId);
 
   useEffect(() => {
     const el = ref.current;
@@ -189,6 +193,7 @@ const CardinalityLabel = ({
           style={{
             transform: `translate(${translateX ?? "-50%"}, ${translateY ?? "-50%"}) translate(${labelX}px,${labelY}px) translate(${offsetX}px,${offsetY}px)`,
             touchAction: "none",
+            zIndex: edge?.zIndex ?? 1,
           }}
         >
           <span
