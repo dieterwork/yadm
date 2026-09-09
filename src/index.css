@@ -91,6 +91,10 @@ body,
         z-index: 1;
         pointer-events: all;
       }
+      /* a handle held long enough to enter handle edit mode */
+      &.demo-handle-held::before {
+        background-color: var(--color-sky-500) !important;
+      }
       &.react-flow__handle-left {
         transform: translate(1px, -50%);
         &::before {

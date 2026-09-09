@@ -17,7 +17,7 @@ import type {
 import DEMOEdgeToolbar, {
   type EdgeToolbarAction,
 } from "../../edge_toolbar/DEMOEdgeToolbar";
-import { useEffect, type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import DoubleArrowMarker from "$/shared/components/ui/markers/DoubleArrowMarker";
 import InteractiveCenterEdge from "./InteractiveCenterEdge";
 import {
@@ -42,6 +42,7 @@ import getArrowRotation from "../utils/getArrowRotation";
 import ExclusionLawMarker from "../object_fact_diagram/ExclusionLawMarker";
 import CardinalityLabel from "../object_fact_diagram/CardinalityLabel";
 import getNodeHandle from "$/features/connection_handles/utils/getHandle";
+import { EDGE_INTERACTION_WIDTH } from "../edges.utils";
 
 export type EditableEdge = Edge<{
   center: CenterData;
@@ -69,6 +70,7 @@ export function EditableEdgeComponent({
   cardinality,
   target,
   targetHandleId,
+  interactionWidth = EDGE_INTERACTION_WIDTH,
 }: Omit<EdgeProps<EditableEdge>, "data"> & {
   markerMid?: MarkerType;
   type?: DEMOEdge["type"];
@@ -188,6 +190,14 @@ export function EditableEdgeComponent({
         d={path}
         markerEnd={markerEnd}
         markerStart={markerStart}
+      />
+      {/* invisible path for interaction */}
+      <path
+        d={path}
+        fill="none"
+        strokeOpacity={0}
+        strokeWidth={interactionWidth}
+        className="react-flow__edge-interaction"
       />
       {linePath === "step" && (
         <InteractiveCenterEdge

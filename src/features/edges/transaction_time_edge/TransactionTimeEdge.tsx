@@ -1,6 +1,7 @@
 import { BaseEdge, getStraightPath, type EdgeProps } from "@xyflow/react";
 import type { DEMOEdge } from "../edges.types";
 import DEMOEdgeToolbar from "../../edge_toolbar/DEMOEdgeToolbar";
+import { EDGE_INTERACTION_WIDTH } from "../edges.utils";
 
 const TransactionTimeEdge = ({
   sourceX,
@@ -9,6 +10,7 @@ const TransactionTimeEdge = ({
   targetY,
   selected,
   id,
+  interactionWidth = EDGE_INTERACTION_WIDTH,
 }: EdgeProps<DEMOEdge>) => {
   const [path, labelX, labelY] = getStraightPath({
     sourceX,
@@ -20,6 +22,7 @@ const TransactionTimeEdge = ({
     <>
       <BaseEdge
         path={path}
+        interactionWidth={interactionWidth}
         style={{ stroke: "var(--color-slate-500)", strokeWidth: 2 }}
       />
       {selected && (

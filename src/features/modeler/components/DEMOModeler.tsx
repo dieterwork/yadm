@@ -364,6 +364,7 @@ const DEMOModeler = () => {
             }}
             connectionLineComponent={(props) => <ConnectionLine {...props} />}
             connectionMode={ConnectionMode.Loose}
+            connectionDragThreshold={1}
             snapToGrid={action !== "draw" ? isGridSnapEnabled : false}
             snapGrid={[10, 10]}
             edgesReconnectable={isEnabled}

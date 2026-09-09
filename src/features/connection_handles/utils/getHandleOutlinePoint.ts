@@ -1,6 +1,8 @@
 import { Position, type XYPosition } from "@xyflow/react";
-import clamp from "$/shared/utils/clamp";
 import handleOutlineMap, { hasHandleOutline } from "./handleOutlineMap";
+
+const wrap = (value: number, period: number) =>
+  ((value % period) + period) % period;
 
 const getHandleOutlinePoint = ({
   type,
@@ -25,14 +27,23 @@ const getHandleOutlinePoint = ({
   const toPoint = (main: number, cross: number) =>
     isMainAxisX ? { x: main, y: cross } : { x: cross, y: main };
 
-  const isLeading = position === Position.Top || position === Position.Left;
-
   const mainValues = outline.flat().map(getMain);
-  const target = clamp(
-    offset * (isMainAxisX ? width : height),
-    Math.min(...mainValues),
-    Math.max(...mainValues),
-  );
+  const minMain = Math.min(...mainValues);
+  const maxMain = Math.max(...mainValues);
+  const span = maxMain - minMain;
+
+  // The offset sweeps the whole outline instead of stopping at its ends: the
+  // first half of a sweep runs along the side the handle belongs to, the second
+  // half comes back along the opposite one, so dragging past a corner keeps
+  // rotating the handle around the shape.
+  const swept = span
+    ? wrap(offset * (isMainAxisX ? width : height) - minMain, 2 * span)
+    : 0;
+  const isReturning = swept > span;
+  const target = minMain + (isReturning ? 2 * span - swept : swept);
+
+  const isLeading =
+    (position === Position.Top || position === Position.Left) !== isReturning;
 
   let crossing: number | null = null;
   for (const part of outline) {

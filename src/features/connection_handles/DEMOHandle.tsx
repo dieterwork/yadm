@@ -10,6 +10,7 @@ import {
 import {
   clearSelectedCardinalityLabels,
   getNode,
+  setHandleEditModeEnabled,
   setNodes,
   updateNode,
   updateNodeHandleOffset,
@@ -19,7 +20,15 @@ import { useGesture } from "@use-gesture/react";
 import { cn } from "@sglara/cn";
 import clamp from "$/shared/utils/clamp";
 import { zIndexMap } from "$/shared/utils/zIndex";
-import { useState, type CSSProperties, type MouseEventHandler } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEventHandler,
+  type PointerEventHandler,
+} from "react";
 import { updateHelperLinesFromHandleChanges } from "../helper_lines/useHelperLinesStore";
 import deleteHandle from "./utils/deleteHandle";
 import DEMOHandleToolbar from "../handle_toolbar/DEMOHandleToolbar";
@@ -29,6 +38,10 @@ import useHandleSelectionStore, {
 import DerivationHandle from "./DerivationHandle";
 import getHandleRotation from "./utils/getHandleRotation";
 import getHandleOutlinePoint from "./utils/getHandleOutlinePoint";
+import { hasHandleOutline } from "./utils/handleOutlineMap";
+
+// how long a handle has to be held before handle edit mode turns on
+const HANDLE_HOLD_DELAY = 2000;
 
 const DEMOHandle = ({
   id,
@@ -61,6 +74,8 @@ const DEMOHandle = ({
   const updateNodeInternals = useUpdateNodeInternals();
   const internalNode = useInternalNode(nodeId);
   const [changedOffset, setChangedOffset] = useState(offset);
+  // the hold has lasted long enough to take over the handle, marking it as held
+  const [isHeld, setIsHeld] = useState(false);
   const selectedHandleId = useHandleSelectionStore(
     (state) => state.selectedHandleId,
   );
@@ -81,16 +96,33 @@ const DEMOHandle = ({
   const edgeIds = connections.map((c) => c.edgeId);
   const connectedEdges = edges.filter((edge) => edgeIds.includes(edge.id));
 
+  // the gesture is bound whether or not handle edit mode is on, so that a hold
+  // that turns the mode on halfway through can carry straight on into a drag
+  const isDraggingHandle = useRef(false);
+  const holdTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const canDragHandle = () =>
+    isHandleEditModeEnabled && isEnabled && !!id && canDrag;
+
+  const startHandleDrag = () => {
+    isDraggingHandle.current = true;
+    clearSelectedCardinalityLabels();
+    setNodes((nodes) =>
+      nodes.map((node) =>
+        node.id === nodeId ? { ...node, selected: false } : node,
+      ),
+    );
+  };
+
   const bind = useGesture({
     onDragStart: () => {
-      clearSelectedCardinalityLabels();
-      setNodes((nodes) =>
-        nodes.map((node) =>
-          node.id === nodeId ? { ...node, selected: false } : node,
-        ),
-      );
+      if (!canDragHandle()) return;
+      startHandleDrag();
     },
     onDragEnd: () => {
+      if (!isDraggingHandle.current) return;
+      isDraggingHandle.current = false;
+
       setNodes((nodes) =>
         nodes.map((node) =>
           node.id === nodeId ? { ...node, selected: !node.selected } : node,
@@ -107,37 +139,38 @@ const DEMOHandle = ({
       );
     },
     onDrag: ({ event, xy }) => {
-      if (!isHandleEditModeEnabled || !isEnabled || !id || !canDrag) return;
+      if (!canDragHandle() || !id) return;
+      // the mode was turned on by the hold, after the gesture had begun
+      if (!isDraggingHandle.current) startHandleDrag();
 
       event.preventDefault();
 
       const xyPosition = screenToFlowPosition({ x: xy[0], y: xy[1] });
+
+      // handles on outlined shapes rotate around them, so their offset is free
+      // to run past the node's bounds and wrap onto the far side of the outline
+      const canRotate = hasHandleOutline(internalNode?.type);
+
       let changedOffset;
       if (position === Position.Top || position === Position.Bottom) {
         // x movement
 
-        const minX = 0;
         const maxX = internalNode?.measured.width ?? 0;
         const xPosition =
           xyPosition.x - (internalNode?.internals.positionAbsolute.x ?? 0);
 
-        // Get clamped offset
-        const offsetClamp = clamp(minX, xPosition, maxX);
-
         // Divide offset by total width to get percentage
-        changedOffset = offsetClamp / (internalNode?.measured.width ?? 0);
+        changedOffset =
+          (canRotate ? xPosition : clamp(xPosition, 0, maxX)) / maxX;
       } else {
         // y movement
-        const minY = 0;
         const maxY = internalNode?.measured.height ?? 0;
         const yPosition =
           xyPosition.y - (internalNode?.internals.positionAbsolute.y ?? 0);
 
-        // Get clamped offset
-        const offsetClamp = clamp(minY, yPosition, maxY);
-
-        // Divide offset by total width to get percentage
-        changedOffset = offsetClamp / (internalNode?.measured.height ?? 0);
+        // Divide offset by total height to get percentage
+        changedOffset =
+          (canRotate ? yPosition : clamp(yPosition, 0, maxY)) / maxY;
       }
       changedOffset = updateHelperLinesFromHandleChanges(
         {
@@ -153,6 +186,46 @@ const DEMOHandle = ({
       updateNodeInternals(nodeId);
     },
   });
+
+  const holdRelease = useRef<AbortController>(undefined);
+
+  const endHold = useCallback(() => {
+    if (!holdRelease.current) return;
+
+    clearTimeout(holdTimeout.current);
+    holdRelease.current.abort();
+    holdRelease.current = undefined;
+    setIsHeld(false);
+    setHandleEditModeEnabled(false);
+  }, []);
+
+  // a hold that is still running when the handle goes away has to be let go of
+  useEffect(() => endHold, [endHold]);
+
+  const startHold: PointerEventHandler<HTMLDivElement> = (event) => {
+    if (!isEnabled || event.button !== 0) return;
+
+    holdTimeout.current = setTimeout(() => {
+      setIsHeld(true);
+      setHandleEditModeEnabled(true);
+    }, HANDLE_HOLD_DELAY);
+
+    // the release is listened for on the window, one step after the document
+    // react flow ends connections on, so that its handlers still see handle
+    // edit mode as it was during the hold
+    holdRelease.current = new AbortController();
+    const { signal } = holdRelease.current;
+    window.addEventListener("mouseup", endHold, { signal });
+    window.addEventListener("touchend", endHold, { signal });
+    window.addEventListener("pointercancel", endHold, { signal });
+  };
+
+  const gestureProps = bind();
+  const onPointerDown: PointerEventHandler<HTMLDivElement> = (event) => {
+    gestureProps.onPointerDown?.(event);
+    startHold(event);
+  };
+  const handleProps = { ...gestureProps, onPointerDown };
 
   const node = getNode(nodeId);
   if (!node) return null;
@@ -263,7 +336,7 @@ const DEMOHandle = ({
       <>
         <Handle
           {...restProps}
-          {...bind()}
+          {...handleProps}
           style={{
             ...style,
             "--_handle-rotation": `${rotation * (180 / Math.PI)}deg`,
@@ -271,6 +344,7 @@ const DEMOHandle = ({
           className={cn(
             "demo-handle",
             "touch-none",
+            isHeld && "demo-handle-held",
             isEnabled &&
               canDrag &&
               (position === Position.Top || position === Position.Bottom) &&
@@ -310,12 +384,14 @@ const DEMOHandle = ({
     <>
       <Handle
         {...restProps}
+        {...handleProps}
         style={{
           ...style,
           "--_handle-rotation": `${rotation * (180 / Math.PI)}deg`,
         }}
         className={cn(
           "demo-handle",
+          isHeld && "demo-handle-held",
           !isEnabled && "nopan nodrag pointer-events-none",
           !isVisible ? "before:invisible" : "before:visible",
         )}

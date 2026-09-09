@@ -5,6 +5,7 @@ import {
   type ConnectionLineComponentProps,
 } from "@xyflow/react";
 import { calcConnectionLineTargetXForTransactionTimeEdge } from "./utils/calcConnectionLineTargetXForTransactionTimeEdge";
+import { useDEMOModelerStore } from "$/features/modeler/store/useDEMOModelerStore";
 
 const ConnectionLine = ({
   fromX,
@@ -16,6 +17,14 @@ const ConnectionLine = ({
   connectionStatus,
   fromNode,
 }: ConnectionLineComponentProps) => {
+  const isHandleEditModeEnabled = useDEMOModelerStore(
+    (state) => state.isHandleEditModeEnabled,
+  );
+
+  // in handle edit mode a handle is being moved, not connected, so a connection
+  // that is still in progress from before the mode was entered is not previewed
+  if (isHandleEditModeEnabled) return null;
+
   const [path] =
     fromNode.type !== "transaction_time"
       ? getSmoothStepPath({
