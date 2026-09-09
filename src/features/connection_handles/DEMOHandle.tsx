@@ -74,7 +74,6 @@ const DEMOHandle = ({
   const updateNodeInternals = useUpdateNodeInternals();
   const internalNode = useInternalNode(nodeId);
   const [changedOffset, setChangedOffset] = useState(offset);
-  // the hold has lasted long enough to take over the handle, marking it as held
   const [isHeld, setIsHeld] = useState(false);
   const selectedHandleId = useHandleSelectionStore(
     (state) => state.selectedHandleId,
@@ -96,8 +95,6 @@ const DEMOHandle = ({
   const edgeIds = connections.map((c) => c.edgeId);
   const connectedEdges = edges.filter((edge) => edgeIds.includes(edge.id));
 
-  // the gesture is bound whether or not handle edit mode is on, so that a hold
-  // that turns the mode on halfway through can carry straight on into a drag
   const isDraggingHandle = useRef(false);
   const holdTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
