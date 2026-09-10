@@ -57,14 +57,6 @@ body,
     background-color: var(--color-white);
     border: 1px solid var(--color-sky-500);
     border-radius: 0;
-    &.top.left {
-    }
-    &.top.right {
-    }
-    &.bottom.left {
-    }
-    &.bottom.right {
-    }
   }
 }
 .derivation-handle {
@@ -91,7 +83,6 @@ body,
         z-index: 1;
         pointer-events: all;
       }
-      /* a handle held long enough to enter handle edit mode */
       &.demo-handle-held::before {
         background-color: var(--color-sky-500) !important;
       }
@@ -145,6 +136,14 @@ body,
           & svg {
             transform: translateY(50%) rotate(var(--_rotation));
           }
+        }
+      }
+      &.demo-handle-circular {
+        right: auto;
+        bottom: auto;
+        transform: translate(-50%, -50%);
+        &::before {
+          transform: none;
         }
       }
     }

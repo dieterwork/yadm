@@ -37,8 +37,8 @@ import useHandleSelectionStore, {
 } from "../handle_toolbar/useHandleSelectionStore";
 import DerivationHandle from "./DerivationHandle";
 import getHandleRotation from "./utils/getHandleRotation";
-import getHandleOutlinePoint from "./utils/getHandleOutlinePoint";
-import { hasHandleOutline } from "./utils/handleOutlineMap";
+import getCircularHandlePoint from "./utils/getCircularHandlePoint";
+import { getCircularHandleBounds } from "./utils/circularHandleMap";
 
 // how long a handle has to be held before handle edit mode turns on
 const HANDLE_HOLD_DELAY = 2000;
@@ -137,47 +137,80 @@ const DEMOHandle = ({
     },
     onDrag: ({ event, xy }) => {
       if (!canDragHandle() || !id) return;
-      // the mode was turned on by the hold, after the gesture had begun
       if (!isDraggingHandle.current) startHandleDrag();
 
       event.preventDefault();
 
       const xyPosition = screenToFlowPosition({ x: xy[0], y: xy[1] });
 
-      // handles on outlined shapes rotate around them, so their offset is free
-      // to run past the node's bounds and wrap onto the far side of the outline
-      const canRotate = hasHandleOutline(internalNode?.type);
+      const pointer = {
+        x: xyPosition.x - (internalNode?.internals.positionAbsolute.x ?? 0),
+        y: xyPosition.y - (internalNode?.internals.positionAbsolute.y ?? 0),
+      };
 
-      let changedOffset;
-      if (position === Position.Top || position === Position.Bottom) {
-        // x movement
+      const isDraggedHorizontally =
+        position === Position.Top || position === Position.Bottom;
+      const size = isDraggedHorizontally ? nodeWidth : nodeHeight;
 
-        const maxX = internalNode?.measured.width ?? 0;
-        const xPosition =
-          xyPosition.x - (internalNode?.internals.positionAbsolute.x ?? 0);
+      const circle = getCircularHandleBounds(
+        internalNode?.type,
+        nodeWidth,
+        nodeHeight,
+      );
 
-        // Divide offset by total width to get percentage
-        changedOffset =
-          (canRotate ? xPosition : clamp(xPosition, 0, maxX)) / maxX;
+      let main = isDraggedHorizontally ? pointer.x : pointer.y;
+      let isReturning = false;
+
+      if (circle) {
+        const radius = { x: circle.width / 2, y: circle.height / 2 };
+        const centre = { x: circle.x + radius.x, y: circle.y + radius.y };
+
+        const direction = {
+          x: (pointer.x - centre.x) / (radius.x || 1),
+          y: (pointer.y - centre.y) / (radius.y || 1),
+        };
+        const length = Math.hypot(direction.x, direction.y);
+        if (!length) return;
+
+        main = isDraggedHorizontally
+          ? centre.x + (direction.x / length) * radius.x
+          : centre.y + (direction.y / length) * radius.y;
+
+        const isLeadingSide =
+          position === Position.Top || position === Position.Left;
+        const towardsCross = isDraggedHorizontally ? direction.y : direction.x;
+        isReturning = isLeadingSide ? towardsCross > 0 : towardsCross < 0;
       } else {
-        // y movement
-        const maxY = internalNode?.measured.height ?? 0;
-        const yPosition =
-          xyPosition.y - (internalNode?.internals.positionAbsolute.y ?? 0);
-
-        // Divide offset by total height to get percentage
-        changedOffset =
-          (canRotate ? yPosition : clamp(yPosition, 0, maxY)) / maxY;
+        main = clamp(main, 0, size);
       }
-      changedOffset = updateHelperLinesFromHandleChanges(
+
+      let changedOffset = updateHelperLinesFromHandleChanges(
         {
           nodeId,
-          offset: changedOffset,
+          offset: main / size,
           position,
           isDragging: true,
         },
         nodes,
       );
+
+      if (circle) {
+        const [minMain, spanMain] = isDraggedHorizontally
+          ? [circle.x, circle.width]
+          : [circle.y, circle.height];
+
+        const swept =
+          clamp(changedOffset * size, minMain, minMain + spanMain) - minMain;
+        const sweep = (isReturning ? 2 * spanMain - swept : swept) + minMain;
+
+        const turn = (2 * spanMain) / size;
+        changedOffset = [-2, -1, 0, 1, 2].reduce((nearest, turns) => {
+          const candidate = sweep / size + turns * turn;
+          return Math.abs(candidate - offset) < Math.abs(nearest - offset)
+            ? candidate
+            : nearest;
+        }, Infinity);
+      }
       setChangedOffset(changedOffset);
       updateNodeHandleOffset(nodeId, id, position, changedOffset);
       updateNodeInternals(nodeId);
@@ -196,9 +229,6 @@ const DEMOHandle = ({
     setHandleEditModeEnabled(false);
   }, []);
 
-  // a hold that is still running when the handle goes away has to be let go of
-  useEffect(() => endHold, [endHold]);
-
   const startHold: PointerEventHandler<HTMLDivElement> = (event) => {
     if (!isEnabled || event.button !== 0) return;
 
@@ -207,9 +237,6 @@ const DEMOHandle = ({
       setHandleEditModeEnabled(true);
     }, HANDLE_HOLD_DELAY);
 
-    // the release is listened for on the window, one step after the document
-    // react flow ends connections on, so that its handlers still see handle
-    // edit mode as it was during the hold
     holdRelease.current = new AbortController();
     const { signal } = holdRelease.current;
     window.addEventListener("mouseup", endHold, { signal });
@@ -242,7 +269,7 @@ const DEMOHandle = ({
   const isDraggedHorizontally =
     position === Position.Top || position === Position.Bottom;
 
-  const outlinePoint = getHandleOutlinePoint({
+  const circularPoint = getCircularHandlePoint({
     type: node.type,
     position,
     offset: offset ?? 0.5,
@@ -252,16 +279,9 @@ const DEMOHandle = ({
 
   const style: CSSProperties = { zIndex: zIndexMap.handle };
 
-  if (outlinePoint) {
-    if (isDraggedHorizontally) {
-      style.left = outlinePoint.x;
-      if (position === Position.Top) style.top = outlinePoint.y;
-      else style.bottom = nodeHeight - outlinePoint.y;
-    } else {
-      style.top = outlinePoint.y;
-      if (position === Position.Left) style.left = outlinePoint.x;
-      else style.right = nodeWidth - outlinePoint.x;
-    }
+  if (circularPoint) {
+    style.left = circularPoint.x;
+    style.top = circularPoint.y;
   } else if (isDraggedHorizontally) {
     style.left = (offset ?? 0.5) * 100 + "%";
   } else {
@@ -341,6 +361,7 @@ const DEMOHandle = ({
           className={cn(
             "demo-handle",
             "touch-none",
+            !!circularPoint && "demo-handle-circular",
             isHeld && "demo-handle-held",
             isEnabled &&
               canDrag &&
@@ -388,6 +409,7 @@ const DEMOHandle = ({
         }}
         className={cn(
           "demo-handle",
+          !!circularPoint && "demo-handle-circular",
           isHeld && "demo-handle-held",
           !isEnabled && "nopan nodrag pointer-events-none",
           !isVisible ? "before:invisible" : "before:visible",

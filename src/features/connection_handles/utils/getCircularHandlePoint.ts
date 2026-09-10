@@ -1,10 +1,10 @@
 import { Position, type XYPosition } from "@xyflow/react";
-import handleOutlineMap, { hasHandleOutline } from "./handleOutlineMap";
+import circularHandleMap, { hasCircularHandles } from "./circularHandleMap";
 
 const wrap = (value: number, period: number) =>
   ((value % period) + period) % period;
 
-const getHandleOutlinePoint = ({
+const getCircularHandlePoint = ({
   type,
   position,
   offset,
@@ -17,9 +17,9 @@ const getHandleOutlinePoint = ({
   width?: number;
   height?: number;
 }): XYPosition | null => {
-  if (!hasHandleOutline(type) || !width || !height) return null;
+  if (!hasCircularHandles(type) || !width || !height) return null;
 
-  const outline = handleOutlineMap[type](width, height);
+  const circularPath = circularHandleMap[type](width, height);
 
   const isMainAxisX = position === Position.Top || position === Position.Bottom;
   const getMain = (point: XYPosition) => (isMainAxisX ? point.x : point.y);
@@ -27,12 +27,12 @@ const getHandleOutlinePoint = ({
   const toPoint = (main: number, cross: number) =>
     isMainAxisX ? { x: main, y: cross } : { x: cross, y: main };
 
-  const mainValues = outline.flat().map(getMain);
+  const mainValues = circularPath.flat().map(getMain);
   const minMain = Math.min(...mainValues);
   const maxMain = Math.max(...mainValues);
   const span = maxMain - minMain;
 
-  // The offset sweeps the whole outline instead of stopping at its ends: the
+  // The offset sweeps the whole path instead of stopping at its ends: the
   // first half of a sweep runs along the side the handle belongs to, the second
   // half comes back along the opposite one, so dragging past a corner keeps
   // rotating the handle around the shape.
@@ -46,7 +46,7 @@ const getHandleOutlinePoint = ({
     (position === Position.Top || position === Position.Left) !== isReturning;
 
   let crossing: number | null = null;
-  for (const part of outline) {
+  for (const part of circularPath) {
     for (let index = 0; index < part.length; index++) {
       const from = part[index];
       const to = part[(index + 1) % part.length];
@@ -72,4 +72,4 @@ const getHandleOutlinePoint = ({
   return crossing === null ? null : toPoint(target, crossing);
 };
 
-export default getHandleOutlinePoint;
+export default getCircularHandlePoint;
